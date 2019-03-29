@@ -38,17 +38,19 @@
 
 			options.AddExtension($"{AppDomain.CurrentDomain.BaseDirectory}\\3.42.0_0.crx");
 
-			Browser = new ChromeDriver(options)
-			{
-				Url = "https://www.yandex.ru"
-			};
+			Browser = new ChromeDriver(options);
+
+			Thread.Sleep(7000);
+
+			Browser.Navigate().GoToUrl("http://www.yandex.ru");
 
 			Browser.Manage().Window.Maximize();
 
 			var timer = new Timer
 			{
-				Interval = 1_290_000,
-				AutoReset = true
+				Interval = 1290000,
+				AutoReset = true,
+				Enabled = true
 			};
 
 			timer.Elapsed += TimerAction;
