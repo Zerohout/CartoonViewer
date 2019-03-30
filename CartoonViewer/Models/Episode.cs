@@ -2,6 +2,7 @@
 
 namespace CartoonViewer.Models
 {
+	using System.Collections.Generic;
 	using System.ComponentModel.DataAnnotations;
 	using System.ComponentModel.DataAnnotations.Schema;
 
@@ -9,14 +10,11 @@ namespace CartoonViewer.Models
 	{
 		[Key]
 		public int EpisodeId { get; set; }
-		[Required]
+
 		public int Number { get; set; }
-		
 		public int SkipCount { get; set; }
 
-		[MaxLength(100)]
 		public string Name { get; set; }
-		[MaxLength(400)]
 		public string Description { get; set; }
 		public bool Checked { get; set; }
 
@@ -24,9 +22,10 @@ namespace CartoonViewer.Models
 		public TimeSpan CreditsStart { get; set; }
 		public TimeSpan Duration { get; set; }
 
-		[ForeignKey("VoiceOver")]
-		public int? VoiceOverId { get; set; }
+		public List<VoiceOver> VoiceOvers { get; set; }
+
 		[ForeignKey("Season")]
 		public int SeasonId { get; set; }
+		public Season Season { get; set; }
 	}
 }

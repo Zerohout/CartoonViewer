@@ -92,6 +92,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Database\CVDbContext.cs" />
     <Compile Include="Helpers\Creator.cs" />
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Helpers\StatusChecker.cs" />
