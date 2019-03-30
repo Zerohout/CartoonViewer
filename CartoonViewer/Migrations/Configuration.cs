@@ -1,23 +1,19 @@
 namespace CartoonViewer.Migrations
 {
-    using System;
-    using System.Data.Entity;
-    using System.Data.Entity.Migrations;
-    using System.Linq;
+	using System.Data.Entity.Migrations;
+	using Database;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<CartoonViewer.Database.CVDbContext>
+	internal sealed class Configuration : DbMigrationsConfiguration<CVDbContext>
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
         }
 
-        protected override void Seed(CartoonViewer.Database.CVDbContext context)
-        {
-            //  This method will be called after migrating to the latest version.
-
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data.
-        }
+	    protected override void Seed(CVDbContext context)
+	    {
+		    //context.VoiceOvers.AddRange(Creator.CreateVoiceOvers());
+		    //context.SaveChanges();
+	    }
     }
 }

@@ -96,6 +96,11 @@
     <Compile Include="Helpers\Creator.cs" />
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Helpers\StatusChecker.cs" />
+    <Compile Include="Migrations\201903302021072_Initializing.cs" />
+    <Compile Include="Migrations\201903302021072_Initializing.Designer.cs">
+      <DependentUpon>201903302021072_Initializing.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Cartoon.cs" />
     <Compile Include="Models\Episode.cs" />
     <Compile Include="Models\Season.cs" />
@@ -119,6 +124,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Migrations\201903302021072_Initializing.resx">
+      <DependentUpon>201903302021072_Initializing.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

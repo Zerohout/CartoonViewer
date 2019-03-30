@@ -3,9 +3,9 @@
 	using System.Collections.Generic;
 	using Models;
 
-	public class Creator
+	public static class Creator
 	{
-		public void CreateVoiceOvers()
+		public static List<VoiceOver> CreateVoiceOvers()
 		{
 			var result = new List<VoiceOver>();
 
@@ -13,17 +13,17 @@
 			{
 				new VoiceOver
 				{
-					Name = "МТВ(Default)",
+					Name = "MTV(Default)",
 					Url = ""
 				},
 				new VoiceOver
 				{
-					Name = "Парамаунт(Default)",
+					Name = "Paramaunt(Default)",
 					Url = ""
 				},
 				new VoiceOver
 				{
-					Name = "Парамаунт",
+					Name = "Paramaunt",
 					Url = "?v=par"
 				},
 				new VoiceOver
@@ -58,6 +58,11 @@
 				},
 				new VoiceOver
 				{
+					Name = "Jaskier",
+					Url = "?v=js"
+				},
+				new VoiceOver
+				{
 					Name = "Гоблин",
 					Url = "?v=goblin"
 				},
@@ -65,8 +70,9 @@
 				{
 					Name = "Англ.",
 					Url = "?v=en"
-				},
+				}
 			});
+			return result;
 		}
 	}
 }
