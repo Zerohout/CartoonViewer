@@ -3,36 +3,50 @@
 	using System;
 	using System.Threading;
 	using System.Threading.Tasks;
-	using System.Timers;
 	using System.Windows;
 	using Caliburn.Micro;
-	using OpenQA.Selenium;
+	using Helpers;
 	using OpenQA.Selenium.Chrome;
-	using WindowsInput;
-	using WindowsInput.Native;
-	using Timer = System.Timers.Timer;
+	using static Helpers.Helper;
+	using Timer = System.Threading.Timer;
+
 
 	public class MainViewModel : Screen
 	{
-		private IWebDriver Browser;
 
 		private WindowState _windowState;
-
-		public bool FirstStart = true;
+		public int SeriesCount { get; set; }
 
 		public MainViewModel()
 		{
-			
+
 		}
 
 		public async void Start()
 		{
 			WindowState = WindowState.Minimized;
 
-			await LaunchBrowser();
+			await Task.Run(LaunchBrowser);
 		}
 
 		private Task LaunchBrowser()
+		{
+			StartBrowser();
+
+			var autoEvent = new AutoResetEvent(false);
+
+			var statusChecker = new StatusChecker(SeriesCount);
+
+			var stateTimer = new Timer(statusChecker.CheckStatus,
+									   autoEvent, new TimeSpan(0,0,0), new TimeSpan(0, 21, 30));
+
+			autoEvent.WaitOne();
+			autoEvent.Dispose();
+
+			return Task.CompletedTask;
+		}
+
+		private void StartBrowser()
 		{
 			var options = new ChromeOptions();
 
@@ -40,64 +54,23 @@
 
 			Browser = new ChromeDriver(options);
 
-			Thread.Sleep(7000);
+			Thread.Sleep(10000);
 
 			Browser.Navigate().GoToUrl("http://www.yandex.ru");
 
+			//Для полной загрузки расширения Adblock
+			//т.к. есть вероятность, что оно не загрузится
+			Browser.Navigate().GoToUrl("http://sp.freehat.cc");
+
 			Browser.Manage().Window.Maximize();
-
-			var timer = new Timer
-			{
-				Interval = 1290000,
-				AutoReset = true,
-				Enabled = true
-			};
-
-			timer.Elapsed += TimerAction;
-
-			timer.Start();
-			TimerAction(timer,null);
-			
-			return Task.CompletedTask;
-		}
-
-		private async void TimerAction(object sender, ElapsedEventArgs e)
-		{
-			await PlayCartoon();
-		}
-		
-		private Task PlayCartoon()
-		{
-			Browser.Navigate().GoToUrl("https://sp.freehat.cc/episode/rand.php");
-
-			var sim = new InputSimulator();
-
-			var el = Browser.FindElement(By.Id("videoplayer"));
-			el.Click();
-
-			Thread.Sleep(2000);
-			if (FirstStart)
-			{
-				sim.Keyboard.KeyPress(VirtualKeyCode.VK_F);
-				FirstStart = false;
-			}
-
-			Thread.Sleep(2000);
-
-			for (var i = 0; i < 5; i++)
-			{
-				sim.Keyboard.KeyPress(VirtualKeyCode.RIGHT);
-				Thread.Sleep(500);
-			}
-			
-			return Task.CompletedTask;
 		}
 
 		public void Closing()
 		{
-			Browser.Quit();
+			Browser?.Quit();
+
 		}
-		
+
 		/// <summary>
 		/// Состояние окна
 		/// </summary>
