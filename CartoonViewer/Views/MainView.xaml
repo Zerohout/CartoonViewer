@@ -10,11 +10,32 @@
     Title="MainView"
     WindowState="{Binding WindowState}"
     cal:Message.Attach="[Closing] = [Action Closing()]"
-    Height="450"
-    Width="800">
+    Height="624"
+    Width="788">
+    <Window.Resources>
+        <Style TargetType="{x:Type ListBoxItem}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Foreground" Value="#BE0003"/>
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="OrangeRed"/>
+                </Trigger>
+                <DataTrigger Binding="{Binding Checked}"
+                             Value="True">
+                    <Setter Property="Foreground" Value="GreenYellow"/>
+                    <Setter Property="BorderBrush" Value="LimeGreen"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="190"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
@@ -23,6 +44,13 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        <Image 
+                Grid.Row="0"
+                Grid.RowSpan="3"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                Panel.ZIndex="0"
+                Source="../Resources/CartoonListBackgroundTemp.png"/>
         <Grid Grid.Column="0"
             Grid.Row="0">
             <Grid.RowDefinitions>
@@ -36,7 +64,29 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <CheckBox Grid.Row="0"
+            <ListBox
+			x:Name="ElementName"
+			Grid.Row="0"
+                Grid.RowSpan="4"
+			Grid.Column="0"
+                Grid.ColumnSpan="3"
+                Background="Transparent"
+                ItemsSource="{Binding Cartoons}">
+                <ListBox.ItemTemplate>
+                    <ItemContainerTemplate>
+                        <DockPanel Margin="0 7">
+                            <CheckBox DockPanel.Dock="Left"
+                                      IsChecked="{Binding Checked, UpdateSourceTrigger=PropertyChanged}"
+                                      cal:Message.Attach="[Checked] = [Action CheckedValidation()];[Unchecked] = [Action CheckedValidation()]"/>
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Text="{Binding Name}"/>
+                        </DockPanel>
+                    </ItemContainerTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <!--<CheckBox Grid.Row="0"
                 Grid.Column="1"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"/>
@@ -44,8 +94,9 @@
                        Grid.Column="2"
                        Text="Южный парк"
                        FontFamily="Comic Sans MS"
+                       Foreground="AliceBlue"
                        FontSize="20"
-                       HorizontalAlignment="Center"
+                       HorizontalAlignment="Left"
                        VerticalAlignment="Center"/>
             <CheckBox Grid.Row="1"
                 Grid.Column="1"
@@ -54,9 +105,10 @@
             <TextBlock Grid.Row="1"
                        Grid.Column="2"
                        Text="Гриффины"
+                       Foreground="AliceBlue"
                        FontFamily="Comic Sans MS"
                        FontSize="20"
-                       HorizontalAlignment="Center"
+                       HorizontalAlignment="Left"
                        VerticalAlignment="Center"/>
             <CheckBox Grid.Row="2"
                 Grid.Column="1"
@@ -65,9 +117,10 @@
             <TextBlock Grid.Row="2"
                        Grid.Column="2"
                        Text="Симпсоны"
+                       Foreground="AliceBlue"
                        FontFamily="Comic Sans MS"
                        FontSize="20"
-                       HorizontalAlignment="Center"
+                       HorizontalAlignment="Left"
                        VerticalAlignment="Center"/>
             <CheckBox Grid.Row="3"
                 Grid.Column="1"
@@ -76,10 +129,11 @@
             <TextBlock Grid.Row="3"
                        Grid.Column="2"
                        Text="Американский папаша"
+                       Foreground="AliceBlue"
                        FontFamily="Comic Sans MS"
                        FontSize="20"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"/>
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"/>-->
         </Grid>
         <StackPanel Grid.Column="0"
             Grid.Row="1"

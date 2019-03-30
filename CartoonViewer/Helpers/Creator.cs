@@ -7,9 +7,7 @@
 	{
 		public static List<VoiceOver> CreateVoiceOvers()
 		{
-			var result = new List<VoiceOver>();
-
-			result.AddRange(new List<VoiceOver>
+			return new List<VoiceOver>
 			{
 				new VoiceOver
 				{
@@ -71,8 +69,32 @@
 					Name = "Англ.",
 					Url = "?v=en"
 				}
-			});
-			return result;
+			};
+		}
+
+		public static List<Cartoon> CreateCartoons()
+		{
+			return new List<Cartoon>
+			{
+				new Cartoon
+				{
+					Name = "Южный парк"
+				},
+				new Cartoon
+				{
+					Name = "Гриффины"
+				},
+				new Cartoon
+				{
+					Name = "Симпсоны"
+				},
+				new Cartoon
+				{
+					Name = "Американский папаша"
+				}
+			};
+
+			
 		}
 	}
 }

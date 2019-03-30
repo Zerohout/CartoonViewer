@@ -13,7 +13,7 @@ namespace CartoonViewer.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201903302021072_Initializing"; }
+            get { return "201903302325283_Initializing"; }
         }
         
         string IMigrationMetadata.Source

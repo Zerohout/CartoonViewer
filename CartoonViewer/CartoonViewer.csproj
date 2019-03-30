@@ -96,9 +96,9 @@
     <Compile Include="Helpers\Creator.cs" />
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Helpers\StatusChecker.cs" />
-    <Compile Include="Migrations\201903302021072_Initializing.cs" />
-    <Compile Include="Migrations\201903302021072_Initializing.Designer.cs">
-      <DependentUpon>201903302021072_Initializing.cs</DependentUpon>
+    <Compile Include="Migrations\201903302325283_Initializing.cs" />
+    <Compile Include="Migrations\201903302325283_Initializing.Designer.cs">
+      <DependentUpon>201903302325283_Initializing.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Cartoon.cs" />
@@ -124,8 +124,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Migrations\201903302021072_Initializing.resx">
-      <DependentUpon>201903302021072_Initializing.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201903302325283_Initializing.resx">
+      <DependentUpon>201903302325283_Initializing.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -146,6 +146,8 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\CartoonListBackgroundTemp.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

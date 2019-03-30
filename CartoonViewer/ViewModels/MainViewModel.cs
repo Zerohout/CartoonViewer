@@ -1,11 +1,15 @@
 ﻿namespace CartoonViewer.ViewModels
 {
 	using System;
+	using System.Data.Entity;
+	using System.Linq;
 	using System.Threading;
 	using System.Threading.Tasks;
 	using System.Windows;
 	using Caliburn.Micro;
+	using Database;
 	using Helpers;
+	using Models;
 	using OpenQA.Selenium.Chrome;
 	using static Helpers.Helper;
 	using Timer = System.Threading.Timer;
@@ -13,13 +17,38 @@
 
 	public class MainViewModel : Screen
 	{
+		private BindableCollection<Cartoon> _cartoons = new BindableCollection<Cartoon>();
+
+		public BindableCollection<Cartoon> Cartoons
+		{
+			get => _cartoons;
+			set
+			{
+				_cartoons = value;
+				NotifyOfPropertyChange(() => Cartoons);
+			}
+		}
+
+
+
 
 		private WindowState _windowState;
 		public int SeriesCount { get; set; }
 
 		public MainViewModel()
 		{
+			LoadCartoons();
+		}
 
+		
+
+		private void LoadCartoons()
+		{
+			using (var ctx = new CVDbContext())
+			{
+				ctx.Cartoons.Load();
+				Cartoons.AddRange(ctx.Cartoons.Local.OrderBy(c => c.CartoonId));
+			}
 		}
 
 		public async void Start()

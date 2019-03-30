@@ -2,6 +2,7 @@ namespace CartoonViewer.Migrations
 {
 	using System.Data.Entity.Migrations;
 	using Database;
+	using Helpers;
 
 	internal sealed class Configuration : DbMigrationsConfiguration<CVDbContext>
     {
@@ -12,8 +13,9 @@ namespace CartoonViewer.Migrations
 
 	    protected override void Seed(CVDbContext context)
 	    {
-		    //context.VoiceOvers.AddRange(Creator.CreateVoiceOvers());
-		    //context.SaveChanges();
-	    }
+			context.VoiceOvers.AddRange(Creator.CreateVoiceOvers());
+			context.Cartoons.AddRange(Creator.CreateCartoons());
+			context.SaveChanges();
+		}
     }
 }
