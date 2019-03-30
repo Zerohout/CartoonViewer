@@ -2,6 +2,7 @@
 
 namespace CartoonViewer.Models
 {
+	using System.Collections.Generic;
 	using System.ComponentModel.DataAnnotations;
 	using System.ComponentModel.DataAnnotations.Schema;
 
@@ -24,8 +25,8 @@ namespace CartoonViewer.Models
 		public TimeSpan CreditsStart { get; set; }
 		public TimeSpan Duration { get; set; }
 
-		[ForeignKey("VoiceOver")]
-		public int? VoiceOverId { get; set; }
+		public List<VoiceOver> VoiceOvers { get; set; }
+
 		[ForeignKey("Season")]
 		public int SeasonId { get; set; }
 	}
