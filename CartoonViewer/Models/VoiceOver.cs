@@ -7,7 +7,7 @@
 	{
 		[Key]
 		public int VoiceOverId { get; set; }
-		[Required]
+		
 		[MinLength(2)]
 		[MaxLength(30)]
 		public string Name { get; set; }
@@ -16,5 +16,6 @@
 
 		[ForeignKey("Episode")]
 		public int? EpisodeId { get; set; }
+		public Episode Episode { get; set; }
 	}
 }

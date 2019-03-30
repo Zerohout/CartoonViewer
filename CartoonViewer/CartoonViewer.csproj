@@ -96,6 +96,19 @@
     <Compile Include="Helpers\Creator.cs" />
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Helpers\StatusChecker.cs" />
+    <Compile Include="Migrations\201903301727572_Initialize.cs" />
+    <Compile Include="Migrations\201903301727572_Initialize.Designer.cs">
+      <DependentUpon>201903301727572_Initialize.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903301732376_RemoveData.cs" />
+    <Compile Include="Migrations\201903301732376_RemoveData.Designer.cs">
+      <DependentUpon>201903301732376_RemoveData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903301740596_ReInitialize.cs" />
+    <Compile Include="Migrations\201903301740596_ReInitialize.Designer.cs">
+      <DependentUpon>201903301740596_ReInitialize.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Cartoon.cs" />
     <Compile Include="Models\Episode.cs" />
     <Compile Include="Models\Season.cs" />
@@ -119,6 +132,15 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Migrations\201903301727572_Initialize.resx">
+      <DependentUpon>201903301727572_Initialize.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903301732376_RemoveData.resx">
+      <DependentUpon>201903301732376_RemoveData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903301740596_ReInitialize.resx">
+      <DependentUpon>201903301740596_ReInitialize.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

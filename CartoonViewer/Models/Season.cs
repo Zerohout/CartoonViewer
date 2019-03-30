@@ -6,9 +6,14 @@
 
 	public class Season
 	{
+		public Season()
+		{
+			Episodes = new List<Episode>();
+		}
+
 		[Key]
 		public int SeasonId { get; set; }
-		[Required]
+		
 		public int Number { get; set; }
 		public bool Checked { get; set; }
 
@@ -16,5 +21,6 @@
 
 		[ForeignKey("Cartoon")]
 		public int CartoonId { get; set; }
+		public Cartoon Cartoon { get; set; }
 	}
 }

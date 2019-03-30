@@ -1,20 +1,19 @@
-﻿using System;
-
-namespace CartoonViewer.Database
+﻿namespace CartoonViewer.Database
 {
+	using System;
 	using System.Data.Entity;
 	using Models;
 
 	public class CVDbContext : DbContext
 	{
-		public CVDbContext():base("CVDb")
+		public CVDbContext() : base("CVDb")
 		{
 			AppDomain.CurrentDomain.SetData("DataDirectory", AppDomain.CurrentDomain.BaseDirectory);
 
 			Database.CreateIfNotExists();
 
-			//Database.SetInitializer(new DropCreateDatabaseAlways<FWUDbContext>());
-			Database.SetInitializer(new DropCreateDatabaseIfModelChanges<CVDbContext>());
+			Database.SetInitializer(new DropCreateDatabaseAlways<CVDbContext>());
+			//Database.SetInitializer(new DropCreateDatabaseIfModelChanges<CVDbContext>());
 		}
 
 		public DbSet<Cartoon> Cartoons { get; set; }

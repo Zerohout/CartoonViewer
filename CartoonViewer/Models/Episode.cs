@@ -8,9 +8,14 @@ namespace CartoonViewer.Models
 
 	public class Episode
 	{
+		public Episode()
+		{
+			VoiceOvers = new List<VoiceOver>();
+		}
+
 		[Key]
 		public int EpisodeId { get; set; }
-		[Required]
+		
 		public int Number { get; set; }
 		
 		public int SkipCount { get; set; }
@@ -29,5 +34,6 @@ namespace CartoonViewer.Models
 
 		[ForeignKey("Season")]
 		public int SeasonId { get; set; }
+		public Season Season { get; set; }
 	}
 }

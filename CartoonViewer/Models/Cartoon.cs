@@ -6,9 +6,14 @@ namespace CartoonViewer.Models
 
 	public class Cartoon
 	{
+		public Cartoon()
+		{
+			Seasons = new List<Season>();
+		}
+
 		[Key]
 		public int CartoonId { get; set; }
-		[Required]
+
 		[MinLength(2)]
 		[MaxLength(30)]
 		public string Name { get; set; }

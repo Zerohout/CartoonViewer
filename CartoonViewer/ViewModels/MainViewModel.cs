@@ -5,6 +5,7 @@
 	using System.Threading.Tasks;
 	using System.Windows;
 	using Caliburn.Micro;
+	using Database;
 	using Helpers;
 	using OpenQA.Selenium.Chrome;
 	using static Helpers.Helper;
@@ -19,7 +20,7 @@
 
 		public MainViewModel()
 		{
-
+			var cxt = new CVDbContext();
 		}
 
 		public async void Start()
