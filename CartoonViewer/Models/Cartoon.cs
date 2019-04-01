@@ -10,6 +10,7 @@ namespace CartoonViewer.Models
 		public int CartoonId { get; set; }
 
 		public string Name { get; set; }
+		public string Url { get; set; }
 		public bool Checked { get; set; }
 
 		public List<Season> Seasons { get; set; }

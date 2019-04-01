@@ -11,10 +11,10 @@ namespace CartoonViewer.Database
 		{
 			AppDomain.CurrentDomain.SetData("DataDirectory", AppDomain.CurrentDomain.BaseDirectory);
 
-			Database.CreateIfNotExists();
+			//Database.CreateIfNotExists();
 
-			//Database.SetInitializer(new DropCreateDatabaseAlways<CVDbContext>());
-			Database.SetInitializer(new DropCreateDatabaseIfModelChanges<CVDbContext>());
+			Database.SetInitializer(new DropCreateDatabaseAlways<CVDbContext>());
+			//Database.SetInitializer(new DropCreateDatabaseIfModelChanges<CVDbContext>());
 		}
 
 		public DbSet<Cartoon> Cartoons { get; set; }

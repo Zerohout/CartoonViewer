@@ -17,5 +17,5 @@ namespace CartoonViewer.Migrations
 			context.Cartoons.AddRange(Creator.CreateCartoons());
 			context.SaveChanges();
 		}
-    }
+	}
 }

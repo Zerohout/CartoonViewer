@@ -78,19 +78,23 @@
 			{
 				new Cartoon
 				{
-					Name = "Южный парк"
+					Name = "Южный парк",
+					Url = "sp"
 				},
 				new Cartoon
 				{
-					Name = "Гриффины"
+					Name = "Гриффины",
+					Url = "grif"
 				},
 				new Cartoon
 				{
-					Name = "Симпсоны"
+					Name = "Симпсоны",
+					Url = "simp"
 				},
 				new Cartoon
 				{
-					Name = "Американский папаша"
+					Name = "Американский папаша",
+					Url = "dad"
 				}
 			};
 
