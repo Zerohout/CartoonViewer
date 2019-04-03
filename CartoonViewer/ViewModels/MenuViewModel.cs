@@ -187,8 +187,8 @@
 			PlayCartoon();
 
 			CurrentDuration = cartoon.Name == "Южный парк"
-				? new TimeSpan(0,21,10)
-				: new TimeSpan(0,21,30);
+				? new TimeSpan(0,0,10)
+				: new TimeSpan(0,0,10);
 
 
 			LaunchTimer();
@@ -239,18 +239,20 @@
 			}
 
 			//Set pause
-			if (!IsPause && Helper.Timer.IsRunning)
+			if (IsPause && Helper.Timer.IsRunning)
 			{
 				Helper.Timer.Stop();
 				WebElement.Click();
+				((MainViewModel)Parent).WindowState = WindowState.Normal;
 			}
 
 			//Unpause
-			if (IsPause && !Helper.Timer.IsRunning)
+			if (!IsPause && !Helper.Timer.IsRunning)
 			{
 				Helper.Timer.Start();
+				((MainViewModel)Parent).WindowState = WindowState.Minimized;
 				WebElement.Click();
-				((MainViewModel) Parent).WindowState = WindowState.Minimized;
+				
 			}
 		}
 
