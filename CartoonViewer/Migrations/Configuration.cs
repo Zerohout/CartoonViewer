@@ -5,14 +5,14 @@ namespace CartoonViewer.Migrations
 	using Helpers;
 
 	internal sealed class Configuration : DbMigrationsConfiguration<CVDbContext>
-    {
-        public Configuration()
-        {
-            AutomaticMigrationsEnabled = true;
-        }
+	{
+		public Configuration()
+		{
+			AutomaticMigrationsEnabled = true;
+		}
 
-	    protected override void Seed(CVDbContext context)
-	    {
+		protected override void Seed(CVDbContext context)
+		{
 			context.VoiceOvers.AddRange(Creator.CreateVoiceOvers());
 			context.Cartoons.AddRange(Creator.CreateCartoons());
 			context.SaveChanges();

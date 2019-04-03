@@ -88,7 +88,7 @@
 
 			for(var i = 0; i < count; i++)
 			{
-				Thread.Sleep(100);
+				Thread.Sleep(250);
 				result = sendWindowsMessage(HWND, WM_KEYDOWN, key, 0);
 				Thread.Sleep(50);
 				result = sendWindowsMessage(HWND, WM_KEYUP, key, 0);

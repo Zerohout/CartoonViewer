@@ -93,10 +93,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Database\CVDbContext.cs" />
+    <Compile Include="Helpers\IDataErrorInfo.cs" />
     <Compile Include="Helpers\Creator.cs" />
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Helpers\MessageHelper.cs" />
-    <Compile Include="Helpers\StatusChecker.cs" />
     <Compile Include="Migrations\201903302325283_Initializing.cs" />
     <Compile Include="Migrations\201903302325283_Initializing.Designer.cs">
       <DependentUpon>201903302325283_Initializing.cs</DependentUpon>
@@ -105,12 +105,17 @@
     <Compile Include="Migrations\201904012156054_ModifiedCartoonClass.Designer.cs">
       <DependentUpon>201904012156054_ModifiedCartoonClass.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904012209447_test.cs" />
+    <Compile Include="Migrations\201904012209447_test.Designer.cs">
+      <DependentUpon>201904012209447_test.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Cartoon.cs" />
     <Compile Include="Models\Episode.cs" />
     <Compile Include="Models\Season.cs" />
     <Compile Include="Models\VoiceOver.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\MenuViewModel.cs" />
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
@@ -135,6 +140,9 @@
     <EmbeddedResource Include="Migrations\201904012156054_ModifiedCartoonClass.resx">
       <DependentUpon>201904012156054_ModifiedCartoonClass.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904012209447_test.resx">
+      <DependentUpon>201904012209447_test.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -149,13 +157,26 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="DesignData\MenuViewDesignData.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MenuView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\CartoonListBackgroundTemp.png" />
+    <Resource Include="Resources\CartoonListBackgroundTemp.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\MenuViewModelBackground.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
