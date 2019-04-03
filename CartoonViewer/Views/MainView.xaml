@@ -6,14 +6,21 @@
     xmlns:local="clr-namespace:CartoonViewer.Views"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="Cartoon viewer"
-    TitleCharacterCasing="Normal"
-    Width="808"
-    Height="624"
+    Width="880"
+    Height="660"
+                 Title="CartoonViewer"
+                 ShowTitleBar="False"
+                 BorderBrush="Transparent"
+                 ShowDialogsOverTitleBar="False"
+                UseNoneWindowStyle="True"
     WindowStartupLocation="CenterScreen"
-    cal:Message.Attach="[Closing] = [Action Closing()]"
+    cal:Message.Attach="[Closing] = [Action Closing()];[MouseLeftButtonDown]=[Action MouseDown()]"
     WindowState="{Binding WindowState}"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    WindowStyle="None"
+    Background="Transparent"
+    AllowsTransparency="True">
+
     <!--<Window.Background>
         <ImageBrush ImageSource="../Resources/CartoonListBackgroundTemp.png"/>
     </Window.Background>-->

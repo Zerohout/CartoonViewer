@@ -60,6 +60,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\ControlzEx.3.0.2.4\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -93,9 +94,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Database\CVDbContext.cs" />
-    <Compile Include="Helpers\IDataErrorInfo.cs" />
     <Compile Include="Helpers\Creator.cs" />
     <Compile Include="Helpers\Helper.cs" />
+    <Compile Include="Helpers\HotkeysRegistrator.cs" />
     <Compile Include="Helpers\MessageHelper.cs" />
     <Compile Include="Migrations\201903302325283_Initializing.cs" />
     <Compile Include="Migrations\201903302325283_Initializing.Designer.cs">
@@ -171,12 +172,18 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\CartoonListBackgroundTemp.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Resource Include="Resources\MenuViewModelBackgroundVer_2.1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\MenuViewModelBackground.png" />
+    <Resource Include="Resources\MenuViewModelBackgroundVer_2.2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\MenuViewModelBackgroundVer_2.5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\MenuViewModelBackgroundVer_3.0.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

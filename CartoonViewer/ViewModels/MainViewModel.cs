@@ -1,26 +1,32 @@
 ﻿namespace CartoonViewer.ViewModels
 {
+	using System.Diagnostics;
 	using System.Windows;
 	using Caliburn.Micro;
+	using Helpers;
 	using static Helpers.Helper;
 
 	public class MainViewModel : Conductor<Screen>.Collection.OneActive
 	{
 		private WindowState _windowState = WindowState.Normal;
+		private HotkeysRegistrator _hotReg;
 		
 		public MainViewModel()
 		{
-			ActiveItem = new MenuViewModel
+			
+		}
+
+		protected override void OnViewLoaded(object view)
+		{
+			_hotReg = new HotkeysRegistrator(GetView() as Window);
+			ActiveItem = new MenuViewModel(_hotReg)
 			{
 				Parent = this
 			};
+			base.OnViewLoaded(view);
 		}
 
-		protected override void OnInitialize()
-		{
-			
-			base.OnInitialize();
-		}
+
 
 		/// <summary>
 		/// Состояние окна
@@ -33,6 +39,11 @@
 				_windowState = value;
 				NotifyOfPropertyChange(() => WindowState);
 			}
+		}
+
+		public void MouseDown()
+		{
+			(GetView() as Window)?.DragMove();
 		}
 
 		/// <summary>

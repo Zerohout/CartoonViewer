@@ -11,7 +11,7 @@
 		private static extern int RegisterWindowMessage(string lpString);
 
 		[DllImport("User32.dll", EntryPoint = "FindWindow")]
-		public static extern Int32 FindWindow(String lpClassName, String lpWindowName);
+		public static extern IntPtr FindWindow(String lpClassName, String lpWindowName);
 
 		//For use with WM_COPYDATA and COPYDATASTRUCT
 		[DllImport("User32.dll", EntryPoint = "SendMessage")]
@@ -22,7 +22,7 @@
 		public static extern int PostMessage(int hWnd, int Msg, int wParam, ref COPYDATASTRUCT lParam);
 
 		[DllImport("User32.dll", EntryPoint = "SendMessage")]
-		public static extern int SendMessage(int hWnd, int Msg, int wParam, int lParam);
+		public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
 
 		[DllImport("User32.dll", EntryPoint = "PostMessage")]
 		public static extern int PostMessage(int hWnd, int Msg, int wParam, int lParam);
@@ -65,11 +65,11 @@
 			return result;
 		}
 
-		public int sendWindowsMessage(int hWnd, int Msg, int wParam, int lParam)
+		public int sendWindowsMessage(IntPtr hWnd, int Msg, int wParam, int lParam)
 		{
 			int result = 0;
 
-			if (hWnd > 0)
+			if (hWnd != IntPtr.Zero)
 			{
 				result = SendMessage(hWnd, Msg, wParam, lParam);
 			}
@@ -77,7 +77,7 @@
 			return result;
 		}
 
-		public int getWindowId(string className, string windowName)
+		public IntPtr getWindowId(string className, string windowName)
 		{
 			return FindWindow(className, windowName);
 		}
