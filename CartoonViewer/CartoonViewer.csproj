@@ -172,18 +172,8 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\MenuViewModelBackgroundVer_2.1.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\MenuViewModelBackgroundVer_2.2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\MenuViewModelBackgroundVer_2.5.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\MenuViewModelBackgroundVer_3.0.png" />
+    <Resource Include="Resources\MainBackground.png" />
+    <Resource Include="Resources\MainBackgroundOnExit.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

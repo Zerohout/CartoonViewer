@@ -19,6 +19,7 @@
 		protected override void OnViewLoaded(object view)
 		{
 			_hotReg = new HotkeysRegistrator(GetView() as Window);
+			
 			ActiveItem = new MenuViewModel(_hotReg)
 			{
 				Parent = this
@@ -51,6 +52,7 @@
 		/// </summary>
 		public void Closing()
 		{
+			_hotReg.UnregisterHotkeys();
 			Browser?.Quit();
 		}
 	}

@@ -4,7 +4,9 @@
     xmlns:local="clr-namespace:CartoonViewer"
     xmlns:viewModels="clr-namespace:CartoonViewer.ViewModels"
     xmlns:models="clr-namespace:CartoonViewer.Models"
-    EpisodeCount="68">
+    EpisodeCount="68"
+    Opacity="1" IsPause="True"
+    >
     <viewModels:MenuViewModel.Cartoons>
         <models:Cartoon Name="Южный парк" />
         <models:Cartoon Name="Гриффины" />

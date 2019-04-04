@@ -23,13 +23,13 @@
 		public const int VK_RIGHT = 0x27;
 		public const int VK_F = 0x46;
 		public const int VK_ESCAPE = 0x1B;
+		public const int VK_SPACE = 0x20;
 		public static readonly TimeSpan ApproximateEpisodeDuration = new TimeSpan(0,21,10);
 		public static IntPtr HWND;
 
 		public static IWebDriver Browser;
 		public static MessageHelper Msg = new MessageHelper();
 		public static Stopwatch Timer = new Stopwatch();
-		public static bool FirstStart = true;
 
 		/// <summary>
 		/// Запуск браузера
