@@ -1,7 +1,6 @@
-﻿using System;
-
-namespace CartoonViewer.Models
+﻿namespace CartoonViewer.Models.CartoonModels
 {
+	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel.DataAnnotations;
 	using System.ComponentModel.DataAnnotations.Schema;

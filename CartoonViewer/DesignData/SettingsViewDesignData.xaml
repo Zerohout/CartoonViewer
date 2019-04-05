@@ -1,0 +1,6 @@
+﻿<vms:SettingsViewModel xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vms="clr-namespace:CartoonViewer.ViewModels"
+                    xmlns:models="clr-namespace:CartoonViewer.Models">
+    
+</vms:SettingsViewModel>

@@ -1,9 +1,10 @@
-﻿namespace CartoonViewer.ViewModels
+﻿// ReSharper disable once CheckNamespace
+namespace CartoonViewer.ViewModels
 {
 	using System;
 	using System.Collections.Generic;
 	using Caliburn.Micro;
-	using Models;
+	using Models.CartoonModels;
 	using OpenQA.Selenium;
 	using static Helpers.Helper;
 

@@ -13,6 +13,8 @@
 		public const string RandomAddress = "rand.php";
 		public const string VideoplayerPlayButton = "pjsdiv:nth-child(8) > pjsdiv > pjsdiv";
 		public static string MainAddress = $"http://{CurrentCartoon}.freehat.cc/episode/";
+		public static readonly string AppPath = AppDomain.CurrentDomain.BaseDirectory;
+		public const string WorkingDataPath = "WorkingData";
 		public static string CurrentCartoon = "";
 		public static int CurrentSkipCount = 6;
 		public static int DelayedSkipCount = 5;
@@ -58,5 +60,7 @@
 
 			Browser.Manage().Window.Maximize();
 		}
+
+		
 	}
 }

@@ -1,4 +1,5 @@
-﻿namespace CartoonViewer.ViewModels
+﻿// ReSharper disable once CheckNamespace
+namespace CartoonViewer.ViewModels
 {
 	using System;
 	using System.Linq;

@@ -1,0 +1,11 @@
+﻿<vms:AddCartoonViewModel xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vms="clr-namespace:CartoonViewer.ViewModels.SettingsViewModels"
+                    xmlns:cartoonModels="clr-namespace:CartoonViewer.Models.CartoonModels">
+    
+        
+        <vms:AddCartoonViewModel.Cartoon>
+        <cartoonModels:Cartoon Name="Тестовый мультфильм"/>
+    </vms:AddCartoonViewModel.Cartoon>
+    
+</vms:AddCartoonViewModel>

@@ -3,7 +3,7 @@
 namespace CartoonViewer.Database
 {
 	using System.Data.Entity;
-	using Models;
+	using Models.CartoonModels;
 
 	public class CVDbContext : DbContext
 	{

@@ -12,8 +12,8 @@ namespace CartoonViewer.Migrations
 
 		protected override void Seed(CVDbContext context)
 		{
-			//context.VoiceOvers.AddRange(Creator.CreateVoiceOvers());
-			//context.Cartoons.AddRange(Creator.CreateCartoons());
+			//context.VoiceOvers.AddRange(Creator.CreateDefaultVoiceOvers());
+			//context.Cartoons.AddRange(Creator.CreateDefaultCartoons());
 			//context.SaveChanges();
 		}
 	}

@@ -10,7 +10,7 @@
 	using System.Windows.Input;
 	using Database;
 	using Helpers;
-	using Models;
+	using Models.CartoonModels;
 	using OpenQA.Selenium;
 	using static Helpers.Helper;
 	using Keys = System.Windows.Forms.Keys;
@@ -92,7 +92,7 @@
 				SwitchEpisode = false;
 
 				SetCartoonsSettings(cartoon);
-				StartVideoPlayer();
+				StartVideoPlayer(cartoon.ElementValues.First(e => e.UserElementName.Contains("кнопка")));
 
 				Helper.Timer.Restart();
 				LaunchMonitoring();
@@ -103,9 +103,10 @@
 		/// <summary>
 		/// Запуск серии в видео проигрывателе
 		/// </summary>
-		private void StartVideoPlayer()
+		private void StartVideoPlayer(ElementValue elementValue)
 		{
-			WebElement = Browser.FindElement(By.CssSelector("pjsdiv:nth-child(8) > pjsdiv > pjsdiv"));
+			WebElement = Browser.FindElement(By.CssSelector(elementValue.CssSelector));
+			
 
 			WebElement.Click();
 			Thread.Sleep(500);
@@ -130,18 +131,23 @@
 		/// <param name="cartoon">Мультфильм</param>
 		private void SetCartoonsSettings(Cartoon cartoon)
 		{
-			var url = GetEpisodeUrl(cartoon);
-			var episodeNum = ExtractNumber(url);
+			
 
-			switch (cartoon.Name)
+			if (cartoon.CartoonUrl.MainUrl.Contains("freehat.cc"))
 			{
-				case "Южный парк":
-					SetSouthParkSettings(episodeNum, url);
-					CurrentDuration = new TimeSpan(0, 21, 10);
-					break;
-				case "Гриффины":
-					CurrentDuration = new TimeSpan(0, 21, 30);
-					break;
+				var url = OpenAndGetRandomEpisodeUrl(cartoon);
+				var episodeNum = ExtractNumber(url);
+				switch (cartoon.Name)
+				{
+					case "Южный парк":
+						SetSouthParkSettings(episodeNum, url);
+						CurrentDuration = new TimeSpan(0, 21, 10);
+						break;
+					case "Гриффины":
+						SetFamilyGuySettings(episodeNum, url);
+						CurrentDuration = new TimeSpan(0, 21, 30);
+						break;
+				}
 			}
 		}
 
@@ -149,6 +155,7 @@
 		/// Настройка дополнительных значений в "Южном Парке"
 		/// </summary>
 		/// <param name="episodeNum">Номер серии</param>
+		/// <param name="url">Адрес серии</param>
 		private void SetSouthParkSettings(int episodeNum, string url)
 		{
 			if (episodeNum >= 101 && episodeNum <= 113)
@@ -205,6 +212,16 @@
 			{
 				CurrentSkipCount = 7;
 			}
+		}
+
+		/// <summary>
+		/// Настройка дополнительных значений в "Гриффинах"
+		/// </summary>
+		/// <param name="episodeNum">Номер серии</param>
+		/// <param name="url">Адрес серии</param>
+		private void SetFamilyGuySettings(int episodeNum, string url)
+		{
+
 		}
 
 		#endregion
@@ -290,11 +307,11 @@
 		#region Дополнительные методы
 
 		/// <summary>
-		/// Получить url серии
+		/// Перейти на адрес мультфильма и получить его адрес
 		/// </summary>
 		/// <param name="cartoon"></param>
 		/// <returns></returns>
-		private string GetEpisodeUrl(Cartoon cartoon)
+		private string OpenAndGetRandomEpisodeUrl(Cartoon cartoon)
 		{
 			//Отсеивание нежелательных серий
 			while (true)
@@ -304,7 +321,7 @@
 				{
 					try
 					{
-						Browser.Navigate().GoToUrl($"https://{cartoon.Url}.freehat.cc/episode/rand.php");
+						Browser.Navigate().GoToUrl($"{cartoon.CartoonUrl.MainUrl}{cartoon.CartoonUrl.UrlParameter}");
 						break;
 					}
 					catch

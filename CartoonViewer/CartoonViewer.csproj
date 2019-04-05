@@ -115,20 +115,31 @@
       <DependentUpon>201904050016228_ModifiedEpisodeModel.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\Cartoon.cs" />
-    <Compile Include="Models\Episode.cs" />
-    <Compile Include="Models\Season.cs" />
-    <Compile Include="Models\VoiceOver.cs" />
+    <Compile Include="Models\CartoonModels\Cartoon.cs" />
+    <Compile Include="Models\CartoonModels\CartoonUrl.cs" />
+    <Compile Include="Models\CartoonModels\ElementValue.cs" />
+    <Compile Include="Models\CartoonModels\Episode.cs" />
+    <Compile Include="Models\CartoonModels\Season.cs" />
+    <Compile Include="Models\CartoonModels\VoiceOver.cs" />
+    <Compile Include="Models\ProgramModels\WorkingData.cs" />
     <Compile Include="ViewModels\DialogViewModel.cs" />
-    <Compile Include="ViewModels\MainMenuViewModels\MMEventsActions.cs" />
-    <Compile Include="ViewModels\MainMenuViewModels\MMPropertiesFields.cs" />
+    <Compile Include="ViewModels\MainMenuData\MMEventsActions.cs" />
+    <Compile Include="ViewModels\MainMenuData\MMPropertiesFields.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\MainMenuViewModel.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="ViewModels\SettingsViewModels\AddCartoonViewModel.cs" />
     <Compile Include="Views\DialogView.xaml.cs">
       <DependentUpon>DialogView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsViews\AddCartoonView.xaml.cs">
+      <DependentUpon>AddCartoonView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -179,6 +190,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="DesignData\SettingsViewDesignData.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DesignData\SettingsViewDesignData\AddCartoonViewDesignData.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\DialogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -191,11 +210,21 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\SettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SettingsViews\AddCartoonView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\MainBackground.png" />
     <Resource Include="Resources\MainBackgroundOnExit.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Models\SettingModels\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

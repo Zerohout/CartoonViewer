@@ -30,7 +30,7 @@ namespace CartoonViewer.Helpers
 			_windowHandle = new WindowInteropHelper(window).Handle;
 
 			var source = HwndSource.FromHwnd(_windowHandle);
-			source.AddHook(WndProc);
+			source?.AddHook(WndProc);
 		}
 
 		public HotkeysRegistrator(IntPtr hWnd)
@@ -39,7 +39,7 @@ namespace CartoonViewer.Helpers
 			var source = HwndSource.FromHwnd(hWnd);
 
 
-			source.AddHook(WndProc);
+			source?.AddHook(WndProc);
 		}
 
 		private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wparam, IntPtr lparam, ref bool handled)

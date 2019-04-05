@@ -1,104 +1,215 @@
 ﻿namespace CartoonViewer.Helpers
 {
 	using System.Collections.Generic;
-	using Models;
+	using System.IO;
+	using Models.CartoonModels;
+	using ViewModels;
+	using static Helper;
 
 	public static class Creator
 	{
-		public static List<VoiceOver> CreateVoiceOvers()
+		/// <summary>
+		/// Создать список озвучек по умолчанию
+		/// </summary>
+		/// <returns></returns>
+		public static List<VoiceOver> CreateDefaultVoiceOvers()
 		{
 			return new List<VoiceOver>
 			{
 				new VoiceOver
 				{
 					Name = "MTV(Default)",
-					Url = ""
+					UrlParameter = "",
+					Checked = true
 				},
 				new VoiceOver
 				{
 					Name = "Paramaunt(Default)",
-					Url = ""
+					UrlParameter = "",
+					Checked = true
 				},
 				new VoiceOver
 				{
 					Name = "Paramaunt",
-					Url = "?v=par"
+					UrlParameter = "?v=par"
 				},
 				new VoiceOver
 				{
 					Name = "РенТВ(Default)",
-					Url = ""
+					UrlParameter = "",
+					Checked = true
 				},
 				new VoiceOver
 				{
 					Name = "VO(Default)",
-					Url = ""
+					UrlParameter = "",
+					Checked = true
 				},
 				new VoiceOver
 				{
 					Name = "КвК(Default)",
-					Url = ""
+					UrlParameter = "",
+					Checked = true
 				},
 				new VoiceOver
 				{
 					Name = "L0cDoG(Default)",
-					Url = ""
+					UrlParameter = "",
+					Checked = true
 				},
 				new VoiceOver
 				{
 					Name = "L0cDoG",
-					Url = "?v=ld"
+					UrlParameter = "?v=ld"
 				},
 				new VoiceOver
 				{
 					Name = "Jaskier(Default)",
-					Url = ""
+					UrlParameter = "",
+					Checked = true
 				},
 				new VoiceOver
 				{
 					Name = "Jaskier",
-					Url = "?v=js"
+					UrlParameter = "?v=js"
 				},
 				new VoiceOver
 				{
 					Name = "Гоблин",
-					Url = "?v=goblin"
+					UrlParameter = "?v=goblin"
 				},
 				new VoiceOver
 				{
 					Name = "Англ.",
-					Url = "?v=en"
+					UrlParameter = "?v=en"
 				}
 			};
 		}
 
-		public static List<Cartoon> CreateCartoons()
+		/// <summary>
+		/// Создать список мультфильмов по умолчанию
+		/// </summary>
+		/// <returns></returns>
+		public static List<Cartoon> CreateDefaultCartoons()
 		{
 			return new List<Cartoon>
 			{
 				new Cartoon
 				{
 					Name = "Южный парк",
-					Url = "sp"
+					CartoonUrl = new CartoonUrl
+					{
+						MainUrl = "http://sp.freehat.cc/episode/",
+						UrlParameter = "rand.php",
+					},
+					ElementValues = new List<ElementValue>()
+					{
+						new ElementValue
+						{
+							UserElementName = "Нижняя кнопка старта",
+							CssSelector = "pjsdiv:nth-child(8) > pjsdiv > pjsdiv"
+						}
+					}
+
 				},
 				new Cartoon
 				{
 					Name = "Гриффины",
-					Url = "grif"
+					CartoonUrl = new CartoonUrl
+					{
+						MainUrl = "http://grif.freehat.cc/episode/",
+						UrlParameter = "rand.php",
+					},
+					ElementValues = new List<ElementValue>()
+					{
+						new ElementValue
+						{
+							UserElementName = "Нижняя кнопка старта",
+							CssSelector = "pjsdiv:nth-child(8) > pjsdiv > pjsdiv"
+						}
+					}
 				},
 				new Cartoon
 				{
 					Name = "Симпсоны",
-					Url = "simp"
+					CartoonUrl = new CartoonUrl
+					{
+						MainUrl = "http://simp.freehat.cc/episode/",
+						UrlParameter = "rand.php",
+					},
+					ElementValues = new List<ElementValue>()
+					{
+						new ElementValue
+						{
+							UserElementName = "Нижняя кнопка старта",
+							CssSelector = "pjsdiv:nth-child(8) > pjsdiv > pjsdiv"
+						}
+					}
 				},
 				new Cartoon
 				{
 					Name = "Американский папаша",
-					Url = "dad"
+					CartoonUrl = new CartoonUrl
+					{
+						MainUrl = "http://dad.freehat.cc/episode/",
+						UrlParameter = "rand.php",
+					},
+					ElementValues = new List<ElementValue>()
+					{
+						new ElementValue
+						{
+							UserElementName = "Нижняя кнопка старта",
+							CssSelector = "pjsdiv:nth-child(8) > pjsdiv > pjsdiv"
+						}
+					}
 				}
 			};
+		}
 
-			
+		/// <summary>
+		/// Создание файла
+		/// </summary>
+		/// <param name="fileName">Имя файла (без расширения и указания папки)</param>
+		/// <param name="fileExtension">Расширение файла (по умолчанию .cview)</param>
+		/// <param name="folderPath">Путь до файла (по умолчанию WorkingData)</param>
+		public static void CreateFile(string fileName, string fileExtension = null, string folderPath = null)
+		{
+			if (folderPath == null)
+			{
+				folderPath = $"{AppPath}\\{WorkingDataPath}";
+			}
+
+			if (fileExtension == null)
+			{
+				fileExtension = ".cview";
+			}
+
+			var path = $"{folderPath}\\{fileName}{fileExtension}";
+
+			if (!Directory.Exists(folderPath))
+			{
+				Directory.CreateDirectory(folderPath);
+			}
+
+			if (!File.Exists(path))
+			{
+				using (var fs = new FileStream(path, FileMode.Create))
+				{
+					fs.Dispose();
+				}
+			}
+			else
+			{
+				if (WinMan.ShowDialog(new DialogViewModel(
+										  "Файл уже существует, хотите его перезаписать?",
+										  DialogState.YES_NO)) ?? false)
+				{
+					using (var fs = new FileStream(path, FileMode.Create))
+					{
+						fs.Dispose();
+					}
+				}
+			}
 		}
 	}
 }

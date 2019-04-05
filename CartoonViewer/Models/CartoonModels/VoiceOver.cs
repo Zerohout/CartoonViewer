@@ -1,4 +1,4 @@
-﻿namespace CartoonViewer.Models
+﻿namespace CartoonViewer.Models.CartoonModels
 {
 	using System.ComponentModel.DataAnnotations;
 	using System.ComponentModel.DataAnnotations.Schema;
@@ -9,7 +9,8 @@
 		public int VoiceOverId { get; set; }
 		
 		public string Name { get; set; }
-		public string Url { get; set; }
+		public string Description { get; set; }
+		public string UrlParameter { get; set; }
 		public bool Checked { get; set; }
 
 		[ForeignKey("Episode")]
