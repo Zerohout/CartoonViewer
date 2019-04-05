@@ -1,6 +1,5 @@
 ﻿namespace CartoonViewer.ViewModels
 {
-	using System.Diagnostics;
 	using System.Windows;
 	using Caliburn.Micro;
 	using Helpers;
@@ -10,25 +9,18 @@
 	{
 		private WindowState _windowState = WindowState.Normal;
 		private HotkeysRegistrator _hotReg;
-		
-		public MainViewModel()
-		{
-			
-		}
 
 		protected override void OnViewLoaded(object view)
 		{
 			_hotReg = new HotkeysRegistrator(GetView() as Window);
 			
-			ActiveItem = new MenuViewModel(_hotReg)
+			ActiveItem = new MainMenuViewModel(_hotReg)
 			{
 				Parent = this
 			};
 			base.OnViewLoaded(view);
 		}
-
-
-
+		
 		/// <summary>
 		/// Состояние окна
 		/// </summary>

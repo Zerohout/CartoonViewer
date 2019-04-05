@@ -1,0 +1,15 @@
+﻿<vm:DialogViewModel xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:CartoonViewer.ViewModels"
+                    xmlns:models="clr-namespace:CartoonViewer.Models"
+                    ErrorTitle="Заголовок текста ошибки"
+                    ErrorMessage="Очень длинное познавательное сообщение с ошибкой, которое подскажет данному пользователю, что ему делать дальше.
+                    А это вторая часть длинного познавательного текста об ошибке. И оно подскажет многое пользователю."
+                    DialogTitle="Заголовок окна"
+                    Message="Длинное информативное сообщение, или вопрос адресованный текущему пользователю."
+                    Visibility_Error="Hidden"
+                    Visibility_Yes_No="Visible"
+                    Visibility_Ok_Cancel="Visible"
+                    Text_Ok_Cancel="Ок / Отмена">
+    
+</vm:DialogViewModel>

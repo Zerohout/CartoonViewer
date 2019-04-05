@@ -1,0 +1,93 @@
+﻿<mah:MetroWindow x:Class="CartoonViewer.Views.DialogView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:CartoonViewer.Views"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:cal="http://www.caliburnproject.org"
+                 mc:Ignorable="d"
+                 cal:Bind.AtDesignTime="True"
+                 d:DataContext="{d:DesignData Source=../DesignData/DialogViewDesignData.xaml}"
+                 Title="{Binding DialogTitle}"
+                 TitleCharacterCasing="Normal"
+                 cal:Message.Attach="[Event Closed]=[Action Closed]"
+                 WindowStartupLocation="CenterScreen"
+    Height="450"
+    Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="0.4*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Text="{Binding ErrorTitle}"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="3"
+                   Grid.Row="0"
+                   FontSize="20"
+                   TextWrapping="WrapWithOverflow"
+                   Foreground="Crimson"
+                   FontFamily="Comic Sans MS"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontWeight="Bold"
+                   Visibility="{Binding Visibility_Error}"/>
+        <TextBox Text="{Binding ErrorMessage}"
+                 IsReadOnly="True"
+                 TextWrapping="WrapWithOverflow"
+            Grid.Column="0"
+                 Grid.Row="1"
+                 Grid.ColumnSpan="3"
+                 Margin="5"
+                 FontSize="14"
+                 Visibility="{Binding Visibility_Error}"
+                 FontFamily="Comic Sans MS"/>
+        <TextBlock Grid.Column="0"
+            Grid.ColumnSpan="3"
+            Grid.Row="1"
+                   FontSize="25"
+                   FontFamily="Comic Sans MS"
+                   FontWeight="Bold"
+                   TextAlignment="Center"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   TextWrapping="Wrap"
+            Text="{Binding Message}"/>
+        <Button  
+            cal:Message.Attach="[Event Click]=[Action Button_Yes]"
+            Grid.Column="0"
+            Margin="30"
+            Visibility="{Binding Visibility_Yes_No}"
+            Grid.Row="2">
+            <TextBlock Text="Хорошо"
+                FontSize="20"
+                FontFamily="Comic Sans MS"/>
+        </Button>
+        <Button  
+            cal:Message.Attach="[Event Click]=[Action Button_No]"
+            Grid.Column="2"
+            Margin="30"
+            Visibility="{Binding Visibility_Yes_No}"
+            Grid.Row="2">
+            <TextBlock Text="Не хочу"
+                       FontSize="20"
+                       FontFamily="Comic Sans MS"/>
+        </Button>
+        <Button  
+            cal:Message.Attach="[Event Click]=[Action Button_Ok_Cancel]"
+            Grid.Column="1"
+            Visibility="{Binding Visibility_Ok_Cancel}"
+            Margin="30"
+            Grid.Row="2">
+            <TextBlock Text="{Binding Text_Ok_Cancel}"
+                       FontSize="20"
+                       FontFamily="Comic Sans MS"/>
+        </Button>
+    </Grid>
+</mah:MetroWindow>

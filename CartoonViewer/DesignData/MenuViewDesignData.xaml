@@ -1,20 +1,21 @@
-﻿<viewModels:MenuViewModel
+﻿<viewModels:MainMenuViewModel
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:CartoonViewer"
     xmlns:viewModels="clr-namespace:CartoonViewer.ViewModels"
     xmlns:models="clr-namespace:CartoonViewer.Models"
+    xmlns:mainMenuViewModels="clr-namespace:CartoonViewer.ViewModels.MainMenuViewModels"
     EpisodeCount="68"
     Opacity="1" IsPause="True"
     >
-    <viewModels:MenuViewModel.Cartoons>
+    <viewModels:MainMenuViewModel.Cartoons>
         <models:Cartoon Name="Южный парк" />
         <models:Cartoon Name="Гриффины" />
         <models:Cartoon Name="Симпсоны" />
         <models:Cartoon Name="Американский папаша" />
         <models:Cartoon Name="Спанч Боб" />
         <models:Cartoon Name="Футурама" />
-    </viewModels:MenuViewModel.Cartoons>
+    </viewModels:MainMenuViewModel.Cartoons>
 
 
-</viewModels:MenuViewModel>
+</viewModels:MainMenuViewModel>

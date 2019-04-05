@@ -4,6 +4,7 @@
 	using System.Diagnostics;
 	using System.Linq;
 	using System.Threading;
+	using Caliburn.Micro;
 	using OpenQA.Selenium;
 	using OpenQA.Selenium.Chrome;
 
@@ -14,6 +15,7 @@
 		public static string MainAddress = $"http://{CurrentCartoon}.freehat.cc/episode/";
 		public static string CurrentCartoon = "";
 		public static int CurrentSkipCount = 6;
+		public static int DelayedSkipCount = 5;
 		public const int WM_KEYDOWN = 0x100;
 		public const int WM_KEYUP = 0x101;
 		public const int WM_CHAR = 0x102;
@@ -26,10 +28,19 @@
 		public const int VK_SPACE = 0x20;
 		public static readonly TimeSpan ApproximateEpisodeDuration = new TimeSpan(0,21,10);
 		public static IntPtr HWND;
+		public static WindowManager WinMan = new WindowManager();
 
 		public static IWebDriver Browser;
 		public static MessageHelper Msg = new MessageHelper();
 		public static Stopwatch Timer = new Stopwatch();
+
+		public enum DialogState
+		{
+			YES_NO,
+			OK,
+			YES_NO_CANCEL,
+			ERROR
+		}
 
 		/// <summary>
 		/// Запуск браузера
