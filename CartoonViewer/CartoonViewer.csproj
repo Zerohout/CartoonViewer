@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>CartoonViewerIcon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Caliburn.Micro, Version=3.2.0.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
       <HintPath>..\packages\Caliburn.Micro.Core.3.2.0\lib\net45\Caliburn.Micro.dll</HintPath>
@@ -98,21 +101,9 @@
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Helpers\HotkeysRegistrator.cs" />
     <Compile Include="Helpers\MessageHelper.cs" />
-    <Compile Include="Migrations\201903302325283_Initializing.cs" />
-    <Compile Include="Migrations\201903302325283_Initializing.Designer.cs">
-      <DependentUpon>201903302325283_Initializing.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904012156054_ModifiedCartoonClass.cs" />
-    <Compile Include="Migrations\201904012156054_ModifiedCartoonClass.Designer.cs">
-      <DependentUpon>201904012156054_ModifiedCartoonClass.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904012209447_test.cs" />
-    <Compile Include="Migrations\201904012209447_test.Designer.cs">
-      <DependentUpon>201904012209447_test.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904050016228_ModifiedEpisodeModel.cs" />
-    <Compile Include="Migrations\201904050016228_ModifiedEpisodeModel.Designer.cs">
-      <DependentUpon>201904050016228_ModifiedEpisodeModel.cs</DependentUpon>
+    <Compile Include="Migrations\201904051609445_Initializing.cs" />
+    <Compile Include="Migrations\201904051609445_Initializing.Designer.cs">
+      <DependentUpon>201904051609445_Initializing.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\CartoonModels\Cartoon.cs" />
@@ -156,17 +147,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Migrations\201903302325283_Initializing.resx">
-      <DependentUpon>201903302325283_Initializing.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904012156054_ModifiedCartoonClass.resx">
-      <DependentUpon>201904012156054_ModifiedCartoonClass.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904012209447_test.resx">
-      <DependentUpon>201904012209447_test.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904050016228_ModifiedEpisodeModel.resx">
-      <DependentUpon>201904050016228_ModifiedEpisodeModel.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201904051609445_Initializing.resx">
+      <DependentUpon>201904051609445_Initializing.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -225,6 +207,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\SettingModels\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="CartoonViewerIcon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

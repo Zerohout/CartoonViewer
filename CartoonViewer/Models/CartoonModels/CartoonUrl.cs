@@ -3,6 +3,7 @@
 	using System.ComponentModel.DataAnnotations;
 	using System.ComponentModel.DataAnnotations.Schema;
 
+	[Table("CartoonUrl")]
 	public class CartoonUrl
 	{
 		[Key]

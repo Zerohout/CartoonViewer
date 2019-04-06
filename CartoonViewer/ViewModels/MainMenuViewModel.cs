@@ -186,7 +186,9 @@
 					 episodeNum == 1908 ||
 					 episodeNum == 1910 ||
 					 episodeNum == 2104 ||
-					 episodeNum == 2105)
+					 episodeNum == 2105 ||
+			         (episodeNum >= 1803 &&
+			          episodeNum <= 1806))
 			{
 				CurrentSkipCount = 11;
 			}
@@ -196,11 +198,16 @@
 				CurrentSkipCount = 12;
 			}
 			else if ((episodeNum >= 2106 && episodeNum <= 2110) ||
-					 (episodeNum >= 2202 && episodeNum <= 2209))
+					 (episodeNum >= 2202 && episodeNum <= 2209) ||
+			         episodeNum == 1802 || episodeNum == 1807 || 
+			         episodeNum == 1809)
 			{
 				CurrentSkipCount = 13;
 			}
-			else if (episodeNum == 2201)
+			else if (episodeNum == 2201 || 
+			         episodeNum == 1801 || 
+			         episodeNum == 1808 ||
+			         episodeNum == 1810)
 			{
 				CurrentSkipCount = 14;
 			}

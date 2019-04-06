@@ -86,6 +86,27 @@
 			};
 		}
 
+		public static List<CartoonUrl> CreateDefaultListCartoonUrl() => new List<CartoonUrl>
+		{
+			CreateDefaultCartoonUrl("sp"),
+			CreateDefaultCartoonUrl("grif"),
+			CreateDefaultCartoonUrl("simp"),
+			CreateDefaultCartoonUrl("dad")
+		};
+
+		public static CartoonUrl CreateDefaultCartoonUrl(string param) => new CartoonUrl
+		{
+			MainUrl = $"http://{param}.freehat.cc/episode/",
+			UrlParameter = "rand.php"
+		};
+
+		public static ElementValue CreateDefaultElementValue(int id) => new ElementValue
+		{
+			CartoonId = id,
+			UserElementName = "Нижняя кнопка старта",
+			CssSelector = "pjsdiv:nth-child(8) > pjsdiv > pjsdiv"
+		};
+
 		/// <summary>
 		/// Создать список мультфильмов по умолчанию
 		/// </summary>
@@ -96,72 +117,19 @@
 			{
 				new Cartoon
 				{
-					Name = "Южный парк",
-					CartoonUrl = new CartoonUrl
-					{
-						MainUrl = "http://sp.freehat.cc/episode/",
-						UrlParameter = "rand.php",
-					},
-					ElementValues = new List<ElementValue>()
-					{
-						new ElementValue
-						{
-							UserElementName = "Нижняя кнопка старта",
-							CssSelector = "pjsdiv:nth-child(8) > pjsdiv > pjsdiv"
-						}
-					}
-
+					Name = "Южный парк"
 				},
 				new Cartoon
 				{
-					Name = "Гриффины",
-					CartoonUrl = new CartoonUrl
-					{
-						MainUrl = "http://grif.freehat.cc/episode/",
-						UrlParameter = "rand.php",
-					},
-					ElementValues = new List<ElementValue>()
-					{
-						new ElementValue
-						{
-							UserElementName = "Нижняя кнопка старта",
-							CssSelector = "pjsdiv:nth-child(8) > pjsdiv > pjsdiv"
-						}
-					}
+					Name = "Гриффины"
 				},
 				new Cartoon
 				{
-					Name = "Симпсоны",
-					CartoonUrl = new CartoonUrl
-					{
-						MainUrl = "http://simp.freehat.cc/episode/",
-						UrlParameter = "rand.php",
-					},
-					ElementValues = new List<ElementValue>()
-					{
-						new ElementValue
-						{
-							UserElementName = "Нижняя кнопка старта",
-							CssSelector = "pjsdiv:nth-child(8) > pjsdiv > pjsdiv"
-						}
-					}
+					Name = "Симпсоны"
 				},
 				new Cartoon
 				{
-					Name = "Американский папаша",
-					CartoonUrl = new CartoonUrl
-					{
-						MainUrl = "http://dad.freehat.cc/episode/",
-						UrlParameter = "rand.php",
-					},
-					ElementValues = new List<ElementValue>()
-					{
-						new ElementValue
-						{
-							UserElementName = "Нижняя кнопка старта",
-							CssSelector = "pjsdiv:nth-child(8) > pjsdiv > pjsdiv"
-						}
-					}
+					Name = "Американский папаша"
 				}
 			};
 		}
