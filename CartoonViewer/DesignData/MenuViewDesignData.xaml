@@ -5,7 +5,7 @@
     xmlns:vms="clr-namespace:CartoonViewer.ViewModels"
     xmlns:models="clr-namespace:CartoonViewer.Models"
     xmlns:cartoonModels="clr-namespace:CartoonViewer.Models.CartoonModels"
-    EpisodeCount="68"
+    EpisodeCountString="68"
     Opacity="1" IsPause="True"
     >
     <vms:MainMenuViewModel.Cartoons>

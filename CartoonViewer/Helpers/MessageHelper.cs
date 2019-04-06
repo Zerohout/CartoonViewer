@@ -1,4 +1,5 @@
-﻿namespace CartoonViewer.Helpers
+﻿// ReSharper disable UnusedMember.Local
+namespace CartoonViewer.Helpers
 {
 	using System;
 	using System.Runtime.InteropServices;
@@ -86,7 +87,7 @@
 		{
 			var result = 0;
 
-			for(var i = 0; i < count; i++)
+			for (var i = 0; i < count; i++)
 			{
 				Thread.Sleep(250);
 				result = sendWindowsMessage(HWND, WM_KEYDOWN, key, 0);

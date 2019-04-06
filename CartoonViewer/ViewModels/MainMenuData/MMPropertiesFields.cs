@@ -13,28 +13,18 @@ namespace CartoonViewer.ViewModels
 		private readonly Random rnd = new Random();
 		private BindableCollection<Cartoon> _cartoons = new BindableCollection<Cartoon>();
 		private List<Cartoon> _checkedCartoons = new List<Cartoon>();
-		private TimeSpan _totalDuration;
 		private TimeSpan _delayedSkipDuration;
-		
+		private List<int> _randomCartoonNumberList = new List<int>();
+
 		private IWebElement WebElement;
 		private bool _isPause;
-		private bool _shutdownComp;
-		private string _episodeCount;
+		private bool _isShutdownComp;
+		private string _episodeCount = "10";
 		private double _opacity = 1;
+		private int _currentEpisodeIndex;
 		private Uri _background = new Uri("../Resources/MainBackground.png", UriKind.Relative);
+		private string _episodesCountRemainingString = "Серий к просмотру";
 
-		public bool SwitchEpisode { get; set; } = false;
-
-		/// <summary>
-		/// Текущая длительность серии
-		/// </summary>
-		public TimeSpan CurrentDuration { get; set; }
-
-		/// <summary>
-		/// Флаг установки отложенного старта
-		/// </summary>
-		public bool IsDelayedSkip { get; set; }
-		
 		/// <summary>
 		/// Список мультфильмов
 		/// </summary>
@@ -62,30 +52,77 @@ namespace CartoonViewer.ViewModels
 		}
 
 		/// <summary>
-		/// Общая длительность выбранного количество серий
+		/// Список случайных номеров мультфильмов для просмотра
 		/// </summary>
-		public TimeSpan TotalDuration
+		public List<int> RandomCartoonNumberList
 		{
-			get => _totalDuration;
+			get => _randomCartoonNumberList;
 			set
 			{
-				_totalDuration = value;
-				NotifyOfPropertyChange(() => TotalDuration);
+				_randomCartoonNumberList = value;
+				NotifyOfPropertyChange(() => RandomCartoonNumberList);
 			}
 		}
 
 		/// <summary>
-		/// Продолжительность отложенного пропуска
+		/// Индекс текущей серии
 		/// </summary>
-		public TimeSpan DelayedSkipDuration
+		public int CurrentEpisodeIndex
 		{
-			get => _delayedSkipDuration;
+			get => _currentEpisodeIndex;
 			set
 			{
-				_delayedSkipDuration = value;
-				NotifyOfPropertyChange(() => DelayedSkipDuration);
+				_currentEpisodeIndex = value;
+				NotifyOfPropertyChange(() => CurrentEpisodeIndex);
 			}
 		}
+
+		/// <summary>
+		/// Количество серий для просмотра
+		/// </summary>
+		public string EpisodeCountString
+		{
+			get => _episodeCount;
+			set
+			{
+				if (int.TryParse(value, out var tempValue))
+				{
+					if (EpisodeCount < tempValue && ElapsedTime > TimeSpan.Zero)
+					{
+						AddCartoonToQueue(tempValue - EpisodeCount);
+					}
+
+					_episodeCount = value;
+				}
+				else
+				{
+					_episodeCount = "0";
+				}
+
+				NotifyEpisodesTime();
+			}
+		}
+
+		/// <summary>
+		/// Числовое представление количества оставшихся серий для просмотра
+		/// </summary>
+		public int EpisodeCount => int.Parse(EpisodeCountString);
+
+		/// <summary>
+		/// Текст TextBlock'а Осталось серий/Серий к просмотру
+		/// </summary>
+		public string EpisodesCountRemainingString
+		{
+			get => _episodesCountRemainingString;
+			set
+			{
+				_episodesCountRemainingString = value;
+				NotifyOfPropertyChange(() => EpisodesCountRemainingString);
+			}
+		}
+
+
+		#region Флаги
 
 		/// <summary>
 		/// Флаг включения паузы
@@ -103,49 +140,93 @@ namespace CartoonViewer.ViewModels
 		/// <summary>
 		/// Флаг выключения компьютера
 		/// </summary>
-		public bool ShutdownComp
+		public bool IsShutdownComp
 		{
-			get => _shutdownComp;
+			get => _isShutdownComp;
 			set
 			{
-				_shutdownComp = value;
-				NotifyOfPropertyChange(() => ShutdownComp);
+				_isShutdownComp = value;
+				NotifyOfPropertyChange(() => IsShutdownComp);
 			}
 		}
 
 		/// <summary>
-		/// Минуты общей длительности
+		/// Флаг установки отложенного старта
 		/// </summary>
-		public int MinuteDuration => TotalDuration.Minutes;
+		public bool IsDelayedSkip { get; set; }
 		/// <summary>
-		/// Часы общей длительности
+		/// Флаг переключения серии
 		/// </summary>
-		public int HourDuration => TotalDuration.Hours;
-		/// <summary>
-		/// Дни общей длительности
-		/// </summary>
-		public int DayDuration => TotalDuration.Days;
+		public bool IsSwitchEpisode { get; set; }
+		
+		#endregion
+		
+		#region Свойства связанные со временем
 
 		/// <summary>
-		/// Количество серий для просмотра
+		/// Продолжительность отложенного пропуска
 		/// </summary>
-		public string EpisodeCount
+		public TimeSpan DelayedSkipDuration
 		{
-			get => int.TryParse(_episodeCount, out var val) ? val.ToString() : "0";
+			get => _delayedSkipDuration;
 			set
 			{
-				_episodeCount = int.TryParse(value, out var temp)
-					? temp.ToString()
-					: "0";
-				TotalDuration =
-					new TimeSpan(
-						0,
-						(int)Math.Ceiling(ApproximateEpisodeDuration.TotalMinutes
-										  * (double.Parse(_episodeCount))),
-						0);
-				NotifyEpisodesTime();
+				_delayedSkipDuration = value;
+				NotifyOfPropertyChange(() => DelayedSkipDuration);
 			}
 		}
+		
+		/// <summary>
+		/// Кончное время просмотра указанного числа серий
+		/// </summary>
+		public TimeSpan EndTime => DateTime.Now.TimeOfDay +
+		                           new TimeSpan(
+			                           0,
+			                           (int)Math.Ceiling(ApproximateEpisodeDuration.TotalMinutes
+			                                             * (double.Parse(_episodeCount))),
+			                           0) + (CurrentDuration - ElapsedTime);
+
+		/// <summary>
+		/// Конечная дата просмотра указанного числа серий
+		/// </summary>
+		public DateTime EndDate => new DateTime(
+			DateTime.Now.Year,
+			DateTime.Now.Month,
+			DateTime.Now.Day + EndTime.Days);
+
+		/// <summary>
+		/// Текущая длительность серии
+		/// </summary>
+		public TimeSpan CurrentDuration { get; set; }
+		/// <summary>
+		/// Год конечной даты
+		/// </summary>
+		public int FinalYear => EndDate.Year;
+		/// <summary>
+		/// Месяц конечной даты
+		/// </summary>
+		public int FinalMonth => EndDate.Month;
+		/// <summary>
+		/// День конечной даты
+		/// </summary>
+		public int FinalDay => EndDate.Day;
+		/// <summary>
+		/// Час конечного времени
+		/// </summary>
+		public int FinalHour => EndTime.Hours;
+		/// <summary>
+		/// Минута конечного времени
+		/// </summary>
+		public int FinalMinute => EndTime.Minutes;
+		/// <summary>
+		/// Прошедшее время серии
+		/// </summary>
+		public TimeSpan ElapsedTime => Timer.Elapsed;
+
+
+		#endregion
+
+		
 
 		/// <summary>
 		/// Прозрачность элементов и фона MainMenu

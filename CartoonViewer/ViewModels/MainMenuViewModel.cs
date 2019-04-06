@@ -1,7 +1,6 @@
 ﻿namespace CartoonViewer.ViewModels
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Data.Entity;
 	using System.Diagnostics;
 	using System.Linq;
@@ -19,10 +18,11 @@
 	{
 		public MainMenuViewModel(HotkeysRegistrator hotReg)
 		{
-			hotReg.RegisterGlobalHotkey(Pause, Keys.Pause, ModifierKeys.None);
+			hotReg.RegisterGlobalHotkey(() => { IsPause = !IsPause; }, Keys.Pause, ModifierKeys.None);
 			hotReg.RegisterGlobalHotkey(Exit, Keys.Pause, ModifierKeys.Shift);
 			hotReg.RegisterGlobalHotkey(Start, Keys.P, ModifierKeys.Alt);
-			hotReg.RegisterGlobalHotkey(() => { SwitchEpisode = true; }, Keys.Right, ModifierKeys.Control);
+			hotReg.RegisterGlobalHotkey(() => { IsSwitchEpisode = true; }, Keys.Right, ModifierKeys.Control);
+			//hotReg.RegisterGlobalHotkey(() => EpisodeCountString = (EpisodeCount-1).ToString(), Keys.Delete, ModifierKeys.Shift);
 		}
 
 		public MainMenuViewModel()
@@ -37,7 +37,7 @@
 
 			base.OnInitialize();
 		}
-		
+
 		/// <summary>
 		/// Загрузка списка мультфильмов из базы данных
 		/// </summary>
@@ -45,32 +45,63 @@
 		{
 			using (var ctx = new CVDbContext())
 			{
-				ctx.Cartoons.Load();
+				ctx.Cartoons.Include("CartoonUrl").Load();
 				Cartoons.AddRange(ctx.Cartoons.Local.OrderBy(c => c.CartoonId));
 			}
 		}
-		
+
 		#region Просмотр серий
+
+		private void RemoveCartoonFromQueue(int count)
+		{
+			for (var i = 0; i < count; i++)
+			{
+				RandomCartoonNumberList.Remove(RandomCartoonNumberList.Last());
+			}
+
+		}
+
+		private void AddCartoonToQueue(int count)
+		{
+			for (var i = 0; i < count; i++)
+			{
+				RandomCartoonNumberList.Add(rnd.Next(1, 101) % CheckedCartoons.Count);
+			}
+		}
 
 		/// <summary>
 		/// Метод начала просмотра серий
 		/// </summary>
 		private void StartBrowsing()
 		{
-			var rndCartList = new List<int>();
+			AddCartoonToQueue(EpisodeCount);
 
-			//создание рандомного списка эпизодов
-			for (var i = 0; i < int.Parse(EpisodeCount); i++)
+			EpisodesCountRemainingString = "Осталось серий";
+
+			while (EpisodeCount > 0)
 			{
-				rndCartList.Add(rnd.Next(1, 101) % CheckedCartoons.Count);
+				EpisodeCountString = (EpisodeCount - 1).ToString();
+
+				//цикл для переключения серии без потерь в количестве указанных просмотров
+				do
+				{
+					IsSwitchEpisode = false;
+
+					PlayEpisode(CheckedCartoons[RandomCartoonNumberList[CurrentEpisodeIndex]]);
+
+					if (IsSwitchEpisode)
+					{
+						AddCartoonToQueue(1);
+					}
+					
+					CurrentEpisodeIndex++;
+
+
+				} while (IsSwitchEpisode);
+
 			}
 
-			foreach (var cartoonNum in rndCartList)
-			{
-				PlayEpisode(CheckedCartoons[cartoonNum]);
-			}
-
-			if (ShutdownComp)
+			if (IsShutdownComp)
 			{
 				var psi = new ProcessStartInfo("shutdown", "/s /t 0")
 				{
@@ -86,18 +117,20 @@
 
 		private void PlayEpisode(Cartoon cartoon)
 		{
-			//цикл для переключения серии без потерь в количестве указанных просмотров
-			do
+			Cartoon _cartoon;
+			
+			using (var ctx = new CVDbContext())
 			{
-				SwitchEpisode = false;
+				ctx.Cartoons.Where(c => c.CartoonId == cartoon.CartoonId).Include("CartoonUrl").Include("ElementValues").Load();
+				_cartoon = ctx.Cartoons.Local.First(c => c.CartoonId == cartoon.CartoonId);
+			}
 
-				SetCartoonsSettings(cartoon);
-				StartVideoPlayer(cartoon.ElementValues.First(e => e.UserElementName.Contains("кнопка")));
+			SetCartoonsSettings(_cartoon);
+			StartVideoPlayer(_cartoon.ElementValues.First(e => e.UserElementName.Contains("кнопка")));
 
-				Helper.Timer.Restart();
-				LaunchMonitoring();
+			Helper.Timer.Restart();
+			LaunchMonitoring();
 
-			} while (SwitchEpisode);
 		}
 
 		/// <summary>
@@ -106,7 +139,6 @@
 		private void StartVideoPlayer(ElementValue elementValue)
 		{
 			WebElement = Browser.FindElement(By.CssSelector(elementValue.CssSelector));
-			
 
 			WebElement.Click();
 			Thread.Sleep(500);
@@ -131,8 +163,6 @@
 		/// <param name="cartoon">Мультфильм</param>
 		private void SetCartoonsSettings(Cartoon cartoon)
 		{
-			
-
 			if (cartoon.CartoonUrl.MainUrl.Contains("freehat.cc"))
 			{
 				var url = OpenAndGetRandomEpisodeUrl(cartoon);
@@ -187,8 +217,8 @@
 					 episodeNum == 1910 ||
 					 episodeNum == 2104 ||
 					 episodeNum == 2105 ||
-			         (episodeNum >= 1803 &&
-			          episodeNum <= 1806))
+					 (episodeNum >= 1803 &&
+					  episodeNum <= 1806))
 			{
 				CurrentSkipCount = 11;
 			}
@@ -199,15 +229,15 @@
 			}
 			else if ((episodeNum >= 2106 && episodeNum <= 2110) ||
 					 (episodeNum >= 2202 && episodeNum <= 2209) ||
-			         episodeNum == 1802 || episodeNum == 1807 || 
-			         episodeNum == 1809)
+					 episodeNum == 1802 || episodeNum == 1807 ||
+					 episodeNum == 1809)
 			{
 				CurrentSkipCount = 13;
 			}
-			else if (episodeNum == 2201 || 
-			         episodeNum == 1801 || 
-			         episodeNum == 1808 ||
-			         episodeNum == 1810)
+			else if (episodeNum == 2201 ||
+					 episodeNum == 1801 ||
+					 episodeNum == 1808 ||
+					 episodeNum == 1810)
 			{
 				CurrentSkipCount = 14;
 			}
@@ -257,8 +287,10 @@
 		{
 			var autoEvent = (AutoResetEvent)stateInfo;
 
+			NotifyEpisodesTime();
+
 			//Таймер превысил длительность серии
-			if (Helper.Timer.Elapsed > CurrentDuration || SwitchEpisode)
+			if (ElapsedTime > CurrentDuration || IsSwitchEpisode)
 			{
 				Helper.Timer.Reset();
 				Msg.PressKey(VK_ESCAPE);
@@ -277,12 +309,13 @@
 			//Отложенный запуск закончил действие
 			if (IsDelayedSkip && Helper.Timer.Elapsed > DelayedSkipDuration)
 			{
+				Helper.Timer.Stop();
 				Msg.PressKey(VK_SPACE);
 				Msg.PressKey(VK_RIGHT, DelayedSkipCount);
 				Msg.PressKey(VK_SPACE);
 
 				IsDelayedSkip = false;
-				Helper.Timer.Restart();
+				Helper.Timer.Start();
 			}
 		}
 
@@ -310,7 +343,7 @@
 		}
 
 		#endregion
-		
+
 		#region Дополнительные методы
 
 		/// <summary>
@@ -375,6 +408,7 @@
 
 			return -1;
 		}
+
 		#endregion
 
 	}

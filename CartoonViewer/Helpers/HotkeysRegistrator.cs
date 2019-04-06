@@ -35,10 +35,7 @@ namespace CartoonViewer.Helpers
 
 		public HotkeysRegistrator(IntPtr hWnd)
 		{
-			var t = Process.GetCurrentProcess();
 			var source = HwndSource.FromHwnd(hWnd);
-
-
 			source?.AddHook(WndProc);
 		}
 
@@ -57,6 +54,7 @@ namespace CartoonViewer.Helpers
 
 		public bool RegisterGlobalHotkey(Action action, System.Windows.Forms.Keys commonKey, params ModifierKeys[] keys)
 		{
+			// ReSharper disable once SuspiciousTypeConversion.Global
 			var mod = keys.Cast<uint>().Aggregate((current, modKey) => current | modKey);
 			var atom = GlobalAddAtom("CartoonViewer" + (_globalActions.Count + 1));
 			var status = RegisterHotKey(_windowHandle, atom, mod, (uint)commonKey);

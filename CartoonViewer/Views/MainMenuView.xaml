@@ -17,6 +17,13 @@
     d:DesignWidth="880"
     mc:Ignorable="d">
     <UserControl.Resources>
+        <Style x:Key="WatchSettings" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
         <Style TargetType="{x:Type ListBoxItem}">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="HorizontalAlignment" Value="Left" />
@@ -86,24 +93,6 @@
                     </ItemContainerTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-        </Grid>
-
-        <Grid Grid.Row="0" Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <!--<mah:ToggleSwitchButton
-                IsChecked="{Binding IsPause}"
-                x:Name="Pause"
-                Grid.Column="1"
-                Grid.Row="0"/>-->
-
         </Grid>
 
         <Grid Grid.Row="0" Grid.Column="2">
@@ -221,14 +210,12 @@
                 Grid.Row="2"
                 Grid.Column="0"
                 Grid.ColumnSpan="3"
-                Margin="5,0,0,0"
+                Margin="10,0,0,0"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                FontFamily="Comic Sans MS"
-                FontSize="16"
-                FontWeight="Bold"
-                Foreground="Black"
-                Text="Количество серий">
+
+                Style="{StaticResource WatchSettings}"
+
+                Text="{Binding EpisodesCountRemainingString}">
                 <TextBlock.RenderTransform>
                     <RotateTransform Angle="-5.4" />
                 </TextBlock.RenderTransform>
@@ -239,16 +226,14 @@
                 Grid.Column="3"
                 MinWidth="40"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center"
                 Background="Transparent"
                 BorderBrush="Transparent"
-                BorderThickness="2"
+                VerticalAlignment="Center"
                 FontFamily="Comic Sans MS"
-                FontSize="16"
+                FontSize="15"
                 FontWeight="Bold"
                 Foreground="Black"
-                Text="{Binding EpisodeCount, UpdateSourceTrigger=PropertyChanged}">
-
+                Text="{Binding EpisodeCountString, UpdateSourceTrigger=PropertyChanged}">
                 <TextBox.RenderTransform>
                     <RotateTransform Angle="-9.5" />
                 </TextBox.RenderTransform>
@@ -591,66 +576,55 @@
                 Grid.RowSpan="2"
                 Grid.Column="0"
                 Margin="5,0,0,0"
-                Orientation="Horizontal">
+                Orientation="Vertical">
 
                 <StackPanel.RenderTransform>
                     <RotateTransform Angle="-9.5" />
                 </StackPanel.RenderTransform>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Center">
+                    <TextBlock
+                        Style="{StaticResource WatchSettings}"
+                        Text="{Binding FinalDay}" />
+                    <TextBlock
+                        Style="{StaticResource WatchSettings}"
+                        Text="."/>
+                    <TextBlock
+                        Style="{StaticResource WatchSettings}"
+                        Text="{Binding FinalMonth}" />
+                    <TextBlock
+                        Style="{StaticResource WatchSettings}"
+                        Text="." />
+                    <TextBlock
+                        Style="{StaticResource WatchSettings}"
+                        Text="{Binding FinalYear}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Center">
+                    <TextBlock
+                        Style="{StaticResource WatchSettings}"
+                        Text="{Binding FinalHour}" />
+                    <TextBlock
+                        Style="{StaticResource WatchSettings}"
+                        Text=":" />
+                    <TextBlock
+                        Style="{StaticResource WatchSettings}"
+                        Text="{Binding FinalMinute}" />
+                </StackPanel>
 
-                <TextBlock
-                    VerticalAlignment="Center"
-                    FontFamily="Comic Sans MS"
-                    FontSize="16"
-                    FontWeight="Bold"
-                    Foreground="Black"
-                    Text="{Binding DayDuration}" />
-                <TextBlock
-                    VerticalAlignment="Center"
-                    FontFamily="Comic Sans MS"
-                    FontSize="16"
-                    FontWeight="Bold"
-                    Foreground="Black"
-                    Text="д." />
-                <TextBlock
-                    VerticalAlignment="Center"
-                    FontFamily="Comic Sans MS"
-                    FontSize="16"
-                    FontWeight="Bold"
-                    Foreground="Black"
-                    Text="{Binding HourDuration}" />
-                <TextBlock
-                    VerticalAlignment="Center"
-                    FontFamily="Comic Sans MS"
-                    FontSize="15"
-                    FontWeight="Bold"
-                    Foreground="Black"
-                    Text="ч." />
-                <TextBlock
-                    VerticalAlignment="Center"
-                    FontFamily="Comic Sans MS"
-                    FontSize="16"
-                    FontWeight="Bold"
-                    Foreground="Black"
-                    Text="{Binding MinuteDuration}" />
-                <TextBlock
-                    VerticalAlignment="Center"
-                    FontFamily="Comic Sans MS"
-                    FontSize="16"
-                    FontWeight="Bold"
-                    Foreground="Black"
-                    Text="м." />
             </StackPanel>
             <TextBlock
                 Grid.Row="2"
-                Grid.RowSpan="2"
-                Grid.Column="1"
+                Grid.RowSpan="3"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
                 FontFamily="Comic Sans MS"
-                FontSize="16"
+                FontSize="13"
                 FontWeight="Bold"
                 Foreground="Black"
-                Text="~Время ">
+                Text="~Время окончания">
                 <TextBlock.RenderTransform>
                     <RotateTransform Angle="-8" />
                 </TextBlock.RenderTransform>
@@ -734,11 +708,12 @@
             </Button>
         </Grid>
 
+        <Grid Grid.Row="2" Grid.Column="2" />
+
         <!--#endregion-->
 
 
 
 
     </Grid>
-    <!--</Grid>-->
 </UserControl>

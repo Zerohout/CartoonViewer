@@ -18,13 +18,13 @@ namespace CartoonViewer.ViewModels
 			((MainViewModel)Parent).TryClose();
 		}
 
-		/// <summary>
-		/// Действие при паузе
-		/// </summary>
-		public void Pause()
-		{
-			IsPause = !IsPause;
-		}
+		///// <summary>
+		///// Действие при паузе
+		///// </summary>
+		//public void Pause()
+		//{
+		//	IsPause = !IsPause;
+		//}
 
 		/// <summary>
 		/// Попадание курсора на кнопку выхода
@@ -71,16 +71,16 @@ namespace CartoonViewer.ViewModels
 		/// </summary>
 		private void NotifyEpisodesTime()
 		{
-			NotifyOfPropertyChange(() => EpisodeCount);
-			NotifyOfPropertyChange(() => DayDuration);
-			NotifyOfPropertyChange(() => HourDuration);
-			NotifyOfPropertyChange(() => MinuteDuration);
+			NotifyOfPropertyChange(() => EpisodeCountString);
+			NotifyOfPropertyChange(() => FinalYear);
+			NotifyOfPropertyChange(() => FinalMonth);
+			NotifyOfPropertyChange(() => FinalDay);
+			NotifyOfPropertyChange(() => FinalHour);
+			NotifyOfPropertyChange(() => FinalMinute);
 		}
 
 		private void SetDefaultValues()
 		{
-			EpisodeCount = "10";
-
 			foreach (var c in Cartoons)
 			{
 				if (c.Name == "Южный парк" || c.Name == "Гриффины")
@@ -90,6 +90,7 @@ namespace CartoonViewer.ViewModels
 			}
 
 			CheckedValidation();
+			
 			NotifyOfPropertyChange(() => Cartoons);
 		}
 	}
