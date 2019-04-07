@@ -6,19 +6,19 @@
     xmlns:local="clr-namespace:CartoonViewer.Views"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Width="880"
-    Height="660"
-                 Title="CartoonViewer"
-                 ShowTitleBar="False"
-                 BorderBrush="Transparent"
-                 ShowDialogsOverTitleBar="False"
-                UseNoneWindowStyle="True"
+    Width="1280"
+    Height="720"
+    Title="CartoonViewer"
+    ShowTitleBar="False"
+    BorderBrush="Transparent"
+    ShowDialogsOverTitleBar="False"
+    UseNoneWindowStyle="True"
     WindowStartupLocation="CenterScreen"
     cal:Message.Attach="[Closing] = [Action Closing()];[MouseLeftButtonDown]=[Action MouseDown()]"
     WindowState="{Binding WindowState}"
+    Background="Transparent"
     mc:Ignorable="d"
     WindowStyle="None"
-    Background="Transparent"
     AllowsTransparency="True">
 
     <!--<Window.Background>
@@ -31,7 +31,6 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-
-        <ContentControl x:Name="ActiveItem"/>
+       <ContentControl x:Name="ActiveItem"/>
     </Grid>
 </mah:MetroWindow>

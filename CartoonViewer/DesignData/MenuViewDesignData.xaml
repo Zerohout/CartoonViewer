@@ -5,9 +5,9 @@
     xmlns:vms="clr-namespace:CartoonViewer.ViewModels"
     xmlns:models="clr-namespace:CartoonViewer.Models"
     xmlns:cartoonModels="clr-namespace:CartoonViewer.Models.CartoonModels"
-    EpisodeCountString="68"
-    Opacity="1" IsPause="True"
-    >
+    EpisodeCountString="10"
+    Opacity="1"
+    Background="../Resources/HDMMBackground.png">
     <vms:MainMenuViewModel.Cartoons>
         <cartoonModels:Cartoon Name="Южный парк" />
         <cartoonModels:Cartoon Name="Гриффины" />

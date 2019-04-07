@@ -31,7 +31,7 @@ namespace CartoonViewer.ViewModels
 		/// </summary>
 		public void CursorOnExit()
 		{
-			Background = new Uri("../Resources/MainBackgroundOnExit.png", UriKind.Relative);
+			Background = new Uri("../Resources/HDMMBackgroundOnExit.png", UriKind.Relative);
 		}
 
 		/// <summary>
@@ -39,7 +39,7 @@ namespace CartoonViewer.ViewModels
 		/// </summary>
 		public void CursorOutsideExit()
 		{
-			Background = new Uri("../Resources/MainBackground.png", UriKind.Relative);
+			Background = new Uri("../Resources/HDMMBackground.png", UriKind.Relative);
 		}
 
 		/// <summary>

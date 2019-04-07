@@ -22,7 +22,7 @@ namespace CartoonViewer.ViewModels
 		private string _episodeCount = "10";
 		private double _opacity = 1;
 		private int _currentEpisodeIndex;
-		private Uri _background = new Uri("../Resources/MainBackground.png", UriKind.Relative);
+		private Uri _background = new Uri("../../Resources/HDMMBackground.png", UriKind.Relative);
 		private string _episodesCountRemainingString = "Серий к просмотру";
 
 		/// <summary>
