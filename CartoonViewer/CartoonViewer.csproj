@@ -59,6 +59,9 @@
     <Reference Include="MahApps.Metro, Version=1.6.5.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.6.5\lib\net46\MahApps.Metro.dll</HintPath>
     </Reference>
+    <Reference Include="MahApps.Metro.IconPacks, Version=2.3.0.4, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MahApps.Metro.IconPacks.2.3.0\lib\net46\MahApps.Metro.IconPacks.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
@@ -97,6 +100,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Database\CVDbContext.cs" />
+    <Compile Include="Helpers\Converters\EnumerableNullReplaceConverter.cs" />
+    <Compile Include="Helpers\Converters\NullReplaceConverter.cs" />
     <Compile Include="Helpers\Creator.cs" />
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Helpers\HotkeysRegistrator.cs" />
@@ -105,32 +110,62 @@
     <Compile Include="Migrations\201904051609445_Initializing.Designer.cs">
       <DependentUpon>201904051609445_Initializing.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904091001245_AddDescriptionToCartoonModel.cs" />
+    <Compile Include="Migrations\201904091001245_AddDescriptionToCartoonModel.Designer.cs">
+      <DependentUpon>201904091001245_AddDescriptionToCartoonModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904101410127_RemakeDatabaseModel.cs" />
+    <Compile Include="Migrations\201904101410127_RemakeDatabaseModel.Designer.cs">
+      <DependentUpon>201904101410127_RemakeDatabaseModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904101522094_CorrectionDatabaseModel.cs" />
+    <Compile Include="Migrations\201904101522094_CorrectionDatabaseModel.Designer.cs">
+      <DependentUpon>201904101522094_CorrectionDatabaseModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\CartoonModels\Cartoon.cs" />
+    <Compile Include="Models\CartoonModels\WebSite.cs" />
     <Compile Include="Models\CartoonModels\CartoonUrl.cs" />
     <Compile Include="Models\CartoonModels\ElementValue.cs" />
     <Compile Include="Models\CartoonModels\Episode.cs" />
     <Compile Include="Models\CartoonModels\Season.cs" />
     <Compile Include="Models\CartoonModels\VoiceOver.cs" />
     <Compile Include="Models\ProgramModels\WorkingData.cs" />
+    <Compile Include="Settings\ViewModels\CartoonsEditingViewModel.cs" />
+    <Compile Include="Settings\ViewModels\EpisodesEditingViewModel.cs" />
+    <Compile Include="Settings\ViewModels\GeneralSettingsViewModel.cs" />
+    <Compile Include="Settings\ViewModels\ISettingsViewModel.cs" />
+    <Compile Include="Settings\ViewModels\SeasonsEditingViewModel.cs" />
+    <Compile Include="Settings\Views\CartoonsEditingView.xaml.cs">
+      <DependentUpon>CartoonsEditingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\Views\EpisodesEditingView.xaml.cs">
+      <DependentUpon>EpisodesEditingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\Views\GeneralSettingsView.xaml.cs">
+      <DependentUpon>GeneralSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\Views\SeasonsEditingView.xaml.cs">
+      <DependentUpon>SeasonsEditingView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\DialogViewModel.cs" />
-    <Compile Include="ViewModels\MainMenuData\MMEventsActions.cs" />
-    <Compile Include="ViewModels\MainMenuData\MMPropertiesFields.cs" />
+    <Compile Include="MainMenu\Partials\MMEventsActions.cs" />
+    <Compile Include="MainMenu\Partials\MMPropertiesFields.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\MainMenuViewModel.cs" />
-    <Compile Include="ViewModels\SettingsViewModel.cs" />
-    <Compile Include="ViewModels\SettingsViewModels\AddCartoonViewModel.cs" />
+    <Compile Include="MainMenu\ViewModels\MainMenuViewModel.cs" />
+    <Compile Include="Settings\ViewModels\SettingsViewModel.cs" />
+    <Compile Include="Settings\ViewModels\CartoonsControlViewModel.cs" />
     <Compile Include="Views\DialogView.xaml.cs">
       <DependentUpon>DialogView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SettingsView.xaml.cs">
+    <Compile Include="Settings\Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SettingsViews\AddCartoonView.xaml.cs">
-      <DependentUpon>AddCartoonView.xaml</DependentUpon>
+    <Compile Include="Settings\Views\CartoonsControlView.xaml.cs">
+      <DependentUpon>CartoonsControlView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -150,6 +185,15 @@
     <EmbeddedResource Include="Migrations\201904051609445_Initializing.resx">
       <DependentUpon>201904051609445_Initializing.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904091001245_AddDescriptionToCartoonModel.resx">
+      <DependentUpon>201904091001245_AddDescriptionToCartoonModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904101410127_RemakeDatabaseModel.resx">
+      <DependentUpon>201904101410127_RemakeDatabaseModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904101522094_CorrectionDatabaseModel.resx">
+      <DependentUpon>201904101522094_CorrectionDatabaseModel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -168,15 +212,39 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DesignData\MenuViewDesignData.xaml">
+    <Page Include="MainMenu\DesignData\MainMenuViewDesignData.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DesignData\SettingsViewDesignData.xaml">
+    <Page Include="Resources\Styles\GeneralStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DesignData\SettingsViewDesignData\AddCartoonViewDesignData.xaml">
+    <Page Include="Settings\DesignData\CartoonsEditingViewDesignData.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\DesignData\SettingsViewDesignData.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\DesignData\CartoonsControlViewDesignData.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\Views\CartoonsEditingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\Views\EpisodesEditingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\Views\GeneralSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\Views\SeasonsEditingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -188,22 +256,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainMenuView.xaml">
+    <Page Include="MainMenu\Views\MainMenuView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SettingsView.xaml">
+    <Page Include="Settings\Views\SettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SettingsViews\AddCartoonView.xaml">
+    <Page Include="Settings\Views\CartoonsControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\MainBackground.png" />
-    <Resource Include="Resources\MainBackgroundOnExit.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\SettingModels\" />
@@ -212,30 +276,13 @@
     <Resource Include="CartoonViewerIcon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\MMBackground.png">
+    <Resource Include="Resources\Images\HDMMBackground.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\MMCartoonListBackground.png">
+    <Resource Include="Resources\Images\HDMMBackgroundOnExit.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\MMExitBackground.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\MMFullBackground.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\MMOnExitBackground.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\MMStartWatchingBackground.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\HDMMBackground.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\HDMMBackgroundOnExit.png">
+    <Resource Include="Resources\Images\MMBackground.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

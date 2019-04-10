@@ -3,19 +3,22 @@
 	using System.ComponentModel.DataAnnotations;
 	using System.ComponentModel.DataAnnotations.Schema;
 
-	[Table("CartoonUrl")]
+	[Table("CartoonUrls")]
 	public class CartoonUrl
 	{
 		[Key]
+		public int CartoonUrlId { get; set; }
+
 		[ForeignKey("Cartoon")]
 		public int CartoonId { get; set; }
-
-		public string MainUrl { get; set; }
-		public string AdditionalUrl { get; set; }
-		public string UrlParameter { get; set; }
-		public string AdditionalUrlParameter { get; set; }
-
-
 		public Cartoon Cartoon { get; set; }
+
+		public string Url { get; set; }
+		public string WebSiteUrl { get; set; }
+		public bool Checked { get; set; }
+
+		[ForeignKey("WebSite")]
+		public int WebSiteId { get; set; }
+		public WebSite WebSite { get; set; }
 	}
 }

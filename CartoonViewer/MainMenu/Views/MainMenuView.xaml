@@ -1,0 +1,269 @@
+﻿<UserControl x:Class="CartoonViewer.MainMenu.Views.MainMenuView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cal="http://www.caliburnproject.org"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helper="clr-namespace:CartoonViewer.Helpers"
+    xmlns:local="clr-namespace:CartoonViewer.MainMenu.Views"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:mah1="http://metro.mahapps.com/winfx/xaml/shared"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    MinWidth="960"
+    MinHeight="540"
+    cal:Bind.AtDesignTime="True"
+    d:DataContext="{d:DesignData Source=../DesignData/MainMenuViewDesignData.xaml}"
+    d:DesignHeight="720"
+    d:DesignWidth="1280"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary Source="../../Resources/Styles/GeneralStyles.xaml"/>
+        </UserControl.Resources>
+
+    <UserControl.Background>
+        <ImageBrush ImageSource="{Binding Background}"
+            Opacity="{Binding Opacity}"/>
+    </UserControl.Background>
+    <Grid Opacity="{Binding Opacity}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.35*"/>
+            <RowDefinition Height="0.325*"/>
+            <RowDefinition Height="0.325*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.31*"/>
+            <ColumnDefinition Width="0.345*"/>
+            <ColumnDefinition Width="0.345*"/>
+        </Grid.ColumnDefinitions>
+
+        <!--#region Row 0-->
+
+        <Grid Grid.Row="0"
+            Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.04*"/>
+                <ColumnDefinition Width="0.9*"/>
+                <ColumnDefinition Width="0.06*"/>
+            </Grid.ColumnDefinitions>
+            <ListBox x:Name="Cartoons"
+                Grid.Row="0"
+                Grid.Column="1"
+                ItemContainerStyle="{StaticResource CartoonListBoxItemStyle}"
+                Background="Transparent">
+                <ListBox.ItemTemplate >
+                    <ItemContainerTemplate>
+                        <DockPanel Margin="0,7">
+                            <CheckBox cal:Message.Attach="[Checked] = [Action CheckedValidation()];[Unchecked] = [Action CheckedValidation()]"
+                                DockPanel.Dock="Left"
+                                IsChecked="{Binding Checked, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock VerticalAlignment="Center"
+                                Text="{Binding Name}"/>
+                        </DockPanel>
+                    </ItemContainerTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+
+        <Grid Grid.Row="0"
+            Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.3*"/>
+                <RowDefinition Height="0.52*"/>
+                <RowDefinition Height="0.18*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.4*"/>
+                <ColumnDefinition Width="0.35*"/>
+                <ColumnDefinition Width="0.25*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Row="1"
+                Grid.Column="1"
+                    Style="{StaticResource ExitButtonStyle}"
+                cal:Message.Attach="
+                    [Event Click]=[Action Exit()];
+                    [Event MouseEnter]=[Action CursorOnExit()];
+                    [Event MouseLeave]=[Action CursorOutsideExit()];"/>
+        </Grid>
+
+        <!--#endregion-->
+
+        <!--#region Row 1-->
+
+        <Grid Grid.Row="1"
+            Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.1*"/>
+                <RowDefinition Height="0.1*"/>
+                <RowDefinition Height="0.03*"/>
+                <RowDefinition Height="0.06*"/>
+                <RowDefinition Height="0.14*"/>
+                <RowDefinition Height="0.07*"/>
+                <RowDefinition Height="0.5*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.29*"/>
+                <ColumnDefinition Width="0.08*"/>
+                <ColumnDefinition Width="0.38*"/>
+                <ColumnDefinition Width="0.08*"/>
+                <ColumnDefinition Width="0.07*"/>
+                <ColumnDefinition Width="0.1*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Row="3"
+                        Grid.RowSpan="3"
+                        Grid.Column="0"
+                        VerticalAlignment="Center"
+                        Margin="5,0,0,0"
+                        Orientation="Vertical">
+                <StackPanel.RenderTransform>
+                    <RotateTransform Angle="-9.5"/>
+                </StackPanel.RenderTransform>
+                <StackPanel HorizontalAlignment="Center"
+                            Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource DateTimeTBlockStyle}"
+                               Text="{Binding FinalDay}"/>
+                    <TextBlock Style="{StaticResource DateTimeTBlockStyle}"
+                               Text="."/>
+                    <TextBlock Style="{StaticResource DateTimeTBlockStyle}"
+                               Text="{Binding FinalMonth}"/>
+                    <TextBlock Style="{StaticResource DateTimeTBlockStyle}"
+                               Text="."/>
+                    <TextBlock Style="{StaticResource DateTimeTBlockStyle}"
+                               Text="{Binding FinalYear}"/>
+                </StackPanel>
+                <StackPanel HorizontalAlignment="Center"
+                            Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource DateTimeTBlockStyle}"
+                               Text="{Binding FinalHour}"/>
+                    <TextBlock Style="{StaticResource DateTimeTBlockStyle}"
+                               Text=":"/>
+                    <TextBlock Style="{StaticResource DateTimeTBlockStyle}"
+                               Text="{Binding FinalMinute}"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel
+                Grid.Row="1"
+                Grid.RowSpan="3"
+                Grid.Column="2"
+                VerticalAlignment="Center"
+                Grid.ColumnSpan="2"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <TextBlock Style="{StaticResource MMDefaultTBlockStyle}"
+                           Text="{Binding EpisodesCountRemainingString}"/>
+                <TextBlock Style="{StaticResource MMDefaultTBlockStyle}"
+                           Text=":"/>
+                <StackPanel.RenderTransform>
+    <RotateTransform Angle="-7"/>
+</StackPanel.RenderTransform>
+            </StackPanel>
+            <TextBlock Grid.Row="2"
+                       Grid.RowSpan="4"
+                       Grid.Column="1"
+                       Grid.ColumnSpan="2"
+                       Style="{StaticResource MMDefaultTBlockStyle}"
+                       HorizontalAlignment="Left"
+                       Text="~Время окончания">
+                <TextBlock.RenderTransform>
+                    <RotateTransform Angle="-9"/>
+                </TextBlock.RenderTransform>
+            </TextBlock>
+            <TextBox Grid.Row="0"
+                Grid.RowSpan="3"
+                Grid.Column="4"
+                Style="{StaticResource EpisodesCountTextBoxStyle}"
+                Text="{Binding EpisodeCountString, UpdateSourceTrigger=PropertyChanged}">
+                <TextBox.RenderTransform>
+                    <RotateTransform Angle="-9.5"/>
+                </TextBox.RenderTransform>
+            </TextBox>
+        </Grid>
+        <Grid Grid.Row="0"
+            Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.3*"/>
+                <RowDefinition Height="0.4*"/>
+                <RowDefinition Height="0.3*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.25*"/>
+                <ColumnDefinition Width="0.4*"/>
+                <ColumnDefinition Width="0.35*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Row="1"
+                Grid.Column="1"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Orientation="Vertical">
+                <TextBlock 
+                    Style="{StaticResource MMDefaultTBlockStyle}"
+                    FontSize="15"
+                    Text="Выключить комп?"/>
+                <mah:ToggleSwitchButton HorizontalAlignment="Center"
+                    IsChecked="{Binding IsShutdownComp}"/>
+            </StackPanel>
+        </Grid>
+
+        <!--#endregion-->
+
+        <!--#region Row 2-->
+
+        <Grid Grid.Row="2"
+            Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.05*"/>
+                <RowDefinition Height="0.45*"/>
+                <RowDefinition Height="0.5*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.15*"/>
+                <ColumnDefinition Width="0.38*"/>
+                <ColumnDefinition Width="0.47*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="Start"
+                Grid.Row="1"
+                Grid.Column="1"
+                Style="{StaticResource StartButtonStyle}">
+
+                <StackPanel Orientation="Vertical">
+                    <TextBlock HorizontalAlignment="Center"
+                        Text="Начать"/>
+                    <TextBlock HorizontalAlignment="Center"
+                        Text="просмотр"/>
+                </StackPanel>
+
+            </Button>
+
+
+        </Grid>
+
+        <Grid Grid.Row="2"
+            Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.2*"/>
+                <ColumnDefinition Width="0.6*"/>
+                <ColumnDefinition Width="0.2*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="GoToSettings"
+                Grid.Row="1"
+                Grid.Column="1">
+                <TextBlock FontSize="20"
+                    Style="{StaticResource MMDefaultTBlockStyle}"
+                    Text="Перейти к настройкам"/>
+            </Button>
+        </Grid>
+
+        <!--#endregion-->
+
+
+
+
+    </Grid>
+</UserControl>

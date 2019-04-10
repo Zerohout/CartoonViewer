@@ -1,8 +1,12 @@
 namespace CartoonViewer.Migrations
 {
+	using System.Data.Entity;
 	using System.Data.Entity.Migrations;
+	using System.Linq;
 	using Database;
-	using Helpers;
+	using Models.CartoonModels;
+	using static Helpers.Creator;
+	using static Helpers.Helper;
 
 	internal sealed class Configuration : DbMigrationsConfiguration<CVDbContext>
 	{
@@ -13,36 +17,67 @@ namespace CartoonViewer.Migrations
 
 		protected override void Seed(CVDbContext context)
 		{
-			context.VoiceOvers.AddRange(Creator.CreateDefaultVoiceOvers());
-			context.Cartoons.AddRange(Creator.CreateDefaultCartoons());
+			context.WebSites.Add(CreateWebSite(FreehatWebSite));
+			context.Cartoons.AddRange(CreateCartoonList());
+			context.VoiceOvers.AddRange(CreateVoiceOverList());
 			context.SaveChanges();
 
-			FillCartoons(context);
+			foreach (var cw in context.WebSites)
+			{
+				cw.ElementValues.Add(CreateElementValue());
+			}
+
 			context.SaveChanges();
+
+			var website = context.WebSites.First();
+
+			var cartoons = context.Cartoons.ToList();
+
+			foreach (var cc in cartoons)
+			{
+				cc.WebSites.Add(website);
+				cc.CartoonUrls.Add(CreateCartoonUrl(cc, website));
+				context.Entry(cc).State = EntityState.Modified;
+			}
+
+
+
+			//context.Entry(cartoons).State = EntityState.Modified;
+			context.SaveChanges();
+
+
+
+			//FillCartoons(context);
+			//context.SaveChanges();
 		}
 
-		private void FillCartoons(CVDbContext context)
+		private CartoonUrl CreateCartoonUrl(Cartoon cartoon, WebSite webSite)
 		{
-			foreach (var c in context.Cartoons)
+			var url = "";
+			switch (cartoon.Name)
 			{
-				switch (c.Name)
-				{
-					case "Южный парк":
-						c.CartoonUrl = Creator.CreateDefaultCartoonUrl("sp");
-						break;
-					case "Гриффины":
-						c.CartoonUrl = Creator.CreateDefaultCartoonUrl("grif");
-						break;
-					case "Симпсоны":
-						c.CartoonUrl = Creator.CreateDefaultCartoonUrl("simp");
-						break;
-					case "Американский папаша":
-						c.CartoonUrl = Creator.CreateDefaultCartoonUrl("dad");
-						break;
-				}
-
-				c.ElementValues.Add(Creator.CreateDefaultElementValue(c.CartoonId));
+				case "Южный парк":
+					url = $"http://sp.freehat.cc/episode/";
+					break;
+				case "Гриффины":
+					url = $"http://grif.freehat.cc/episode/";
+					break;
+				case "Симпсоны":
+					url = $"http://simp.freehat.cc/episode/";
+					break;
+				case "Американский папаша":
+					url = $"http://dad.freehat.cc/episode/";
+					break;
 			}
+
+			return new CartoonUrl
+			{
+				Cartoon = cartoon,
+				Url = url,
+				Checked = true,
+				WebSite = webSite,
+				WebSiteUrl = webSite.Url
+			};
 		}
 	}
 }

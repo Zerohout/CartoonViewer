@@ -12,7 +12,7 @@
 		/// Создать список озвучек по умолчанию
 		/// </summary>
 		/// <returns></returns>
-		public static List<VoiceOver> CreateDefaultVoiceOvers()
+		public static List<VoiceOver> CreateVoiceOverList()
 		{
 			return new List<VoiceOver>
 			{
@@ -86,42 +86,68 @@
 			};
 		}
 
-		public static List<CartoonUrl> CreateDefaultListCartoonUrl() => new List<CartoonUrl>
-		{
-			CreateDefaultCartoonUrl("sp"),
-			CreateDefaultCartoonUrl("grif"),
-			CreateDefaultCartoonUrl("simp"),
-			CreateDefaultCartoonUrl("dad")
-		};
+		//public static List<CartoonUrl> CreateCartoonUrlList() => new List<CartoonUrl>
+		//{
+		//	CreateCartoonUrl("sp"),
+		//	CreateCartoonUrl("grif"),
+		//	CreateCartoonUrl("simp"),
+		//	CreateCartoonUrl("dad")
+		//};
 
-		public static CartoonUrl CreateDefaultCartoonUrl(string param) => new CartoonUrl
-		{
-			MainUrl = $"http://{param}.freehat.cc/episode/",
-			UrlParameter = "rand.php"
-		};
+		//public static CartoonUrl CreateCartoonUrl(string param) => new CartoonUrl
+		//{
+		//	MainUrl = $"http://{param}.freehat.cc/episode/",
+		//	WebSiteUrl = FreehatWebSite
+		//};
 
-		public static ElementValue CreateDefaultElementValue(int id) => new ElementValue
+		public static ElementValue CreateElementValue() => new ElementValue
 		{
-			CartoonId = id,
-			UserElementName = "Нижняя кнопка старта",
+			//WebSiteId = id,
+			ElementName = "Нижняя кнопка старта",
 			CssSelector = "pjsdiv:nth-child(8) > pjsdiv > pjsdiv"
+		};
+
+		public static WebSite CreateWebSite(string url) => new WebSite
+		{
+			Url = url
 		};
 
 		/// <summary>
 		/// Создать список мультфильмов по умолчанию
 		/// </summary>
 		/// <returns></returns>
-		public static List<Cartoon> CreateDefaultCartoons()
+		public static List<Cartoon> CreateCartoonList()
 		{
 			return new List<Cartoon>
 			{
 				new Cartoon
 				{
-					Name = "Южный парк"
+					Name = "Южный парк",
+					CartoonType = "Сериал",
+					Checked = true,
+					Description = "Aмериканский мультсериал, который создают Трей Паркер и Мэтт Стоун. " +
+					              "Основу сюжета составляют приключения четырёх мальчиков и их друзей, " +
+					              "живущих в маленьком городке Саут-Парк, штат Колорадо. " +
+					              "Сериал высмеивает недостатки американской культуры и текущие мировые события, " +
+					              "а также подвергает критике множество глубоких убеждений и табу " +
+					              "посредством пародии и чёрного юмора. " +
+								  "«Южный Парк» позиционируется как мультфильм для взрослых."
 				},
 				new Cartoon
 				{
-					Name = "Гриффины"
+					Name = "Гриффины",
+					CartoonType = "Сериал",
+					Checked = true,
+					Description = "Американский анимационный ситком, созданный Сетом Макфарлейном " +
+					              "для телекомпании Fox Broadcasting Company. " +
+					              "В центре сюжета неблагополучная семья Гриффинов, " +
+					              "состоящая из родителей, Питера и Лоис, " +
+					              "их детей, Криса, Мэг и Стьюи, а также Брайана — антропоморфного пса. " +
+					              "Действие ситкома происходит в Куахоге, вымышленном пригороде Провиденса, " +
+					              "штат Род-Айленд. Бо́льшая часть юмора сериала представлена в форме так называемых врезок, " +
+					              "которые зачастую не имеют ничего общего с сюжетом и содержат шутки " +
+					              "на различные щепетильные и спорные темы, такие как политика, " +
+					              "рабство, инвалидность, феминизм, ожирение и другие."
 				},
 				new Cartoon
 				{

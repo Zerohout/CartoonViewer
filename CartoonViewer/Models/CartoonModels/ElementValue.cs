@@ -8,7 +8,7 @@
 		[Key]
 		public int ElementValueId { get; set; }
 		
-		public string UserElementName { get; set; }
+		public string ElementName { get; set; }
 
 		public string Id { get; set; }
 		public string Name { get; set; }
@@ -19,8 +19,8 @@
 		public string PartialLinkText { get; set; }
 		public string XPath { get; set; }
 
-		[ForeignKey("Cartoon")]
-		public int CartoonId { get; set; }
-		public Cartoon Cartoon { get; set; }
+		[ForeignKey("WebSite")]
+		public int WebSiteId { get; set; }
+		public WebSite WebSite { get; set; }
 	}
 }
