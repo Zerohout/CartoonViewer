@@ -4,7 +4,9 @@
 	using System.Windows.Input;
 	using Caliburn.Micro;
 	using CartoonViewer.ViewModels;
+	using Helpers;
 	using MainMenu.ViewModels;
+	using static Helpers.Helper;
 
 	public class SettingsViewModel : Conductor<Screen>.Collection.OneActive
 	{
@@ -44,6 +46,37 @@
 
 		public void BackToMainMenu()
 		{
+			var settings = ((CartoonsControlViewModel) ActiveItem).ActiveItem as ISettingsViewModel;
+
+
+
+			if (settings?.HasChanges ?? false)
+			{
+				var result = WinMan.ShowDialog(new DialogViewModel("Сохранить ваши изменения?", Helper.DialogState.YES_NO_CANCEL));
+
+				if (result == true)
+				{
+					settings.SaveChanges();
+				}
+				else if (result == false)
+				{
+					var repeatResult = WinMan.ShowDialog(
+						new DialogViewModel("Ваши изменения не будут сохранены. Вы точно хотите продолжить?", Helper.DialogState.YES_NO));
+					if (repeatResult == false || repeatResult == null)
+					{
+						return;
+					}
+				}
+				else
+				{
+					return;
+				}
+
+			}
+
+
+
+			((CartoonsControlViewModel) ActiveItem)?.ActiveItem?.TryClose();
 			ActiveItem?.TryClose();
 			((MainViewModel)Parent).ChangeActiveItem(new MainMenuViewModel());
 		}

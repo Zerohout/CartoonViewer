@@ -3,11 +3,9 @@
 	using System.Data.Entity;
 	using System.Linq;
 	using System.Windows;
-	using System.Windows.Data;
 	using Caliburn.Micro;
 	using CartoonViewer.ViewModels;
 	using Database;
-	using Helpers.Converters;
 	using Models.CartoonModels;
 	using static Helpers.Helper;
 
@@ -21,10 +19,6 @@
 		private BindableCollection<WebSite> _webSites = new BindableCollection<WebSite>();
 		private BindableCollection<Cartoon> _cartoons = new BindableCollection<Cartoon>();
 		private BindableCollection<Season> _seasons = new BindableCollection<Season>();
-
-		public IValueConverter NullReplacer => new NullReplaceConverter();
-		public IValueConverter EnumerableNulReplacer => new EnumerableNullReplaceConverter();
-
 
 		public CartoonsControlViewModel()
 		{
@@ -72,16 +66,16 @@
 			using (var ctx = new CVDbContext())
 			{
 				await ctx.Cartoons
-				         .Include(c => c.WebSites)
-				         .LoadAsync();
-				
+						 .Include(c => c.WebSites)
+						 .LoadAsync();
+
 				Cartoons.AddRange(ctx.Cartoons.Local
-				                           .Where(c => c.WebSites.Any(w => w.Url == WebSite.Url))
-				                           .ToList());
+										   .Where(c => c.WebSites.Any(w => w.Url == WebSite.Url))
+										   .ToList());
 			}
 
-			Cartoons.Add(new Cartoon{Name = NewElementString});
-			
+			Cartoons.Add(new Cartoon { Name = NewElementString });
+
 
 			CartoonsVisibility = Visibility.Visible;
 		}
@@ -112,7 +106,7 @@
 					SeasonsVisibility = Visibility.Hidden;
 				}
 
-				ChangeActiveItem(new CartoonsEditingViewModel(Cartoon));
+				ChangeActiveItem(new CartoonsEditingViewModel(Cartoon, WebSite.WebSiteId));
 				return;
 			}
 
@@ -124,10 +118,38 @@
 				Seasons.AddRange(ctx.Seasons.Local.Where(s => s.CartoonId == _cartoon.CartoonId));
 			}
 
-			Seasons.Add(new Season { Name = NewElementString });
-			ChangeActiveItem(new CartoonsEditingViewModel(Cartoon));
+			ChangeActiveItem(new CartoonsEditingViewModel(Cartoon, WebSite.WebSiteId));
 
 			SeasonsVisibility = Visibility.Visible;
+		}
+
+		public void ChangeSelectedSeason(int id)
+		{
+			if (((CartoonsEditingViewModel)ActiveItem).HasChanges)
+			{
+				var result = WinMan.ShowDialog(new DialogViewModel("Сохранить ваши изменения?", DialogState.YES_NO_CANCEL));
+
+				if (result == true)
+				{
+					((CartoonsEditingViewModel)ActiveItem).SaveChanges();
+				}
+				else if (result == false)
+				{
+					var repeatResult = WinMan.ShowDialog(
+						new DialogViewModel("Ваши изменения не будут сохранены. Вы точно хотите продолжить?", DialogState.YES_NO));
+					if (repeatResult == false || repeatResult == null)
+					{
+						return;
+					}
+				}
+				else
+				{
+					return;
+				}
+				
+			}
+
+			Season = Seasons.First(s => s.SeasonId == id);
 		}
 
 		/// <summary>
@@ -139,7 +161,7 @@
 
 			if (Season == null)
 			{
-				ChangeActiveItem(new CartoonsEditingViewModel(Cartoon));
+				ChangeActiveItem(new CartoonsEditingViewModel(Cartoon, WebSite.WebSiteId));
 				return;
 			}
 

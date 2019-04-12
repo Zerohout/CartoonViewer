@@ -17,6 +17,12 @@ namespace CartoonViewer.Migrations
 
 		protected override void Seed(CVDbContext context)
 		{
+			//AddDataToDatabase(context);
+		}
+
+
+		private void AddDataToDatabase(CVDbContext context)
+		{
 			context.WebSites.Add(CreateWebSite(FreehatWebSite));
 			context.Cartoons.AddRange(CreateCartoonList());
 			context.VoiceOvers.AddRange(CreateVoiceOverList());
@@ -30,7 +36,6 @@ namespace CartoonViewer.Migrations
 			context.SaveChanges();
 
 			var website = context.WebSites.First();
-
 			var cartoons = context.Cartoons.ToList();
 
 			foreach (var cc in cartoons)
@@ -42,13 +47,7 @@ namespace CartoonViewer.Migrations
 
 
 
-			//context.Entry(cartoons).State = EntityState.Modified;
 			context.SaveChanges();
-
-
-
-			//FillCartoons(context);
-			//context.SaveChanges();
 		}
 
 		private CartoonUrl CreateCartoonUrl(Cartoon cartoon, WebSite webSite)

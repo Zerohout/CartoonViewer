@@ -9,7 +9,7 @@
         <cartoonModels:WebSite Url="http://freehat.cc"/> 
     </vms:CartoonsControlViewModel.WebSites>
 
-   <vms:CartoonsControlViewModel.Cartoons>
+    <vms:CartoonsControlViewModel.Cartoons>
         <cartoonModels:Cartoon Name="Южный парк"/>
         <cartoonModels:Cartoon Name="Гриффины"/>
         <cartoonModels:Cartoon Name="Симпсоны"/>

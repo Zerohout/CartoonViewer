@@ -100,8 +100,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Database\CVDbContext.cs" />
-    <Compile Include="Helpers\Converters\EnumerableNullReplaceConverter.cs" />
-    <Compile Include="Helpers\Converters\NullReplaceConverter.cs" />
+    <Compile Include="Helpers\Cloner.cs" />
     <Compile Include="Helpers\Creator.cs" />
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Helpers\HotkeysRegistrator.cs" />

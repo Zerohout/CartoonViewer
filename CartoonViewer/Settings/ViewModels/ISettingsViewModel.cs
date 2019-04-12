@@ -5,9 +5,10 @@
 
 	public interface ISettingsViewModel : IScreen
     {
-	    bool HasChanges { get; set; }
+	    bool HasChanges { get; }
 		Visibility AdvancedSettingsVisibility { get; set; }
 
-		void LoadDataAsync(int id);
+		void LoadData();
+	    void SaveChanges();
     }
 }

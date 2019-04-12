@@ -2,7 +2,19 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                               xmlns:helper="clr-namespace:CartoonViewer.Helpers"
                     xmlns:vms="clr-namespace:CartoonViewer.Settings.ViewModels"
-                              SaveChangesVisibility="Visible"
-                              AdvancedSettingsVisibility="Visible">
-    
+                    xmlns:cartoonModels="clr-namespace:CartoonViewer.Models.CartoonModels"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib"
+                    SaveChangesVisibility="Visible"
+                              AdvancedSettingsVisibility="Visible"
+                              CartoonTypesVisibility="Visible"
+                              Url="http://cartoonUrl.url"
+                              Name="CartoonName"
+                              Description="Небольшое, но информативное описание мультфильма">
+    <vms:CartoonsEditingViewModel.Seasons>
+        <cartoonModels:Season Number="1"/>
+        <cartoonModels:Season Number="2"/>
+        <cartoonModels:Season Number="3"/>
+        <cartoonModels:Season Number="4"/>
+        <cartoonModels:Season Number="5"/>
+    </vms:CartoonsEditingViewModel.Seasons>
 </vms:CartoonsEditingViewModel>

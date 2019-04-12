@@ -8,6 +8,7 @@
 	using Database;
 	using Helpers;
 	using Models.CartoonModels;
+	using static Helpers.Cloner;
 	using static Helpers.Helper;
 
 	public class SeasonsEditingViewModel : Screen, ISettingsViewModel
@@ -16,8 +17,8 @@
 		{
 			if (season.Name == NewElementString) return;
 
-			_season = CopySeason(season);
-			_tempSeason = CopySeason(season);
+			_season = CloneSeason(season);
+			_tempSeason = CloneSeason(season);
 		}
 
 		public SeasonsEditingViewModel(List<Season> seasons)
@@ -78,20 +79,22 @@
 
 		public bool HasChanges { get; set; }
 
-		public async void LoadDataAsync(int id)
+		public void LoadData()
 		{
 			Season result;
 			using (var ctx = new CVDbContext())
 			{
-				await ctx.Seasons
-				   .Where(s => s.SeasonId == id)
-				   .Include(s => s.Episodes)
-				   .LoadAsync();
+				//await ctx.Seasons
+				//   .Where(s => s.SeasonId == id)
+				//   .Include(s => s.Episodes)
+				//   .LoadAsync();
 				result = ctx.Seasons.Local.FirstOrDefault();
 			}
 
-			Season = CopySeason(result);
-			TempSeason = CopySeason(result);
+			Season = CloneSeason(result);
+			TempSeason = CloneSeason(result);
 		}
+
+		public void SaveChanges() { throw new System.NotImplementedException(); }
 	}
 }

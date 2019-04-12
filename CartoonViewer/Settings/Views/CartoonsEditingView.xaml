@@ -5,14 +5,12 @@
     xmlns:local="clr-namespace:CartoonViewer.Settings.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:cal="http://www.caliburnproject.org"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     cal:Bind.AtDesignTime="True"
     d:DataContext="{d:DesignData Source=../DesignData/CartoonsEditingViewDesignData.xaml}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <UserControl.Resources>
-        <ResourceDictionary Source="../../Resources/Styles/GeneralStyles.xaml"/>
-    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -24,9 +22,10 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+
         <!--#region Row 0-->
 
-        <!--<Grid Grid.Row="0"
+        <Grid Grid.Row="0"
             Grid.RowSpan="2"
             Grid.Column="0"
             Grid.ColumnSpan="2">
@@ -39,9 +38,9 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Vertical"
+            <StackPanel Grid.Row="0"
                 Grid.Column="0"
-                Grid.Row="0"
+                Orientation="Vertical"
                 Margin="0,2.5"
                 VerticalAlignment="Bottom">
                 <TextBlock Style="{StaticResource SEDefaultTBlockStyle}"
@@ -50,41 +49,13 @@
                     Text="мультфильма"/>
             </StackPanel>
             <TextBox Grid.Column="0"
+                     cal:Message.Attach="[Event TextChanged]=[Action TextChanged()]"
                 Grid.Row="1"
-                VerticalAlignment="Top"
                 Margin="5,2.5"
-                Style="{StaticResource SETBoxDefaultStyle}"
-                Text="{Binding Cartoon.CartoonUrl.MainUrl}"/>
-        </Grid>-->
-
-        <Grid Grid.Column="0"
-              Grid.Row="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="0.5*"/>
-                <RowDefinition Height="0.25*"/>
-                <RowDefinition Height="0.25*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <StackPanel Orientation="Vertical">
-                <TextBlock Style="{StaticResource SEDefaultTBlockStyle}"
-                           Text="Адреса и параметры"/>
-                <TextBlock Style="{StaticResource SEDefaultTBlockStyle}"
-                           Text="мультфильма"/>
-            </StackPanel>
-            <ComboBox Grid.Column="0"
-                     Grid.Row="1"
-                     Margin="5 0"
-                     VerticalAlignment="Center"
-                     ItemsSource="{Binding Cartoon.CartoonUrl}"></ComboBox>
-            <TextBox Grid.Row="2"
-                     Style="{StaticResource SETBoxDefaultStyle}"
-                     VerticalAlignment="Center"
-                     Margin="5 0"/>
+                VerticalAlignment="Top"
+                Text="{Binding Url,UpdateSourceTrigger=PropertyChanged}"
+                Style="{StaticResource SETBoxDefaultStyle}"/>
         </Grid>
-
 
         <Grid Grid.Row="0"
             Grid.RowSpan="2"
@@ -109,17 +80,19 @@
             </StackPanel>
             <TextBox Grid.Column="0"
                 Grid.Row="1"
+                     cal:Message.Attach="[Event TextChanged]=[Action TextChanged()]"
                 Margin="5,2.5"
                 VerticalAlignment="Top"
-                Text="{Binding Cartoon.Name}"
+                Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}"
                 Style="{StaticResource SETBoxDefaultStyle}"/>
         </Grid>
 
-        
-        <!--<Grid Grid.Column="1"
+        <Grid Grid.Row="0"
+            Grid.RowSpan="2"
+            Grid.Column="1"
             Grid.ColumnSpan="2"
-            Grid.Row="0"
-            Grid.RowSpan="2">
+            Visibility="{Binding CartoonTypesVisibility}"
+            IsEnabled="False">
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.25*"/>
                 <RowDefinition Height="0.25*"/>
@@ -129,57 +102,136 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Grid.Column="1"
-                Grid.Row="0"
-                VerticalAlignment="Bottom"
+            <StackPanel Grid.Row="0"
+                Grid.Column="1"
+                Orientation="Vertical"
                 Margin="0,2.5"
-                Orientation="Vertical">
+                VerticalAlignment="Bottom">
                 <TextBlock Style="{StaticResource SEDefaultTBlockStyle}"
-                    Text="Параметр"/>
+                    Text="Тип"/>
                 <TextBlock Style="{StaticResource SEDefaultTBlockStyle}"
                     Text="мультфильма"/>
             </StackPanel>
-            <TextBox Text="{Binding Cartoon.CartoonUrl.UrlParameter}"
-                Style="{StaticResource SETBoxDefaultStyle}"
+            <ComboBox Grid.Row="1"
                 Grid.Column="1"
-                Grid.Row="1"
+                Margin="0,2.5"
                 VerticalAlignment="Top"
-                Margin="5,2.5"/>
-        </Grid>-->
+                ItemsSource="{Binding CartoonTypes}"/>
+        </Grid>
 
         <!--#endregion-->
 
         <!--#region Row 1-->
 
-        <!--<Grid Grid.Column="0"
-            Grid.ColumnSpan="2"
-            Grid.Row="1"
-              Visibility="{Binding AdvancedSettingsVisibility}">
+        <Grid Grid.Row="1"
+            Grid.RowSpan="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="2">
             <Grid.RowDefinitions>
-                <RowDefinition Height="0.2*"/>
-                <RowDefinition Height="0.3*"/>
-                <RowDefinition Height="0.5*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Grid.Column="0"
-                Grid.Row="1"
+
+            <Grid Grid.Row="0"
                 Grid.RowSpan="2"
-                VerticalAlignment="Top"
-                Orientation="Vertical">
-                <TextBox Style="{StaticResource SETBoxDefaultStyle}"
+                Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Style="{StaticResource SEDefaultTBlockStyle}"
+                    Text="Список эпизодов"
+                    Grid.Row="0"
+                    Grid.Column="0"/>
+                <ListBox Grid.Row="1"
+                         cal:Message.Attach="[Event SelectionChanged]=[Action SelectionChanged()]"
+                         Grid.Column="0"
+                    Margin="5"
+                    ItemsSource="{Binding Seasons, UpdateSourceTrigger=PropertyChanged}"
+                         SelectedItem="{Binding SelectedSeason, UpdateSourceTrigger=PropertyChanged}">
+                    <ListBox.ItemTemplate>
+                        <ItemContainerTemplate>
+                            <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center">
+                                <TextBlock Style="{StaticResource CCComboBoxTBlockItemStyle}"
+                                    Text="{Binding Number}"/>
+                                <TextBlock Style="{StaticResource CCComboBoxTBlockItemStyle}"
+                                    Text=" сезон"/>
+                            </StackPanel>
+                        </ItemContainerTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+            </Grid>
+
+            <Grid Grid.Row="1"
+                Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Row="1"
+                    cal:Message.Attach="[Event Click]=[Action AddSeason()]"
+                    Grid.Column="0"
+                    Margin="0,2.5"
                     VerticalAlignment="Center"
-                    Text="{Binding Cartoon.CartoonUrl.AdditionalUrlParameter}"/>
-                <TextBlock Style="{StaticResource SEDefaultTBlockStyle}"
-                    Text="Дополнительный"/>
-                <TextBlock Style="{StaticResource SEDefaultTBlockStyle}"
-                    Text="адрес мультфильма"/>
-
-            </StackPanel>
-
-        </Grid>-->
+                    HorizontalAlignment="Center">
+                    <iconPacks:PackIconMaterial Kind="PlaylistPlus"
+                        Foreground="LimeGreen"
+                        Height="16"
+                        Width="20"/>
+                </Button>
+                <Button 
+                    cal:Message.Attach="[Event Click]=[Action EditSeason()]"
+                    Grid.Row="2"
+                    Margin="0,2.5"
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center">
+                    <iconPacks:PackIconMaterial Kind="PlaylistEdit"
+                        Foreground="Yellow"
+                        Height="16"
+                        Width="20"/>
+                </Button>
+                <Button Grid.Row="3"
+                    Margin="0,2.5"
+                    cal:Message.Attach="[Event Click]=[Action RemoveSeason()]"
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center">
+                    <iconPacks:PackIconMaterial Kind="PlaylistRemove"
+                        Foreground="Red"
+                        Height="16"
+                        Width="20"/>
+                </Button>
+                <Button Grid.Row="4"
+                        Margin="0,2.5"
+                        cal:Message.Attach="[Event Click]=[Action CancelSelection()]"
+                        Grid.Column="0"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center">
+                    <iconPacks:PackIconMaterial Kind="Cancel"
+                                                Foreground="Wheat"
+                                                Height="16"
+                                                Width="20"/>
+                </Button>
+            </Grid>
+        </Grid>
 
         <Grid Grid.Column="1"
             Grid.Row="1">
@@ -211,91 +263,39 @@
             </Button>
         </Grid>
 
-        <!--<Grid Grid.Column="1"
-            Grid.ColumnSpan="2"
-            Grid.Row="1"
-              Visibility="{Binding AdvancedSettingsVisibility}">
+        <Grid Grid.Row="1"
+              Grid.RowSpan="2"
+              Grid.Column="2">
             <Grid.RowDefinitions>
-                <RowDefinition Height="0.2*"/>
-                <RowDefinition Height="0.3*"/>
-                <RowDefinition Height="0.5*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <StackPanel Grid.Column="1"
-                Grid.Row="1"
-                Grid.RowSpan="2"
-                VerticalAlignment="Top"
-                Orientation="Vertical">
-                <TextBox Style="{StaticResource SETBoxDefaultStyle}"
-                    VerticalAlignment="Center"
-                    Text="{Binding Cartoon.CartoonUrl.AdditionalUrlParameter}"/>
-                <TextBlock Style="{StaticResource SEDefaultTBlockStyle}"
-                    Text="Дополнительный"/>
-                <TextBlock Style="{StaticResource SEDefaultTBlockStyle}"
-                    Text="параметр мультфильма"/>
-            </StackPanel>
-
-        </Grid>-->
-
-        <!--#endregion-->
-
-        <!--#region Row 2-->
-
-        <Grid Grid.Row="2"
-            Grid.Column="0"
-              Grid.ColumnSpan="2">
-            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Vertical"
-                Margin="5">
-                <TextBlock Style="{StaticResource SEDefaultTBlockStyle}"
-                    Text="Описание мультфильма"/>
-                <TextBox Margin="5"
-                    TextWrapping="Wrap"
-                    VerticalAlignment="Stretch"
-                    Style="{StaticResource SETBoxDefaultStyle}"
-                    Text=""/>
-            </StackPanel>
+<TextBlock Grid.Row="0"
+           Grid.Column="0"
+           Style="{StaticResource SEDefaultTBlockStyle}"
+           Text="Описание мультфильма"/>
+            <TextBox Grid.Row="1"
+                     Grid.Column="0"
+                     cal:Message.Attach="[Event TextChanged]=[Action TextChanged()]"
+                     Margin="5"
+                     TextWrapping="Wrap"
+                     Style="{StaticResource SETBoxDefaultStyle}"
+                     FontSize="12"
+                     Foreground="AntiqueWhite"
+                      Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
+        
 
-        <Grid Grid.Column="2"
-            Grid.Row="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="0.2*"/>
-                <RowDefinition Height="0.6*"/>
-                <RowDefinition Height="0.2*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.2*"/>
-                <ColumnDefinition Width="0.6*"/>
-                <ColumnDefinition Width="0.2*"/>
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="1"
-                       Grid.Row="1">
-                <StackPanel Orientation="Vertical"
-                            >
-                    <TextBlock Style="{StaticResource SEDefaultTBlockStyle}"
-                               FontSize="16"
-                               Foreground="AliceBlue"
-                               Text="Изменить"/>
-                    <TextBlock Style="{StaticResource SEDefaultTBlockStyle}"
-                               FontSize="16"
-                               Foreground="AliceBlue"
-                               Text="значения"/>
-                    <TextBlock Style="{StaticResource SEDefaultTBlockStyle}"
-                               FontSize="16"
-                               Foreground="AliceBlue"
-                               Text="элементов"/>
-                </StackPanel>
-            </Button>
-        </Grid>
+        <!--#endregion-->
+
+
+
+
+
+        <!--#region Row 2-->
 
         <!--#endregion-->
 

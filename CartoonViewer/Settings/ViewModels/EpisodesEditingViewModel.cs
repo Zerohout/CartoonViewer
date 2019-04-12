@@ -7,6 +7,7 @@
 	using Database;
 	using Helpers;
 	using Models.CartoonModels;
+	using static Helpers.Cloner;
 	using static Helpers.Helper;
 
 	public class EpisodesEditingViewModel : Screen, ISettingsViewModel
@@ -15,7 +16,7 @@
 		{
 			if (episode.Name == NewElementString) return;
 
-			LoadDataAsync(episode.EpisodeId);
+			LoadData();
 		}
 
 		public EpisodesEditingViewModel()
@@ -69,20 +70,22 @@
 
 		public bool HasChanges { get; set; }
 
-		public async void LoadDataAsync(int id)
+		public void LoadData()
 		{
-			Episode result;
+			//Episode result;
 			using (var ctx = new CVDbContext())
 			{
-				await ctx.Episodes
-				   .Where(e => e.EpisodeId == id)
-				   .Include(e => e.VoiceOvers)
-				   .LoadAsync();
-				result = ctx.Episodes.Local.FirstOrDefault();
+				//await ctx.Episodes
+				//   .Where(e => e.EpisodeId == id)
+				//   .Include(e => e.VoiceOvers)
+				//   .LoadAsync();
+				//result = ctx.Episodes.Local.FirstOrDefault();
 			}
 
-			Episode = CopyEpisode(result);
-			TempEpisode = CopyEpisode(result);
+			//Episode = CloneEpisode(result);
+			//TempEpisode = CloneEpisode(result);
 		}
+
+		public void SaveChanges() { throw new System.NotImplementedException(); }
 	}
 }

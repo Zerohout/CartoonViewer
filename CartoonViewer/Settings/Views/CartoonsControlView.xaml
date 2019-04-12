@@ -6,7 +6,6 @@
     xmlns:local="clr-namespace:CartoonViewer.Settings.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     cal:Bind.AtDesignTime="True"
-    xmlns:converters="clr-namespace:CartoonViewer.Helpers.Converters"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     d:DataContext="{d:DesignData Source=../DesignData/CartoonsControlViewDesignData.xaml}"
     d:DesignHeight="450"

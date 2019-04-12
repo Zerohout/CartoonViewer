@@ -1,6 +1,7 @@
 ﻿namespace CartoonViewer.Helpers
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Linq;
 	using System.Threading;
@@ -43,6 +44,14 @@
 		public static IntPtr HWND;
 		public static HotkeysRegistrator HotReg;
 
+		public readonly static BindableCollection<string> CartoonTypes = new BindableCollection<string>
+		{
+			"/disney",
+			"/pixar",
+			"/serii",
+			"/multfilm",
+		};
+
 		
 		public enum DialogState
 		{
@@ -69,59 +78,6 @@
 			Browser.Manage().Window.Maximize();
 		}
 
-		/// <summary>
-		/// Копирование экземпляра мультфильма
-		/// </summary>
-		/// <param name="cartoon">Мультфильм, который бует копироваться</param>
-		/// <returns>Скопированный мультфильм</returns>
-		public static Cartoon CopyCartoon(Cartoon cartoon) => new Cartoon
-		{
-			CartoonId = cartoon.CartoonId,
-			Name = cartoon.Name,
-			//CartoonUrl = cartoon.CartoonUrl,
-			Checked = cartoon.Checked,
-			//ElementValues = cartoon.ElementValues,
-			Seasons = cartoon.Seasons
-		};
-
-		/// <summary>
-		/// Копирование экземпляра сезона
-		/// </summary>
-		/// <param name="season">Сезон, который бует копироваться</param>
-		/// <returns>Скопированный Сезон</returns>
-		public static Season CopySeason(Season season) => new Season
-		{
-			SeasonId = season.SeasonId,
-			Name = season.Name,
-			Number = season.Number,
-			Description = season.Description,
-			Checked = season.Checked,
-			Cartoon = season.Cartoon,
-			CartoonId = season.CartoonId,
-			Episodes = season.Episodes
-		};
-
-		/// <summary>
-		/// Копирование экземпляра серии
-		/// </summary>
-		/// <param name="episode">Серия, который бует копироваться</param>
-		/// <returns>Скопированная серия</returns>
-		public static Episode CopyEpisode(Episode episode) => new Episode
-		{
-			EpisodeId = episode.EpisodeId,
-			Name = episode.Name,
-			Number = episode.Number,
-			Description = episode.Description,
-			Checked = episode.Checked,
-			DelayedSkip = episode.DelayedSkip,
-			SkipCount = episode.SkipCount,
-			Duration = episode.Duration,
-			CreditsStart = episode.CreditsStart,
-			VoiceOvers = episode.VoiceOvers,
-			Season = episode.Season,
-			SeasonId = episode.SeasonId
-		};
-
-
+		
 	}
 }
