@@ -121,6 +121,10 @@
     <Compile Include="Migrations\201904101522094_CorrectionDatabaseModel.Designer.cs">
       <DependentUpon>201904101522094_CorrectionDatabaseModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904131045501_AddLastDateViewedToEpisodeModel.cs" />
+    <Compile Include="Migrations\201904131045501_AddLastDateViewedToEpisodeModel.Designer.cs">
+      <DependentUpon>201904131045501_AddLastDateViewedToEpisodeModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\CartoonModels\Cartoon.cs" />
     <Compile Include="Models\CartoonModels\WebSite.cs" />
@@ -192,6 +196,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201904101522094_CorrectionDatabaseModel.resx">
       <DependentUpon>201904101522094_CorrectionDatabaseModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904131045501_AddLastDateViewedToEpisodeModel.resx">
+      <DependentUpon>201904131045501_AddLastDateViewedToEpisodeModel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -17,6 +17,7 @@
         <cartoonModels:Cartoon Name="Американский папаша" />
         <cartoonModels:Cartoon Name="Спанч Боб" />
         <cartoonModels:Cartoon Name="Футурама" />
+        <cartoonModels:Cartoon Name="Удивительный мир Гамбола" />
     </viewModels:MainMenuViewModel.Cartoons>
 
 

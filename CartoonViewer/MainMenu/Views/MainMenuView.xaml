@@ -4,10 +4,11 @@
     xmlns:cal="http://www.caliburnproject.org"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helper="clr-namespace:CartoonViewer.Helpers"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:CartoonViewer.MainMenu.Views"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-    xmlns:mah1="http://metro.mahapps.com/winfx/xaml/shared"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:CartoonViewer.MainMenu.ViewModels"
     MinWidth="960"
     MinHeight="540"
     cal:Bind.AtDesignTime="True"
@@ -17,7 +18,7 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary Source="../../Resources/Styles/GeneralStyles.xaml"/>
-        </UserControl.Resources>
+    </UserControl.Resources>
 
     <UserControl.Background>
         <ImageBrush ImageSource="{Binding Background}"
@@ -47,23 +48,44 @@
                 <ColumnDefinition Width="0.9*"/>
                 <ColumnDefinition Width="0.06*"/>
             </Grid.ColumnDefinitions>
-            <ListBox x:Name="Cartoons"
-                Grid.Row="0"
-                Grid.Column="1"
-                ItemContainerStyle="{StaticResource CartoonListBoxItemStyle}"
-                Background="Transparent">
-                <ListBox.ItemTemplate >
-                    <ItemContainerTemplate>
-                        <DockPanel Margin="0,7">
-                            <CheckBox cal:Message.Attach="[Checked] = [Action CheckedValidation()];[Unchecked] = [Action CheckedValidation()]"
-                                DockPanel.Dock="Left"
-                                IsChecked="{Binding Checked, UpdateSourceTrigger=PropertyChanged}"/>
-                            <TextBlock VerticalAlignment="Center"
-                                Text="{Binding Name}"/>
-                        </DockPanel>
-                    </ItemContainerTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+            <ScrollViewer Grid.Row="0"
+                Grid.Column="1">
+                <ItemsControl ItemsSource="{Binding Cartoons}"
+                    Style="{StaticResource MMItemsControlStyle}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <DockPanel Margin="0,7">
+                                <ToggleButton VerticalAlignment="Center"
+                                    Margin="0,0,10,0"
+                                    cal:Message.Attach="[Checked] = [Action CheckedValidation()];[Unchecked] = [Action CheckedValidation()]"
+                                    IsChecked="{Binding Checked, UpdateSourceTrigger=PropertyChanged}"
+                                    Style="{StaticResource MMCartoonListTButtonStyle}">
+                                    <iconPacks:PackIconMaterial x:Name="ToggleButton"
+                                        Width="20"
+                                        Height="20"/>
+                                </ToggleButton>
+                                <TextBlock x:Name="CartoonName"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding Name}"/>
+                            </DockPanel>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding Checked}"
+                                    Value="True">
+                                    <Setter TargetName="ToggleButton" Property="Kind" Value="Eye"/>
+                                    <Setter TargetName="ToggleButton" Property="Foreground" Value="LimeGreen"/>
+                                    <Setter TargetName="CartoonName" Property="Foreground" Value="LimeGreen"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Checked}"
+                                    Value="False">
+                                    <Setter TargetName="ToggleButton" Property="Kind" Value="EyeOff"/>
+                                    <Setter TargetName="ToggleButton" Property="Foreground" Value="#FFCE0000"/>
+                                </DataTrigger>
+
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
         </Grid>
 
         <Grid Grid.Row="0"
@@ -80,11 +102,8 @@
             </Grid.ColumnDefinitions>
             <Button Grid.Row="1"
                 Grid.Column="1"
-                    Style="{StaticResource ExitButtonStyle}"
-                cal:Message.Attach="
-                    [Event Click]=[Action Exit()];
-                    [Event MouseEnter]=[Action CursorOnExit()];
-                    [Event MouseLeave]=[Action CursorOutsideExit()];"/>
+                cal:Message.Attach="                     [Event Click]=[Action Exit()];                     [Event MouseEnter]=[Action CursorOnExit()];                     [Event MouseLeave]=[Action CursorOutsideExit()];"
+                Style="{StaticResource ExitButtonStyle}"/>
         </Grid>
 
         <!--#endregion-->
@@ -111,60 +130,59 @@
                 <ColumnDefinition Width="0.1*"/>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Row="3"
-                        Grid.RowSpan="3"
-                        Grid.Column="0"
-                        VerticalAlignment="Center"
-                        Margin="5,0,0,0"
-                        Orientation="Vertical">
+                Grid.RowSpan="3"
+                Grid.Column="0"
+                Margin="5,0,0,0"
+                VerticalAlignment="Center"
+                Orientation="Vertical">
                 <StackPanel.RenderTransform>
                     <RotateTransform Angle="-9.5"/>
                 </StackPanel.RenderTransform>
                 <StackPanel HorizontalAlignment="Center"
-                            Orientation="Horizontal">
+                    Orientation="Horizontal">
                     <TextBlock Style="{StaticResource DateTimeTBlockStyle}"
-                               Text="{Binding FinalDay}"/>
+                        Text="{Binding FinalDay}"/>
                     <TextBlock Style="{StaticResource DateTimeTBlockStyle}"
-                               Text="."/>
+                        Text="."/>
                     <TextBlock Style="{StaticResource DateTimeTBlockStyle}"
-                               Text="{Binding FinalMonth}"/>
+                        Text="{Binding FinalMonth}"/>
                     <TextBlock Style="{StaticResource DateTimeTBlockStyle}"
-                               Text="."/>
+                        Text="."/>
                     <TextBlock Style="{StaticResource DateTimeTBlockStyle}"
-                               Text="{Binding FinalYear}"/>
+                        Text="{Binding FinalYear}"/>
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Center"
-                            Orientation="Horizontal">
+                    Orientation="Horizontal">
                     <TextBlock Style="{StaticResource DateTimeTBlockStyle}"
-                               Text="{Binding FinalHour}"/>
+                        Text="{Binding FinalHour}"/>
                     <TextBlock Style="{StaticResource DateTimeTBlockStyle}"
-                               Text=":"/>
+                        Text=":"/>
                     <TextBlock Style="{StaticResource DateTimeTBlockStyle}"
-                               Text="{Binding FinalMinute}"/>
+                        Text="{Binding FinalMinute}"/>
                 </StackPanel>
             </StackPanel>
-            <StackPanel
-                Grid.Row="1"
+            <StackPanel Grid.Row="1"
                 Grid.RowSpan="3"
                 Grid.Column="2"
-                VerticalAlignment="Center"
                 Grid.ColumnSpan="2"
                 HorizontalAlignment="Center"
+                VerticalAlignment="Center"
                 Orientation="Horizontal">
                 <TextBlock Style="{StaticResource MMDefaultTBlockStyle}"
-                           Text="{Binding EpisodesCountRemainingString}"/>
+                    Text="{Binding EpisodesCountRemainingString}"/>
                 <TextBlock Style="{StaticResource MMDefaultTBlockStyle}"
-                           Text=":"/>
+                    Text=":"/>
                 <StackPanel.RenderTransform>
-    <RotateTransform Angle="-7"/>
-</StackPanel.RenderTransform>
+                    <RotateTransform Angle="-7"/>
+                </StackPanel.RenderTransform>
             </StackPanel>
             <TextBlock Grid.Row="2"
-                       Grid.RowSpan="4"
-                       Grid.Column="1"
-                       Grid.ColumnSpan="2"
-                       Style="{StaticResource MMDefaultTBlockStyle}"
-                       HorizontalAlignment="Left"
-                       Text="~Время окончания">
+                Grid.RowSpan="4"
+                Grid.Column="1"
+                Grid.ColumnSpan="2"
+                HorizontalAlignment="Left"
+                Style="{StaticResource MMDefaultTBlockStyle}"
+                Text="~Время окончания">
                 <TextBlock.RenderTransform>
                     <RotateTransform Angle="-9"/>
                 </TextBlock.RenderTransform>
@@ -196,9 +214,8 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Orientation="Vertical">
-                <TextBlock 
+                <TextBlock FontSize="15"
                     Style="{StaticResource MMDefaultTBlockStyle}"
-                    FontSize="15"
                     Text="Выключить комп?"/>
                 <mah:ToggleSwitchButton HorizontalAlignment="Center"
                     IsChecked="{Binding IsShutdownComp}"/>

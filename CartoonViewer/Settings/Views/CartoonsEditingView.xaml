@@ -147,7 +147,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Style="{StaticResource SEDefaultTBlockStyle}"
-                    Text="Список эпизодов"
+                    Text="Список сезонов"
                     Grid.Row="0"
                     Grid.Column="0"/>
                 <ListBox Grid.Row="1"
@@ -273,7 +273,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-<TextBlock Grid.Row="0"
+            <TextBlock Grid.Row="0"
            Grid.Column="0"
            Style="{StaticResource SEDefaultTBlockStyle}"
            Text="Описание мультфильма"/>
@@ -287,7 +287,7 @@
                      Foreground="AntiqueWhite"
                       Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
-        
+
 
         <!--#endregion-->
 
