@@ -5,16 +5,15 @@
                     xmlns:cartoonModels="clr-namespace:CartoonViewer.Models.CartoonModels"
                     xmlns:system="clr-namespace:System;assembly=mscorlib"
                     SaveChangesVisibility="Visible"
-                              AdvancedSettingsVisibility="Visible"
                               CartoonTypesVisibility="Visible"
                               Url="http://cartoonUrl.url"
                               Name="CartoonName"
                               Description="Небольшое, но информативное описание мультфильма">
     <vms:CartoonsEditingViewModel.Seasons>
-        <cartoonModels:Season Number="1"/>
-        <cartoonModels:Season Number="2"/>
-        <cartoonModels:Season Number="3"/>
-        <cartoonModels:Season Number="4"/>
-        <cartoonModels:Season Number="5"/>
+        <cartoonModels:CartoonSeason Number="1"/>
+        <cartoonModels:CartoonSeason Number="2"/>
+        <cartoonModels:CartoonSeason Number="3"/>
+        <cartoonModels:CartoonSeason Number="4"/>
+        <cartoonModels:CartoonSeason Number="5"/>
     </vms:CartoonsEditingViewModel.Seasons>
 </vms:CartoonsEditingViewModel>

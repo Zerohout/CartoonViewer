@@ -12,22 +12,22 @@
 
 	public class EpisodesEditingViewModel : Screen, ISettingsViewModel
 	{
-		public EpisodesEditingViewModel(Episode episode)
+		public EpisodesEditingViewModel(CartoonEpisode cartoonEpisode)
 		{
-			if (episode.Name == NewElementString) return;
+			if (cartoonEpisode.Name == NewElementString) return;
 
 			LoadData();
 		}
 
 		public EpisodesEditingViewModel()
 		{
-			_episode = new Episode();
-			_tempEpisode = new Episode();
+			_cartoonEpisode = new CartoonEpisode();
+			_tempCartoonEpisode = new CartoonEpisode();
 		}
 
-		private BindableCollection<Episode> _episodes = new BindableCollection<Episode>();
+		private BindableCollection<CartoonEpisode> _episodes = new BindableCollection<CartoonEpisode>();
 
-		public BindableCollection<Episode> Episodes
+		public BindableCollection<CartoonEpisode> Episodes
 		{
 			get => _episodes;
 			set
@@ -43,28 +43,28 @@
 			set => Helper.AdvancedSettingsVisibility = value;
 		}
 
-		private Episode _tempEpisode = new Episode();
+		private CartoonEpisode _tempCartoonEpisode = new CartoonEpisode();
 
-		public Episode TempEpisode
+		public CartoonEpisode TempCartoonEpisode
 		{
-			get => _tempEpisode;
+			get => _tempCartoonEpisode;
 			set
 			{
-				_tempEpisode = value;
-				NotifyOfPropertyChange(() => TempEpisode);
+				_tempCartoonEpisode = value;
+				NotifyOfPropertyChange(() => TempCartoonEpisode);
 			}
 		}
 
 
-		private Episode _episode = new Episode();
+		private CartoonEpisode _cartoonEpisode = new CartoonEpisode();
 
-		public Episode Episode
+		public CartoonEpisode CartoonEpisode
 		{
-			get => _episode;
+			get => _cartoonEpisode;
 			set
 			{
-				_episode = value;
-				NotifyOfPropertyChange(() => Episode);
+				_cartoonEpisode = value;
+				NotifyOfPropertyChange(() => CartoonEpisode);
 			}
 		}
 
@@ -72,18 +72,18 @@
 
 		public void LoadData()
 		{
-			//Episode result;
+			//CartoonEpisode result;
 			using (var ctx = new CVDbContext())
 			{
-				//await ctx.Episodes
-				//   .Where(e => e.EpisodeId == id)
-				//   .Include(e => e.VoiceOvers)
+				//await ctx.CartoonEpisodes
+				//   .Where(e => e.CartoonEpisodeId == id)
+				//   .Include(e => e.CartoonVoiceOvers)
 				//   .LoadAsync();
-				//result = ctx.Episodes.Local.FirstOrDefault();
+				//result = ctx.CartoonEpisodes.Local.FirstOrDefault();
 			}
 
-			//Episode = CloneEpisode(result);
-			//TempEpisode = CloneEpisode(result);
+			//CartoonEpisode = CloneEpisode(result);
+			//TempCartoonEpisode = CloneEpisode(result);
 		}
 
 		public void SaveChanges() { throw new System.NotImplementedException(); }

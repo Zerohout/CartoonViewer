@@ -5,12 +5,20 @@
 	using System.ComponentModel.DataAnnotations;
 	using System.ComponentModel.DataAnnotations.Schema;
 
-	public class Episode
+	public class CartoonEpisode
 	{
+		public CartoonEpisode()
+		{
+			CartoonVoiceOvers = new List<CartoonVoiceOver>();
+		}
+
 		[Key]
-		public int EpisodeId { get; set; }
+		public int CartoonEpisodeId { get; set; }
 
 		public int Number { get; set; }
+		public string NumberName => $"{Number} эпизод";
+
+
 		public int SkipCount { get; set; }
 
 		public string Name { get; set; }
@@ -22,10 +30,10 @@
 		public TimeSpan Duration { get; set; }
 		public DateTime LastDateViewed { get; set; } = new DateTime(2019,01,01);
 
-		public List<VoiceOver> VoiceOvers { get; set; }
+		public List<CartoonVoiceOver> CartoonVoiceOvers { get; set; }
 
-		[ForeignKey("Season")]
-		public int SeasonId { get; set; }
-		public Season Season { get; set; }
+		[ForeignKey("CartoonSeason")]
+		public int CartoonSeasonId { get; set; }
+		public CartoonSeason CartoonSeason { get; set; }
 	}
 }

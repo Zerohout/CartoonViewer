@@ -48,8 +48,8 @@
               Margin="5"
               VerticalAlignment="Top"
               ItemsSource="{Binding WebSites}"
-              SelectedItem="{Binding WebSite}"
-              cal:Message.Attach="[Event SelectionChanged] = [Action WebSitesSelectionChanged()]">
+              SelectedItem="{Binding CartoonWebSite}"
+              cal:Message.Attach="[Event SelectionChanged] = [Action CartoonCartoonCartoonWebSitesSelectionChanged()]">
         <ComboBox.ItemTemplate>
             <ItemContainerTemplate>
                         <TextBlock Text="{Binding Url}"
@@ -129,8 +129,8 @@
                 Margin="5"
                 VerticalAlignment="Top"
                       ItemsSource="{Binding Seasons}"
-                      SelectedItem="{Binding Season}"
-                      cal:Message.Attach="[Event SelectionChanged] = [Action SeasonsSelectionChanged()]">
+                      SelectedItem="{Binding CartoonSeason}"
+                      cal:Message.Attach="[Event SelectionChanged] = [Action CartoonCartoonCartoonSeasonsSelectionChanged()]">
                 <ComboBox.ItemTemplate>
                     <ItemContainerTemplate>
                         <StackPanel Orientation="Horizontal">
@@ -146,7 +146,7 @@
                     Grid.Column="1"
                     VerticalAlignment="Top"
                     Margin="0 5"
-                    cal:Message.Attach="[Event Click]=[Action CancelSeasonSelection()]">
+                    cal:Message.Attach="[Event Click]=[Action CancelCartoonSeasonSelection()]">
                 <iconPacks:PackIconMaterial Kind="Cancel" Height="12"/>
             </Button>
         </Grid>

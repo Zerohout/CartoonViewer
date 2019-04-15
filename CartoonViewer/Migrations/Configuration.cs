@@ -23,49 +23,52 @@ namespace CartoonViewer.Migrations
 
 		private void AddDataToDatabase(CVDbContext context)
 		{
-			context.WebSites.Add(CreateWebSite(FreehatWebSite));
+			context.CartoonWebSites.Add(CreateWebSite(FreehatWebSite));
 			context.Cartoons.AddRange(CreateCartoonList());
-			context.VoiceOvers.AddRange(CreateVoiceOverList());
 			context.SaveChanges();
 
-			foreach (var cw in context.WebSites)
+
+			foreach (var cw in context.CartoonWebSites)
 			{
 				cw.ElementValues.Add(CreateElementValue());
 			}
 
 			context.SaveChanges();
 
-			var website = context.WebSites.First();
+			var website = context.CartoonWebSites.First();
 			var cartoons = context.Cartoons.ToList();
 
 			foreach (var cc in cartoons)
 			{
-				cc.WebSites.Add(website);
+				if (cc.Name == "Южный парк")
+				{
+					cc.CartoonVoiceOvers.AddRange(CreateSouthParkVoiceOverList(cc.CartoonId));
+				}
+
+				cc.CartoonWebSites.Add(website);
 				cc.CartoonUrls.Add(CreateCartoonUrl(cc, website));
 				context.Entry(cc).State = EntityState.Modified;
 			}
 
-
-
 			context.SaveChanges();
 		}
 
-		private CartoonUrl CreateCartoonUrl(Cartoon cartoon, WebSite webSite)
+		private CartoonUrl CreateCartoonUrl(Cartoon cartoon, CartoonWebSite cartoonWebSite)
 		{
 			var url = "";
 			switch (cartoon.Name)
 			{
 				case "Южный парк":
-					url = $"http://sp.freehat.cc/episode/";
+					url = $"http://sp.freehat.cc/cartoonEpisode/";
 					break;
 				case "Гриффины":
-					url = $"http://grif.freehat.cc/episode/";
+					url = $"http://grif.freehat.cc/cartoonEpisode/";
 					break;
 				case "Симпсоны":
-					url = $"http://simp.freehat.cc/episode/";
+					url = $"http://simp.freehat.cc/cartoonEpisode/";
 					break;
 				case "Американский папаша":
-					url = $"http://dad.freehat.cc/episode/";
+					url = $"http://dad.freehat.cc/cartoonEpisode/";
 					break;
 			}
 
@@ -74,8 +77,8 @@ namespace CartoonViewer.Migrations
 				Cartoon = cartoon,
 				Url = url,
 				Checked = true,
-				WebSite = webSite,
-				WebSiteUrl = webSite.Url
+				CartoonWebSite = cartoonWebSite,
+				WebSiteUrl = cartoonWebSite.Url
 			};
 		}
 	}

@@ -19,8 +19,8 @@
 		public string PartialLinkText { get; set; }
 		public string XPath { get; set; }
 
-		[ForeignKey("WebSite")]
-		public int WebSiteId { get; set; }
-		public WebSite WebSite { get; set; }
+		[ForeignKey("CartoonWebSite")]
+		public int CartoonWebSiteId { get; set; }
+		public CartoonWebSite CartoonWebSite { get; set; }
 	}
 }

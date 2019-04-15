@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace CartoonViewer.Helpers
 {
@@ -15,9 +11,9 @@ namespace CartoonViewer.Helpers
 		/// </summary>
 		/// <param name="webSites">Клонируемый список сайтов</param>
 		/// <returns></returns>
-		public static List<WebSite> CloneWebSiteList(List<WebSite> webSites)
+		public static List<CartoonWebSite> CloneWebSiteList(List<CartoonWebSite> webSites)
 		{
-			var result = new List<WebSite>();
+			var result = new List<CartoonWebSite>();
 
 			if (webSites == null || webSites.Count == 0) return result;
 
@@ -33,13 +29,13 @@ namespace CartoonViewer.Helpers
 		/// <summary>
 		/// Клонирование Вебсайта
 		/// </summary>
-		/// <param name="webSite">Клонируемый сайт</param>
+		/// <param name="cartoonWebSite">Клонируемый сайт</param>
 		/// <returns></returns>
-		public static WebSite CloneWebSite(WebSite webSite) => new WebSite
+		public static CartoonWebSite CloneWebSite(CartoonWebSite cartoonWebSite) => new CartoonWebSite
 		{
-			WebSiteId = webSite.WebSiteId,
-			Url = webSite.Url,
-			ElementValues = CloneElementValueList(webSite.ElementValues)
+			CartoonWebSiteId = cartoonWebSite.CartoonWebSiteId,
+			Url = cartoonWebSite.Url,
+			ElementValues = CloneElementValueList(cartoonWebSite.ElementValues)
 		};
 
 		/// <summary>
@@ -78,7 +74,7 @@ namespace CartoonViewer.Helpers
 			PartialLinkText = elementValue.PartialLinkText,
 			TagName = elementValue.TagName,
 			XPath = elementValue.XPath,
-			WebSiteId = elementValue.WebSiteId
+			CartoonWebSiteId = elementValue.CartoonWebSiteId
 		};
 
 		/// <summary>
@@ -114,8 +110,8 @@ namespace CartoonViewer.Helpers
 			CartoonType = cartoon.CartoonType,
 			CartoonUrls = cartoon.CartoonUrls,
 			Checked = cartoon.Checked,
-			WebSites = CloneWebSiteList(cartoon.WebSites),
-			Seasons = CloneSeasonList(cartoon.Seasons)
+			CartoonWebSites = CloneWebSiteList(cartoon.CartoonWebSites),
+			CartoonSeasons = CloneSeasonList(cartoon.CartoonSeasons)
 		};
 
 		/// <summary>
@@ -150,7 +146,7 @@ namespace CartoonViewer.Helpers
 			WebSiteUrl = cartoonUrl.WebSiteUrl,
 			Checked = cartoonUrl.Checked,
 			CartoonId = cartoonUrl.CartoonId,
-			WebSiteId = cartoonUrl.WebSiteId
+			CartoonWebSiteId = cartoonUrl.CartoonWebSiteId
 		};
 
 		/// <summary>
@@ -158,9 +154,9 @@ namespace CartoonViewer.Helpers
 		/// </summary>
 		/// <param name="seasons">Клонируемый список сезонов</param>
 		/// <returns></returns>
-		public static List<Season> CloneSeasonList(List<Season> seasons)
+		public static List<CartoonSeason> CloneSeasonList(List<CartoonSeason> seasons)
 		{
-			var result = new List<Season>();
+			var result = new List<CartoonSeason>();
 
 			if (seasons == null || seasons.Count == 0) return result;
 
@@ -176,17 +172,17 @@ namespace CartoonViewer.Helpers
 		/// <summary>
 		/// Клонирование сезона
 		/// </summary>
-		/// <param name="season">Клонируемый сезон</param>
+		/// <param name="cartoonSeason">Клонируемый сезон</param>
 		/// <returns></returns>
-		public static Season CloneSeason(Season season) => new Season
+		public static CartoonSeason CloneSeason(CartoonSeason cartoonSeason) => new CartoonSeason
 		{
-			SeasonId = season.SeasonId,
-			Name = season.Name,
-			Number = season.Number,
-			Description = season.Description,
-			Checked = season.Checked,
-			CartoonId = season.CartoonId,
-			Episodes = CloneEpisodeList(season.Episodes)
+			CartoonSeasonId = cartoonSeason.CartoonSeasonId,
+			Name = cartoonSeason.Name,
+			Number = cartoonSeason.Number,
+			Description = cartoonSeason.Description,
+			Checked = cartoonSeason.Checked,
+			CartoonId = cartoonSeason.CartoonId,
+			CartoonEpisodes = CloneEpisodeList(cartoonSeason.CartoonEpisodes)
 		};
 
 		/// <summary>
@@ -194,9 +190,9 @@ namespace CartoonViewer.Helpers
 		/// </summary>
 		/// <param name="episodes">Клонируемый список эпизодов</param>
 		/// <returns></returns>
-		public static List<Episode> CloneEpisodeList(List<Episode> episodes)
+		public static List<CartoonEpisode> CloneEpisodeList(List<CartoonEpisode> episodes)
 		{
-			var result = new List<Episode>();
+			var result = new List<CartoonEpisode>();
 
 			if (episodes == null || episodes.Count == 0) return result;
 
@@ -212,21 +208,21 @@ namespace CartoonViewer.Helpers
 		/// <summary>
 		/// Клонирование эпизода
 		/// </summary>
-		/// <param name="episode">Клонируемый эпизод</param>
+		/// <param name="cartoonEpisode">Клонируемый эпизод</param>
 		/// <returns></returns>
-		public static Episode CloneEpisode(Episode episode) => new Episode
+		public static CartoonEpisode CloneEpisode(CartoonEpisode cartoonEpisode) => new CartoonEpisode
 		{
-			EpisodeId = episode.EpisodeId,
-			Name = episode.Name,
-			Number = episode.Number,
-			Description = episode.Description,
-			Checked = episode.Checked,
-			DelayedSkip = episode.DelayedSkip,
-			SkipCount = episode.SkipCount,
-			Duration = episode.Duration,
-			CreditsStart = episode.CreditsStart,
-			VoiceOvers = CopyVoiceOverList(episode.VoiceOvers),
-			SeasonId = episode.SeasonId
+			CartoonEpisodeId = cartoonEpisode.CartoonEpisodeId,
+			Name = cartoonEpisode.Name,
+			Number = cartoonEpisode.Number,
+			Description = cartoonEpisode.Description,
+			Checked = cartoonEpisode.Checked,
+			DelayedSkip = cartoonEpisode.DelayedSkip,
+			SkipCount = cartoonEpisode.SkipCount,
+			Duration = cartoonEpisode.Duration,
+			CreditsStart = cartoonEpisode.CreditsStart,
+			//CartoonVoiceOvers = CloneVoiceOverList(cartoonEpisode.CartoonVoiceOvers),
+			CartoonSeasonId = cartoonEpisode.CartoonSeasonId
 		};
 
 		/// <summary>
@@ -234,16 +230,16 @@ namespace CartoonViewer.Helpers
 		/// </summary>
 		/// <param name="voiceOvers">Клонируемый список озвучек</param>
 		/// <returns></returns>
-		public static List<VoiceOver> CopyVoiceOverList(List<VoiceOver> voiceOvers)
+		public static List<CartoonVoiceOver> CloneVoiceOverList(List<CartoonVoiceOver> voiceOvers)
 		{
-			var result = new List<VoiceOver>();
+			var result = new List<CartoonVoiceOver>();
 
 			if (voiceOvers == null || voiceOvers.Count == 0) return result;
 
 
 			foreach (var voiceOver in voiceOvers)
 			{
-				result.Add(CopyVoiceOver(voiceOver));
+				result.Add(CloneVoiceOver(voiceOver));
 			}
 
 			return result;
@@ -252,16 +248,15 @@ namespace CartoonViewer.Helpers
 		/// <summary>
 		/// Клонирование озвучки
 		/// </summary>
-		/// <param name="voiceOver">Клонируемая озвучка</param>
+		/// <param name="cartoonVoiceOver">Клонируемая озвучка</param>
 		/// <returns></returns>
-		public static VoiceOver CopyVoiceOver(VoiceOver voiceOver) => new VoiceOver
+		public static CartoonVoiceOver CloneVoiceOver(CartoonVoiceOver cartoonVoiceOver) => new CartoonVoiceOver
 		{
-			VoiceOverId = voiceOver.VoiceOverId,
-			Name = voiceOver.Name,
-			Description = voiceOver.Description,
-			UrlParameter = voiceOver.UrlParameter,
-			Checked = voiceOver.Checked,
-			EpisodeId = voiceOver.EpisodeId
+			CartoonVoiceOverId = cartoonVoiceOver.CartoonVoiceOverId,
+			Name = cartoonVoiceOver.Name,
+			Description = cartoonVoiceOver.Description,
+			UrlParameter = cartoonVoiceOver.UrlParameter,
+			Checked = cartoonVoiceOver.Checked
 		};
 	}
 }

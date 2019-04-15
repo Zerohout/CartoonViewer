@@ -3,7 +3,6 @@
 namespace CartoonViewer.Database
 {
 	using System.Data.Entity;
-	using Helpers;
 	using Models.CartoonModels;
 
 	public class CVDbContext : DbContext
@@ -26,12 +25,12 @@ namespace CartoonViewer.Database
 
 		}
 
-		public DbSet<WebSite> WebSites { get; set; }
+		public DbSet<CartoonWebSite> CartoonWebSites { get; set; }
 		public DbSet<ElementValue> ElementValues { get; set; }
 		public DbSet<Cartoon> Cartoons { get; set; }
 		public DbSet<CartoonUrl> CartoonUrl { get; set; }
-		public DbSet<Season> Seasons { get; set; }
-		public DbSet<Episode> Episodes { get; set; }
-		public DbSet<VoiceOver> VoiceOvers { get; set; }
+		public DbSet<CartoonSeason> CartoonSeasons { get; set; }
+		public DbSet<CartoonEpisode> CartoonEpisodes { get; set; }
+		public DbSet<CartoonVoiceOver> VoiceOvers { get; set; }
 	}
 }

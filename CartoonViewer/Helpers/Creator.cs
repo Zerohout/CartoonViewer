@@ -12,73 +12,66 @@
 		/// Создать список озвучек по умолчанию
 		/// </summary>
 		/// <returns></returns>
-		public static List<VoiceOver> CreateVoiceOverList()
+		public static List<CartoonVoiceOver> CreateSouthParkVoiceOverList(int CartoonId)
 		{
-			return new List<VoiceOver>
+			return new List<CartoonVoiceOver>
 			{
-				new VoiceOver
+				new CartoonVoiceOver
 				{
 					Name = "MTV(Default)",
-					UrlParameter = "",
-					Checked = true
+					UrlParameter = ""
 				},
-				new VoiceOver
+				new CartoonVoiceOver
 				{
 					Name = "Paramaunt(Default)",
-					UrlParameter = "",
-					Checked = true
+					UrlParameter = ""
 				},
-				new VoiceOver
+				new CartoonVoiceOver
 				{
 					Name = "Paramaunt",
 					UrlParameter = "?v=par"
 				},
-				new VoiceOver
+				new CartoonVoiceOver
 				{
 					Name = "РенТВ(Default)",
-					UrlParameter = "",
-					Checked = true
+					UrlParameter = ""
 				},
-				new VoiceOver
+				new CartoonVoiceOver
 				{
 					Name = "VO(Default)",
-					UrlParameter = "",
-					Checked = true
+					UrlParameter = ""
 				},
-				new VoiceOver
+				new CartoonVoiceOver
 				{
 					Name = "КвК(Default)",
-					UrlParameter = "",
-					Checked = true
+					UrlParameter = ""
 				},
-				new VoiceOver
+				new CartoonVoiceOver
 				{
 					Name = "L0cDoG(Default)",
-					UrlParameter = "",
-					Checked = true
+					UrlParameter = ""
 				},
-				new VoiceOver
+				new CartoonVoiceOver
 				{
 					Name = "L0cDoG",
 					UrlParameter = "?v=ld"
 				},
-				new VoiceOver
+				new CartoonVoiceOver
 				{
 					Name = "Jaskier(Default)",
-					UrlParameter = "",
-					Checked = true
+					UrlParameter = ""
 				},
-				new VoiceOver
+				new CartoonVoiceOver
 				{
 					Name = "Jaskier",
 					UrlParameter = "?v=js"
 				},
-				new VoiceOver
+				new CartoonVoiceOver
 				{
 					Name = "Гоблин",
 					UrlParameter = "?v=goblin"
 				},
-				new VoiceOver
+				new CartoonVoiceOver
 				{
 					Name = "Англ.",
 					UrlParameter = "?v=en"
@@ -96,18 +89,18 @@
 
 		//public static CartoonUrl CreateCartoonUrl(string param) => new CartoonUrl
 		//{
-		//	MainUrl = $"http://{param}.freehat.cc/episode/",
+		//	MainUrl = $"http://{param}.freehat.cc/cartoonEpisode/",
 		//	WebSiteUrl = FreehatWebSite
 		//};
 
 		public static ElementValue CreateElementValue() => new ElementValue
 		{
-			//WebSiteId = id,
+			//CartoonWebSiteId = id,
 			ElementName = "Нижняя кнопка старта",
 			CssSelector = "pjsdiv:nth-child(8) > pjsdiv > pjsdiv"
 		};
 
-		public static WebSite CreateWebSite(string url) => new WebSite
+		public static CartoonWebSite CreateWebSite(string url) => new CartoonWebSite
 		{
 			Url = url
 		};

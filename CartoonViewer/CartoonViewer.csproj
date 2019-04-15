@@ -105,35 +105,20 @@
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Helpers\HotkeysRegistrator.cs" />
     <Compile Include="Helpers\MessageHelper.cs" />
-    <Compile Include="Migrations\201904051609445_Initializing.cs" />
-    <Compile Include="Migrations\201904051609445_Initializing.Designer.cs">
-      <DependentUpon>201904051609445_Initializing.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904091001245_AddDescriptionToCartoonModel.cs" />
-    <Compile Include="Migrations\201904091001245_AddDescriptionToCartoonModel.Designer.cs">
-      <DependentUpon>201904091001245_AddDescriptionToCartoonModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904101410127_RemakeDatabaseModel.cs" />
-    <Compile Include="Migrations\201904101410127_RemakeDatabaseModel.Designer.cs">
-      <DependentUpon>201904101410127_RemakeDatabaseModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904101522094_CorrectionDatabaseModel.cs" />
-    <Compile Include="Migrations\201904101522094_CorrectionDatabaseModel.Designer.cs">
-      <DependentUpon>201904101522094_CorrectionDatabaseModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904131045501_AddLastDateViewedToEpisodeModel.cs" />
-    <Compile Include="Migrations\201904131045501_AddLastDateViewedToEpisodeModel.Designer.cs">
-      <DependentUpon>201904131045501_AddLastDateViewedToEpisodeModel.cs</DependentUpon>
+    <Compile Include="Migrations\201904151808288_Initialize.cs" />
+    <Compile Include="Migrations\201904151808288_Initialize.Designer.cs">
+      <DependentUpon>201904151808288_Initialize.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\CartoonModels\Cartoon.cs" />
-    <Compile Include="Models\CartoonModels\WebSite.cs" />
+    <Compile Include="Models\CartoonModels\CartoonWebSite.cs" />
     <Compile Include="Models\CartoonModels\CartoonUrl.cs" />
     <Compile Include="Models\CartoonModels\ElementValue.cs" />
-    <Compile Include="Models\CartoonModels\Episode.cs" />
-    <Compile Include="Models\CartoonModels\Season.cs" />
-    <Compile Include="Models\CartoonModels\VoiceOver.cs" />
+    <Compile Include="Models\CartoonModels\CartoonEpisode.cs" />
+    <Compile Include="Models\CartoonModels\CartoonSeason.cs" />
+    <Compile Include="Models\CartoonModels\CartoonVoiceOver.cs" />
     <Compile Include="Models\ProgramModels\WorkingData.cs" />
+    <Compile Include="Models\SettingModels\EpisodeTime.cs" />
     <Compile Include="Settings\ViewModels\CartoonsEditingViewModel.cs" />
     <Compile Include="Settings\ViewModels\EpisodesEditingViewModel.cs" />
     <Compile Include="Settings\ViewModels\GeneralSettingsViewModel.cs" />
@@ -185,20 +170,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Migrations\201904051609445_Initializing.resx">
-      <DependentUpon>201904051609445_Initializing.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904091001245_AddDescriptionToCartoonModel.resx">
-      <DependentUpon>201904091001245_AddDescriptionToCartoonModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904101410127_RemakeDatabaseModel.resx">
-      <DependentUpon>201904101410127_RemakeDatabaseModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904101522094_CorrectionDatabaseModel.resx">
-      <DependentUpon>201904101522094_CorrectionDatabaseModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904131045501_AddLastDateViewedToEpisodeModel.resx">
-      <DependentUpon>201904131045501_AddLastDateViewedToEpisodeModel.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201904151808288_Initialize.resx">
+      <DependentUpon>201904151808288_Initialize.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -227,6 +200,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Settings\DesignData\CartoonsEditingViewDesignData.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\DesignData\SeasonsEditingViewDesignData.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -275,9 +252,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\SettingModels\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="CartoonViewerIcon.ico" />
   </ItemGroup>

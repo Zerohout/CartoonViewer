@@ -13,12 +13,12 @@
 	{
 		private Visibility _cartoonsVisibility = Visibility.Hidden;
 		private Visibility _seasonsVisibility = Visibility.Hidden;
-		private WebSite _webSite;
+		private CartoonWebSite _cartoonWebSite;
 		private Cartoon _cartoon;
-		private Season _season;
-		private BindableCollection<WebSite> _webSites = new BindableCollection<WebSite>();
+		private CartoonSeason _cartoonSeason;
+		private BindableCollection<CartoonWebSite> _webSites = new BindableCollection<CartoonWebSite>();
 		private BindableCollection<Cartoon> _cartoons = new BindableCollection<Cartoon>();
-		private BindableCollection<Season> _seasons = new BindableCollection<Season>();
+		private BindableCollection<CartoonSeason> _seasons = new BindableCollection<CartoonSeason>();
 
 		public CartoonsControlViewModel()
 		{
@@ -39,8 +39,8 @@
 
 			using (var ctx = new CVDbContext())
 			{
-				await ctx.WebSites.LoadAsync();
-				WebSites.AddRange(ctx.WebSites.Local);
+				await ctx.CartoonWebSites.LoadAsync();
+				WebSites.AddRange(ctx.CartoonWebSites.Local);
 				NotifyOfPropertyChange(() => WebSites);
 			}
 
@@ -48,12 +48,15 @@
 
 		#region EventsActions
 
+		/// <summary>
+		/// Изменен выбранный адрес сайта
+		/// </summary>
 		public async void WebSitesSelectionChanged()
 		{
 			Cartoons.Clear();
 			Seasons.Clear();
 
-			if (WebSite == null)
+			if (CartoonWebSite == null)
 			{
 				if (CartoonsVisibility == Visibility.Visible)
 				{
@@ -66,11 +69,11 @@
 			using (var ctx = new CVDbContext())
 			{
 				await ctx.Cartoons
-						 .Include(c => c.WebSites)
+						 .Include(c => c.CartoonWebSites)
 						 .LoadAsync();
 
 				Cartoons.AddRange(ctx.Cartoons.Local
-										   .Where(c => c.WebSites.Any(w => w.Url == WebSite.Url))
+										   .Where(c => c.CartoonWebSites.Any(w => w.Url == CartoonWebSite.Url))
 										   .ToList());
 			}
 
@@ -106,23 +109,43 @@
 					SeasonsVisibility = Visibility.Hidden;
 				}
 
-				ChangeActiveItem(new CartoonsEditingViewModel(Cartoon, WebSite.WebSiteId));
+				ChangeActiveItem(new CartoonsEditingViewModel(Cartoon, CartoonWebSite.CartoonWebSiteId));
 				return;
 			}
 
 			using (var ctx = new CVDbContext())
 			{
-				await ctx.Seasons
+				await ctx.CartoonSeasons
 						 .LoadAsync();
 
-				Seasons.AddRange(ctx.Seasons.Local.Where(s => s.CartoonId == _cartoon.CartoonId));
+				Seasons.AddRange(ctx.CartoonSeasons.Local.Where(s => s.CartoonId == _cartoon.CartoonId));
 			}
 
-			ChangeActiveItem(new CartoonsEditingViewModel(Cartoon, WebSite.WebSiteId));
+			ChangeActiveItem(new CartoonsEditingViewModel(Cartoon, CartoonWebSite.CartoonWebSiteId));
 
 			SeasonsVisibility = Visibility.Visible;
 		}
 
+		/// <summary>
+		/// Изменен выбранный сезон
+		/// </summary>
+		public void SeasonsSelectionChanged()
+		{
+			NotifyOfPropertyChange(() => CanCancelSeasonSelection);
+
+			if (CartoonSeason == null)
+			{
+				ChangeActiveItem(new CartoonsEditingViewModel(Cartoon, CartoonWebSite.CartoonWebSiteId));
+				return;
+			}
+
+			ChangeActiveItem(new SeasonsEditingViewModel(CartoonSeason));
+		}
+
+		/// <summary>
+		/// Изменить выбранный сезон (проверка на несохраненные изменения)
+		/// </summary>
+		/// <param name="id"></param>
 		public void ChangeSelectedSeason(int id)
 		{
 			if (((CartoonsEditingViewModel)ActiveItem).HasChanges)
@@ -146,26 +169,9 @@
 				{
 					return;
 				}
-				
 			}
 
-			Season = Seasons.First(s => s.SeasonId == id);
-		}
-
-		/// <summary>
-		/// Изменен выбранный сезон
-		/// </summary>
-		public void SeasonsSelectionChanged()
-		{
-			NotifyOfPropertyChange(() => CanCancelSeasonSelection);
-
-			if (Season == null)
-			{
-				ChangeActiveItem(new CartoonsEditingViewModel(Cartoon, WebSite.WebSiteId));
-				return;
-			}
-
-			ChangeActiveItem(new SeasonsEditingViewModel(Season));
+			CartoonSeason = Seasons.First(s => s.CartoonSeasonId == id);
 		}
 
 		public void CancelCartoonSelection()
@@ -178,11 +184,11 @@
 
 		public void CancelSeasonSelection()
 		{
-			Season = null;
+			CartoonSeason = null;
 			NotifyOfPropertyChange(() => CanCancelSeasonSelection);
 		}
 
-		public bool CanCancelSeasonSelection => Season != null;
+		public bool CanCancelSeasonSelection => CartoonSeason != null;
 
 		#endregion
 
@@ -199,7 +205,7 @@
 				switch (result)
 				{
 					case true:
-						//SaveChanges
+						((ISettingsViewModel)ActiveItem).SaveChanges();
 						break;
 					case false:
 						ActiveItem.TryClose();
@@ -222,13 +228,13 @@
 
 		#region Properties
 
-		public WebSite WebSite
+		public CartoonWebSite CartoonWebSite
 		{
-			get => _webSite;
+			get => _cartoonWebSite;
 			set
 			{
-				_webSite = value;
-				NotifyOfPropertyChange(() => WebSite);
+				_cartoonWebSite = value;
+				NotifyOfPropertyChange(() => CartoonWebSite);
 			}
 		}
 
@@ -242,17 +248,17 @@
 			}
 		}
 
-		public Season Season
+		public CartoonSeason CartoonSeason
 		{
-			get => _season;
+			get => _cartoonSeason;
 			set
 			{
-				_season = value;
-				NotifyOfPropertyChange(() => Season);
+				_cartoonSeason = value;
+				NotifyOfPropertyChange(() => CartoonSeason);
 			}
 		}
 
-		public BindableCollection<WebSite> WebSites
+		public BindableCollection<CartoonWebSite> WebSites
 		{
 			get => _webSites;
 			set
@@ -272,7 +278,7 @@
 			}
 		}
 
-		public BindableCollection<Season> Seasons
+		public BindableCollection<CartoonSeason> Seasons
 		{
 			get => _seasons;
 			set

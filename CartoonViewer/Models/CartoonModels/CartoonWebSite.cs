@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace CartoonViewer.Models.CartoonModels
 {
 	using System.ComponentModel.DataAnnotations;
 
-	public class WebSite
+	public class CartoonWebSite
 	{
-		public WebSite()
+		public CartoonWebSite()
 		{
 			ElementValues = new List<ElementValue>();
 			Cartoons = new List<Cartoon>();
 		}
 
 		[Key]
-		public int WebSiteId { get; set; }
+		public int CartoonWebSiteId { get; set; }
 
 		public string Url { get; set; }
 

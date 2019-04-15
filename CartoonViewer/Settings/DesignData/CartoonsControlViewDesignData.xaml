@@ -6,7 +6,7 @@
                               SeasonsVisibility="Visible">
 
     <vms:CartoonsControlViewModel.WebSites>
-        <cartoonModels:WebSite Url="http://freehat.cc"/> 
+        <cartoonModels:CartoonWebSite Url="http://freehat.cc"/> 
     </vms:CartoonsControlViewModel.WebSites>
 
     <vms:CartoonsControlViewModel.Cartoons>
@@ -17,11 +17,11 @@
     </vms:CartoonsControlViewModel.Cartoons>
 
     <vms:CartoonsControlViewModel.Seasons>
-        <cartoonModels:Season Number="1"/>
-        <cartoonModels:Season Number="2"/>
-        <cartoonModels:Season Number="3"/>
-        <cartoonModels:Season Number="4"/>
-        <cartoonModels:Season Number="5"/>
+        <cartoonModels:CartoonSeason Number="1"/>
+        <cartoonModels:CartoonSeason Number="2"/>
+        <cartoonModels:CartoonSeason Number="3"/>
+        <cartoonModels:CartoonSeason Number="4"/>
+        <cartoonModels:CartoonSeason Number="5"/>
     </vms:CartoonsControlViewModel.Seasons>
     
 </vms:CartoonsControlViewModel>

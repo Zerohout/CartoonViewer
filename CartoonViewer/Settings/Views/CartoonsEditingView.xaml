@@ -155,7 +155,7 @@
                          Grid.Column="0"
                     Margin="5"
                     ItemsSource="{Binding Seasons, UpdateSourceTrigger=PropertyChanged}"
-                         SelectedItem="{Binding SelectedSeason, UpdateSourceTrigger=PropertyChanged}">
+                         SelectedItem="{Binding SelectedCartoonSeason, UpdateSourceTrigger=PropertyChanged}">
                     <ListBox.ItemTemplate>
                         <ItemContainerTemplate>
                             <StackPanel Orientation="Horizontal"
@@ -186,7 +186,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Button Grid.Row="1"
-                    cal:Message.Attach="[Event Click]=[Action AddSeason()]"
+                    cal:Message.Attach="[Event Click]=[Action AddCartoonSeason()]"
                     Grid.Column="0"
                     Margin="0,2.5"
                     VerticalAlignment="Center"
@@ -197,7 +197,7 @@
                         Width="20"/>
                 </Button>
                 <Button 
-                    cal:Message.Attach="[Event Click]=[Action EditSeason()]"
+                    cal:Message.Attach="[Event Click]=[Action EditCartoonSeason()]"
                     Grid.Row="2"
                     Margin="0,2.5"
                     Grid.Column="0"
@@ -210,7 +210,7 @@
                 </Button>
                 <Button Grid.Row="3"
                     Margin="0,2.5"
-                    cal:Message.Attach="[Event Click]=[Action RemoveSeason()]"
+                    cal:Message.Attach="[Event Click]=[Action RemoveCartoonSeason()]"
                     Grid.Column="0"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center">

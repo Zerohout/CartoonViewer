@@ -2,15 +2,15 @@
 {
 	using System.Collections.Generic;
 	using System.ComponentModel.DataAnnotations;
-	using System.ComponentModel.DataAnnotations.Schema;
 
 	public class Cartoon
 	{
 		public Cartoon()
 		{
-			WebSites = new List<WebSite>();
+			CartoonWebSites = new List<CartoonWebSite>();
 			CartoonUrls = new List<CartoonUrl>();
-			Seasons = new List<Season>();
+			CartoonSeasons = new List<CartoonSeason>();
+			CartoonVoiceOvers = new List<CartoonVoiceOver>();
 		}
 
 		[Key]
@@ -21,9 +21,10 @@
 		public string CartoonType { get; set; }
 		public bool Checked { get; set; }
 
-		public List<WebSite> WebSites { get; set; }
+		public List<CartoonWebSite> CartoonWebSites { get; set; }
 		public List<CartoonUrl> CartoonUrls { get; set; }
-		public List<Season> Seasons { get; set; }
+		public List<CartoonSeason> CartoonSeasons { get; set; }
+		public List<CartoonVoiceOver> CartoonVoiceOvers { get; set; }
 
 	}
 }

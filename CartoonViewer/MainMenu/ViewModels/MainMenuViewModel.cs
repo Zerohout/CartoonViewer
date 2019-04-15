@@ -36,25 +36,8 @@
 			//Helper.HotReg.RegisterGlobalHotkey(() => EpisodeCountString = (EpisodeCount - 1).ToString(), Keys.Delete, ModifierKeys.Shift);
 
 			LoadCartoons();
-			var test = PackIconMaterialKind.Eye;
-			
-			var icon = new PackIconMaterial{Name = "Eye", Foreground = new SolidColorBrush(Colors.LimeGreen)};
-			
 			base.OnInitialize();
 		}
-
-		private PackIconMaterialKind _watchingStatusIcon = PackIconMaterialKind.Eye;
-
-		public PackIconMaterialKind WatchingStatusIcon
-		{
-			get => _watchingStatusIcon;
-			set
-			{
-				_watchingStatusIcon = value;
-				NotifyOfPropertyChange(() => WatchingStatusIcon);
-			}
-		}
-
 
 		/// <summary>
 		/// Загрузка списка мультфильмов из базы данных
