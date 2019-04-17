@@ -7,7 +7,7 @@ namespace CartoonViewer.Helpers
 	public static class Cloner
 	{
 		/// <summary>
-		/// Клоникрование списка Вебсайтов
+		/// Клонирование списка Вебсайтов
 		/// </summary>
 		/// <param name="webSites">Клонируемый список сайтов</param>
 		/// <returns></returns>
@@ -87,7 +87,7 @@ namespace CartoonViewer.Helpers
 			var result = new List<Cartoon>();
 
 			if (cartoons == null ||
-			    cartoons.Count == 0) return result;
+				cartoons.Count == 0) return result;
 
 			foreach (var cartoon in cartoons)
 			{
@@ -124,7 +124,7 @@ namespace CartoonViewer.Helpers
 			var result = new List<CartoonUrl>();
 
 			if (cartoonUrls == null ||
-			    cartoonUrls.Count == 0) return result;
+				cartoonUrls.Count == 0) return result;
 
 			foreach (var cartoonUrl in cartoonUrls)
 			{
@@ -221,7 +221,7 @@ namespace CartoonViewer.Helpers
 			SkipCount = cartoonEpisode.SkipCount,
 			Duration = cartoonEpisode.Duration,
 			CreditsStart = cartoonEpisode.CreditsStart,
-			//CartoonVoiceOvers = CloneVoiceOverList(cartoonEpisode.CartoonVoiceOvers),
+			//EpisodeVoiceOvers = CloneVoiceOverList(cartoonEpisode.EpisodeVoiceOvers),
 			CartoonSeasonId = cartoonEpisode.CartoonSeasonId
 		};
 

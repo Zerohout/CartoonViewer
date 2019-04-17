@@ -66,6 +66,9 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.ValueTuple, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.3.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\ControlzEx.3.0.2.4\lib\net45\System.Windows.Interactivity.dll</HintPath>
@@ -109,6 +112,10 @@
     <Compile Include="Migrations\201904151808288_Initialize.Designer.cs">
       <DependentUpon>201904151808288_Initialize.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904161211291_RenameVoiceOverListInEpisodeModel.cs" />
+    <Compile Include="Migrations\201904161211291_RenameVoiceOverListInEpisodeModel.Designer.cs">
+      <DependentUpon>201904161211291_RenameVoiceOverListInEpisodeModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\CartoonModels\Cartoon.cs" />
     <Compile Include="Models\CartoonModels\CartoonWebSite.cs" />
@@ -119,16 +126,28 @@
     <Compile Include="Models\CartoonModels\CartoonVoiceOver.cs" />
     <Compile Include="Models\ProgramModels\WorkingData.cs" />
     <Compile Include="Models\SettingModels\EpisodeTime.cs" />
+    <Compile Include="Settings\ViewModels\CartoonsEditing\CEEventsActions.cs" />
+    <Compile Include="Settings\ViewModels\CartoonsEditing\CEMethods.cs" />
+    <Compile Include="Settings\ViewModels\CartoonsEditing\CEPropertiesAndFields.cs" />
+    <Compile Include="Settings\ViewModels\CartoonsControl\CCEventsActions.cs" />
+    <Compile Include="Settings\ViewModels\CartoonsControl\CCMethods.cs" />
+    <Compile Include="Settings\ViewModels\CartoonsControl\CCPropertiesAndFields.cs" />
     <Compile Include="Settings\ViewModels\CartoonsEditingViewModel.cs" />
-    <Compile Include="Settings\ViewModels\EpisodesEditingViewModel.cs" />
+    <Compile Include="Settings\ViewModels\SeasonsEditing\SEEventsActions.cs" />
+    <Compile Include="Settings\ViewModels\SeasonsEditing\SEMethods.cs" />
+    <Compile Include="Settings\ViewModels\SeasonsEditing\SEPropertiesAndFields.cs" />
+    <Compile Include="Settings\ViewModels\VoiceOversEditing\VOEEventsActions.cs" />
+    <Compile Include="Settings\ViewModels\VoiceOversEditing\VOEMethods.cs" />
+    <Compile Include="Settings\ViewModels\VoiceOversEditingViewModel.cs" />
+    <Compile Include="Settings\ViewModels\VoiceOversEditing\VOEPropertiesAndFields.cs" />
     <Compile Include="Settings\ViewModels\GeneralSettingsViewModel.cs" />
     <Compile Include="Settings\ViewModels\ISettingsViewModel.cs" />
     <Compile Include="Settings\ViewModels\SeasonsEditingViewModel.cs" />
     <Compile Include="Settings\Views\CartoonsEditingView.xaml.cs">
       <DependentUpon>CartoonsEditingView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings\Views\EpisodesEditingView.xaml.cs">
-      <DependentUpon>EpisodesEditingView.xaml</DependentUpon>
+    <Compile Include="Settings\Views\VoiceOversEditingView.xaml.cs">
+      <DependentUpon>VoiceOversEditingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Settings\Views\GeneralSettingsView.xaml.cs">
       <DependentUpon>GeneralSettingsView.xaml</DependentUpon>
@@ -173,6 +192,9 @@
     <EmbeddedResource Include="Migrations\201904151808288_Initialize.resx">
       <DependentUpon>201904151808288_Initialize.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904161211291_RenameVoiceOverListInEpisodeModel.resx">
+      <DependentUpon>201904161211291_RenameVoiceOverListInEpisodeModel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -207,6 +229,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Settings\DesignData\VoiceOversEditingViewDesignData.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Settings\DesignData\SettingsViewDesignData.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -219,7 +245,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\Views\EpisodesEditingView.xaml">
+    <Page Include="Settings\Views\VoiceOversEditingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

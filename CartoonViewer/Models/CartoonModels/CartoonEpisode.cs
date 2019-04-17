@@ -9,7 +9,7 @@
 	{
 		public CartoonEpisode()
 		{
-			CartoonVoiceOvers = new List<CartoonVoiceOver>();
+			EpisodeVoiceOvers = new List<CartoonVoiceOver>();
 		}
 
 		[Key]
@@ -30,7 +30,7 @@
 		public TimeSpan Duration { get; set; }
 		public DateTime LastDateViewed { get; set; } = new DateTime(2019,01,01);
 
-		public List<CartoonVoiceOver> CartoonVoiceOvers { get; set; }
+		public List<CartoonVoiceOver> EpisodeVoiceOvers { get; set; }
 
 		[ForeignKey("CartoonSeason")]
 		public int CartoonSeasonId { get; set; }

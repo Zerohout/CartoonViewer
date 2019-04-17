@@ -1,13 +1,11 @@
 ﻿namespace CartoonViewer.Helpers
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Linq;
 	using System.Threading;
 	using System.Windows;
 	using Caliburn.Micro;
-	using Models.CartoonModels;
 	using OpenQA.Selenium;
 	using OpenQA.Selenium.Chrome;
 
@@ -22,6 +20,7 @@
 
 		public static int CurrentSkipCount = 6;
 		public static int DelayedSkipCount = 5;
+		public static (int WebSiteId, int CartoonId, int SeasonId, int EpisodeId) GlobalIdList;
 
 		public const int WM_KEYDOWN = 0x100;
 		public const int WM_KEYUP = 0x101;
@@ -34,7 +33,7 @@
 		public const int VK_ESCAPE = 0x1B;
 		public const int VK_SPACE = 0x20;
 
-		public static readonly TimeSpan ApproximateEpisodeDuration = new TimeSpan(0,21,10);
+		public static readonly TimeSpan ApproximateEpisodeDuration = new TimeSpan(0, 21, 10);
 		public static WindowManager WinMan = new WindowManager();
 		public static MessageHelper Msg = new MessageHelper();
 		public static Stopwatch Timer = new Stopwatch();
@@ -52,7 +51,7 @@
 			"/multfilm",
 		};
 
-		
+
 		public enum DialogState
 		{
 			YES_NO,
@@ -71,13 +70,13 @@
 			Thread.Sleep(1000);
 
 			HWND = Msg.getWindowId(null,
-			                       Process.GetProcessesByName("chrome")
-			                              .Single(p => p.MainWindowTitle.Contains("Google"))
-			                              .MainWindowTitle);
+								   Process.GetProcessesByName("chrome")
+										  .Single(p => p.MainWindowTitle.Contains("Google"))
+										  .MainWindowTitle);
 
 			Browser.Manage().Window.Maximize();
 		}
 
-		
+
 	}
 }

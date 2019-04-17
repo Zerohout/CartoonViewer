@@ -1,14 +1,11 @@
 ﻿namespace CartoonViewer.Settings.ViewModels
 {
-	using System.Windows;
 	using Caliburn.Micro;
 
 	public interface ISettingsViewModel : IScreen
-    {
-	    bool HasChanges { get; }
-		Visibility AdvancedSettingsVisibility { get; set; }
-
+	{
+		bool HasChanges { get; }
 		void LoadData();
-	    void SaveChanges();
-    }
+		void SaveChanges();
+	}
 }

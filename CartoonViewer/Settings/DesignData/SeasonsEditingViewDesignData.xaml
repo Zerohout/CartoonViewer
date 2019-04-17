@@ -20,7 +20,7 @@
         <cartoonModels:CartoonSeason Name="Название"
                        Description="Описание"/>
     </vms:SeasonsEditingViewModel.CartoonSeason>
-    
+
     <vms:SeasonsEditingViewModel.EpisodeTime>
         <settingModels:EpisodeTime DelayedSkipMinutesString="59"
                                    DelayedSkipSecondsString="59"
