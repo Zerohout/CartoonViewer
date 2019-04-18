@@ -5,17 +5,35 @@
     xmlns:helper="clr-namespace:CartoonViewer.Helpers"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:vms="clr-namespace:CartoonViewer.Settings.ViewModels"
-    Name="CartoonName"
     CartoonTypesVisibility="Visible"
-    Description="Небольшое, но информативное описание мультфильма"
     SaveChangesVisibility="Visible"
     Url="http://cartoonUrl.url">
+
+    <vms:CartoonsEditingViewModel.SelectedCartoon>
+        <cartoonModels:Cartoon Name="Название_мультфильма"
+                               Description="Описание_мультфильма"/>
+    </vms:CartoonsEditingViewModel.SelectedCartoon>
+
+    <vms:CartoonsEditingViewModel.SelectedCartoonUrl>
+        <cartoonModels:CartoonUrl Url="http://cartoon.url"/>
+    </vms:CartoonsEditingViewModel.SelectedCartoonUrl>
+
     <vms:CartoonsEditingViewModel.Seasons>
         <cartoonModels:CartoonSeason Number="1" />
         <cartoonModels:CartoonSeason Number="2" />
         <cartoonModels:CartoonSeason Number="3" />
         <cartoonModels:CartoonSeason Number="4" />
         <cartoonModels:CartoonSeason Number="5" />
+        <cartoonModels:CartoonSeason Number="6" />
+        <cartoonModels:CartoonSeason Number="7" />
+        <cartoonModels:CartoonSeason Number="8" />
+        <cartoonModels:CartoonSeason Number="9" />
+        <cartoonModels:CartoonSeason Number="10" />
+        <cartoonModels:CartoonSeason Number="11" />
+        <cartoonModels:CartoonSeason Number="12" />
+        <cartoonModels:CartoonSeason Number="13" />
+        <cartoonModels:CartoonSeason Number="14" />
+        <cartoonModels:CartoonSeason Number="15" />
     </vms:CartoonsEditingViewModel.Seasons>
     <vms:CartoonsEditingViewModel.VoiceOvers>
         <cartoonModels:CartoonVoiceOver Name="Озвучка_1"/>

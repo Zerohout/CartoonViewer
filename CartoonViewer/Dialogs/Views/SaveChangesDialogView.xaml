@@ -41,18 +41,18 @@
         <Button
             Grid.Row="1"
             Grid.Column="0"
-            Style="{StaticResource DlgSaveBtnStyle}">
+            Style="{StaticResource DlgSaveActionBtnStyle}">
         </Button>
         <Button
             Grid.Row="1"
             Grid.Column="1"
             cal:Message.Attach="[Event Click]=[Action Cancel()]"
-            Style="{StaticResource DlgCancelBtnStyle}">
+            Style="{StaticResource DlgCancelActionBtnStyle}">
         </Button>
         <Button
             Grid.Row="1"
             Grid.Column="2"
-            Style="{StaticResource DlgNotSaveBtnStyle}"
+            Style="{StaticResource DlgNotSaveActionBtnStyle}"
             cal:Message.Attach="[Event Click]=[Action SaveChanges()]">
         </Button>
         

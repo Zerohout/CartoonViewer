@@ -53,7 +53,6 @@
                 Grid.Column="0"
                 Margin="5"
                 VerticalAlignment="Top"
-                cal:Message.Attach="[Event SelectionChanged] = [Action WebSitesSelectionChanged()];                 [Event PreviewMouseDown]=[Action CBoxMouseDown($eventArgs)]"
                 ItemsSource="{Binding WebSites}"
                 SelectedItem="{Binding SelectedWebSite}">
                 <ComboBox.ItemTemplate>
@@ -110,9 +109,10 @@
                 Grid.Column="0"
                 Margin="5"
                 VerticalAlignment="Top"
-                cal:Message.Attach="[Event SelectionChanged] = [Action CartoonsSelectionChanged()];                 [Event PreviewMouseDown]=[Action CBoxMouseDown($eventArgs)]"
                 ItemsSource="{Binding Cartoons}"
-                SelectedItem="{Binding SelectedCartoon}">
+                SelectedItem="{Binding SelectedCartoon}"
+                >
+                
                 <ComboBox.ItemTemplate>
                     <ItemContainerTemplate>
                         <StackPanel>
@@ -169,7 +169,6 @@
                 Grid.Column="0"
                 Margin="5"
                 VerticalAlignment="Top"
-                cal:Message.Attach="[Event SelectionChanged] = [Action SeasonsSelectionChanged()];                 [Event PreviewMouseDown]=[Action CBoxMouseDown($eventArgs)]"
                 ItemsSource="{Binding Seasons}"
                 SelectedItem="{Binding SelectedSeason}">
                 <ComboBox.ItemTemplate>

@@ -17,9 +17,40 @@
 		private string _description;
 
 		private Visibility _cartoonTypesVisibility = Visibility.Hidden;
-		private CartoonSeason _selectedCartoonSeason;
+		private CartoonSeason _selectedSeason;
 		private BindableCollection<CartoonVoiceOver> _voiceOvers = new BindableCollection<CartoonVoiceOver>();
 		private BindableCollection<CartoonSeason> _seasons = new BindableCollection<CartoonSeason>();
+		
+		private CartoonUrl _selectedCartoonUrl;
+
+		public int SeasonIndex { get; set; }
+
+		public CartoonUrl SelectedCartoonUrl
+		{
+			get => _selectedCartoonUrl;
+			set
+			{
+				_selectedCartoonUrl = value;
+				NotifyOfPropertyChange(() => SelectedCartoonUrl);
+			}
+		}
+
+		public CartoonUrl TempCartoonUrl { get; set; }
+
+		private Cartoon _selctedCartoon;
+
+		public Cartoon SelectedCartoon
+		{
+			get => _selctedCartoon;
+			set
+			{
+				_selctedCartoon = value;
+				NotifyOfPropertyChange(() => SelectedCartoon);
+			}
+		}
+
+		public Cartoon TempCartoon { get; set; }
+
 
 		#endregion
 
@@ -40,19 +71,7 @@
 		public BindableCollection<string> CartoonTypes { get; set; } = Helper.CartoonTypes;
 
 
-		public bool HasChanges
-		{
-			get
-			{
-				if((string.IsNullOrWhiteSpace(Url) || string.IsNullOrWhiteSpace(Name)) ||
-					TempUrl == Url && TempName == Name && TempDescription == Description)
-				{
-					return false;
-				}
-
-				return true;
-			}
-		}
+		public bool HasChanges => CanSaveChanges;
 
 		public BindableCollection<CartoonSeason> Seasons
 		{
@@ -65,13 +84,13 @@
 			}
 		}
 
-		public CartoonSeason SelectedCartoonSeason
+		public CartoonSeason SelectedSeason
 		{
-			get => _selectedCartoonSeason;
+			get => _selectedSeason;
 			set
 			{
-				_selectedCartoonSeason = value;
-				NotifyOfPropertyChange(() => SelectedCartoonSeason);
+				_selectedSeason = value;
+				NotifyOfPropertyChange(() => SelectedSeason);
 			}
 		}
 

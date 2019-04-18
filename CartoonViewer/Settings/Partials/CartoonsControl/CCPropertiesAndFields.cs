@@ -1,63 +1,93 @@
 ﻿namespace CartoonViewer.Settings.ViewModels
 {
+	using System;
+	using System.Threading.Tasks;
 	using System.Windows;
+	using System.Windows.Input;
+	using System.Windows.Threading;
 	using Caliburn.Micro;
+	using CartoonViewer.ViewModels;
+	using Helpers;
 	using Models.CartoonModels;
+	using static Helpers.Helper;
+	using Action = System.Action;
 
 	public partial class CartoonsControlViewModel : Conductor<Screen>.Collection.OneActive
 	{
 		#region Private fields
 
-		//private Visibility _cartoonsVisibility = Visibility.Hidden;
-		//private Visibility _seasonsVisibility = Visibility.Hidden;
-		private CartoonWebSite _selectedWebSite;
-		private Cartoon _selectedCartoon;
-		private CartoonSeason _selectedSeason;
+		private object _selectedWebSite;
+		private object _selectedCartoon;
+		private object _selectedSeason;
 		private BindableCollection<CartoonWebSite> _webSites = new BindableCollection<CartoonWebSite>();
 		private BindableCollection<Cartoon> _cartoons = new BindableCollection<Cartoon>();
 		private BindableCollection<CartoonSeason> _seasons = new BindableCollection<CartoonSeason>();
 
+
+
 		#endregion
 
 		#region Properties
+		/// <summary>
+		/// Для конструктора XAML
+		/// </summary>
+		public bool IsDesignTime { get; set; }
 
+		/// <summary>
+		/// Выбранный сайт
+		/// </summary>
 		public CartoonWebSite SelectedWebSite
 		{
-			get => _selectedWebSite;
+			get => _selectedWebSite as CartoonWebSite;
 			set
 			{
-				if (ExitWithoutSave() ?? false)
+				if(IsDesignTime)
 				{
-
+					_selectedWebSite = value;
+					return;
 				}
-
-				_selectedWebSite = value;
-				NotifyOfPropertyChange(() => SelectedWebSite);
-				NotifyOfPropertyChange(() => CartoonsVisibility);
+				ChangePropertyValue(ref _selectedWebSite, value);
 			}
 		}
 
+		/// <summary>
+		/// Выбранный м/ф
+		/// </summary>
 		public Cartoon SelectedCartoon
 		{
-			get => _selectedCartoon;
+			get => _selectedCartoon as Cartoon;
 			set
 			{
-				_selectedCartoon = value;
-				NotifyOfPropertyChange(() => SelectedCartoon);
-				NotifyOfPropertyChange(() => CartoonEditingAndSeasonsVisibility);
+				if(IsDesignTime)
+				{
+					_selectedCartoon = value;
+					return;
+				}
+				ChangePropertyValue(ref _selectedCartoon, value);
 			}
 		}
 
+
+		/// <summary>
+		/// Выбранный сезон
+		/// </summary>
 		public CartoonSeason SelectedSeason
 		{
-			get => _selectedSeason;
+			get => _selectedSeason as CartoonSeason;
 			set
 			{
-				_selectedSeason = value;
-				NotifyOfPropertyChange(() => SelectedSeason);
+				if(IsDesignTime)
+				{
+					_selectedSeason = value;
+					return;
+				}
+				ChangePropertyValue(ref _selectedSeason, value);
 			}
 		}
 
+		/// <summary>
+		/// Список доступных сайтов
+		/// </summary>
 		public BindableCollection<CartoonWebSite> WebSites
 		{
 			get => _webSites;
@@ -67,7 +97,9 @@
 				NotifyOfPropertyChange(() => WebSites);
 			}
 		}
-
+		/// <summary>
+		/// Список м/ф выбранного сайта
+		/// </summary>
 		public BindableCollection<Cartoon> Cartoons
 		{
 			get => _cartoons;
@@ -78,6 +110,9 @@
 			}
 		}
 
+		/// <summary>
+		/// Список сезонов выбранного м/ф
+		/// </summary>
 		public BindableCollection<CartoonSeason> Seasons
 		{
 			get => _seasons;
@@ -88,15 +123,21 @@
 			}
 		}
 
+		/// <summary>
+		/// Свойство Visibility списка м/ф
+		/// </summary>
 		public Visibility CartoonsVisibility =>
 			SelectedWebSite == null
 				? Visibility.Hidden
 				: Visibility.Visible;
+		/// <summary>
+		/// Свойство Visibility VM редактирования м/ф и списка сезонов выбраного м/ф
+		/// </summary>
 		public Visibility CartoonEditingAndSeasonsVisibility =>
 			SelectedCartoon == null
 				? Visibility.Hidden
 				: Visibility.Visible;
-		
+
 
 		#endregion
 	}

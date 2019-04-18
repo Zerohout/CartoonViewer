@@ -1,9 +1,11 @@
 ﻿namespace CartoonViewer.Settings.ViewModels
 {
+	using System.Linq;
 	using System.Windows;
 	using Models.CartoonModels;
 	using static Helpers.Helper;
 	using Screen = Caliburn.Micro.Screen;
+	using static Helpers.Cloner;
 
 	public partial class CartoonsEditingViewModel : Screen, ISettingsViewModel
 	{
@@ -18,9 +20,16 @@
 		{
 			if(cartoon.Name == NewElementString)
 			{
+				SelectedCartoon = CloneCartoon(cartoon);
+				
+				TempCartoon = CloneCartoon(SelectedCartoon);
+				SelectedCartoonUrl = new CartoonUrl
+				{
+					CartoonWebSiteId = GlobalIdList.WebSiteId
+				};
+				TempCartoonUrl = CloneCartoonUrl(SelectedCartoonUrl);
 				AddCartoonVisibility = Visibility.Visible;
 				SaveChangesVisibility = Visibility.Hidden;
-
 				return;
 			}
 
@@ -31,6 +40,8 @@
 			SaveChangesVisibility = Visibility.Visible;
 			NotifySeasonList();
 		}
+
+		
 
 		public CartoonsEditingViewModel()
 		{

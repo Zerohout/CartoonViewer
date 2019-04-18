@@ -2,9 +2,12 @@
 {
 	using System.Data.Entity;
 	using System.Linq;
+	using System.Threading.Tasks;
 	using Caliburn.Micro;
 	using Database;
 	using Models.CartoonModels;
+	using static Helpers.Helper;
+	using static Helpers.Cloner;
 
 	public partial class CartoonsEditingViewModel : Screen, ISettingsViewModel
 	{
@@ -19,34 +22,38 @@
 		}
 
 		#endregion
-
+		
 		#region Public methods
 
-		public void LoadData()
+		private async void LoadData()
 		{
 			Cartoon result;
 			using(var ctx = new CVDbContext())
 			{
-				ctx.Cartoons
-				   .Where(c => c.CartoonId == CartoonId)
+				result = await ctx.Cartoons
 				   .Include(c => c.CartoonUrls)
 				   .Include(c => c.CartoonSeasons)
 				   .Include(c => c.CartoonVoiceOvers)
-				   .Load();
-
-				result = ctx.Cartoons.Local.First();
-				VoiceOvers.Clear();
-				VoiceOvers.AddRange(result.CartoonVoiceOvers);
+				   .SingleAsync(c => c.CartoonId == GlobalIdList.CartoonId);
 			}
 
-			Seasons.Clear();
-			Seasons.AddRange(result.CartoonSeasons);
-			Url = result.CartoonUrls.Find(cu => cu.CartoonWebSiteId == WebSiteId).Url;
-			Name = result.Name;
-			Description = result.Description;
-			TempUrl = Url;
-			TempName = Name;
-			TempDescription = Description;
+			SelectedCartoon = CloneCartoon(result);
+			TempCartoon = CloneCartoon(SelectedCartoon);
+			SelectedCartoonUrl = CloneCartoonUrl(result.CartoonUrls
+			                                           .Find(cu => cu.CartoonWebSiteId == GlobalIdList.WebSiteId));
+			TempCartoonUrl = CloneCartoonUrl(SelectedCartoonUrl);
+			Seasons = new BindableCollection<CartoonSeason>(result.CartoonSeasons);
+			VoiceOvers = new BindableCollection<CartoonVoiceOver>(result.CartoonVoiceOvers);
+
+
+			//Seasons.Clear();
+			//Seasons.AddRange(result.CartoonSeasons);
+			//Url = result.CartoonUrls.Find(cu => cu.CartoonWebSiteId == WebSiteId).Url;
+			//Name = result.Name;
+			//Description = result.Description;
+			//TempUrl = Url;
+			//TempName = Name;
+			//TempDescription = Description;
 		}
 
 		#endregion

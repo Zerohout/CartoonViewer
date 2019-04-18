@@ -55,6 +55,7 @@
 		public enum DialogState
 		{
 			SAVE_CHANGES,
+			REMOVE,
 			YES_NO,
 			OK,
 			YES_NO_CANCEL,
@@ -63,11 +64,10 @@
 
 		public enum DialogResult
 		{
-			SAVE,
-			NOT_SAVE,
-			CANCEL_ACTION,
-			YES,
-			NO
+			YES_ACTION,
+			NO_ACTION,
+			CANCEL_ACTION
+			
 		}
 
 		/// <summary>

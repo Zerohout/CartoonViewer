@@ -1,5 +1,4 @@
 ﻿<UserControl
-    x:Class="CartoonViewer.Settings.Views.CartoonsEditingView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cal="http://www.caliburnproject.org"
@@ -7,6 +6,8 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:CartoonViewer.Settings.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controlzex="urn:controlzex"
+    x:Class="CartoonViewer.Settings.Views.CartoonsEditingView"
     cal:Bind.AtDesignTime="True"
     d:DataContext="{d:DesignData Source=../DesignData/CartoonsEditingViewDesignData.xaml}"
     d:DesignHeight="450"
@@ -60,7 +61,7 @@
                 VerticalAlignment="Top"
                 cal:Message.Attach="[Event TextChanged]=[Action TextChanged()]"
                 Style="{StaticResource SETBoxDefaultStyle}"
-                Text="{Binding Url, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{Binding SelectedCartoonUrl.Url, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
 
         <Grid
@@ -95,7 +96,7 @@
                 VerticalAlignment="Top"
                 cal:Message.Attach="[Event TextChanged]=[Action TextChanged()]"
                 Style="{StaticResource SETBoxDefaultStyle}"
-                Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{Binding SelectedCartoon.Name, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
 
         <Grid
@@ -157,7 +158,8 @@
                 Panel.ZIndex="1"
                 Grid.Row="0"
                 Grid.RowSpan="2"
-                Grid.Column="0">
+                Grid.Column="0"
+                Visibility="{Binding SaveChangesVisibility}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
@@ -170,28 +172,35 @@
                     Grid.Column="0"
                     Style="{StaticResource SEDefaultTBlockStyle}"
                     Text="Список сезонов" />
+                    
+
                 <ListBox
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    Margin="5"
-                    cal:Message.Attach="[Event SelectionChanged]=[Action SelectionChanged()]"
-                    ItemsSource="{Binding Seasons, UpdateSourceTrigger=PropertyChanged}"
-                    SelectedItem="{Binding SelectedCartoonSeason, UpdateSourceTrigger=PropertyChanged}">
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Margin="5"
+                        cal:Message.Attach="[Event SelectionChanged]=[Action SelectionChanged($source)]"
+                        ItemsSource="{Binding Seasons, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItem="{Binding SelectedSeason, UpdateSourceTrigger=PropertyChanged}"
+                        
+                         >
+
                     <ListBox.ItemTemplate>
                         <ItemContainerTemplate>
                             <StackPanel
-                                HorizontalAlignment="Center"
-                                Orientation="Horizontal">
+                                    HorizontalAlignment="Center"
+                                    Orientation="Horizontal">
                                 <TextBlock
-                                    Style="{StaticResource CCComboBoxTBlockItemStyle}"
-                                    Text="{Binding Number}" />
+                                        Style="{StaticResource CCComboBoxTBlockItemStyle}"
+                                        Text="{Binding Number}" />
                                 <TextBlock
-                                    Style="{StaticResource CCComboBoxTBlockItemStyle}"
-                                    Text=" сезон" />
+                                        Style="{StaticResource CCComboBoxTBlockItemStyle}"
+                                        Text=" сезон" />
                             </StackPanel>
                         </ItemContainerTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
+
+
 
             </Grid>
 
@@ -242,7 +251,7 @@
                     Margin="0,2.5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    cal:Message.Attach="[Event Click]=[Action RemoveCartoonSeason()]">
+                    cal:Message.Attach="[Event Click]=[Action RemoveSeason()]">
                     <iconPacks:PackIconMaterial
                         Width="20"
                         Height="16"
@@ -268,12 +277,16 @@
         <Grid
             Grid.Row="1"
             Grid.Column="1">
+            <StackPanel Orientation="Vertical" 
+                        VerticalAlignment="Center"
+                        Visibility="{Binding SaveChangesVisibility}">
             <Button
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
+                Margin="5 2.5"
                 cal:Message.Attach="[Event Click] = [Action SaveChanges()]"
-                Visibility="{Binding SaveChangesVisibility}">
-                <StackPanel Orientation="Vertical">
+                >
+                    <StackPanel Orientation="Vertical"  Visibility="{Binding SaveChangesVisibility}">
                     <TextBlock
                         Foreground="AliceBlue"
                         Style="{StaticResource SEDefaultTBlockStyle}"
@@ -284,6 +297,24 @@
                         Text="изменения" />
                 </StackPanel>
             </Button>
+                <Button HorizontalAlignment="Center"
+                Margin="5 2.5"
+                        VerticalAlignment="Center"
+                        cal:Message.Attach="[Event Click] = [Action RemoveCartoon()]"
+                       >
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock
+                            Foreground="AliceBlue"
+                            Style="{StaticResource SEDefaultTBlockStyle}"
+                            Text="Удалить" />
+                        <TextBlock
+                            Foreground="AliceBlue"
+                            Style="{StaticResource SEDefaultTBlockStyle}"
+                            Text="мультфильм" />
+                    </StackPanel>
+
+                </Button>
+            </StackPanel>
             <Button
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
@@ -326,14 +357,14 @@
                 FontSize="12"
                 Foreground="AntiqueWhite"
                 Style="{StaticResource SETBoxDefaultStyle}"
-                Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                Text="{Binding SelectedCartoon.Description, UpdateSourceTrigger=PropertyChanged}"
                 TextWrapping="Wrap" />
         </Grid>
 
 
         <!--#endregion-->
 
-        
+
 
 
 
@@ -342,7 +373,8 @@
         <Grid
             Panel.ZIndex="0"
             Grid.Row="2"
-            Grid.Column="1" >
+            Grid.Column="1" 
+            Visibility="{Binding SaveChangesVisibility}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -366,19 +398,19 @@
                         Foreground="Yellow"/>
                 </Button>
             </StackPanel>
-        
-        <ScrollViewer Grid.Row="1"
+
+            <ScrollViewer Grid.Row="1"
                       Grid.Column="1">
-            <ItemsControl ItemsSource="{Binding VoiceOvers}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Style="{StaticResource SEDefaultTBlockStyle}"
+                <ItemsControl ItemsSource="{Binding VoiceOvers}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Style="{StaticResource SEDefaultTBlockStyle}"
                                    FontSize="14"
                                    Text="{Binding Name}"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
         </Grid>
 
         <!--#endregion-->

@@ -11,6 +11,18 @@
 		private Visibility _visibility_Yes_No;
 		private Visibility _visibility_Ok_Cancel;
 		private Visibility _saveChangesVisibility;
+		private Visibility _removeVisibility;
+
+		public Visibility RemoveVisibility
+		{
+			get => _removeVisibility;
+			set
+			{
+				_removeVisibility = value;
+				NotifyOfPropertyChange(() => RemoveVisibility);
+			}
+		}
+
 
 		public Visibility SaveChangesVisibility
 		{
@@ -47,6 +59,7 @@
 			}
 		}
 
+		public string Test { get; set; }
 		public DialogViewModel(string message,
 			DialogState currentState = DialogState.OK,
 			string dialogTitle = null)
@@ -55,10 +68,15 @@
 			{
 				case DialogState.SAVE_CHANGES:
 					SaveChangesVisibility = Visibility.Visible;
-					Visibility_Yes_No = Visibility.Hidden;
-					Visibility_Ok_Cancel = Visibility.Hidden;
+					RemoveVisibility = Visibility.Hidden;
 					_message = message ?? "Сохранить ваши изменения?";
 					_dialogTitle = dialogTitle ?? "Сохранить изменения?";
+					return;
+				case DialogState.REMOVE:
+					SaveChangesVisibility = Visibility.Hidden;
+					RemoveVisibility = Visibility.Visible;
+					_message = $"Вы действительно хотите удалить этот {message}?";
+					_dialogTitle = dialogTitle ?? "Удалить объект?";
 					return;
 				case DialogState.YES_NO:
 					SaveChangesVisibility = Visibility.Hidden;
@@ -93,15 +111,15 @@
 
 		}
 
-		public void SaveChanges()
+		public void YesAction()
 		{
-			DialogResult = DialogResult.SAVE;
+			DialogResult = DialogResult.YES_ACTION;
 			TryClose();
 		}
 
-		public void NotSaveChanges()
+		public void NoAction()
 		{
-			DialogResult = DialogResult.NOT_SAVE;
+			DialogResult = DialogResult.NO_ACTION;
 			TryClose();
 		}
 

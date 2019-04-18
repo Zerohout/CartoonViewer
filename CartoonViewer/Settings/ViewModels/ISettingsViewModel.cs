@@ -5,7 +5,7 @@
 	public interface ISettingsViewModel : IScreen
 	{
 		bool HasChanges { get; }
-		void LoadData();
+		//void LoadData();
 		void SaveChanges();
 	}
 }

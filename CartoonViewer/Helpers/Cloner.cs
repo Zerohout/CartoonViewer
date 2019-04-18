@@ -110,8 +110,8 @@ namespace CartoonViewer.Helpers
 			CartoonType = cartoon.CartoonType,
 			CartoonUrls = cartoon.CartoonUrls,
 			Checked = cartoon.Checked,
-			CartoonWebSites = CloneWebSiteList(cartoon.CartoonWebSites),
-			CartoonSeasons = CloneSeasonList(cartoon.CartoonSeasons)
+			CartoonSeasons = CloneSeasonList(cartoon.CartoonSeasons),
+			CartoonWebSites = CloneWebSiteList(cartoon.CartoonWebSites)
 		};
 
 		/// <summary>

@@ -12,6 +12,6 @@
                     Visibility_Ok_Cancel="Hidden"
                     SaveChangesVisibility="Visible"
                     Text_Ok_Cancel="Ок / Отмена"
-                    >
+                    CurrentState="SAVE_CHANGES">
     
 </vms:DialogViewModel>

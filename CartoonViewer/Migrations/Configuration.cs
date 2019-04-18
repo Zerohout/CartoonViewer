@@ -59,16 +59,16 @@ namespace CartoonViewer.Migrations
 			switch (cartoon.Name)
 			{
 				case "Южный парк":
-					url = $"http://sp.freehat.cc/cartoonEpisode/";
+					url = $"http://sp.freehat.cc/episode/";
 					break;
 				case "Гриффины":
-					url = $"http://grif.freehat.cc/cartoonEpisode/";
+					url = $"http://grif.freehat.cc/episode/";
 					break;
 				case "Симпсоны":
-					url = $"http://simp.freehat.cc/cartoonEpisode/";
+					url = $"http://simp.freehat.cc/episode/";
 					break;
 				case "Американский папаша":
-					url = $"http://dad.freehat.cc/cartoonEpisode/";
+					url = $"http://dad.freehat.cc/episode/";
 					break;
 			}
 

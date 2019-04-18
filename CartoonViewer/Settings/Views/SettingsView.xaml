@@ -180,7 +180,7 @@
                     Grid.ColumnSpan="2"
                     Grid.Row="1"
                     Margin="10 5"
-                    x:Name="BackToMainMenu">
+                    cal:Message.Attach="[Event Click]=[Action BackToMainMenu($eventArgs)]">
                 <StackPanel Orientation="Vertical">
                     <TextBlock
                         Text="Вернуться в"
