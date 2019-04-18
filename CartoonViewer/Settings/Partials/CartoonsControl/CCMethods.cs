@@ -18,34 +18,33 @@
 		/// <param name="id"></param>
 		public void ChangeSelectedSeason(int id)
 		{
-			if(((CartoonsEditingViewModel)ActiveItem).HasChanges)
-			{
-				var result = WinMan.ShowDialog(new DialogViewModel("Сохранить ваши изменения?", DialogState.YES_NO_CANCEL));
-
-				if(result == true)
-				{
-					((CartoonsEditingViewModel)ActiveItem).SaveChanges();
-				}
-				else if(result == false)
-				{
-					var repeatResult = WinMan.ShowDialog(
-						new DialogViewModel("Ваши изменения не будут сохранены. Вы точно хотите продолжить?", DialogState.YES_NO));
-					if(repeatResult == false || repeatResult == null)
-					{
-						return;
-					}
-				}
-				else
-				{
-					return;
-				}
-			}
+			_ = ExitWithoutSave();
 
 			GlobalIdList.SeasonId = id;
 			SelectedSeason = Seasons.First(s => s.CartoonSeasonId == id);
 		}
 
+		private bool? ExitWithoutSave()
+		{
+			//if(((ISettingsViewModel)ActiveItem)?.HasChanges ?? false)
+			//{
+			//	var vm = new DialogViewModel(
+			//		message: "Сохранить изменения?",
+			//		currentState: DialogState.YES_NO_CANCEL);
+			//	_ = WinMan.ShowDialog(vm);
 
+			//	switch(vm.DialogResult)
+			//	{
+			//		case true:
+			//			((ISettingsViewModel)ActiveItem).SaveChanges();
+			//			return
+			//	}
+
+			//	return false;
+			//}
+
+			return true;
+		}
 
 		#endregion
 
@@ -54,29 +53,50 @@
 		/// <summary>
 		/// Загрузка из БД списков элементов (Сайты, м/ф, сезоны)
 		/// </summary>
-		private void LoadListData()
+		private void LoadList()
 		{
 			if(SelectedWebSite == null)
 			{
-				LoadWebSitesAsync();
+				LoadWebSiteList();
 				return;
 			}
 
 			if(SelectedCartoon == null)
 			{
-				LoadCartoonsAsync();
+				LoadCartoonList();
 				return;
 			}
 
+			LoadSeasonList();
+		}
 
-			LoadSeasonsAsync();
+		private void UnloadData()
+		{
+			if(SelectedWebSite == null)
+			{
+
+			}
+
+			if(SelectedCartoon == null)
+			{
+
+			}
+
+			if(SelectedSeason == null)
+			{
+
+			}
+		}
+
+		private void LoadSelectedData()
+		{
 
 		}
 
 		/// <summary>
 		/// Загрузка из БД списка сайтов
 		/// </summary>
-		private async void LoadWebSitesAsync()
+		private async void LoadWebSiteList()
 		{
 			BindableCollection<CartoonWebSite> webSites;
 
@@ -91,7 +111,7 @@
 		/// <summary>
 		/// Загрузка из БД списка мультфильмов
 		/// </summary>
-		private async void LoadCartoonsAsync()
+		private async void LoadCartoonList()
 		{
 			BindableCollection<Cartoon> cartoons;
 
@@ -109,7 +129,7 @@
 		/// <summary>
 		/// Загрузка из БД списка сезонов
 		/// </summary>
-		private async void LoadSeasonsAsync()
+		private async void LoadSeasonList()
 		{
 			BindableCollection<CartoonSeason> seasons;
 

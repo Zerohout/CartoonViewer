@@ -1,15 +1,25 @@
 ﻿namespace CartoonViewer.Settings.ViewModels
 {
+	using System;
 	using System.Data.Entity;
 	using System.Linq;
+	using System.Windows.Input;
 	using Caliburn.Micro;
+	using CartoonViewer.ViewModels;
 	using Database;
+	using Dialogs.ViewModels;
 	using Models.CartoonModels;
 	using static Helpers.Helper;
 
 	public partial class CartoonsControlViewModel : Conductor<Screen>.Collection.OneActive
 	{
 		#region ComboBoxes
+
+		public void CBoxMouseDown(EventArgs ea)
+		{
+			WinMan.ShowDialog(new DialogViewModel(null,DialogState.SAVE_CHANGES));
+			//((MouseButtonEventArgs) ea).Handled = !ExitWithoutSave() ?? false;
+		}
 
 		/// <summary>
 		/// Изменен выбранный адрес сайта
@@ -21,26 +31,10 @@
 
 			GlobalIdList.WebSiteId = SelectedWebSite.CartoonWebSiteId;
 
-			LoadListData();
+			LoadList();
 		}
 
-		private void UnloadData()
-		{
-			if (SelectedWebSite == null)
-			{
-
-			}
-
-			if (SelectedCartoon == null)
-			{
-
-			}
-
-			if (SelectedSeason == null)
-			{
-
-			}
-		}
+		
 
 		/// <summary>
 		/// Изменен выбранный мультфильм
@@ -52,7 +46,7 @@
 
 			GlobalIdList.CartoonId = SelectedCartoon.CartoonId;
 
-			LoadListData();
+			LoadList();
 
 			Seasons.Clear();
 			NotifyOfPropertyChange(() => CanCancelCartoonSelection);

@@ -1,8 +1,8 @@
 ﻿namespace CartoonViewer.ViewModels
 {
 	using System.Windows;
-	using Caliburn.Micro;
 	using static Helpers.Helper;
+	using Screen = Caliburn.Micro.Screen;
 
 	public class DialogViewModel : Screen
 	{
@@ -10,7 +10,26 @@
 
 		private Visibility _visibility_Yes_No;
 		private Visibility _visibility_Ok_Cancel;
-		private Visibility _visibility_Error;
+		private Visibility _saveChangesVisibility;
+
+		public Visibility SaveChangesVisibility
+		{
+			get => _saveChangesVisibility;
+			set
+			{
+				_saveChangesVisibility = value;
+				NotifyOfPropertyChange(() => SaveChangesVisibility);
+			}
+		}
+
+		public DialogResult DialogResult { get; set; }
+
+
+		
+
+
+
+
 
 		private string _errorTitle;
 		private string _dialogTitle;
@@ -30,69 +49,92 @@
 
 		public DialogViewModel(string message,
 			DialogState currentState = DialogState.OK,
-			string dialogTitle = null,
-			string errorTitle = null)
+			string dialogTitle = null)
 		{
-			switch (currentState)
+			switch(currentState)
 			{
+				case DialogState.SAVE_CHANGES:
+					SaveChangesVisibility = Visibility.Visible;
+					Visibility_Yes_No = Visibility.Hidden;
+					Visibility_Ok_Cancel = Visibility.Hidden;
+					_message = message ?? "Сохранить ваши изменения?";
+					_dialogTitle = dialogTitle ?? "Сохранить изменения?";
+					return;
 				case DialogState.YES_NO:
+					SaveChangesVisibility = Visibility.Hidden;
 					Visibility_Yes_No = Visibility.Visible;
 					Visibility_Ok_Cancel = Visibility.Hidden;
-					Visibility_Error = Visibility.Hidden;
 					_message = message;
 					_dialogTitle = dialogTitle ?? "У нас к вам вопрос:";
 					return;
 				case DialogState.YES_NO_CANCEL:
+					SaveChangesVisibility = Visibility.Hidden;
 					Visibility_Yes_No = Visibility.Visible;
 					Visibility_Ok_Cancel = Visibility.Visible;
-					Visibility_Error = Visibility.Hidden;
 					_message = message;
 					_dialogTitle = dialogTitle ?? "Вы уверены?";
-					_text_Ok_Cancel = "Я передумал";
+					_text_Ok_Cancel = "Отмена";
 					return;
 				case DialogState.OK:
+					SaveChangesVisibility = Visibility.Hidden;
 					Visibility_Yes_No = Visibility.Hidden;
 					Visibility_Ok_Cancel = Visibility.Visible;
-					Visibility_Error = Visibility.Hidden;
 					_message = message;
 					_dialogTitle = dialogTitle ?? "Прочтите внимательно!";
-					_text_Ok_Cancel = "Понятно";
-					return;
-				case DialogState.ERROR:
-					Visibility_Yes_No = Visibility.Hidden;
-					Visibility_Ok_Cancel = Visibility.Hidden;
-					Visibility_Error = Visibility.Visible;
-					_errorMessage = message;
-					_errorTitle = errorTitle ?? "Произошла неожиданная ошибка. Подробности ниже:";
-					_dialogTitle = dialogTitle ?? "Произошла ошибка";
+					_text_Ok_Cancel = "ОК";
 					return;
 			}
 		}
+
+		
 
 		public DialogViewModel()
 		{
 
 		}
 
+		public void SaveChanges()
+		{
+			DialogResult = DialogResult.SAVE;
+			TryClose();
+		}
+
+		public void NotSaveChanges()
+		{
+			DialogResult = DialogResult.NOT_SAVE;
+			TryClose();
+		}
+
+		public void CancelAction()
+		{
+			DialogResult = DialogResult.CANCEL_ACTION;
+			TryClose();
+		}
+
 		public void Button_Yes()
 		{
-			TryClose(true);
+			//DialogResult = true;
+			TryClose();
 		}
 
 		public void Button_No()
 		{
-			TryClose(false);
+			//DialogResult = false;
+			TryClose();
 		}
 
 		public void Button_Ok_Cancel()
 		{
+			//DialogResult = null;
 			TryClose();
 		}
 
 		public void Closed()
 		{
+			//DialogResult = null;
 			TryClose();
 		}
+
 
 		public string DialogTitle
 		{
@@ -161,16 +203,6 @@
 			{
 				_visibility_Ok_Cancel = value;
 				NotifyOfPropertyChange(() => Visibility_Ok_Cancel);
-			}
-		}
-		
-		public Visibility Visibility_Error
-		{
-			get => _visibility_Error;
-			set
-			{
-				_visibility_Error = value;
-				NotifyOfPropertyChange(() => Visibility_Error);
 			}
 		}
 	}

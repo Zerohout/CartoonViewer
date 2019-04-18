@@ -9,16 +9,6 @@
 	{
 		//TODO Изменить значения имени, адреса и описания в свойства класса Cartoon (Cartoon.Name etc.)
 
-		// Комментарий
-
-		#region Регион
-
-		#endregion
-
-		#region MyRegion
-
-		#endregion
-
 		/// <summary>
 		/// 
 		/// </summary>

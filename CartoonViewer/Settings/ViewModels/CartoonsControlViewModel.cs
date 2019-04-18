@@ -14,7 +14,7 @@
 
 		protected override void OnInitialize()
 		{
-			LoadListData();
+			LoadList();
 			NotifyOfPropertyChange(() => CanCancelSeasonSelection);
 			NotifyOfPropertyChange(() => CanCancelCartoonSelection);
 			base.OnInitialize();

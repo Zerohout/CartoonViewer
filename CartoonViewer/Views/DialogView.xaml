@@ -13,20 +13,21 @@
                  TitleCharacterCasing="Normal"
                  cal:Message.Attach="[Event Closed]=[Action Closed]"
                  WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    UseNoneWindowStyle="True"
     Height="450"
     Width="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.1*"/>
-            <RowDefinition Height="0.5*"/>
             <RowDefinition Height="0.4*"/>
+            <RowDefinition Height="0.6*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <TextBlock Text="{Binding ErrorTitle}"
+        <!--<TextBlock Text="{Binding ErrorTitle}"
                    Grid.Column="0"
                    Grid.ColumnSpan="3"
                    Grid.Row="0"
@@ -37,8 +38,8 @@
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    FontWeight="Bold"
-                   Visibility="{Binding Visibility_Error}"/>
-        <TextBox Text="{Binding ErrorMessage}"
+                   Visibility="{Binding Visibility_Error}"/>-->
+        <!--<TextBox Text="{Binding ErrorMessage}"
                  IsReadOnly="True"
                  TextWrapping="WrapWithOverflow"
             Grid.Column="0"
@@ -47,10 +48,10 @@
                  Margin="5"
                  FontSize="14"
                  Visibility="{Binding Visibility_Error}"
-                 FontFamily="Comic Sans MS"/>
+                 FontFamily="Comic Sans MS"/>-->
         <TextBlock Grid.Column="0"
             Grid.ColumnSpan="3"
-            Grid.Row="1"
+            Grid.Row="0"
                    FontSize="25"
                    FontFamily="Comic Sans MS"
                    FontWeight="Bold"
@@ -60,34 +61,53 @@
                    TextWrapping="Wrap"
             Text="{Binding Message}"/>
         <Button  
-            cal:Message.Attach="[Event Click]=[Action Button_Yes]"
+            cal:Message.Attach="[Event Click]=[Action Button_Yes()]"
             Grid.Column="0"
             Margin="30"
             Visibility="{Binding Visibility_Yes_No}"
-            Grid.Row="2">
-            <TextBlock Text="Хорошо"
+            Grid.Row="1">
+            <TextBlock Text="Да"
                 FontSize="20"
                 FontFamily="Comic Sans MS"/>
         </Button>
         <Button  
-            cal:Message.Attach="[Event Click]=[Action Button_No]"
-            Grid.Column="2"
-            Margin="30"
-            Visibility="{Binding Visibility_Yes_No}"
-            Grid.Row="2">
-            <TextBlock Text="Не хочу"
-                       FontSize="20"
-                       FontFamily="Comic Sans MS"/>
+            cal:Message.Attach="[Event Click]=[Action SaveChanges()]"
+            Grid.Column="0"
+            Visibility="{Binding SaveChangesVisibility}"
+            Style="{StaticResource DlgSaveBtnStyle}"
+            Grid.Row="1">
         </Button>
         <Button  
-            cal:Message.Attach="[Event Click]=[Action Button_Ok_Cancel]"
+            cal:Message.Attach="[Event Click]=[Action Button_Ok_Cancel()]"
             Grid.Column="1"
             Visibility="{Binding Visibility_Ok_Cancel}"
             Margin="30"
-            Grid.Row="2">
+            Grid.Row="1">
             <TextBlock Text="{Binding Text_Ok_Cancel}"
                        FontSize="20"
                        FontFamily="Comic Sans MS"/>
         </Button>
+        <Button  
+            cal:Message.Attach="[Event Click]=[Action CancelAction()]"
+            Grid.Column="1"
+            Visibility="{Binding SaveChangesVisibility}"
+            Style="{StaticResource DlgCancelBtnStyle}"
+            Grid.Row="1"/>
+        <Button  
+            cal:Message.Attach="[Event Click]=[Action Button_No()]"
+            Grid.Column="2"
+            Margin="30"
+            Visibility="{Binding Visibility_Yes_No}"
+            Grid.Row="1">
+            <TextBlock Text="Нет"
+                       FontSize="20"
+                       FontFamily="Comic Sans MS"/>
+        </Button>
+        <Button  
+            cal:Message.Attach="[Event Click]=[Action NotSaveChanges()]"
+            Grid.Column="2"
+            Style="{StaticResource DlgNotSaveBtnStyle}"
+            Visibility="{Binding SaveChangesVisibility}"
+            Grid.Row="1"/>
     </Grid>
 </mah:MetroWindow>

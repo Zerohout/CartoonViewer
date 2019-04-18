@@ -53,7 +53,7 @@
                 Grid.Column="0"
                 Margin="5"
                 VerticalAlignment="Top"
-                cal:Message.Attach="[Event SelectionChanged] = [Action WebSitesSelectionChanged()]"
+                cal:Message.Attach="[Event SelectionChanged] = [Action WebSitesSelectionChanged()];                 [Event PreviewMouseDown]=[Action CBoxMouseDown($eventArgs)]"
                 ItemsSource="{Binding WebSites}"
                 SelectedItem="{Binding SelectedWebSite}">
                 <ComboBox.ItemTemplate>
@@ -71,8 +71,8 @@
                 VerticalAlignment="Top"
                 cal:Message.Attach="[Event Click]=[Action CancelWebSiteSelection()]">
                 <iconPacks:PackIconMaterial
-                    Height="12"
                     Width="16"
+                    Height="12"
                     Padding="-2"
                     Foreground="AliceBlue"
                     Kind="Cancel" />
@@ -110,7 +110,7 @@
                 Grid.Column="0"
                 Margin="5"
                 VerticalAlignment="Top"
-                cal:Message.Attach="[Event SelectionChanged] = [Action CartoonsSelectionChanged()]"
+                cal:Message.Attach="[Event SelectionChanged] = [Action CartoonsSelectionChanged()];                 [Event PreviewMouseDown]=[Action CBoxMouseDown($eventArgs)]"
                 ItemsSource="{Binding Cartoons}"
                 SelectedItem="{Binding SelectedCartoon}">
                 <ComboBox.ItemTemplate>
@@ -130,8 +130,8 @@
                 VerticalAlignment="Top"
                 cal:Message.Attach="[Event Click]=[Action CancelCartoonSelection()]">
                 <iconPacks:PackIconMaterial
-                    Height="12"
                     Width="16"
+                    Height="12"
                     Padding="-2"
                     Foreground="AliceBlue"
                     Kind="Cancel" />
@@ -169,7 +169,7 @@
                 Grid.Column="0"
                 Margin="5"
                 VerticalAlignment="Top"
-                cal:Message.Attach="[Event SelectionChanged] = [Action CartoonCartoonCartoonSeasonsSelectionChanged()]"
+                cal:Message.Attach="[Event SelectionChanged] = [Action SeasonsSelectionChanged()];                 [Event PreviewMouseDown]=[Action CBoxMouseDown($eventArgs)]"
                 ItemsSource="{Binding Seasons}"
                 SelectedItem="{Binding SelectedSeason}">
                 <ComboBox.ItemTemplate>
@@ -190,10 +190,10 @@
                 Grid.Column="1"
                 Margin="0,5"
                 VerticalAlignment="Top"
-                cal:Message.Attach="[Event Click]=[Action CancelCartoonSeasonSelection()]">
+                cal:Message.Attach="[Event Click]=[Action CancelSeasonSelection()]">
                 <iconPacks:PackIconMaterial
-                    Height="12"
                     Width="16"
+                    Height="12"
                     Padding="-2"
                     Foreground="AliceBlue"
                     Kind="Cancel" />
@@ -216,6 +216,6 @@
 
 
 
-        
+
     </Grid>
 </UserControl>

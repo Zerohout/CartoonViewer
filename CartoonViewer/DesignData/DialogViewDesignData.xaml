@@ -5,11 +5,13 @@
                     ErrorTitle="Заголовок текста ошибки"
                     ErrorMessage="Очень длинное познавательное сообщение с ошибкой, которое подскажет данному пользователю, что ему делать дальше.
                     А это вторая часть длинного познавательного текста об ошибке. И оно подскажет многое пользователю."
-                    DialogTitle="Заголовок окна"
+                    DialogTitle="Сохранить изменения?"
                     Message="Длинное информативное сообщение, или вопрос адресованный текущему пользователю."
-                    Visibility_Error="Hidden"
-                    Visibility_Yes_No="Visible"
-                    Visibility_Ok_Cancel="Visible"
-                    Text_Ok_Cancel="Ок / Отмена">
+                   
+                    Visibility_Yes_No="Hidden"
+                    Visibility_Ok_Cancel="Hidden"
+                    SaveChangesVisibility="Visible"
+                    Text_Ok_Cancel="Ок / Отмена"
+                    >
     
 </vms:DialogViewModel>

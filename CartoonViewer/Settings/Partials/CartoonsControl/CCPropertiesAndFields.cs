@@ -26,6 +26,11 @@
 			get => _selectedWebSite;
 			set
 			{
+				if (ExitWithoutSave() ?? false)
+				{
+
+				}
+
 				_selectedWebSite = value;
 				NotifyOfPropertyChange(() => SelectedWebSite);
 				NotifyOfPropertyChange(() => CartoonsVisibility);

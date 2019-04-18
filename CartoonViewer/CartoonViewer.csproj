@@ -103,6 +103,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Database\CVDbContext.cs" />
+    <Compile Include="Dialogs\ViewModels\SaveChangesDialogViewModel.cs" />
+    <Compile Include="Dialogs\Views\SaveChangesDialogView.xaml.cs">
+      <DependentUpon>SaveChangesDialogView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\Cloner.cs" />
     <Compile Include="Helpers\Creator.cs" />
     <Compile Include="Helpers\Helper.cs" />
@@ -126,20 +130,20 @@
     <Compile Include="Models\CartoonModels\CartoonVoiceOver.cs" />
     <Compile Include="Models\ProgramModels\WorkingData.cs" />
     <Compile Include="Models\SettingModels\EpisodeTime.cs" />
-    <Compile Include="Settings\ViewModels\CartoonsEditing\CEEventsActions.cs" />
-    <Compile Include="Settings\ViewModels\CartoonsEditing\CEMethods.cs" />
-    <Compile Include="Settings\ViewModels\CartoonsEditing\CEPropertiesAndFields.cs" />
-    <Compile Include="Settings\ViewModels\CartoonsControl\CCEventsActions.cs" />
-    <Compile Include="Settings\ViewModels\CartoonsControl\CCMethods.cs" />
-    <Compile Include="Settings\ViewModels\CartoonsControl\CCPropertiesAndFields.cs" />
+    <Compile Include="Settings\Partials\CartoonsEditing\CEEventsActions.cs" />
+    <Compile Include="Settings\Partials\CartoonsEditing\CEMethods.cs" />
+    <Compile Include="Settings\Partials\CartoonsEditing\CEPropertiesAndFields.cs" />
+    <Compile Include="Settings\Partials\CartoonsControl\CCEventsActions.cs" />
+    <Compile Include="Settings\Partials\CartoonsControl\CCMethods.cs" />
+    <Compile Include="Settings\Partials\CartoonsControl\CCPropertiesAndFields.cs" />
     <Compile Include="Settings\ViewModels\CartoonsEditingViewModel.cs" />
-    <Compile Include="Settings\ViewModels\SeasonsEditing\SEEventsActions.cs" />
-    <Compile Include="Settings\ViewModels\SeasonsEditing\SEMethods.cs" />
-    <Compile Include="Settings\ViewModels\SeasonsEditing\SEPropertiesAndFields.cs" />
-    <Compile Include="Settings\ViewModels\VoiceOversEditing\VOEEventsActions.cs" />
-    <Compile Include="Settings\ViewModels\VoiceOversEditing\VOEMethods.cs" />
+    <Compile Include="Settings\Partials\SeasonsEditing\SEEventsActions.cs" />
+    <Compile Include="Settings\Partials\SeasonsEditing\SEMethods.cs" />
+    <Compile Include="Settings\Partials\SeasonsEditing\SEPropertiesAndFields.cs" />
+    <Compile Include="Settings\Partials\VoiceOversEditing\VOEEventsActions.cs" />
+    <Compile Include="Settings\Partials\VoiceOversEditing\VOEMethods.cs" />
     <Compile Include="Settings\ViewModels\VoiceOversEditingViewModel.cs" />
-    <Compile Include="Settings\ViewModels\VoiceOversEditing\VOEPropertiesAndFields.cs" />
+    <Compile Include="Settings\Partials\VoiceOversEditing\VOEPropertiesAndFields.cs" />
     <Compile Include="Settings\ViewModels\GeneralSettingsViewModel.cs" />
     <Compile Include="Settings\ViewModels\ISettingsViewModel.cs" />
     <Compile Include="Settings\ViewModels\SeasonsEditingViewModel.cs" />
@@ -213,7 +217,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Dialogs\DesignData\SaveChangesDialogViewDesignData.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\Views\SaveChangesDialogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainMenu\DesignData\MainMenuViewDesignData.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Styles\DialogStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -278,7 +294,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Dialogs\Partials\" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="CartoonViewerIcon.ico" />
   </ItemGroup>
