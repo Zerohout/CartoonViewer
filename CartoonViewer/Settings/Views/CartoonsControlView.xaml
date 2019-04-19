@@ -176,10 +176,7 @@
                         <StackPanel Orientation="Horizontal">
                             <TextBlock
                                 Style="{StaticResource CCComboBoxTBlockItemStyle}"
-                                Text="{Binding Number}" />
-                            <TextBlock
-                                Style="{StaticResource CCComboBoxTBlockItemStyle}"
-                                Text=" сезон" />
+                                Text="{Binding NumberName}" />
                         </StackPanel>
                     </ItemContainerTemplate>
                 </ComboBox.ItemTemplate>

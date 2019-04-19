@@ -50,11 +50,8 @@
 			if(_selectedSeason == null)
 			{
 				ChangeActiveItem(_selectedCartoon != null
-					                 ? new CartoonsEditingViewModel(SelectedCartoon, GlobalIdList.WebSiteId)
+					                 ? new CartoonsEditingViewModel(SelectedCartoon)
 					                 : null);
-
-				NotifyOfPropertyChange(() => CanCancelSeasonSelection);
-				NotifyOfPropertyChange(() => SelectedSeason);
 			}
 
 			if(_selectedCartoon == null)
@@ -62,18 +59,12 @@
 				SelectedSeason = null;
 				ChangeActiveItem(null);
 				Seasons = new BindableCollection<CartoonSeason>();
-				NotifyOfPropertyChange(() => CanCancelCartoonSelection);
-				NotifyOfPropertyChange(() => CartoonEditingAndSeasonsVisibility);
-				NotifyOfPropertyChange(() => SelectedCartoon);
 			}
 
 			if(_selectedWebSite == null)
 			{
 				SelectedCartoon = null;
 				Cartoons = new BindableCollection<Cartoon>();
-				NotifyOfPropertyChange(() => CanCancelWebSiteSelection);
-				NotifyOfPropertyChange(() => CartoonsVisibility);
-				NotifyOfPropertyChange(() => SelectedWebSite);
 			}
 		}
 
@@ -289,7 +280,7 @@
 						}
 						LoadList();
 						ChangeActiveItem(
-							new CartoonsEditingViewModel(SelectedCartoon, GlobalIdList.WebSiteId));
+							new CartoonsEditingViewModel(SelectedCartoon));
 
 					}
 					else
@@ -306,7 +297,7 @@
 					if (value != null)
 					{
 						GlobalIdList.SeasonId = ((CartoonSeason) value).CartoonSeasonId;
-						ChangeActiveItem(new SeasonsEditingViewModel(SelectedSeason));
+						ChangeActiveItem(new EpisodesEditingViewModel());
 					}
 					else
 					{

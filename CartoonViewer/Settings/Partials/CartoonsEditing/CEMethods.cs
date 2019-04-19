@@ -13,28 +13,16 @@
 	{
 		#region Private methods
 
-		private void NotifySeasonList()
-		{
-			NotifyOfPropertyChange(() => Seasons);
-			NotifyOfPropertyChange(() => CanEditSeason);
-			NotifyOfPropertyChange(() => CanRemoveSeason);
-			NotifyOfPropertyChange(() => CanCancelSelection);
-		}
-
-		#endregion
-		
-		#region Public methods
-
 		private async void LoadData()
 		{
 			Cartoon result;
 			using(var ctx = new CVDbContext())
 			{
 				result = await ctx.Cartoons
-				   .Include(c => c.CartoonUrls)
-				   .Include(c => c.CartoonSeasons)
-				   .Include(c => c.CartoonVoiceOvers)
-				   .SingleAsync(c => c.CartoonId == GlobalIdList.CartoonId);
+				                  .Include(c => c.CartoonUrls)
+				                  .Include(c => c.CartoonSeasons)
+				                  .Include(c => c.CartoonVoiceOvers)
+				                  .SingleAsync(c => c.CartoonId == GlobalIdList.CartoonId);
 			}
 
 			SelectedCartoon = CloneCartoon(result);
@@ -44,18 +32,22 @@
 			TempCartoonUrl = CloneCartoonUrl(SelectedCartoonUrl);
 			Seasons = new BindableCollection<CartoonSeason>(result.CartoonSeasons);
 			VoiceOvers = new BindableCollection<CartoonVoiceOver>(result.CartoonVoiceOvers);
-
-
-			//Seasons.Clear();
-			//Seasons.AddRange(result.CartoonSeasons);
-			//Url = result.CartoonUrls.Find(cu => cu.CartoonWebSiteId == WebSiteId).Url;
-			//Name = result.Name;
-			//Description = result.Description;
-			//TempUrl = Url;
-			//TempName = Name;
-			//TempDescription = Description;
+			if(Seasons.Count > 0)
+			{
+				SelectedSeason = Seasons.First();
+			}
 		}
 
+		private void NotifySeasonList()
+		{
+			NotifyOfPropertyChange(() => CanEditSeason);
+			NotifyOfPropertyChange(() => CanRemoveSeason);
+			NotifyOfPropertyChange(() => CanCancelSelection);
+		}
+
+
 		#endregion
+		
+		
 	}
 }

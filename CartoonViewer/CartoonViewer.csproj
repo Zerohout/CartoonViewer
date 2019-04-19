@@ -137,16 +137,16 @@
     <Compile Include="Settings\Partials\CartoonsControl\CCMethods.cs" />
     <Compile Include="Settings\Partials\CartoonsControl\CCPropertiesAndFields.cs" />
     <Compile Include="Settings\ViewModels\CartoonsEditingViewModel.cs" />
-    <Compile Include="Settings\Partials\SeasonsEditing\SEEventsActions.cs" />
-    <Compile Include="Settings\Partials\SeasonsEditing\SEMethods.cs" />
-    <Compile Include="Settings\Partials\SeasonsEditing\SEPropertiesAndFields.cs" />
+    <Compile Include="Settings\Partials\EpisodesEditing\SEEventsActions.cs" />
+    <Compile Include="Settings\Partials\EpisodesEditing\SEMethods.cs" />
+    <Compile Include="Settings\Partials\EpisodesEditing\SEPropertiesAndFields.cs" />
     <Compile Include="Settings\Partials\VoiceOversEditing\VOEEventsActions.cs" />
     <Compile Include="Settings\Partials\VoiceOversEditing\VOEMethods.cs" />
     <Compile Include="Settings\ViewModels\VoiceOversEditingViewModel.cs" />
     <Compile Include="Settings\Partials\VoiceOversEditing\VOEPropertiesAndFields.cs" />
     <Compile Include="Settings\ViewModels\GeneralSettingsViewModel.cs" />
     <Compile Include="Settings\ViewModels\ISettingsViewModel.cs" />
-    <Compile Include="Settings\ViewModels\SeasonsEditingViewModel.cs" />
+    <Compile Include="Settings\ViewModels\EpisodesEditingViewModel.cs" />
     <Compile Include="Settings\Views\CartoonsEditingView.xaml.cs">
       <DependentUpon>CartoonsEditingView.xaml</DependentUpon>
     </Compile>
@@ -156,8 +156,8 @@
     <Compile Include="Settings\Views\GeneralSettingsView.xaml.cs">
       <DependentUpon>GeneralSettingsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings\Views\SeasonsEditingView.xaml.cs">
-      <DependentUpon>SeasonsEditingView.xaml</DependentUpon>
+    <Compile Include="Settings\Views\EpisodesEditingView.xaml.cs">
+      <DependentUpon>EpisodesEditingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\DialogViewModel.cs" />
     <Compile Include="MainMenu\Partials\MMEventsActions.cs" />
@@ -241,7 +241,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\DesignData\SeasonsEditingViewDesignData.xaml">
+    <Page Include="Settings\DesignData\EpisodesEditingViewDesignData.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -269,7 +269,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\Views\SeasonsEditingView.xaml">
+    <Page Include="Settings\Views\EpisodesEditingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

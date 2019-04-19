@@ -73,6 +73,12 @@
             Visibility="{Binding RemoveVisibility}" />
         <Button
             Grid.Row="1"
+            Grid.Column="0"
+            cal:Message.Attach="[Event Click]=[Action YesAction()]"
+            Style="{StaticResource DlgCancelChangesActionBtnStyle}"
+            Visibility="{Binding CancelChangesVisibility}" />
+        <Button
+            Grid.Row="1"
             Grid.Column="1"
             cal:Message.Attach="[Event Click]=[Action CancelAction()]"
             Style="{StaticResource DlgCancelActionBtnStyle}"
@@ -88,6 +94,12 @@
             Grid.Column="2"
             cal:Message.Attach="[Event Click]=[Action NoAction()]"
             Style="{StaticResource DlgNotRemoveActionBtnStyle}"
-            Visibility="{Binding RemoveChangesVisibility}" />
+            Visibility="{Binding RemoveVisibility}" />
+        <Button
+            Grid.Row="1"
+            Grid.Column="2"
+            cal:Message.Attach="[Event Click]=[Action NoAction()]"
+            Style="{StaticResource DlgNotCancelChangesActionBtnStyle}"
+            Visibility="{Binding CancelChangesVisibility}" />
     </Grid>
 </mah:MetroWindow>

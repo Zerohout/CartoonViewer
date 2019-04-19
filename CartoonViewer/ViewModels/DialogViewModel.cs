@@ -69,12 +69,21 @@
 				case DialogState.SAVE_CHANGES:
 					SaveChangesVisibility = Visibility.Visible;
 					RemoveVisibility = Visibility.Hidden;
+					CancelChangesVisibility = Visibility.Hidden;
 					_message = message ?? "Сохранить ваши изменения?";
 					_dialogTitle = dialogTitle ?? "Сохранить изменения?";
+					return;
+				case DialogState.CANCEL_CHANGES:
+					SaveChangesVisibility = Visibility.Hidden;
+					RemoveVisibility = Visibility.Hidden;
+					CancelChangesVisibility = Visibility.Visible;
+					_message = message ?? "Отменить ваши изменения?";
+					_dialogTitle = dialogTitle ?? "Отменить изменения?";
 					return;
 				case DialogState.REMOVE:
 					SaveChangesVisibility = Visibility.Hidden;
 					RemoveVisibility = Visibility.Visible;
+					CancelChangesVisibility = Visibility.Hidden;
 					_message = $"Вы действительно хотите удалить этот {message}?";
 					_dialogTitle = dialogTitle ?? "Удалить объект?";
 					return;
@@ -223,5 +232,18 @@
 				NotifyOfPropertyChange(() => Visibility_Ok_Cancel);
 			}
 		}
+
+		private Visibility _cancelChangesVisibility;
+
+		public Visibility CancelChangesVisibility
+		{
+			get => _cancelChangesVisibility;
+			set
+			{
+				_cancelChangesVisibility = value;
+				NotifyOfPropertyChange(() => CancelChangesVisibility);
+			}
+		}
+
 	}
 }

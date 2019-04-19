@@ -55,6 +55,7 @@
 		public enum DialogState
 		{
 			SAVE_CHANGES,
+			CANCEL_CHANGES,
 			REMOVE,
 			YES_NO,
 			OK,

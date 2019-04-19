@@ -22,14 +22,14 @@
 		private BindableCollection<CartoonWebSite> _webSites = new BindableCollection<CartoonWebSite>();
 		private BindableCollection<Cartoon> _cartoons = new BindableCollection<Cartoon>();
 		private BindableCollection<CartoonSeason> _seasons = new BindableCollection<CartoonSeason>();
-
-
-
+		
 		#endregion
 
 		#region Properties
 		/// <summary>
-		/// Для конструктора XAML
+		/// Для корректного отображения элементов в конструкторе XAML
+		/// Без свойство, конструктор обращается к бд, чем вызывает серьезное зависание
+		/// при его открытии и приводит к возникновению ошибки обращения к бд
 		/// </summary>
 		public bool IsDesignTime { get; set; }
 

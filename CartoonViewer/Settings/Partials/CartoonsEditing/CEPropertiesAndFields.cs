@@ -4,27 +4,56 @@
 	using Caliburn.Micro;
 	using Helpers;
 	using Models.CartoonModels;
+	using static Helpers.Helper;
 
 	public partial class CartoonsEditingViewModel : Screen, ISettingsViewModel
 	{
 		#region Private fields
 
-		private readonly int WebSiteId;
-
-		private readonly int CartoonId;
-		private string _name;
-		private string _url;
-		private string _description;
-
-		private Visibility _cartoonTypesVisibility = Visibility.Hidden;
-		private CartoonSeason _selectedSeason;
 		private BindableCollection<CartoonVoiceOver> _voiceOvers = new BindableCollection<CartoonVoiceOver>();
 		private BindableCollection<CartoonSeason> _seasons = new BindableCollection<CartoonSeason>();
-		
+		private Cartoon _selectedCartoon;
+		private CartoonSeason _selectedSeason;
 		private CartoonUrl _selectedCartoonUrl;
+		
+		#endregion
 
-		public int SeasonIndex { get; set; }
+		#region Properties
 
+		public Visibility SaveChangesVisibility =>
+			TempCartoon?.Name == NewElementString
+				? Visibility.Hidden
+				: Visibility.Visible;
+
+		public Visibility CreateNewCartoonVisibility =>
+			TempCartoon?.Name == NewElementString
+				? Visibility.Visible
+				: Visibility.Hidden;
+
+		/// <summary>
+		/// Флаг наличия изменений
+		/// </summary>
+		public bool HasChanges => CanSaveChanges;
+		/// <summary>
+		/// Выбранный м/ф
+		/// </summary>
+		public Cartoon SelectedCartoon
+		{
+			get => _selectedCartoon;
+			set
+			{
+				_selectedCartoon = value;
+				NotifyOfPropertyChange(() => SelectedCartoon);
+				NotifySeasonList();
+			}
+		}
+		/// <summary>
+		/// Временный м\ф для отслеживания изменений
+		/// </summary>
+		public Cartoon TempCartoon { get; set; }
+		/// <summary>
+		/// Выбранный CartoonUrl
+		/// </summary>
 		public CartoonUrl SelectedCartoonUrl
 		{
 			get => _selectedCartoonUrl;
@@ -34,28 +63,13 @@
 				NotifyOfPropertyChange(() => SelectedCartoonUrl);
 			}
 		}
-
+		/// <summary>
+		/// Временный CartoonUrl для отслеживания изменений
+		/// </summary>
 		public CartoonUrl TempCartoonUrl { get; set; }
-
-		private Cartoon _selctedCartoon;
-
-		public Cartoon SelectedCartoon
-		{
-			get => _selctedCartoon;
-			set
-			{
-				_selctedCartoon = value;
-				NotifyOfPropertyChange(() => SelectedCartoon);
-			}
-		}
-
-		public Cartoon TempCartoon { get; set; }
-
-
-		#endregion
-
-		#region Properties
-
+		/// <summary>
+		/// Список озвучек выбранного м/ф
+		/// </summary>
 		public BindableCollection<CartoonVoiceOver> VoiceOvers
 		{
 			get => _voiceOvers;
@@ -66,13 +80,9 @@
 			}
 		}
 
-		public Visibility SaveChangesVisibility { get; set; } = Visibility.Hidden;
-		public Visibility AddCartoonVisibility { get; set; } = Visibility.Hidden;
-		public BindableCollection<string> CartoonTypes { get; set; } = Helper.CartoonTypes;
-
-
-		public bool HasChanges => CanSaveChanges;
-
+		/// <summary>
+		/// Список сезонов выбранного м/ф
+		/// </summary>
 		public BindableCollection<CartoonSeason> Seasons
 		{
 			get => _seasons;
@@ -83,7 +93,9 @@
 				NotifyOfPropertyChange(() => Seasons);
 			}
 		}
-
+		/// <summary>
+		/// Выьранный сезон м/ф
+		/// </summary>
 		public CartoonSeason SelectedSeason
 		{
 			get => _selectedSeason;
@@ -93,54 +105,6 @@
 				NotifyOfPropertyChange(() => SelectedSeason);
 			}
 		}
-
-		public Visibility CartoonTypesVisibility
-		{
-			get => _cartoonTypesVisibility;
-			set
-			{
-				_cartoonTypesVisibility = value;
-				NotifyOfPropertyChange(() => CartoonTypesVisibility);
-			}
-		}
-
-		public string Name
-		{
-			get => _name;
-			set
-			{
-				_name = value;
-				NotifyOfPropertyChange(() => Name);
-			}
-		}
-
-		public string TempName { get; set; }
-
-		public string Url
-		{
-			get => _url;
-			set
-			{
-				_url = value;
-				NotifyOfPropertyChange(() => Url);
-			}
-		}
-
-		public string TempUrl { get; set; }
-
-
-
-		public string Description
-		{
-			get => _description;
-			set
-			{
-				_description = value;
-				NotifyOfPropertyChange(() => Description);
-			}
-		}
-
-		public string TempDescription { get; set; }
 
 		#endregion
 	}

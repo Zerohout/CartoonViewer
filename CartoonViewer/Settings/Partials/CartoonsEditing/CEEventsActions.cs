@@ -27,33 +27,33 @@
 		/// <summary>
 		/// Добавить Сезон в список
 		/// </summary>
-		public void AddSeason()
+		public async void AddSeason()
 		{
 			var count = Seasons.Count + 1;
 
 			var newSeason = new CartoonSeason
 			{
-				CartoonId = CartoonId,
+				CartoonId = GlobalIdList.CartoonId,
 				Number = count,
 				Checked = true,
 				CartoonEpisodes = new List<CartoonEpisode>()
 			};
 
 			Seasons.Add(newSeason);
+			NotifyOfPropertyChange(() => Seasons);
 			((CartoonsControlViewModel)Parent).Seasons.Add(newSeason);
+			NotifyOfPropertyChange(() => ((CartoonsControlViewModel)Parent).Seasons);
 
 			using(var ctx = new CVDbContext())
 			{
 				ctx.CartoonSeasons.Add(Seasons.Last());
-				ctx.SaveChanges();
+				await ctx.SaveChangesAsync();
 				Seasons.Last().CartoonSeasonId = ctx.CartoonSeasons.ToList().Last().CartoonSeasonId;
 			}
 
 			SelectedSeason = Seasons.Count > 0
 				? Seasons.Last()
 				: null;
-
-			NotifySeasonList();
 		}
 
 		/// <summary>
@@ -61,8 +61,9 @@
 		/// </summary>
 		public void EditSeason()
 		{
-			var temp = ((CartoonsControlViewModel) Parent).Seasons;
-			((CartoonsControlViewModel) Parent).SelectedSeason = temp
+			var parent = ((CartoonsControlViewModel) Parent);
+
+			parent.SelectedSeason = parent.Seasons
 				.First(s => s.CartoonSeasonId == SelectedSeason.CartoonSeasonId);
 		}
 
@@ -84,11 +85,10 @@
 			((CartoonsControlViewModel) Parent)
 				.Seasons.Remove(tempList.First(s => s.CartoonSeasonId == SelectedSeason.CartoonSeasonId));
 			Seasons.Remove(SelectedSeason);
+			NotifyOfPropertyChange(() => Seasons);
 			SelectedSeason = Seasons.Count > 0
 				? Seasons.Last()
 				: null;
-
-			NotifySeasonList();
 		}
 
 		public bool CanRemoveSeason => SelectedSeason != null;
@@ -99,7 +99,6 @@
 		public void CancelSelection()
 		{
 			SelectedSeason = null;
-			NotifySeasonList();
 		}
 
 		public bool CanCancelSelection => SelectedSeason != null;
@@ -128,16 +127,10 @@
 
 			TempCartoon = CloneCartoon(SelectedCartoon);
 			TempCartoonUrl = CloneCartoonUrl(SelectedCartoonUrl);
-
-
-			//TempUrl = Url;
-			//TempName = Name;
-			//TempDescription = Description;
-
+			
 			NotifyOfPropertyChange(() => CanSaveChanges);
 			NotifyOfPropertyChange(() => HasChanges);
 			var parent = (CartoonsControlViewModel)Parent;
-			
 
 			parent.SelectedCartoon.Name = SelectedCartoon.Name;
 			parent.NotifyOfPropertyChange(() => parent.SelectedCartoon);
@@ -177,7 +170,7 @@
 			}
 		}
 
-		public void AddCartoon()
+		public void CreateNewCartoon()
 		{
 			SelectedCartoon.CartoonUrls.Add(SelectedCartoonUrl);
 			var parent = ((CartoonsControlViewModel)Parent);
@@ -199,10 +192,16 @@
 			}
 		}
 
-		public bool CanAddCartoon
+		public bool CanCreateNewCartoon
 		{
 			get
 			{
+				if (SelectedCartoon == null ||
+				    SelectedCartoonUrl == null)
+				{
+					return false;
+				}
+
 				if (string.IsNullOrEmpty(SelectedCartoon.Name) ||
 				    string.IsNullOrEmpty(SelectedCartoonUrl.Url) ||
 				    SelectedCartoon.Name == NewElementString)
@@ -255,7 +254,7 @@
 		public void TextChanged()
 		{
 			NotifyOfPropertyChange(() => CanSaveChanges);
-			NotifyOfPropertyChange(() => CanAddCartoon);
+			NotifyOfPropertyChange(() => CanCreateNewCartoon);
 			NotifyOfPropertyChange(() => HasChanges);
 		}
 

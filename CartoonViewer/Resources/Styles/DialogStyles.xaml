@@ -150,6 +150,46 @@
         </Setter>
     </Style>
     <Style
+        x:Key="DlgCancelChangesActionBtnStyle"
+        TargetType="Button"
+        BasedOn="{StaticResource DefaultMetroButtonStyle}">
+        <Setter Property="Margin" Value="30"/>
+        <Setter Property="Content">
+            <Setter.Value>
+                <StackPanel Orientation="Vertical">
+                    <iconPacks:PackIconFontAwesome
+                        Style="{StaticResource DlgYesActionBtnIconStyle}" />
+                    <TextBlock
+                        Style="{StaticResource DlgYesActionBtnTBlock}"
+                        Text="Да," />
+                    <TextBlock
+                        Style="{StaticResource DlgYesActionBtnTBlock}"
+                        Text="отменить" />
+                </StackPanel>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style
+        x:Key="DlgNotCancelChangesActionBtnStyle"
+        TargetType="Button"
+        BasedOn="{StaticResource DefaultMetroButtonStyle}">
+        <Setter Property="Margin" Value="30"/>
+        <Setter Property="Content">
+            <Setter.Value>
+                <StackPanel Orientation="Vertical">
+                    <iconPacks:PackIconFontAwesome
+                        Style="{StaticResource DlgNoActionBtnIconStyle}" />
+                    <TextBlock
+                        Style="{StaticResource DlgNoActionBtnTBlock}"
+                        Text="Нет, не" />
+                    <TextBlock
+                        Style="{StaticResource DlgNoActionBtnTBlock}"
+                        Text="отменять" />
+                </StackPanel>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style
         x:Key="DlgCancelActionBtnStyle"
         TargetType="Button"
         BasedOn="{StaticResource DefaultMetroButtonStyle}">

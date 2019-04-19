@@ -5,9 +5,7 @@
     xmlns:helper="clr-namespace:CartoonViewer.Helpers"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:vms="clr-namespace:CartoonViewer.Settings.ViewModels"
-    CartoonTypesVisibility="Visible"
-    SaveChangesVisibility="Visible"
-    Url="http://cartoonUrl.url">
+    >
 
     <vms:CartoonsEditingViewModel.SelectedCartoon>
         <cartoonModels:Cartoon Name="Название_мультфильма"

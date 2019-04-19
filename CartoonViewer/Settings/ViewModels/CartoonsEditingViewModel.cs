@@ -15,8 +15,7 @@
 		/// 
 		/// </summary>
 		/// <param name="cartoon"></param>
-		/// <param name="webSiteId"></param>
-		public CartoonsEditingViewModel(Cartoon cartoon, int webSiteId)
+		public CartoonsEditingViewModel(Cartoon cartoon)
 		{
 			if(cartoon.Name == NewElementString)
 			{
@@ -28,16 +27,14 @@
 					CartoonWebSiteId = GlobalIdList.WebSiteId
 				};
 				TempCartoonUrl = CloneCartoonUrl(SelectedCartoonUrl);
-				AddCartoonVisibility = Visibility.Visible;
-				SaveChangesVisibility = Visibility.Hidden;
+				//CreateNewCartoonVisibility = Visibility.Visible;
+				//SaveChangesVisibility = Visibility.Hidden;
 				return;
 			}
 
-			WebSiteId = webSiteId;
-			CartoonId = cartoon.CartoonId;
 			LoadData();
-			AddCartoonVisibility = Visibility.Hidden;
-			SaveChangesVisibility = Visibility.Visible;
+			//CreateNewCartoonVisibility = Visibility.Hidden;
+			//SaveChangesVisibility = Visibility.Visible;
 			NotifySeasonList();
 		}
 
