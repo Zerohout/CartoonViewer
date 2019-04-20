@@ -2,6 +2,7 @@
 {
 	using System.Data.Entity;
 	using System.Linq;
+	using System.Xml.Serialization;
 	using Caliburn.Micro;
 	using Database;
 	using Models.CartoonModels;
@@ -9,40 +10,103 @@
 	public partial class VoiceOversEditingViewModel : Screen
 	{
 		#region Private Methods
-
-		private void ChangeData()
+		/// <summary>
+		/// Изменить выбранный м/ф и все связанные данные
+		/// </summary>
+		/// <param name="value">Конечное значение м/ф</param>
+		private void ChangeSelectedCartoon(Cartoon value)
 		{
-			if(SelectedCartoon == null && SelectedSeason != null)
+			if(IsDesignTime)
 			{
-
-				SelectedCartoonVoiceOver = null;
-				CartoonVoiceOvers = new BindableCollection<CartoonVoiceOver>();
-
-				SelectedSeason = null;
-				CartoonSeasons = new BindableCollection<CartoonSeason>();
-				NotifyOfPropertyChange(() => SeasonsAndCartoonVoiceOversVisibility);
-
+				_selectedCartoon = value;
+				NotifyOfPropertyChange(() => SelectedCartoon);
 				return;
 			}
 
-			if(SelectedSeason == null && SelectedEpisode != null)
-			{
-				SelectedEpisode = null;
-				CartoonEpisodes = new BindableCollection<CartoonEpisode>();
-				NotifyOfPropertyChange(() => EpisodesVisibility);
-
+			if(_selectedCartoon == value)
 				return;
-			}
 
-			if(SelectedEpisode == null)
+			IdList.CartoonId = value?.CartoonId ?? 0;
+			SelectedCartoonVoiceOver = null;
+			ChangeSelectedSeason(null);
+
+
+			if(value == null)
 			{
-				SelectedEpisodeVoiceOver = null;
-				EpisodeVoiceOvers = new BindableCollection<CartoonVoiceOver>();
-				NotifyOfPropertyChange(() => EpisodeVoiceOversVisibility);
-
-				return;
+				_selectedCartoon = null;
+				NotifyOfPropertyChange(() => SelectedCartoon);
 			}
+			else
+			{
+				LoadData();
+			}
+			NotifyOfPropertyChange(() => CanCancelCartoonVoiceOverSelection);
+			NotifyOfPropertyChange(() => SeasonsAndCartoonVoiceOversVisibility);
 		}
+		/// <summary>
+		/// Изменить выбранный сезон и все связные данные
+		/// </summary>
+		/// <param name="value">Конечное значение сезона</param>
+		private void ChangeSelectedSeason(CartoonSeason value)
+		{
+			if(IsDesignTime)
+			{
+				_selectedSeason = value;
+				NotifyOfPropertyChange(() => SelectedSeason);
+				return;
+			}
+
+			if(_selectedSeason == value)
+				return;
+
+			IdList.SeasonId = value?.CartoonSeasonId ?? 0;
+			ChangeSelectedEpisode(null);
+
+			if(value == null)
+			{
+				_selectedSeason = null;
+				NotifyOfPropertyChange(() => SelectedSeason);
+			}
+			else
+			{
+				LoadData();
+			}
+			NotifyOfPropertyChange(() => EpisodesVisibility);
+			NotifyOfPropertyChange(() => CanCancelSeasonSelection);
+		}
+		/// <summary>
+		/// Изменить выбранный эпизод и все связанные данные
+		/// </summary>
+		/// <param name="value">Конечное значение эпизода</param>
+		private void ChangeSelectedEpisode(CartoonEpisode value)
+		{
+			if(IsDesignTime)
+			{
+				_selectedEpisode = value;
+				NotifyOfPropertyChange(() => SelectedEpisode);
+				return;
+			}
+
+			if(_selectedEpisode == value)
+				return;
+
+			IdList.EpisodeId = value?.CartoonEpisodeId ?? 0;
+			SelectedEpisodeVoiceOver = null;
+
+			if(value == null)
+			{
+				_selectedEpisode = null;
+				NotifyOfPropertyChange(() => SelectedEpisode);
+			}
+			else
+			{
+				LoadData();
+			}
+			NotifyOfPropertyChange(() => EpisodeVoiceOversVisibility);
+			NotifyOfPropertyChange(() => CanCancelEpisodeSelection);
+		}
+
+
 
 		/// <summary>
 		/// Загрузка из базы данных всех необходимых данных
@@ -50,16 +114,15 @@
 		private void LoadData()
 		{
 			// --Начальная, когда ни один мульфильм не выбран
-			if(SelectedCartoon == null)
+			if(_selectedCartoon == null)
 			{
 				LoadCartoonsData();
 
-				var id = IdList.CartoonId;
-
 				// --При загруженных с конструктора данных мультфильма
-				if(id > 0)
+				if(IdList.CartoonId > 0)
 				{
-					SelectedCartoon = Cartoons.First(c => c.CartoonId == id);
+					_selectedCartoon = _cartoons.First(c => c.CartoonId == IdList.CartoonId);
+					NotifyOfPropertyChange(() => SelectedCartoon);
 					LoadData();
 				}
 
@@ -67,16 +130,19 @@
 			}
 
 			// --При выборе мультфильма
-			if(SelectedSeason == null)
+			if(_selectedSeason == null)
 			{
 				LoadSelectedCartoonVoiceOverData();
 				LoadSelectedCartoonSeasonsData();
 
-				var id = IdList.SeasonId;
+				_selectedCartoon = _cartoons.First(c => c.CartoonId == IdList.CartoonId);
+				NotifyOfPropertyChange(() => SelectedCartoon);
 
-				if(id > 0)
+				if(IdList.SeasonId > 0)
 				{
-					SelectedSeason = CartoonSeasons.First(c => c.CartoonSeasonId == id);
+					_selectedSeason = _seasons.First(cs => cs.CartoonSeasonId == IdList.SeasonId);
+					NotifyOfPropertyChange(() => SelectedSeason);
+
 					LoadData();
 				}
 
@@ -84,15 +150,17 @@
 			}
 
 			// --При выборе сезона
-			if(SelectedEpisode == null)
+			if(_selectedEpisode == null)
 			{
 				LoadSelectedSeasonEpisodesData();
 
-				var id = IdList.EpisodeId;
+				_selectedSeason = _seasons.First(cs => cs.CartoonSeasonId == IdList.SeasonId);
+				NotifyOfPropertyChange(() => SelectedSeason);
 
-				if(id > 0)
+				if(IdList.EpisodeId > 0)
 				{
-					SelectedEpisode = CartoonEpisodes.First(ce => ce.CartoonEpisodeId == id);
+					_selectedEpisode = _episodes.First(ce => ce.CartoonEpisodeId == IdList.EpisodeId);
+					NotifyOfPropertyChange(() => SelectedEpisode);
 					LoadData();
 				}
 				return;
@@ -100,6 +168,8 @@
 
 			// --При выборе эпизода
 			LoadSelectedEpisodeVoiceOversData();
+			_selectedEpisode = _episodes.First(ce => ce.CartoonEpisodeId == IdList.EpisodeId);
+			NotifyOfPropertyChange(() => SelectedEpisode);
 		}
 
 		/// <summary>
@@ -155,7 +225,7 @@
 				seasons = new BindableCollection<CartoonSeason>(ctx.CartoonSeasons.Local);
 			}
 
-			CartoonSeasons = new BindableCollection<CartoonSeason>(seasons);
+			Seasons = new BindableCollection<CartoonSeason>(seasons);
 		}
 
 		/// <summary>
@@ -173,8 +243,8 @@
 				episodes = new BindableCollection<CartoonEpisode>(ctx.CartoonEpisodes.Local);
 			}
 
-			CartoonEpisodes.Clear();
-			CartoonEpisodes.AddRange(episodes);
+			Episodes.Clear();
+			Episodes.AddRange(episodes);
 		}
 
 		/// <summary>
@@ -194,6 +264,44 @@
 			}
 
 			EpisodeVoiceOvers = new BindableCollection<CartoonVoiceOver>(voiceOvers);
+		}
+		/// <summary>
+		/// Оповестить кнопки списка озвучек м/ф об изменениях
+		/// </summary>
+		private void NotifyCartoonVoiceOversButtons()
+		{
+			NotifyOfPropertyChange(() => CanAddCartoonVoiceOver);
+			NotifyOfPropertyChange(() => CanEditCartoonVoiceOver);
+			NotifyOfPropertyChange(() => CanRemoveCartoonVoiceOver);
+			NotifyOfPropertyChange(() => CanCancelCartoonVoiceOverSelection);
+			NotifyOfPropertyChange(() => CanMoveToEpisodeVoiceOvers);
+		}
+		/// <summary>
+		/// Оповестить кнопки списка озвучек эпизода об ихменениях
+		/// </summary>
+		private void NotifyEpisodeVoiceOversButtons()
+		{
+			NotifyOfPropertyChange(() => CanRemoveFromEpisodeVoiceOvers);
+			NotifyOfPropertyChange(() => CanCancelEpisodeVoiceOverSelection);
+		}
+		/// <summary>
+		/// Оповестить значения связанные с изменением редактируемой озвучки м/ф
+		/// </summary>
+		private void NotifyChanges()
+		{
+			NotifyOfPropertyChange(() => HasChanges);
+			NotifyOfPropertyChange(() => CanSaveChanges);
+			NotifyOfPropertyChange(() => CanCancelChanges);
+			NotifyOfPropertyChange(() => CanUnlockEditingInterface);
+		}
+		/// <summary>
+		/// Оповестить кнопки снятия выделения с выбранного объекта
+		/// </summary>
+		private void NotifyCancelButtons()
+		{
+			NotifyOfPropertyChange(() => CanCancelCartoonSelection);
+			NotifyOfPropertyChange(() => CanCancelEpisodeSelection);
+			NotifyOfPropertyChange(() => CanCancelSeasonSelection);
 		}
 
 		#endregion

@@ -67,14 +67,13 @@
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="0,5"
+                ToolTip="Снять выделение с сайта"
                 VerticalAlignment="Top"
                 cal:Message.Attach="[Event Click]=[Action CancelWebSiteSelection()]">
                 <iconPacks:PackIconMaterial
                     Width="16"
                     Height="12"
-                    Padding="-2"
-                    Foreground="AliceBlue"
-                    Kind="Cancel" />
+                    Style="{StaticResource EditListCancelBtnIconStyle}"/>
             </Button>
         </Grid>
 
@@ -128,13 +127,12 @@
                 Grid.Column="1"
                 Margin="0,5"
                 VerticalAlignment="Top"
+                ToolTip="Снять выделение с м/ф"
                 cal:Message.Attach="[Event Click]=[Action CancelCartoonSelection()]">
                 <iconPacks:PackIconMaterial
                     Width="16"
                     Height="12"
-                    Padding="-2"
-                    Foreground="AliceBlue"
-                    Kind="Cancel" />
+                    Style="{StaticResource EditListCancelBtnIconStyle}"/>
             </Button>
         </Grid>
 
@@ -185,14 +183,13 @@
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="0,5"
+                ToolTip="Снять выделение с сезона"
                 VerticalAlignment="Top"
                 cal:Message.Attach="[Event Click]=[Action CancelSeasonSelection()]">
                 <iconPacks:PackIconMaterial
                     Width="16"
                     Height="12"
-                    Padding="-2"
-                    Foreground="AliceBlue"
-                    Kind="Cancel" />
+                    Style="{StaticResource EditListCancelBtnIconStyle}"/>
             </Button>
         </Grid>
 

@@ -43,6 +43,7 @@
 			NotifyOfPropertyChange(() => CanEditSeason);
 			NotifyOfPropertyChange(() => CanRemoveSeason);
 			NotifyOfPropertyChange(() => CanCancelSelection);
+			NotifyOfPropertyChange(() => CanSelectSeason);
 		}
 
 

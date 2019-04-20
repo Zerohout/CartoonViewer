@@ -150,14 +150,14 @@
     <Compile Include="Settings\Views\CartoonsEditingView.xaml.cs">
       <DependentUpon>CartoonsEditingView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Settings\Views\EpisodesEditingView.xaml.cs">
+      <DependentUpon>EpisodesEditingView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Settings\Views\VoiceOversEditingView.xaml.cs">
       <DependentUpon>VoiceOversEditingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Settings\Views\GeneralSettingsView.xaml.cs">
       <DependentUpon>GeneralSettingsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Settings\Views\EpisodesEditingView.xaml.cs">
-      <DependentUpon>EpisodesEditingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\DialogViewModel.cs" />
     <Compile Include="MainMenu\Partials\MMEventsActions.cs" />
@@ -261,15 +261,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Settings\Views\EpisodesEditingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Settings\Views\VoiceOversEditingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Settings\Views\GeneralSettingsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Settings\Views\EpisodesEditingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

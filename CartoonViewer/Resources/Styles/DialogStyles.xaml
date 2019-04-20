@@ -41,6 +41,14 @@
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
+    <Style x:Key="EditListDefautlBtnIconStyle"
+           TargetType="iconPacks:PackIconMaterial">
+        <Setter Property="Width" Value="20"/>
+        <Setter Property="Height" Value="16"/>
+        <Setter Property="Padding" Value="-2"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
     <Style x:Key="DlgYesActionBtnIconStyle" TargetType="iconPacks:PackIconFontAwesome"
            BasedOn="{StaticResource DlgDefaultBtnIconStyle}">
         <Setter Property="Foreground" Value="LawnGreen"/>
@@ -56,8 +64,49 @@
         <Setter Property="Foreground" Value="DodgerBlue"/>
         <Setter Property="Kind" Value="HandPaperRegular"/>
     </Style>
-
-
+    <Style x:Key="EditListAddBtnIconStyle" 
+           TargetType="iconPacks:PackIconMaterial"
+           BasedOn="{StaticResource EditListDefautlBtnIconStyle}">
+        <Setter Property="Foreground" Value="LawnGreen"/>
+        <Setter Property="Kind" Value="PlaylistPlus"/>
+    </Style>
+    <Style x:Key="EditListEditBtnIconStyle" TargetType="iconPacks:PackIconMaterial"
+           BasedOn="{StaticResource EditListDefautlBtnIconStyle}">
+        <Setter Property="Foreground" Value="Yellow"/>
+        <Setter Property="Kind" Value="PlaylistEdit"/>
+    </Style>
+    <Style x:Key="EditListRemoveBtnIconStyle" TargetType="iconPacks:PackIconMaterial"
+           BasedOn="{StaticResource EditListDefautlBtnIconStyle}">
+        <Setter Property="Foreground" Value="Tomato"/>
+        <Setter Property="Kind" Value="PlaylistMinus"/>
+    </Style>
+    <Style x:Key="EditListCancelBtnIconStyle" TargetType="iconPacks:PackIconMaterial"
+           BasedOn="{StaticResource EditListDefautlBtnIconStyle}">
+        <Setter Property="Foreground" Value="AntiqueWhite"/>
+        <Setter Property="Kind" Value="Cancel"/>
+    </Style>
+    <Style x:Key="EditListMoveBtnIconStyle" TargetType="iconPacks:PackIconMaterial"
+           BasedOn="{StaticResource EditListDefautlBtnIconStyle}">
+        <Setter Property="Foreground" Value="DodgerBlue"/>
+        <Setter Property="Kind" Value="ArrowDownBold"/>
+    </Style>
+    <Style x:Key="EditListUnlockBtnIconStyle" 
+           TargetType="iconPacks:PackIconFontAwesome" >
+        <Setter Property="Width" Value="20"/>
+        <Setter Property="Height" Value="16"/>
+        <Setter Property="Padding" Value="-2"/>
+        <Setter Property="Foreground" Value="DodgerBlue"/>
+        <Setter Property="Kind" Value="UnlockAltSolid"/>
+    </Style>
+    <Style x:Key="EditListSelectBtnIconStyle" 
+           TargetType="iconPacks:PackIconFontAwesome" >
+        <Setter Property="Width" Value="20"/>
+        <Setter Property="Height" Value="16"/>
+        <Setter Property="Padding" Value="-2"/>
+        <Setter Property="Foreground" Value="Aqua"/>
+        <Setter Property="Kind" Value="HandPointerRegular"/>
+    </Style>
+    
 
     <!--#endregion-->
 

@@ -16,9 +16,25 @@
 	{
 		#region EventsActions
 
+		public void SelectSeason() { SelectedSeason = Seasons.First(); }
+
+		public bool CanSelectSeason
+		{
+			get
+			{
+				if (SelectedSeason == null ||
+				    Seasons.Count == 0)
+				{
+					return false;
+				}
+
+				return true;
+			}
+		}
+
 		public void EditVoiceOvers()
 		{
-			WinMan.ShowWindow(
+			WinMan.ShowDialog(
 				new VoiceOversEditingViewModel(
 					websiteId: GlobalIdList.WebSiteId,
 					cartoonId: GlobalIdList.CartoonId));
@@ -264,7 +280,6 @@
 		public void SelectionChanged(ListBox lb)
 		{
 			lb.ScrollIntoView(lb.SelectedItem);
-			NotifySeasonList();
 		}
 
 		#endregion

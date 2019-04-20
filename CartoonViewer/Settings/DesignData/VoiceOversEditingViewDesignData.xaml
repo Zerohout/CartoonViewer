@@ -3,16 +3,17 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cartoonModels="clr-namespace:CartoonViewer.Models.CartoonModels"
     xmlns:vms="clr-namespace:CartoonViewer.Settings.ViewModels"
-    >
+    IsDesignTime="True"
+    IsNotEditing="False">
     <vms:VoiceOversEditingViewModel.Cartoons>
-        <cartoonModels:Cartoon Name="Мультфильм_1"/>
-        <cartoonModels:Cartoon Name="Мультфильм_2"/>
-        <cartoonModels:Cartoon Name="Мультфильм_3"/>
-        <cartoonModels:Cartoon Name="Мультфильм_4"/>
-        <cartoonModels:Cartoon Name="Мультфильм_5"/>
+        <cartoonModels:Cartoon Name="Мультфильм_1" />
+        <cartoonModels:Cartoon Name="Мультфильм_2" />
+        <cartoonModels:Cartoon Name="Мультфильм_3" />
+        <cartoonModels:Cartoon Name="Мультфильм_4" />
+        <cartoonModels:Cartoon Name="Мультфильм_5" />
     </vms:VoiceOversEditingViewModel.Cartoons>
     <vms:VoiceOversEditingViewModel.SelectedCartoon>
-        <cartoonModels:Cartoon/>
+        <cartoonModels:Cartoon />
     </vms:VoiceOversEditingViewModel.SelectedCartoon>
 
     <vms:VoiceOversEditingViewModel.CartoonVoiceOvers>
@@ -28,50 +29,53 @@
         <cartoonModels:CartoonVoiceOver Name="Озвучка_мультфильма_10" />
     </vms:VoiceOversEditingViewModel.CartoonVoiceOvers>
     <vms:VoiceOversEditingViewModel.SelectedCartoonVoiceOver>
-        <cartoonModels:CartoonVoiceOver
-            Name="Выбранная_озвучка_мультфильма"
-            Description="Описание_озвучки_мультфильма"
-            UrlParameter="cartoon_voiceOver/param" />
+        <cartoonModels:CartoonVoiceOver Name="Выбранная_озвучка_мультфильма" />
     </vms:VoiceOversEditingViewModel.SelectedCartoonVoiceOver>
+    <vms:VoiceOversEditingViewModel.EditedCartoonVoiceOver>
+        <cartoonModels:CartoonVoiceOver
+            Name="Редактируемая_озвучка_мультфильма"
+            Description="Описание редактируемой озвучки мультфильма"
+            UrlParameter="cartoon_voiceOver/param" />
+    </vms:VoiceOversEditingViewModel.EditedCartoonVoiceOver>
 
-    <vms:VoiceOversEditingViewModel.CartoonSeasons>
-        <cartoonModels:CartoonSeason Number="1"/>
-        <cartoonModels:CartoonSeason Number="2"/>
-        <cartoonModels:CartoonSeason Number="3"/>
-        <cartoonModels:CartoonSeason Number="4"/>
-        <cartoonModels:CartoonSeason Number="5"/>
-    </vms:VoiceOversEditingViewModel.CartoonSeasons>
+    <vms:VoiceOversEditingViewModel.Seasons>
+        <cartoonModels:CartoonSeason Number="1" />
+        <cartoonModels:CartoonSeason Number="2" />
+        <cartoonModels:CartoonSeason Number="3" />
+        <cartoonModels:CartoonSeason Number="4" />
+        <cartoonModels:CartoonSeason Number="5" />
+    </vms:VoiceOversEditingViewModel.Seasons>
     <vms:VoiceOversEditingViewModel.SelectedSeason>
-        <cartoonModels:CartoonSeason Number="1"/>
+        <cartoonModels:CartoonSeason Number="1" />
     </vms:VoiceOversEditingViewModel.SelectedSeason>
 
-    <vms:VoiceOversEditingViewModel.CartoonEpisodes>
-        <cartoonModels:CartoonEpisode Number="1"/>
-        <cartoonModels:CartoonEpisode Number="2"/>
-        <cartoonModels:CartoonEpisode Number="3"/>
-        <cartoonModels:CartoonEpisode Number="4"/>
-        <cartoonModels:CartoonEpisode Number="5"/>
-    </vms:VoiceOversEditingViewModel.CartoonEpisodes>
+    <vms:VoiceOversEditingViewModel.Episodes>
+        <cartoonModels:CartoonEpisode Number="1" />
+        <cartoonModels:CartoonEpisode Number="2" />
+        <cartoonModels:CartoonEpisode Number="3" />
+        <cartoonModels:CartoonEpisode Number="4" />
+        <cartoonModels:CartoonEpisode Number="5" />
+    </vms:VoiceOversEditingViewModel.Episodes>
     <vms:VoiceOversEditingViewModel.SelectedEpisode>
-        <cartoonModels:CartoonEpisode Number="1"/>
+        <cartoonModels:CartoonEpisode Number="1" />
     </vms:VoiceOversEditingViewModel.SelectedEpisode>
 
     <vms:VoiceOversEditingViewModel.EpisodeVoiceOvers>
-        <cartoonModels:CartoonVoiceOver Name="Озвучка_эпизода_1"/>
-        <cartoonModels:CartoonVoiceOver Name="Озвучка_эпизода_2"/>
-        <cartoonModels:CartoonVoiceOver Name="Озвучка_эпизода_3"/>
-        <cartoonModels:CartoonVoiceOver Name="Озвучка_эпизода_4"/>
-        <cartoonModels:CartoonVoiceOver Name="Озвучка_эпизода_5"/>
-        <cartoonModels:CartoonVoiceOver Name="Озвучка_эпизода_6"/>
-        <cartoonModels:CartoonVoiceOver Name="Озвучка_эпизода_7"/>
-        <cartoonModels:CartoonVoiceOver Name="Озвучка_эпизода_8"/>
-        <cartoonModels:CartoonVoiceOver Name="Озвучка_эпизода_9"/>
-        <cartoonModels:CartoonVoiceOver Name="Озвучка_эпизода_10"/>
+        <cartoonModels:CartoonVoiceOver Name="Озвучка_эпизода_1" />
+        <cartoonModels:CartoonVoiceOver Name="Озвучка_эпизода_2" />
+        <cartoonModels:CartoonVoiceOver Name="Озвучка_эпизода_3" />
+        <cartoonModels:CartoonVoiceOver Name="Озвучка_эпизода_4" />
+        <cartoonModels:CartoonVoiceOver Name="Озвучка_эпизода_5" />
+        <cartoonModels:CartoonVoiceOver Name="Озвучка_эпизода_6" />
+        <cartoonModels:CartoonVoiceOver Name="Озвучка_эпизода_7" />
+        <cartoonModels:CartoonVoiceOver Name="Озвучка_эпизода_8" />
+        <cartoonModels:CartoonVoiceOver Name="Озвучка_эпизода_9" />
+        <cartoonModels:CartoonVoiceOver Name="Озвучка_эпизода_10" />
     </vms:VoiceOversEditingViewModel.EpisodeVoiceOvers>
     <vms:VoiceOversEditingViewModel.SelectedEpisodeVoiceOver>
         <cartoonModels:CartoonVoiceOver
             Name="Выбранная_озвучка_эпизода"
             Description="Описание_озвучки_эпизода"
-            UrlParameter="episode_voiceOver/param"/>
+            UrlParameter="episode_voiceOver/param" />
     </vms:VoiceOversEditingViewModel.SelectedEpisodeVoiceOver>
 </vms:VoiceOversEditingViewModel>

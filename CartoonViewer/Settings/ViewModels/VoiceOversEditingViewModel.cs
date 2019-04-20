@@ -20,7 +20,7 @@
 		/// <summary>
 		/// Конструктор при выборе озвучек эпизода (загрузка минуя выбор мультфильма, сезона и эпизода)
 		/// </summary>
-		/// <param name="ids"></param>
+		/// <param name="idList"></param>
 		public VoiceOversEditingViewModel((int WebSiteId, int CartoonId, int SeasonId, int EpisodeId) idList)
 		{
 			IdList = idList;

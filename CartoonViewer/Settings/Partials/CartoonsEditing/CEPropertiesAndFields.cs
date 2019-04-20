@@ -103,6 +103,7 @@
 			{
 				_selectedSeason = value;
 				NotifyOfPropertyChange(() => SelectedSeason);
+				NotifySeasonList();
 			}
 		}
 

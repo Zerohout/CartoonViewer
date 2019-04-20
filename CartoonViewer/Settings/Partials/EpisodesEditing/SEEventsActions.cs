@@ -20,6 +20,7 @@
 	{
 		#region EventsActions
 
+		public void EditVoiceOvers() { WinMan.ShowDialog(new VoiceOversEditingViewModel(GlobalIdList)); }
 		public void TextChanged()
 		{
 			NotifyEditingButtons();

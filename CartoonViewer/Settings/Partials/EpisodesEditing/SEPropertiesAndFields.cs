@@ -19,6 +19,8 @@
 		private EpisodeTime _episodeTime;
 		private CartoonEpisode _editingEpisode;
 
+
+		
 		public CartoonEpisode EditingEpisode
 		{
 			get => _editingEpisode;

@@ -9,8 +9,6 @@
 
 	public partial class CartoonsEditingViewModel : Screen, ISettingsViewModel
 	{
-		//TODO Изменить значения имени, адреса и описания в свойства класса Cartoon (Cartoon.Name etc.)
-
 		/// <summary>
 		/// 
 		/// </summary>

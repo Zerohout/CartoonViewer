@@ -8,12 +8,11 @@
     xmlns:local="clr-namespace:CartoonViewer.Settings.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     cal:Bind.AtDesignTime="True"
+    cal:Message.Attach="[Event KeyDown]=[Action ListenKey($eventArgs)]"
     d:DataContext="{d:DesignData Source=../DesignData/EpisodesEditingViewDesignData.xaml}"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    cal:Message.Attach="[Event KeyDown]=[Action ListenKey($eventArgs)]"
     Focusable="True"
-
     mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
@@ -34,133 +33,149 @@
             Grid.RowSpan="2"
             Grid.Column="0">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Grid
+            <TextBlock
                 Grid.Row="0"
-                Grid.Column="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <TextBlock
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    Style="{StaticResource SEDefaultTBlockStyle}"
-                    Text="Список эпизодов" />
-                <ListBox
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    Margin="5,2.5"
-                    cal:Message.Attach="[Event MouseDoubleClick]=[Action EditEpisode()]; [Event SelectionChanged]=[Action SelectionChanged($source)]"
-                    IsEnabled="{Binding IsNotEditing}"
-                    ItemsSource="{Binding Episodes, UpdateSourceTrigger=PropertyChanged}"
-                    SelectedItem="{Binding SelectedEpisode, UpdateSourceTrigger=PropertyChanged}">
-                    <ListBox.ItemTemplate>
-                        <ItemContainerTemplate>
-                            <TextBlock
-                                Style="{StaticResource CCComboBoxTBlockItemStyle}"
-                                Text="{Binding NumberName}" />
-                        </ItemContainerTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-                <Grid
-                    Grid.Row="1"
-                    Grid.Column="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Button
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        Margin="0,2.5"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        cal:Message.Attach="[Event Click]=[Action AddEpisode()]">
-                        <iconPacks:PackIconMaterial
-                            Width="20"
-                            Height="16"
-                            Padding="-2"
-                            Foreground="LimeGreen"
-                            Kind="PlaylistPlus" />
-                    </Button>
-                    <Button
-                        Grid.Row="2"
-                        Grid.Column="0"
-                        Margin="0,2.5"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        cal:Message.Attach="[Event Click]=[Action EditEpisode()]">
-                        <iconPacks:PackIconMaterial
-                            Width="20"
-                            Height="16"
-                            Padding="-2"
-                            Foreground="Yellow"
-                            Kind="PlaylistEdit" />
-                    </Button>
-                    <Button
-                        Grid.Row="3"
-                        Grid.Column="0"
-                        Margin="0,2.5"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        cal:Message.Attach="[Event Click]=[Action RemoveEpisode()]">
-                        <iconPacks:PackIconMaterial
-                            Width="20"
-                            Height="16"
-                            Padding="-2"
-                            Foreground="Red"
-                            Kind="PlaylistRemove" />
-                    </Button>
-                    <Button
-                        Grid.Row="4"
-                        Grid.Column="0"
-                        Margin="0,2.5"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        cal:Message.Attach="[Event Click]=[Action CancelSelection()]">
-                        <iconPacks:PackIconMaterial
-                            Width="20"
-                            Height="16"
-                            Padding="-2"
-                            Foreground="Wheat"
-                            Kind="Cancel" />
-                    </Button>
-                    <Button
-                        Grid.Row="5"
-                        Grid.Column="0"
-                        Margin="0,2.5"
-                        Visibility="{Binding EpisodeEditingVisibility}"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        cal:Message.Attach="[Event Click]=[Action CancelEditing()]">
-                        <iconPacks:PackIconFontAwesome 
-                            Kind="UnlockAltSolid"
-                            Width="20"
-                            Height="16"
-                            Padding="-2"
-                            Foreground="DodgerBlue"/>
-                    </Button>
-                </Grid>
-            </Grid>
+                Grid.Column="0"
+                Style="{StaticResource SEDefaultTBlockStyle}"
+                Text="Список эпизодов" />
+            <ListBox
+                Grid.Row="1"
+                Grid.Column="0"
+                Margin="5,2.5"
+                cal:Message.Attach="[Event MouseDoubleClick]=[Action EditEpisode()]; [Event SelectionChanged]=[Action SelectionChanged($source)]"
+                IsEnabled="{Binding IsNotEditing}"
+                ItemsSource="{Binding Episodes, UpdateSourceTrigger=PropertyChanged}"
+                SelectedItem="{Binding SelectedEpisode, UpdateSourceTrigger=PropertyChanged}">
+                <ListBox.ItemTemplate>
+                    <ItemContainerTemplate>
+                        <TextBlock
+                            Style="{StaticResource CCComboBoxTBlockItemStyle}"
+                            Text="{Binding NumberName}" />
+                    </ItemContainerTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <StackPanel
+                Grid.Row="1"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Orientation="Vertical">
+                <Button
+                    Margin="0,2.5"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    cal:Message.Attach="[Event Click]=[Action AddEpisode()]">
+                    <iconPacks:PackIconMaterial Style="{StaticResource EditListAddBtnIconStyle}" />
+                    <Button.Style>
+                        <Style
+                            BasedOn="{StaticResource MahApps.Metro.Styles.MetroButton}"
+                            TargetType="Button">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="ToolTip" Value="Добавить новый эпизод" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="ToolTip" Value="Необходимо разблокировать интерфейс" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button
+                    Margin="0,2.5"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    cal:Message.Attach="[Event Click]=[Action EditEpisode()]">
+                    <iconPacks:PackIconMaterial Style="{StaticResource EditListEditBtnIconStyle}" />
+                    <Button.Style>
+                        <Style
+                            BasedOn="{StaticResource MahApps.Metro.Styles.MetroButton}"
+                            TargetType="Button">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="ToolTip" Value="Редактировать выбранный эпизод" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="ToolTip" Value="Необходимо разблокировать интерфейс" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button
+                    Margin="0,2.5"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    cal:Message.Attach="[Event Click]=[Action RemoveEpisode()]">
+                    <iconPacks:PackIconMaterial Style="{StaticResource EditListRemoveBtnIconStyle}" />
+                    <Button.Style>
+                        <Style
+                            BasedOn="{StaticResource MahApps.Metro.Styles.MetroButton}"
+                            TargetType="Button">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="ToolTip" Value="Удалить выбранный эпизод" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="ToolTip" Value="Необходимо разблокировать интерфейс" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button
+                    Margin="0,2.5"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    cal:Message.Attach="[Event Click]=[Action CancelSelection()]">
+                    <iconPacks:PackIconMaterial Style="{StaticResource EditListCancelBtnIconStyle}" />
+                    <Button.Style>
+                        <Style
+                            BasedOn="{StaticResource MahApps.Metro.Styles.MetroButton}"
+                            TargetType="Button">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="ToolTip" Value="Снять выделение" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="ToolTip" Value="Необходимо разблокировать интерфейс" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button
+                    Margin="0,2.5"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    cal:Message.Attach="[Event Click]=[Action CancelEditing()]"
+                    ToolTipService.ShowOnDisabled="True"
+                    Visibility="{Binding EpisodeEditingVisibility}">
+                    <iconPacks:PackIconFontAwesome Style="{StaticResource EditListUnlockBtnIconStyle}" />
+                    <Button.Style>
+                        <Style
+                            BasedOn="{StaticResource MahApps.Metro.Styles.MetroButton}"
+                            TargetType="Button">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="ToolTip" Value="Разблокировать интерфейс" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="ToolTip" Value="Необходимо сохранить или отменить изменения" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </StackPanel>
         </Grid>
+
 
         <Grid
             Grid.Row="0"
@@ -426,12 +441,10 @@
                     <Button
                         Margin="10,0,0,0"
                         HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center">
-                        <iconPacks:PackIconMaterial
-                            Width="20"
-                            Height="16"
-                            Foreground="Yellow"
-                            Kind="PlaylistEdit" />
+                        VerticalContentAlignment="Center"
+                        cal:Message.Attach="[Event Click]=[Action EditVoiceOvers()]"
+                        ToolTip="Открыть редактор озвучек">
+                        <iconPacks:PackIconMaterial Style="{StaticResource EditListEditBtnIconStyle}" />
                     </Button>
                 </StackPanel>
                 <ScrollViewer Grid.Row="1">
