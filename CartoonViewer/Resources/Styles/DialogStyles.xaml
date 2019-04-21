@@ -41,8 +41,16 @@
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
-    <Style x:Key="EditListDefautlBtnIconStyle"
+    <Style x:Key="EditListMaterialBtnIconStyle"
            TargetType="iconPacks:PackIconMaterial">
+        <Setter Property="Width" Value="20"/>
+        <Setter Property="Height" Value="16"/>
+        <Setter Property="Padding" Value="-2"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <Style x:Key="EditListFontAwesomelBtnIconStyle"
+           TargetType="iconPacks:PackIconFontAwesome">
         <Setter Property="Width" Value="20"/>
         <Setter Property="Height" Value="16"/>
         <Setter Property="Padding" Value="-2"/>
@@ -66,43 +74,61 @@
     </Style>
     <Style x:Key="EditListAddBtnIconStyle" 
            TargetType="iconPacks:PackIconMaterial"
-           BasedOn="{StaticResource EditListDefautlBtnIconStyle}">
+           BasedOn="{StaticResource EditListMaterialBtnIconStyle}">
         <Setter Property="Foreground" Value="LawnGreen"/>
         <Setter Property="Kind" Value="PlaylistPlus"/>
     </Style>
     <Style x:Key="EditListEditBtnIconStyle" TargetType="iconPacks:PackIconMaterial"
-           BasedOn="{StaticResource EditListDefautlBtnIconStyle}">
+           BasedOn="{StaticResource EditListMaterialBtnIconStyle}">
         <Setter Property="Foreground" Value="Yellow"/>
         <Setter Property="Kind" Value="PlaylistEdit"/>
     </Style>
     <Style x:Key="EditListRemoveBtnIconStyle" TargetType="iconPacks:PackIconMaterial"
-           BasedOn="{StaticResource EditListDefautlBtnIconStyle}">
+           BasedOn="{StaticResource EditListMaterialBtnIconStyle}">
         <Setter Property="Foreground" Value="Tomato"/>
         <Setter Property="Kind" Value="PlaylistMinus"/>
     </Style>
     <Style x:Key="EditListCancelBtnIconStyle" TargetType="iconPacks:PackIconMaterial"
-           BasedOn="{StaticResource EditListDefautlBtnIconStyle}">
+           BasedOn="{StaticResource EditListMaterialBtnIconStyle}">
         <Setter Property="Foreground" Value="AntiqueWhite"/>
         <Setter Property="Kind" Value="Cancel"/>
     </Style>
-    <Style x:Key="EditListMoveBtnIconStyle" TargetType="iconPacks:PackIconMaterial"
-           BasedOn="{StaticResource EditListDefautlBtnIconStyle}">
+    <Style x:Key="EditListMoveDownBtnIconStyle" TargetType="iconPacks:PackIconMaterial"
+           BasedOn="{StaticResource EditListMaterialBtnIconStyle}">
         <Setter Property="Foreground" Value="DodgerBlue"/>
         <Setter Property="Kind" Value="ArrowDownBold"/>
     </Style>
-    <Style x:Key="EditListUnlockBtnIconStyle" 
-           TargetType="iconPacks:PackIconFontAwesome" >
-        <Setter Property="Width" Value="20"/>
-        <Setter Property="Height" Value="16"/>
-        <Setter Property="Padding" Value="-2"/>
+    <!--<Style x:Key="EditListMoveLeftBtnIconStyle" TargetType="iconPacks:PackIconMaterial"
+           BasedOn="{StaticResource EditListMaterialBtnIconStyle}">
         <Setter Property="Foreground" Value="DodgerBlue"/>
+        <Setter Property="Kind" Value="ArrowLeftBold"/>
+    </Style>
+    <Style x:Key="EditListMoveRightBtnIconStyle" TargetType="iconPacks:PackIconMaterial"
+           BasedOn="{StaticResource EditListMaterialBtnIconStyle}">
+        <Setter Property="Foreground" Value="DodgerBlue"/>
+        <Setter Property="Kind" Value="ArrowRightBold"/>
+    </Style>-->
+    <Style x:Key="EditListUnlockBtnIconStyle" 
+           BasedOn="{StaticResource EditListFontAwesomelBtnIconStyle}"
+           TargetType="iconPacks:PackIconFontAwesome" >
+        <Setter Property="Foreground" Value="Aqua"/>
         <Setter Property="Kind" Value="UnlockAltSolid"/>
     </Style>
-    <Style x:Key="EditListSelectBtnIconStyle" 
+    <Style x:Key="EditListRigthBtnIconStyle" 
+           BasedOn="{StaticResource EditListFontAwesomelBtnIconStyle}"
            TargetType="iconPacks:PackIconFontAwesome" >
-        <Setter Property="Width" Value="20"/>
-        <Setter Property="Height" Value="16"/>
-        <Setter Property="Padding" Value="-2"/>
+        <Setter Property="Foreground" Value="DodgerBlue"/>
+        <Setter Property="Kind" Value="AngleRightSolid"/>
+    </Style>
+    <Style x:Key="EditListDoubleRigthBtnIconStyle" 
+           BasedOn="{StaticResource EditListFontAwesomelBtnIconStyle}"
+           TargetType="iconPacks:PackIconFontAwesome" >
+        <Setter Property="Foreground" Value="DodgerBlue"/>
+        <Setter Property="Kind" Value="AngleDoubleRightSolid"/>
+    </Style>
+    <Style x:Key="EditListSelectBtnIconStyle" 
+           BasedOn="{StaticResource EditListFontAwesomelBtnIconStyle}"
+           TargetType="iconPacks:PackIconFontAwesome" >
         <Setter Property="Foreground" Value="Aqua"/>
         <Setter Property="Kind" Value="HandPointerRegular"/>
     </Style>

@@ -12,7 +12,7 @@
 		/// Создать список озвучек по умолчанию
 		/// </summary>
 		/// <returns></returns>
-		public static List<CartoonVoiceOver> CreateSouthParkVoiceOverList(int CartoonId)
+		public static List<CartoonVoiceOver> CreateSouthParkVoiceOverList()
 		{
 			return new List<CartoonVoiceOver>
 			{
@@ -79,23 +79,8 @@
 			};
 		}
 
-		//public static List<CartoonUrl> CreateCartoonUrlList() => new List<CartoonUrl>
-		//{
-		//	CreateCartoonUrl("sp"),
-		//	CreateCartoonUrl("grif"),
-		//	CreateCartoonUrl("simp"),
-		//	CreateCartoonUrl("dad")
-		//};
-
-		//public static CartoonUrl CreateCartoonUrl(string param) => new CartoonUrl
-		//{
-		//	MainUrl = $"http://{param}.freehat.cc/cartoonEpisode/",
-		//	WebSiteUrl = FreehatWebSite
-		//};
-
 		public static ElementValue CreateElementValue() => new ElementValue
 		{
-			//CartoonWebSiteId = id,
 			ElementName = "Нижняя кнопка старта",
 			CssSelector = "pjsdiv:nth-child(8) > pjsdiv > pjsdiv"
 		};

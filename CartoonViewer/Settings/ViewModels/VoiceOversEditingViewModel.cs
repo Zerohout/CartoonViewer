@@ -1,6 +1,10 @@
 ﻿namespace CartoonViewer.Settings.ViewModels
 {
+	using System.Collections.Generic;
+	using System.Linq;
 	using Caliburn.Micro;
+	using Database;
+	using Models.CartoonModels;
 
 	public partial class VoiceOversEditingViewModel : Screen
 	{
@@ -26,6 +30,15 @@
 			IdList = idList;
 			LoadData();
 		}
+
+		protected override void OnInitialize()
+		{
+			LoadGlobalVoiceOverList();
+
+			base.OnInitialize();
+		}
+
+		
 
 		public VoiceOversEditingViewModel()
 		{

@@ -1,6 +1,5 @@
 ﻿namespace CartoonViewer.Settings.ViewModels
 {
-	using System.Linq;
 	using System.Windows;
 	using Caliburn.Micro;
 	using Models.CartoonModels;
@@ -9,34 +8,33 @@
 	{
 		#region Private fields
 
-		private BindableCollection<Cartoon> _cartoons = new BindableCollection<Cartoon>();
+		private BindableCollection<CartoonVoiceOver> _globalVoiceOvers = new BindableCollection<CartoonVoiceOver>();
 		private BindableCollection<CartoonVoiceOver> _cartoonVoiceOvers = new BindableCollection<CartoonVoiceOver>();
+		private BindableCollection<CartoonVoiceOver> _episodeVoiceOvers = new BindableCollection<CartoonVoiceOver>();
+		private BindableCollection<Cartoon> _cartoons = new BindableCollection<Cartoon>();
 		private BindableCollection<CartoonSeason> _seasons = new BindableCollection<CartoonSeason>();
 		private BindableCollection<CartoonEpisode> _episodes = new BindableCollection<CartoonEpisode>();
-		private BindableCollection<CartoonVoiceOver> _episodeVoiceOvers = new BindableCollection<CartoonVoiceOver>();
-		private Cartoon _selectedCartoon;
+
+		private CartoonVoiceOver _selectedGlobalVoiceOver;
 		private CartoonVoiceOver _selectedCartoonVoiceOver;
+		private CartoonVoiceOver _selectedEpisodeVoiceOver;
+		private CartoonVoiceOver _editedVoiceOver;
+		private Cartoon _selectedCartoon;
 		private CartoonSeason _selectedSeason;
 		private CartoonEpisode _selectedEpisode;
-		private CartoonVoiceOver _selectedEpisodeVoiceOver;
+
 		private (int WebSiteId, int CartoonId, int SeasonId, int EpisodeId) IdList;
 		private int SelectedVoiceOverId;
 		private bool _isNotEditing = true;
-		//private Visibility _editingVisibility;
-
-		private CartoonVoiceOver _editedCartoonVoiceOver;
-
-		
-
-
-
-
-
-		//private readonly (int cartoonId, int seasonId, int episodeId) UsagesIds;
 
 		#endregion
 
-		#region Properties
+		#region Flags
+
+		/// <summary>
+		/// Флаг необходимый для корректной работы конструктора XAML
+		/// </summary>
+		public bool IsDesignTime { get; set; }
 
 		/// <summary>
 		/// Флаг состояния редактирования
@@ -49,15 +47,60 @@
 				_isNotEditing = value;
 				NotifyOfPropertyChange(() => IsNotEditing);
 				NotifyOfPropertyChange(() => EditingVisibility);
+				NotifySharedVoiceOversButtons();
+				NotifyGlobalVoiceOversButtons();
 				NotifyCartoonVoiceOversButtons();
 				NotifyEpisodeVoiceOversButtons();
 				NotifyCancelButtons();
 			}
 		}
+
 		/// <summary>
-		/// Флаг необходимый для корректной работы конструктора XAML
+		/// Флаг наличия изменения
 		/// </summary>
-		public bool IsDesignTime { get; set; }
+		public bool HasChanges
+		{
+			get
+			{
+				if(EditedVoiceOver == null || TempEditedVoiceOver == null)
+				{
+					return false;
+				}
+
+				if(string.IsNullOrEmpty(EditedVoiceOver.Name) ||
+				   string.IsNullOrEmpty(EditedVoiceOver.UrlParameter) ||
+				   string.IsNullOrEmpty(EditedVoiceOver.Description))
+				{
+					return false;
+				}
+
+				if(EditedVoiceOver.Name == TempEditedVoiceOver.Name &&
+				   EditedVoiceOver.UrlParameter == TempEditedVoiceOver.UrlParameter &&
+				   EditedVoiceOver.Description == TempEditedVoiceOver.Description)
+				{
+					return false;
+				}
+
+				return true;
+			}
+		}
+
+		#endregion
+
+		#region Collections
+
+		/// <summary>
+		/// Глобальный список (всех) озвучек
+		/// </summary>
+		public BindableCollection<CartoonVoiceOver> GlobalVoiceOvers
+		{
+			get => _globalVoiceOvers;
+			set
+			{
+				_globalVoiceOvers = value;
+				NotifyOfPropertyChange(() => GlobalVoiceOvers);
+			}
+		}
 
 		/// <summary>
 		/// Список мультфильмов
@@ -70,14 +113,6 @@
 				_cartoons = value;
 				NotifyOfPropertyChange(() => Cartoons);
 			}
-		}
-		/// <summary>
-		/// Выбранный мультфильм
-		/// </summary>
-		public Cartoon SelectedCartoon
-		{
-			get => _selectedCartoon;
-			set => ChangeSelectedCartoon(value);
 		}
 
 		/// <summary>
@@ -92,48 +127,7 @@
 				NotifyOfPropertyChange(() => CartoonVoiceOvers);
 			}
 		}
-		/// <summary>
-		/// Выбранная озвучка мульфтильма
-		/// </summary>
-		public CartoonVoiceOver SelectedCartoonVoiceOver
-		{
-			get => _selectedCartoonVoiceOver;
-			set
-			{
-				_selectedCartoonVoiceOver = value;
-				SelectedVoiceOverId = value?.CartoonVoiceOverId ?? 0;
-				NotifyOfPropertyChange(() => SelectedCartoonVoiceOver);
-				NotifyCartoonVoiceOversButtons();
 
-				if(SelectedEpisode == null)
-					return;
-
-
-				_selectedEpisodeVoiceOver = EpisodeVoiceOvers
-					.FirstOrDefault(evo => evo.CartoonVoiceOverId == SelectedVoiceOverId);
-
-
-				NotifyOfPropertyChange(() => SelectedEpisodeVoiceOver);
-				NotifyEpisodeVoiceOversButtons();
-
-			}
-		}
-		/// <summary>
-		/// Редактируемый экземпляр выбранной озвучки м/ф
-		/// </summary>
-		public CartoonVoiceOver EditedCartoonVoiceOver
-		{
-			get => _editedCartoonVoiceOver;
-			set
-			{
-				_editedCartoonVoiceOver = value;
-				NotifyOfPropertyChange(() => EditedCartoonVoiceOver);
-			}
-		}
-		/// <summary>
-		/// Временная выбранная озвучка мультфильма для определения наличия изменений
-		/// </summary>
-		public CartoonVoiceOver TempEditedCartoonVoiceOver { get; set; }
 		/// <summary>
 		/// Список сезонов мультфильма
 		/// </summary>
@@ -146,14 +140,7 @@
 				NotifyOfPropertyChange(() => Seasons);
 			}
 		}
-		/// <summary>
-		/// Выбранный сезон мультфильма
-		/// </summary>
-		public CartoonSeason SelectedSeason
-		{
-			get => _selectedSeason;
-			set => ChangeSelectedSeason(value);
-		}
+
 		/// <summary>
 		/// Список эпизодов выбранного сезона
 		/// </summary>
@@ -166,14 +153,7 @@
 				NotifyOfPropertyChange(() => Episodes);
 			}
 		}
-		/// <summary>
-		/// Выбранный эпизод
-		/// </summary>
-		public CartoonEpisode SelectedEpisode
-		{
-			get => _selectedEpisode;
-			set => ChangeSelectedEpisode(value);
-		}
+
 		/// <summary>
 		/// Список озвучек выбранного эпизода
 		/// </summary>
@@ -186,6 +166,68 @@
 				NotifyOfPropertyChange(() => EpisodeVoiceOvers);
 			}
 		}
+
+		#endregion
+
+		#region Top selections
+
+		/// <summary>
+		/// Выбранный мультфильм
+		/// </summary>
+		public Cartoon SelectedCartoon
+		{
+			get => _selectedCartoon;
+			set => ChangeSelectedCartoon(value);
+		}
+
+		/// <summary>
+		/// Выбранный сезон мультфильма
+		/// </summary>
+		public CartoonSeason SelectedSeason
+		{
+			get => _selectedSeason;
+			set => ChangeSelectedSeason(value);
+		}
+
+		/// <summary>
+		/// Выбранный эпизод
+		/// </summary>
+		public CartoonEpisode SelectedEpisode
+		{
+			get => _selectedEpisode;
+			set => ChangeSelectedEpisode(value);
+		}
+
+		#endregion
+
+		#region Selected voice overs
+
+		/// <summary>
+		/// Выбранная глобальная озвучка
+		/// </summary>
+		public CartoonVoiceOver SelectedGlobalVoiceOver
+		{
+			get => _selectedGlobalVoiceOver;
+			set
+			{
+				SelectedVoiceOverId = value?.CartoonVoiceOverId ?? 0;
+				SetVoiceOverValue();
+			}
+		}
+
+		/// <summary>
+		/// Выбранная озвучка м/ф
+		/// </summary>
+		public CartoonVoiceOver SelectedCartoonVoiceOver
+		{
+			get => _selectedCartoonVoiceOver;
+			set
+			{
+				SelectedVoiceOverId = value?.CartoonVoiceOverId ?? 0;
+				SetVoiceOverValue();
+			}
+		}
+
 		/// <summary>
 		/// Выбранная озвучка эпизода
 		/// </summary>
@@ -195,76 +237,68 @@
 			set
 			{
 				SelectedVoiceOverId = value?.CartoonVoiceOverId ?? 0;
-				_selectedEpisodeVoiceOver = value;
-
-				SelectedCartoonVoiceOver = CartoonVoiceOvers
-					.FirstOrDefault(cvo => cvo.CartoonVoiceOverId == SelectedVoiceOverId);
-
-				//NotifyEpisodeVoiceOversButtons();
-
+				SetVoiceOverValue();
 			}
 		}
-		
+
+		#endregion
+
+		#region Editable properties
+
 		/// <summary>
-		/// Свойство Visibility списка сезонов и озвучек выбравнного мультфильма
+		/// Редактируемый экземпляр выбранной озвучки
 		/// </summary>
-		public Visibility SeasonsAndCartoonVoiceOversVisibility =>
+		public CartoonVoiceOver EditedVoiceOver
+		{
+			get => _editedVoiceOver;
+			set
+			{
+				_editedVoiceOver = value;
+				NotifyOfPropertyChange(() => EditedVoiceOver);
+			}
+		}
+
+		/// <summary>
+		/// Временный экземпляр редактируемой озвучки
+		/// </summary>
+		public CartoonVoiceOver TempEditedVoiceOver { get; set; }
+
+		#endregion
+
+		#region Visibility
+
+		/// <summary>
+		/// Свойство Visibility элементов зависимых от выбранного м/ф
+		/// </summary>
+		public Visibility SelectedCartoonVisibility =>
 			SelectedCartoon == null
 				? Visibility.Hidden
 				: Visibility.Visible;
 
 		/// <summary>
-		/// Свойство Visibility списка эпизодов
+		/// Свойство Visibility элементов зависимых от выбранного сезона
 		/// </summary>
-		public Visibility EpisodesVisibility =>
+		public Visibility SelectedSeasonVisibility =>
 			SelectedSeason == null
 				? Visibility.Hidden
 				: Visibility.Visible;
 
 		/// <summary>
-		/// Свойство Visibility списка озвучек выбранного эпизода
+		/// Свойство Visibility элементов зависимых от выбранного эпизода
 		/// </summary>
-		public Visibility EpisodeVoiceOversVisibility =>
+		public Visibility SelectedEpisodeVisibility =>
 			SelectedEpisode == null
 				? Visibility.Hidden
 				: Visibility.Visible;
 		/// <summary>
-		/// Свойство Visibility полей для редактирования выбранной озвучки м/ф
+		/// Свойство Visibility полей для редактирования выбранной озвучки
 		/// </summary>
 		public Visibility EditingVisibility =>
 			IsNotEditing
 				? Visibility.Hidden
 				: Visibility.Visible;
-		/// <summary>
-		/// Флаг наличия изменения
-		/// </summary>
-		public bool HasChanges
-		{
-			get
-			{
-				if(EditedCartoonVoiceOver == null || TempEditedCartoonVoiceOver == null)
-				{
-					return false;
-				}
-
-				if(string.IsNullOrEmpty(EditedCartoonVoiceOver.Name) ||
-				   string.IsNullOrEmpty(EditedCartoonVoiceOver.UrlParameter) ||
-				   string.IsNullOrEmpty(EditedCartoonVoiceOver.Description))
-				{
-					return false;
-				}
-
-				if(EditedCartoonVoiceOver.Name == TempEditedCartoonVoiceOver.Name &&
-				   EditedCartoonVoiceOver.UrlParameter == TempEditedCartoonVoiceOver.UrlParameter &&
-				   EditedCartoonVoiceOver.Description == TempEditedCartoonVoiceOver.Description)
-				{
-					return false;
-				}
-
-				return true;
-			}
-		}
 
 		#endregion
+
 	}
 }

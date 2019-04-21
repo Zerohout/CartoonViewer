@@ -3,7 +3,8 @@
 	using System;
 	using System.Data.Entity;
 	using System.Linq;
-	using System.Runtime.InteropServices.ComTypes;
+	using System.Threading.Tasks;
+	using System.Windows.Controls;
 	using Caliburn.Micro;
 	using Database;
 	using Models.CartoonModels;
@@ -19,102 +20,159 @@
 		{
 			NotifyChanges();
 		}
+		
+		#region Selections actions
+
 		/// <summary>
-		/// Сохранить изменения
-		/// </summary>
-		public async void SaveChanges()
-		{
-			if(SelectedVoiceOverId == 0)
-			{
-				throw new Exception("Id выбраной озвучки м/ф равен 0");
-			}
-
-			using(var ctx = new CVDbContext())
-			{
-				var voiceOver = ctx.VoiceOvers.Find(SelectedVoiceOverId);
-
-				voiceOver.Name = EditedCartoonVoiceOver.Name;
-				voiceOver.UrlParameter = EditedCartoonVoiceOver.UrlParameter;
-				voiceOver.Description = EditedCartoonVoiceOver.Description;
-
-				ctx.Entry(voiceOver).State = EntityState.Modified;
-				await ctx.SaveChangesAsync();
-			}
-
-			TempEditedCartoonVoiceOver = CloneVoiceOver(EditedCartoonVoiceOver);
-
-			NotifyChanges();
-		}
-
-		public bool CanSaveChanges => HasChanges;
-		/// <summary>
-		/// Отменить изменения
-		/// </summary>
-		public void CancelChanges()
-		{
-			EditedCartoonVoiceOver = CloneVoiceOver(TempEditedCartoonVoiceOver);
-			NotifyChanges();
-		}
-
-		public bool CanCancelChanges => HasChanges;
-		/// <summary>
-		/// Выйти из редактора
-		/// </summary>
-		public void Exit()
-		{
-			TryClose();
-		}
-		/// <summary>
-		/// Снять выделение с м/ф
+		/// Снять выделение с текущего м/ф
 		/// </summary>
 		public void CancelCartoonSelection() => SelectedCartoon = null;
 
 		public bool CanCancelCartoonSelection => SelectedCartoon != null && IsNotEditing;
+
 		/// <summary>
-		/// Добавить новую озвучку в выбранный м/ф
+		/// Снять выделение с текущего сезона
 		/// </summary>
-		public void AddCartoonVoiceOver()
+		public void CancelSeasonSelection() => SelectedSeason = null;
+
+		public bool CanCancelSeasonSelection => SelectedSeason != null && IsNotEditing;
+
+		/// <summary>
+		/// Снять выделение с текущего эпизода
+		/// </summary>
+		public void CancelEpisodeSelection() => SelectedEpisode = null;
+
+		public bool CanCancelEpisodeSelection => SelectedEpisode != null && IsNotEditing;
+
+		/// <summary>
+		/// Прокрутка списка к выбранной озвучке
+		/// </summary>
+		/// <param name="lb"></param>
+		public void VoiceOverSelectionChanged(ListBox lb)
 		{
-			CartoonVoiceOver defaultVoiceOver;
-			using(var ctx = new CVDbContext())
+			lb.ScrollIntoView(lb.SelectedItem);
+		}
+		
+		#endregion
+
+		#region Shared actions
+
+		/// <summary>
+		/// Разблокировать интерфейс и скрыть поля редактирования выбранной озвучки
+		/// </summary>
+		public void UnlockEditingInterface()
+		{
+			EditedVoiceOver = null;
+			TempEditedVoiceOver = null;
+			IsNotEditing = true;
+		}
+
+		public bool CanUnlockEditingInterface
+		{
+			get
 			{
-				var count = ctx.VoiceOvers.Max(vo => vo.CartoonVoiceOverId) + 1;
-
-				defaultVoiceOver = new CartoonVoiceOver
+				if (EditedVoiceOver == null)
 				{
-					Name = $"Озвучка_{count}",
-					UrlParameter = $"param_{count}",
-					Description = $"Описание озвучки_{count}"
-				};
+					return false;
+				}
 
-				ctx.Cartoons.Find(IdList.CartoonId).CartoonVoiceOvers.Add(defaultVoiceOver);
-				ctx.SaveChanges();
+				if(HasChanges)
+				{
+					return false;
+				}
 
-				defaultVoiceOver.CartoonVoiceOverId = ctx.VoiceOvers.ToList().Last().CartoonVoiceOverId;
+				if(string.IsNullOrEmpty(EditedVoiceOver.Name) ||
+				   string.IsNullOrEmpty(EditedVoiceOver.UrlParameter) ||
+				   string.IsNullOrEmpty(EditedVoiceOver.Description))
+				{
+					return false;
+				}
+
+				return true;
+
 			}
+		}
 
-			CartoonVoiceOvers.Add(defaultVoiceOver);
-			NotifyOfPropertyChange(() => CartoonVoiceOvers);
-			SelectedCartoonVoiceOver = CartoonVoiceOvers.Count > 0
-				? CartoonVoiceOvers.Last()
+		#endregion
+
+		#region Global Voice overs actions
+
+		/// <summary>
+		/// Добавить новую глобальную озвучку
+		/// </summary>
+		public async void AddGlobalVoiceOver()
+		{
+			var newVoiceOver = await CreateNewVoiceOver();
+
+			GlobalVoiceOvers.Add(newVoiceOver);
+			NotifyOfPropertyChange(() => GlobalVoiceOvers);
+			SelectedGlobalVoiceOver = GlobalVoiceOvers.Count > 0
+				? GlobalVoiceOvers.Last()
 				: null;
 		}
-		public bool CanAddCartoonVoiceOver => IsNotEditing;
+		public bool CanAddGlobalVoiceOver => IsNotEditing;
+
 		/// <summary>
-		/// Начать редактирование выбранной озвучки м/ф
+		/// Редактировать выбранную глобальную озвучку
 		/// </summary>
-		public void EditCartoonVoiceOver()
+		public void EditSelectedGlobalVoiceOver()
 		{
-			EditedCartoonVoiceOver = CloneVoiceOver(SelectedCartoonVoiceOver);
-			TempEditedCartoonVoiceOver = CloneVoiceOver(SelectedCartoonVoiceOver);
+			EditedVoiceOver = CloneVoiceOver(SelectedGlobalVoiceOver);
+			TempEditedVoiceOver = CloneVoiceOver(SelectedGlobalVoiceOver);
 			IsNotEditing = false;
 		}
+		public bool CanEditSelectedGlobalVoiceOver => SelectedGlobalVoiceOver != null && IsNotEditing;
 
-		public bool CanEditCartoonVoiceOver => SelectedCartoonVoiceOver != null && IsNotEditing;
 		/// <summary>
 		/// Удалить выбранную озвучку из всех списков
 		/// </summary>
-		public async void RemoveCartoonVoiceOver()
+		public void RemoveGlobalVoiceOverAction()
+		{
+			if(SelectedVoiceOverId == 0)
+			{
+				throw new Exception("Id выбраной озвучки м/ф равен 0");
+			}
+
+			RemoveSelectedGlobalVoiceOverFromDb();
+
+			//RemoveVoiceOverFromLists();
+			var tempId = SelectedVoiceOverId;
+			if(SelectedEpisode != null)
+			{
+				if(EpisodeVoiceOvers.Any(evo => evo.CartoonVoiceOverId == SelectedVoiceOverId))
+				{
+					RemoveVoiceOverFromEpisodeList();
+				}
+			}
+
+			SelectedVoiceOverId = tempId;
+
+			if(SelectedCartoon != null)
+			{
+				if(CartoonVoiceOvers.Any(cvo => cvo.CartoonVoiceOverId == SelectedVoiceOverId))
+				{
+					RemoveVoiceOverFromCartoonList();
+				}
+			}
+
+			SelectedVoiceOverId = tempId;
+
+			RemoveVoiceOverFromGlobalList();
+		}
+
+		public bool CanRemoveGlobalVoiceOverAction => SelectedGlobalVoiceOver != null && IsNotEditing;
+
+		/// <summary>
+		/// Снять выделение с выбранной глобальной озвучки
+		/// </summary>
+		public void CancelGlobalVoiceOverSelection() => SelectedGlobalVoiceOver = null;
+
+		public bool CanCancelGlobalVoiceOverSelection => SelectedGlobalVoiceOver != null && IsNotEditing;
+
+		/// <summary>
+		/// Копировать выбранную глобальную озвучку в текущий м/ф
+		/// </summary>
+		public void MoveToCartoonVoiceOvers()
 		{
 			if(SelectedVoiceOverId == 0)
 			{
@@ -123,27 +181,141 @@
 
 			using(var ctx = new CVDbContext())
 			{
-				var voiceOver = ctx.VoiceOvers.Find(SelectedVoiceOverId);
+				var cartoon = ctx.Cartoons
+								 .Include(c => c.CartoonVoiceOvers)
+								 .Single(c => c.CartoonId == IdList.CartoonId);
 
-				ctx.VoiceOvers.Remove(voiceOver);
-				await ctx.SaveChangesAsync();
+				ctx.VoiceOvers
+				   .Include(vo => vo.Cartoons)
+				   .Single(vo => vo.CartoonVoiceOverId == SelectedVoiceOverId)
+				   .Cartoons.Add(cartoon);
+				ctx.SaveChanges();
+			}
 
-				if(SelectedEpisode != null)
+			var voiceOver = GlobalVoiceOvers.First(vo => vo.CartoonVoiceOverId == SelectedVoiceOverId);
+
+			CartoonVoiceOvers.Add(voiceOver);
+			NotifyOfPropertyChange(() => EpisodeVoiceOvers);
+
+			SelectedCartoonVoiceOver = voiceOver;
+			NotifyOfPropertyChange(() => SelectedCartoonVoiceOver);
+		}
+
+		public bool CanMoveToCartoonVoiceOvers
+		{
+			get
+			{
+				if(SelectedGlobalVoiceOver == null ||
+				   SelectedCartoon == null ||
+				   IsNotEditing is false)
 				{
-					EpisodeVoiceOvers.Remove(voiceOver);
-					NotifyOfPropertyChange(() => EpisodeVoiceOvers);
+					return false;
 				}
-				CartoonVoiceOvers.Remove(voiceOver);
-				NotifyOfPropertyChange(() => CartoonVoiceOvers);
-				SelectedCartoonVoiceOver = CartoonVoiceOvers.Count > 0
-					? CartoonVoiceOvers.Last()
-					: null;
+
+				if(CartoonVoiceOvers.Any(evo => evo.CartoonVoiceOverId == SelectedVoiceOverId))
+				{
+					return false;
+				}
+
+				return true;
 			}
 		}
 
-		public bool CanRemoveCartoonVoiceOver => SelectedCartoonVoiceOver != null && IsNotEditing;
 		/// <summary>
-		/// Копировать выбранную озвучку м/ф в выбранный эпизод
+		/// Копировать выбранную глобальную озвучку сразу в текущий эпизод
+		/// </summary>
+		public void MoveFromGlobalToEpisodeVoiceOvers()
+		{
+			MoveToCartoonVoiceOvers();
+			MoveToEpisodeVoiceOvers();
+		}
+
+		public bool CanMoveFromGlobalToEpisodeVoiceOvers
+		{
+			get
+			{
+				if(SelectedGlobalVoiceOver == null ||
+				   SelectedCartoon == null ||
+				   SelectedEpisode == null ||
+				   IsNotEditing is false)
+				{
+					return false;
+				}
+
+				if(EpisodeVoiceOvers.Any(evo => evo.CartoonVoiceOverId == SelectedVoiceOverId))
+				{
+					return false;
+				}
+
+				return true;
+			}
+		}
+
+		#endregion
+
+		#region Cartoon Voice overs actions
+
+		/// <summary>
+		/// Добавить новую озвучку в текущий м/ф
+		/// </summary>
+		public void AddCartoonVoiceOver()
+		{
+			AddGlobalVoiceOver();
+			MoveToCartoonVoiceOvers();
+
+		}
+		public bool CanAddCartoonVoiceOver => IsNotEditing;
+
+		/// <summary>
+		/// Редактировать выбранную озвучку текущего м/ф
+		/// </summary>
+		public void EditSelectedCartoonVoiceOver()
+		{
+			EditSelectedGlobalVoiceOver();
+		}
+		public bool CanEditSelectedCartoonVoiceOver => SelectedCartoonVoiceOver != null && IsNotEditing;
+
+		/// <summary>
+		/// Удалить выбранную озвучку из текущего м/ф
+		/// </summary>
+		public void RemoveSelectedCartoonVoiceOver()
+		{
+			if(SelectedVoiceOverId == 0)
+			{
+				throw new Exception("Id выбраной озвучки м/ф равен 0");
+			}
+
+			RemoveSelectedEpisodeVoiceOverFromDb();
+			RemoveSelectedCartoonVoiceOverFromDb();
+			var tempId = SelectedVoiceOverId;
+
+			if(SelectedEpisode != null)
+			{
+				if(EpisodeVoiceOvers.Any(evo => evo.CartoonVoiceOverId == SelectedVoiceOverId))
+				{
+					RemoveVoiceOverFromEpisodeList();
+				}
+			}
+
+			SelectedVoiceOverId = tempId;
+			RemoveVoiceOverFromCartoonList();
+
+			SelectedGlobalVoiceOver = GlobalVoiceOvers
+				.First(gvo => gvo.CartoonVoiceOverId == CartoonVoiceOvers
+														.Last().CartoonVoiceOverId);
+		}
+
+		public bool CanRemoveSelectedCartoonVoiceOver => SelectedCartoonVoiceOver != null && IsNotEditing;
+
+		/// <summary>
+		/// Снять выделение с выбранной озвучки текущего м/ф
+		/// </summary>
+		public void CancelCartoonVoiceOverSelection() => SelectedGlobalVoiceOver = null;
+
+		public bool CanCancelCartoonVoiceOverSelection => SelectedCartoonVoiceOver != null && IsNotEditing;
+
+		/// <summary>
+		/// Копировать выбранную озвучку м/ф в текущий эпизод
 		/// </summary>
 		public void MoveToEpisodeVoiceOvers()
 		{
@@ -159,18 +331,17 @@
 								 .Single(ce => ce.CartoonEpisodeId == IdList.EpisodeId);
 
 				ctx.VoiceOvers
-									.Include(vo => vo.CartoonEpisodes)
-									.Single(vo => vo.CartoonVoiceOverId == SelectedVoiceOverId)
-									.CartoonEpisodes.Add(episode);
+				   .Include(vo => vo.CartoonEpisodes)
+				   .Single(vo => vo.CartoonVoiceOverId == SelectedVoiceOverId)
+				   .CartoonEpisodes.Add(episode);
 				ctx.SaveChanges();
 			}
 
-			var voiceOver = CartoonVoiceOvers.First(vo => vo.CartoonVoiceOverId == SelectedVoiceOverId);
+			var voiceOver = GlobalVoiceOvers.First(vo => vo.CartoonVoiceOverId == SelectedVoiceOverId);
 
 			EpisodeVoiceOvers.Add(voiceOver);
 			NotifyOfPropertyChange(() => EpisodeVoiceOvers);
-			_selectedEpisodeVoiceOver = voiceOver;
-			NotifyOfPropertyChange(() => SelectedEpisodeVoiceOver);
+			SelectedEpisodeVoiceOver = voiceOver;
 		}
 
 		public bool CanMoveToEpisodeVoiceOvers
@@ -192,71 +363,116 @@
 				return true;
 			}
 		}
-		/// <summary>
-		/// Снять выделение с выбранной озвучки м/ф
-		/// </summary>
-		public void CancelCartoonVoiceOverSelection() => SelectedCartoonVoiceOver = null;
 
-		public bool CanCancelCartoonVoiceOverSelection => SelectedCartoonVoiceOver != null && IsNotEditing;
+		#endregion
+
+		#region Episode Voice overs actions
+
 		/// <summary>
-		/// Разблокировать интерфейс и скрыть поля редактирования озвучки м/ф
+		/// Добавить озвучку в текущий эпизод
 		/// </summary>
-		public void UnlockEditingInterface()
+		public void AddEpisodeVoiceOverAction()
 		{
-			EditedCartoonVoiceOver = null;
-			TempEditedCartoonVoiceOver = null;
-			IsNotEditing = true;
+			AddGlobalVoiceOver();
+			MoveFromGlobalToEpisodeVoiceOvers();
 		}
 
-		public bool CanUnlockEditingInterface => !HasChanges;
-		/// <summary>
-		/// Снять выделение с выбранного сезона
-		/// </summary>
-		public void CancelSeasonSelection() => SelectedSeason = null;
+		public bool CanAddEpisodeVoiceOverAction => IsNotEditing;
 
-		public bool CanCancelSeasonSelection => SelectedSeason != null && IsNotEditing;
 		/// <summary>
-		/// Снять выделение с выбранного эпизода
+		/// Редактировать выбранную озвучку текущего эпизода
 		/// </summary>
-		public void CancelEpisodeSelection() => SelectedEpisode = null;
-
-		public bool CanCancelEpisodeSelection => SelectedEpisode != null && IsNotEditing;
-		/// <summary>
-		/// Удалить озвучку из списка выбранного эпизода
-		/// </summary>
-		public void RemoveFromEpisodeVoiceOvers()
+		public void EditSelectedEpisodeVoiceOver()
 		{
+			EditSelectedGlobalVoiceOver();
+		}
+		public bool CanEditSelectedEpisodeVoiceOver => SelectedEpisodeVoiceOver != null && IsNotEditing;
 
+		/// <summary>
+		/// Удалить выбранную озвучку из текущего эпизода
+		/// </summary>
+		public void RemoveSelectedEpisodeVoiceOver()
+		{
+			RemoveSelectedEpisodeVoiceOverFromDb();
+			RemoveVoiceOverFromEpisodeList();
 
-			using(var ctx = new CVDbContext())
-			{
-				var episode = ctx.CartoonEpisodes
-				                 .Include(ce => ce.EpisodeVoiceOvers)
-				                 .Single(ce => ce.CartoonEpisodeId == IdList.EpisodeId);
-
-				ctx.VoiceOvers
-				   .Include(vo => vo.CartoonEpisodes)
-				   .Single(vo => vo.CartoonVoiceOverId == SelectedVoiceOverId)
-				   .CartoonEpisodes.Remove(episode);
-				ctx.SaveChanges();
-			}
-			var voiceOver = EpisodeVoiceOvers.First(evo => evo.CartoonVoiceOverId == SelectedVoiceOverId);
-			EpisodeVoiceOvers.Remove(voiceOver);
-			SelectedCartoonVoiceOver = CartoonVoiceOvers
-				.First(cvo => cvo.CartoonVoiceOverId == EpisodeVoiceOvers
-				                                        .Last().CartoonVoiceOverId);
+			SelectedGlobalVoiceOver = GlobalVoiceOvers
+				.First(gvo => gvo.CartoonVoiceOverId == EpisodeVoiceOvers
+														.Last().CartoonVoiceOverId);
 		}
 
-		public bool CanRemoveFromEpisodeVoiceOvers => SelectedEpisodeVoiceOver != null && IsNotEditing;
+		public bool CanRemoveSelectedEpisodeVoiceOver => SelectedEpisodeVoiceOver != null && IsNotEditing;
+
 		/// <summary>
-		/// Снять выделение с выбранной озвучки эпизода
+		/// Снять выделение с выбранной озвучки текущего эпизода
 		/// </summary>
-		public void CancelEpisodeVoiceOverSelection() => SelectedEpisodeVoiceOver = null;
+		public void CancelEpisodeVoiceOverSelection() => SelectedGlobalVoiceOver = null;
 
 		public bool CanCancelEpisodeVoiceOverSelection => SelectedEpisodeVoiceOver != null && IsNotEditing;
 
+		#endregion
 
+		#region Changes buttons
 
+		/// <summary>
+		/// Сохранить изменения
+		/// </summary>
+		public async void SaveChanges()
+		{
+			if(SelectedVoiceOverId == 0)
+			{
+				throw new Exception("Id выбраной озвучки м/ф равен 0");
+			}
+
+			using(var ctx = new CVDbContext())
+			{
+				var voiceOver = ctx.VoiceOvers.Find(SelectedVoiceOverId);
+
+				CopyChanges(ref voiceOver, EditedVoiceOver);
+
+				ctx.Entry(voiceOver).State = EntityState.Modified;
+				await ctx.SaveChangesAsync();
+			}
+
+			TempEditedVoiceOver = CloneVoiceOver(EditedVoiceOver);
+			
+			NotifyChanges();
+			IsNotEditing = true;
+			var tempId = SelectedVoiceOverId;
+
+			var tempValues = IdList;
+
+			CancelCartoonSelection();
+			IdList = tempValues;
+			LoadGlobalVoiceOverList();
+			LoadData();
+			SelectedGlobalVoiceOver = GlobalVoiceOvers
+				.First(gvo => gvo.CartoonVoiceOverId == tempId);
+		}
+
+		public bool CanSaveChanges => HasChanges;
+
+		/// <summary>
+		/// Отменить изменения
+		/// </summary>
+		public void CancelChanges()
+		{
+			EditedVoiceOver = CloneVoiceOver(TempEditedVoiceOver);
+			NotifyChanges();
+		}
+
+		public bool CanCancelChanges => HasChanges;
+
+		#endregion
+		
+		/// <summary>
+		/// Выйти из редактора
+		/// </summary>
+		public void Exit()
+		{
+			TryClose();
+		}
+		
 		#endregion
 	}
 }
