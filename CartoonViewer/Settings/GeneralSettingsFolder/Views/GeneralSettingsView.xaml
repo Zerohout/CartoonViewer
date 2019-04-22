@@ -1,0 +1,584 @@
+﻿<UserControl
+    x:Class="CartoonViewer.Settings.GeneralSettingsFolder.Views.GeneralSettingsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cal="http://www.caliburnproject.org"
+    xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:local="clr-namespace:CartoonViewer.Settings.GeneralSettingsFolder.Views"
+    xmlns:mah="clr-namespace:MahApps;assembly=MahApps.Metro"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    cal:Bind.AtDesignTime="True"
+    d:DataContext="{d:DesignData Source=../DesignData/GeneralSettingsViewDesignData.xaml}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    Focusable="True"
+    mc:Ignorable="d">
+    <ScrollViewer
+        Background="{StaticResource GrayBrush10}"
+        CanContentScroll="True"
+        VerticalScrollBarVisibility="Visible">
+        <Grid Background="{StaticResource GrayBrush10}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid
+                Grid.Row="0"
+                Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="5,10,5,7.5"
+                    HorizontalAlignment="Right"
+                    FontSize="18"
+                    Foreground="DodgerBlue"
+                    Style="{StaticResource SEDefaultTBlockStyle}"
+                    Text="Количество начальных просматриваемых эпизодов: " />
+                <TextBox
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    MinWidth="75"
+                    Margin="5,10,5,7.5"
+                    HorizontalAlignment="Left"
+                    HorizontalContentAlignment="Center"
+                    cal:Message.Attach="[Event KeyDown]=[Action NumericValidation($eventArgs)]"
+                    Foreground="Aqua"
+                    Style="{StaticResource SETBoxDefaultStyle}"
+                    Text="{Binding GeneralValue.DefaultStartEpisodesCount, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Margin="15,10,5,7.5"
+                    HorizontalAlignment="Left"
+                    FontSize="18"
+                    Foreground="DodgerBlue"
+                    Style="{StaticResource SEDefaultTBlockStyle}">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}~{0}д. {1}ч. {2}м.">
+                            <Binding Path="GeneralValue.ApproximateDuration.Days" />
+                            <Binding Path="GeneralValue.ApproximateDuration.Hours" />
+                            <Binding Path="GeneralValue.ApproximateDuration.Minutes" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+
+            <Grid
+                Grid.Row="1"
+                Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock
+                    Grid.Column="0"
+                    Margin="10,7.5,5,7.5"
+                    HorizontalAlignment="Right"
+                    FontSize="18"
+                    Foreground="OrangeRed"
+                    Style="{StaticResource SEDefaultTBlockStyle}"
+                    Text="Интелектуальное выключение компьютера: " />
+                <controls:ToggleSwitchButton
+                    Grid.Column="1"
+                    Margin="5,7.5"
+                    HorizontalAlignment="Left"
+                    IsChecked="{Binding GeneralValue.IntellectualShutdown}"
+                    OffSwitchBrush="Tomato"
+                    OnSwitchBrush="LawnGreen"
+                    ThumbIndicatorWidth="18" />
+                <TextBlock
+                    Grid.Column="2"
+                    Margin="20,0,0,0"
+                    FontSize="18">
+                    <TextBlock.Style>
+                        <Style
+                            BasedOn="{StaticResource SEDefaultTBlockStyle}"
+                            TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding GeneralValue.IntellectualShutdown}"
+                                    Value="True">
+                                    <Setter Property="Text" Value="Активировано" />
+                                    <Setter Property="Foreground" Value="LawnGreen" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding GeneralValue.IntellectualShutdown}"
+                                    Value="False">
+                                    <Setter Property="Text" Value="Дезактивировано" />
+                                    <Setter Property="Foreground" Value="Tomato" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
+
+            <Grid
+                Grid.Row="2"
+                Grid.Column="0"
+                Visibility="{Binding GeneralValue.IntelectualShutdownSettingsVisibility}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+
+                </Grid.ColumnDefinitions>
+                <StackPanel
+                    Margin="0,5,0,2.5"
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        FontSize="18"
+                        Foreground="OrangeRed"
+                        Style="{StaticResource SEDefaultTBlockStyle}"
+                        Text="Активировать выключение компьютера спустя " />
+                    <TextBox
+                        MinWidth="50"
+                        HorizontalContentAlignment="Center"
+                        cal:Message.Attach="[Event KeyDown]=[Action NumericValidation($eventArgs)]"
+                        Foreground="Aqua"
+                        Style="{StaticResource SETBoxDefaultStyle}"
+                        Text="{Binding GeneralValue.IntellectualShutdownIdleTime, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
+                    <ComboBox
+                        MinWidth="85"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        FontFamily="Comic Sans MS"
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Foreground="Aqua"
+                        ItemsSource="{Binding GeneralValue.IntellectualShutdownIdleTimeTypeList}"
+                        SelectedItem="{Binding GeneralValue.SelectedIntellectualShutdownIdleTimeType}" />
+                    <TextBlock
+                        FontSize="18"
+                        Foreground="OrangeRed"
+                        Style="{StaticResource SEDefaultTBlockStyle}"
+                        Text=" просмотра," />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="1"
+                    Margin="0,2.5,0,5"
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        FontSize="18"
+                        Foreground="OrangeRed"
+                        Style="{StaticResource SEDefaultTBlockStyle}"
+                        Text="если текущее время суток больше " />
+                    <TextBox
+                        MinWidth="30"
+                        HorizontalContentAlignment="Center"
+                        cal:Message.Attach="[Event KeyDown]=[Action NumericValidation($eventArgs)]"
+                        Foreground="Aqua"
+                        Style="{StaticResource SETBoxDefaultStyle}"
+                        Text="{Binding GeneralValue.IntellectualShutdownReachedHoursTime, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
+                    <TextBlock
+                        FontSize="18"
+                        Foreground="OrangeRed"
+                        Style="{StaticResource SEDefaultTBlockStyle}"
+                        Text=":" />
+                    <TextBox
+                        MinWidth="30"
+                        HorizontalContentAlignment="Center"
+                        cal:Message.Attach="[Event KeyDown]=[Action NumericValidation($eventArgs)]"
+                        Foreground="Aqua"
+                        Style="{StaticResource SETBoxDefaultStyle}"
+                        Text="{Binding GeneralValue.IntellectualShutdownReachedMinutesTime, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
+
+                </StackPanel>
+                <Button
+                    Grid.Row="1"
+                    HorizontalAlignment="Left"
+                    cal:Message.Attach="[Event Click]=[Action ExpandCollapseIntellectualShutdownRemark()]">
+                    <Button.Style>
+                        <Style
+                            BasedOn="{StaticResource MetroButton}"
+                            TargetType="Button">
+                            <Style.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding GeneralValue.IsIntellectualShutdownRemarkExpand}"
+                                    Value="True">
+                                    <Setter Property="ToolTip" Value="Свернуть примечания" />
+                                    <Setter Property="Content">
+                                        <Setter.Value>
+                                            <iconPacks:PackIconEntypo
+                                                Width="25"
+                                                Height="15"
+                                                Foreground="OrangeRed"
+                                                Kind="ChevronUp" />
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding GeneralValue.IsIntellectualShutdownRemarkExpand}"
+                                    Value="False">
+                                    <Setter Property="ToolTip" Value="Развернуть примечания" />
+                                    <Setter Property="Content">
+                                        <Setter.Value>
+                                            <iconPacks:PackIconEntypo
+                                                Width="25"
+                                                Height="15"
+                                                Foreground="OrangeRed"
+                                                Kind="ChevronDown" />
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <StackPanel
+                    Grid.Row="2"
+                    Orientation="Vertical"
+                    Visibility="{Binding GeneralValue.IntellectualShutdownRemarkVisibility}">
+                    <TextBlock
+                        Margin="10,0,0,0"
+                        HorizontalAlignment="Left"
+                        FontSize="16"
+                        Foreground="YellowGreen"
+                        Style="{StaticResource SEDefaultTBlockStyle}"
+                        Text="1 примечание: 2 часа ночи меньше 23 часов вечера, 23:59 больше чем 0:01 " />
+                    <TextBlock
+                        Margin="10,0,0,0"
+                        HorizontalAlignment="Left"
+                        FontSize="16"
+                        Foreground="YellowGreen"
+                        Style="{StaticResource SEDefaultTBlockStyle}"
+                        Text="2 примечание: компьютер не выключится сразу при достижении указанных границ, а лишь включит функцию выключения, на тот случай, если вы забыли сами её включить."
+                        TextWrapping="Wrap" />
+                    <TextBlock
+                        Margin="10,0,0,0"
+                        HorizontalAlignment="Left"
+                        FontSize="16"
+                        Foreground="YellowGreen"
+                        Style="{StaticResource SEDefaultTBlockStyle}"
+                        Text="3 примечание: Интелектуальное выключение не мешает работе функции выключения компьютера, если вы её активировали в ручную, а лишь дополняет её."
+                        TextWrapping="Wrap" />
+                    <TextBlock
+                        Margin="10,0,0,0"
+                        HorizontalAlignment="Left"
+                        FontSize="16"
+                        Foreground="YellowGreen"
+                        Style="{StaticResource SEDefaultTBlockStyle}"
+                        Text="4 примечание: Если было указано 60 минут и 1 час, то после часа просмотра программа, при условии что время суток больше 1 часа ночи и функция выключения компьютера отключена, сама включит данную функцию. В ином случае ничего не произойдет"
+                        TextWrapping="Wrap" />
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Row="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                    Margin="10,0,0,0"
+                    FontSize="18"
+                    Foreground="Yellow"
+                    Style="{StaticResource SEDefaultTBlockStyle}"
+                    Text="Режим просмотра: " />
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Orientation="Horizontal">
+                    <RadioButton
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        IsChecked="{Binding GeneralValue.RandomWatching}" />
+                    <TextBlock
+                        Margin="10,0,0,0"
+                        FontSize="18"
+                        Text="В случайном порядке">
+                        <TextBlock.Style>
+                            <Style
+                                BasedOn="{StaticResource SEDefaultTBlockStyle}"
+                                TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding GeneralValue.RandomWatching}"
+                                        Value="True">
+                                        <Setter Property="Foreground" Value="LawnGreen" />
+                                    </DataTrigger>
+                                    <DataTrigger
+                                        Binding="{Binding GeneralValue.RandomWatching}"
+                                        Value="False">
+                                        <Setter Property="Foreground" Value="Tomato" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Orientation="Horizontal">
+                    <RadioButton
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        IsChecked="{Binding GeneralValue.WatchingInRow}" />
+                    <TextBlock
+                        Margin="10,0,0,0"
+                        FontSize="18"
+                        Text="Смотреть подряд">
+                        <TextBlock.Style>
+                            <Style
+                                BasedOn="{StaticResource SEDefaultTBlockStyle}"
+                                TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding GeneralValue.WatchingInRow}"
+                                        Value="True">
+                                        <Setter Property="Foreground" Value="LawnGreen" />
+                                    </DataTrigger>
+                                    <DataTrigger
+                                        Binding="{Binding GeneralValue.WatchingInRow}"
+                                        Value="False">
+                                        <Setter Property="Foreground" Value="Tomato" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.RowSpan="2"
+                    Grid.Column="2"
+                    Orientation="Horizontal"
+                    Visibility="{Binding GeneralValue.RandomEnabledVisibility}">
+                    <StackPanel
+                        Margin="10,0"
+                        Orientation="Vertical">
+                        <TextBlock
+                            FontSize="18"
+                            Foreground="Yellow"
+                            Style="{StaticResource SEDefaultTBlockStyle}"
+                            Text="Количество смешиваний:" />
+                        <TextBlock
+                            FontSize="18"
+                            Foreground="Yellow"
+                            Style="{StaticResource SEDefaultTBlockStyle}"
+                            Text="(экспериментальная функция)" />
+                    </StackPanel>
+                    <TextBox
+                        MinWidth="50"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        cal:Message.Attach="[Event KeyDown]=[Action NumericValidation($eventArgs)]"
+                        FontSize="30"
+                        Foreground="Aqua"
+                        Style="{StaticResource SETBoxDefaultStyle}"
+                        Text="{Binding GeneralValue.RandomMixCount, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
+                </StackPanel>
+            </Grid>
+            <Grid
+                Grid.Row="4"
+                Margin="10,5"
+                Visibility="{Binding GeneralValue.RandomEnabledVisibility}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                    FontSize="18"
+                    Foreground="Chocolate">
+                    <TextBlock.Style>
+                        <Style
+                            BasedOn="{StaticResource SEDefaultTBlockStyle}"
+                            TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Value="никогда">
+                                    <Setter Property="Text" Value="Я " />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Value="лет">
+                                    <Setter Property="Text" Value="Минимальное количество " />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Value="месяцев">
+                                    <Setter Property="Text" Value="Минимальное количество " />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Value="недель">
+                                    <Setter Property="Text" Value="Минимальное количество " />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Value="дней">
+                                    <Setter Property="Text" Value="Минимальное количество " />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Value="часов">
+                                    <Setter Property="Text" Value="Минимальное количество " />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Value="всегда">
+                                    <Setter Property="Text" Value="Я " />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <ComboBox
+                    Grid.Column="1"
+                    MaxWidth="110"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    FontFamily="Comic Sans MS"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Foreground="Aqua"
+                    ItemsSource="{Binding GeneralValue.NoneRepeatTimeTypeList}"
+                    SelectedItem="{Binding GeneralValue.SelectedNoneRepeatTimeType}" />
+                <TextBlock
+                    Grid.Column="2"
+                    FontSize="18"
+                    Foreground="Chocolate">
+                    <TextBlock.Style>
+                        <Style
+                            BasedOn="{StaticResource SEDefaultTBlockStyle}"
+                            TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Value="никогда">
+                                    <Setter Property="Text" Value=" не хочу видеть повторяющиеся эпизоды." />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Value="лет">
+                                    <Setter Property="Text" Value=", прежде чем эпизод повторится -" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Value="месяцев">
+                                    <Setter Property="Text" Value=", прежде чем эпизод повторится -" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Value="недель">
+                                    <Setter Property="Text" Value=", прежде чем эпизод повторится -" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Value="дней">
+                                    <Setter Property="Text" Value=", прежде чем эпизод повторится -" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Value="часов">
+                                    <Setter Property="Text" Value=", прежде чем эпизод повторится -" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Value="всегда">
+                                    <Setter Property="Text" Value=" хочу видеть повторяющиеся эпизоды." />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <TextBox
+                    Grid.Column="3"
+                    MinWidth="45"
+                    Margin="10,0"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    cal:Message.Attach="[Event KeyDown]=[Action NumericValidation($eventArgs)]"
+                    FontFamily="Comic Sans MS"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Foreground="Aqua"
+                    Text="{Binding GeneralValue.NoneRepeatTime, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}">
+                    <TextBox.Style>
+                        <Style
+                            BasedOn="{StaticResource MetroTextBox}"
+                            TargetType="TextBox">
+                            <Style.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Value="никогда">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Value="лет">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Value="месяцев">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Value="недель">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Value="дней">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Value="часов">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Value="всегда">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+            </Grid>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

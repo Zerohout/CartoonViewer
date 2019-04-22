@@ -1,0 +1,24 @@
+﻿<vms:GeneralSettingsViewModel
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:settingsModels="clr-namespace:CartoonViewer.Models.SettingModels"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:vms="clr-namespace:CartoonViewer.Settings.GeneralSettingsFolder.ViewModels">
+    <vms:GeneralSettingsViewModel.GeneralValue>
+        <settingsModels:GeneralSettingsValue
+            DefaultStartEpisodesCount="999999"
+            IntellectualShutdown="True"
+            IntellectualShutdownIdleTime="60"
+            IntellectualShutdownReachedHoursTime="3"
+            IntellectualShutdownReachedMinutesTime="30"
+            IsIntellectualShutdownRemarkExpand="True"
+            NoneRepeatTime="3"
+            RandomMixCount="10"
+            RandomWatching="True"
+            SelectedIntellectualShutdownIdleTimeType="минут"
+            SelectedNoneRepeatTimeType="дней"
+            WatchingInRow="False" />
+    </vms:GeneralSettingsViewModel.GeneralValue>
+
+
+</vms:GeneralSettingsViewModel>

@@ -78,9 +78,9 @@ namespace CartoonViewer.Helpers
 		};
 
 		/// <summary>
-		/// Клонирование списка мультфильмов
+		/// Клонирование списка мультсериалов
 		/// </summary>
-		/// <param name="cartoons">Клонируемый список мультфильмов</param>
+		/// <param name="cartoons">Клонируемый список мультсериалов</param>
 		/// <returns></returns>
 		public static List<Cartoon> CloneCartoonList(List<Cartoon> cartoons)
 		{
@@ -98,9 +98,9 @@ namespace CartoonViewer.Helpers
 		}
 
 		/// <summary>
-		/// Клонирование мультфильма
+		/// Клонирование мультсериала
 		/// </summary>
-		/// <param name="cartoon">Клонируемый мультфильм</param>
+		/// <param name="cartoon">Клонируемый мультсериал</param>
 		/// <returns></returns>
 		public static Cartoon CloneCartoon(Cartoon cartoon) => new Cartoon
 		{
@@ -115,9 +115,9 @@ namespace CartoonViewer.Helpers
 		};
 
 		/// <summary>
-		/// Клонирование списка ссылок мультфильма
+		/// Клонирование списка ссылок мультсериала
 		/// </summary>
-		/// <param name="cartoonUrls">Клонируемый списко ссылок мультфильма</param>
+		/// <param name="cartoonUrls">Клонируемый списко ссылок мультсериала</param>
 		/// <returns></returns>
 		public static List<CartoonUrl> CloneCartoonUrlList(List<CartoonUrl> cartoonUrls)
 		{
@@ -135,9 +135,9 @@ namespace CartoonViewer.Helpers
 		}
 
 		/// <summary>
-		/// Клонирование ссылок мультфильма
+		/// Клонирование ссылок мультсериала
 		/// </summary>
-		/// <param name="cartoonUrl">Клонируемые ссылки мультфильма</param>
+		/// <param name="cartoonUrl">Клонируемые ссылки мультсериала</param>
 		/// <returns></returns>
 		public static CartoonUrl CloneCartoonUrl(CartoonUrl cartoonUrl) => new CartoonUrl
 		{

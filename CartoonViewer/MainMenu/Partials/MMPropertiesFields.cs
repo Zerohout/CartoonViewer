@@ -27,7 +27,7 @@ namespace CartoonViewer.MainMenu.ViewModels
 		private string _episodesCountRemainingString = "Серий к просмотру";
 
 		/// <summary>
-		/// Список мультфильмов
+		/// Список мультсериалов
 		/// </summary>
 		public BindableCollection<Cartoon> Cartoons
 		{
@@ -40,7 +40,7 @@ namespace CartoonViewer.MainMenu.ViewModels
 		}
 
 		/// <summary>
-		/// Список выбранных мультфильмов
+		/// Список выбранных мультсериалов
 		/// </summary>
 		public List<Cartoon> CheckedCartoons
 		{
@@ -53,7 +53,7 @@ namespace CartoonViewer.MainMenu.ViewModels
 		}
 
 		/// <summary>
-		/// Список случайных номеров мультфильмов для просмотра
+		/// Список случайных номеров мультсериалов для просмотра
 		/// </summary>
 		public List<int> RandomCartoonNumberList
 		{

@@ -40,7 +40,7 @@
 		}
 
 		/// <summary>
-		/// Загрузка списка мультфильмов из базы данных
+		/// Загрузка списка мультсериалов из базы данных
 		/// </summary>
 		private void LoadCartoons()
 		{
@@ -166,12 +166,12 @@
 
 		#endregion
 
-		#region Настройки мультфильмов
+		#region Настройки мультсериалов
 
 		/// <summary>
-		/// Установка настроек мультфильмов
+		/// Установка настроек мультсериалов
 		/// </summary>
-		/// <param name="cartoon">Мультфильм</param>
+		/// <param name="cartoon">Мультсериал</param>
 		private void SetCartoonsSettings(Cartoon cartoon)
 		{
 			//if (cartoon.CartoonUrl.MainUrl.Contains("freehat.cc"))
@@ -358,7 +358,7 @@
 		#region Дополнительные методы
 
 		/// <summary>
-		/// Перейти на адрес мультфильма и получить его адрес
+		/// Перейти на адрес мультсериала и получить его адрес
 		/// </summary>
 		/// <param name="cartoon"></param>
 		/// <returns></returns>

@@ -10,7 +10,7 @@ namespace CartoonViewer.MainMenu.ViewModels
 	using CartoonViewer.ViewModels;
 	using Database;
 	using Helpers;
-	using Settings.ViewModels;
+	using Settings.CartoonEditorSetting.ViewModels;
 	using ViewModels;
 	using Action = System.Action;
 	using static Helpers.Helper;
@@ -69,7 +69,7 @@ namespace CartoonViewer.MainMenu.ViewModels
 		public bool CanStart => CheckedCartoons.Count > 0;
 
 		/// <summary>
-		/// Действие при выборе/снятия выбора с мультфильма
+		/// Действие при выборе/снятия выбора с мультсериала
 		/// </summary>
 		public void CheckedValidation()
 		{

@@ -1,0 +1,95 @@
+﻿<viewModels:VoiceOversEditingViewModel
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cartoonModels="clr-namespace:CartoonViewer.Models.CartoonModels"
+    xmlns:viewModels="clr-namespace:CartoonViewer.Settings.CartoonEditorSetting.ViewModels"
+    IsDesignTime="True"
+    IsNotEditing="False">
+
+    <viewModels:VoiceOversEditingViewModel.GlobalVoiceOvers>
+        <cartoonModels:CartoonVoiceOver Name="Глоб._озв._1" />
+        <cartoonModels:CartoonVoiceOver Name="Глоб._озв._2" />
+        <cartoonModels:CartoonVoiceOver Name="Глоб._озв._3" />
+        <cartoonModels:CartoonVoiceOver Name="Глоб._озв._4" />
+        <cartoonModels:CartoonVoiceOver Name="Глоб._озв._5" />
+        <cartoonModels:CartoonVoiceOver Name="Глоб._озв._6" />
+        <cartoonModels:CartoonVoiceOver Name="Глоб._озв._7" />
+        <cartoonModels:CartoonVoiceOver Name="Глоб._озв._8" />
+        <cartoonModels:CartoonVoiceOver Name="Глоб._озв._9" />
+        <cartoonModels:CartoonVoiceOver Name="Глоб._озв._10" />
+    </viewModels:VoiceOversEditingViewModel.GlobalVoiceOvers>
+    <viewModels:VoiceOversEditingViewModel.SelectedGlobalVoiceOver>
+        <cartoonModels:CartoonVoiceOver Name="Выб._глоб._озв.>" />
+    </viewModels:VoiceOversEditingViewModel.SelectedGlobalVoiceOver>
+
+    <viewModels:VoiceOversEditingViewModel.Cartoons>
+        <cartoonModels:Cartoon Name="М/ф_1" />
+        <cartoonModels:Cartoon Name="М/ф_2" />
+        <cartoonModels:Cartoon Name="М/ф_3" />
+        <cartoonModels:Cartoon Name="М/ф_4" />
+        <cartoonModels:Cartoon Name="М/ф_5" />
+    </viewModels:VoiceOversEditingViewModel.Cartoons>
+    <viewModels:VoiceOversEditingViewModel.SelectedCartoon>
+        <cartoonModels:Cartoon />
+    </viewModels:VoiceOversEditingViewModel.SelectedCartoon>
+
+    <viewModels:VoiceOversEditingViewModel.CartoonVoiceOvers>
+        <cartoonModels:CartoonVoiceOver Name="Озв._м/ф_1" />
+        <cartoonModels:CartoonVoiceOver Name="Озв._м/ф_2" />
+        <cartoonModels:CartoonVoiceOver Name="Озв._м/ф_3" />
+        <cartoonModels:CartoonVoiceOver Name="Озв._м/ф_4" />
+        <cartoonModels:CartoonVoiceOver Name="Озв._м/ф_5" />
+        <cartoonModels:CartoonVoiceOver Name="Озв._м/ф_6" />
+        <cartoonModels:CartoonVoiceOver Name="Озв._м/ф_7" />
+        <cartoonModels:CartoonVoiceOver Name="Озв._м/ф_8" />
+        <cartoonModels:CartoonVoiceOver Name="Озв._м/ф_9" />
+        <cartoonModels:CartoonVoiceOver Name="Озв._м/ф_10" />
+    </viewModels:VoiceOversEditingViewModel.CartoonVoiceOvers>
+    <viewModels:VoiceOversEditingViewModel.SelectedCartoonVoiceOver>
+        <cartoonModels:CartoonVoiceOver Name="Выб._озв._м\ф" />
+    </viewModels:VoiceOversEditingViewModel.SelectedCartoonVoiceOver>
+    <viewModels:VoiceOversEditingViewModel.EditedVoiceOver>
+        <cartoonModels:CartoonVoiceOver
+            Name="Ред._озв._м/ф"
+            Description="Описание редактируемой озвучки мультсериала"
+            UrlParameter="cartoon_voiceOver/param" />
+    </viewModels:VoiceOversEditingViewModel.EditedVoiceOver>
+
+    <viewModels:VoiceOversEditingViewModel.Seasons>
+        <cartoonModels:CartoonSeason Number="1" />
+        <cartoonModels:CartoonSeason Number="2" />
+        <cartoonModels:CartoonSeason Number="3" />
+        <cartoonModels:CartoonSeason Number="4" />
+        <cartoonModels:CartoonSeason Number="5" />
+    </viewModels:VoiceOversEditingViewModel.Seasons>
+    <viewModels:VoiceOversEditingViewModel.SelectedSeason>
+        <cartoonModels:CartoonSeason Number="1" />
+    </viewModels:VoiceOversEditingViewModel.SelectedSeason>
+
+    <viewModels:VoiceOversEditingViewModel.Episodes>
+        <cartoonModels:CartoonEpisode Number="1" />
+        <cartoonModels:CartoonEpisode Number="2" />
+        <cartoonModels:CartoonEpisode Number="3" />
+        <cartoonModels:CartoonEpisode Number="4" />
+        <cartoonModels:CartoonEpisode Number="5" />
+    </viewModels:VoiceOversEditingViewModel.Episodes>
+    <viewModels:VoiceOversEditingViewModel.SelectedEpisode>
+        <cartoonModels:CartoonEpisode Number="1" />
+    </viewModels:VoiceOversEditingViewModel.SelectedEpisode>
+
+    <viewModels:VoiceOversEditingViewModel.EpisodeVoiceOvers>
+        <cartoonModels:CartoonVoiceOver Name="Озв._эп._1" />
+        <cartoonModels:CartoonVoiceOver Name="Озв._эп._2" />
+        <cartoonModels:CartoonVoiceOver Name="Озв._эп._3" />
+        <cartoonModels:CartoonVoiceOver Name="Озв._эп._4" />
+        <cartoonModels:CartoonVoiceOver Name="Озв._эп._5" />
+        <cartoonModels:CartoonVoiceOver Name="Озв._эп._6" />
+        <cartoonModels:CartoonVoiceOver Name="Озв._эп._7" />
+        <cartoonModels:CartoonVoiceOver Name="Озв._эп._8" />
+        <cartoonModels:CartoonVoiceOver Name="Озв._эп._9" />
+        <cartoonModels:CartoonVoiceOver Name="Озв._эп._10" />
+    </viewModels:VoiceOversEditingViewModel.EpisodeVoiceOvers>
+    <viewModels:VoiceOversEditingViewModel.SelectedEpisodeVoiceOver>
+        <cartoonModels:CartoonVoiceOver Name="Выб._озв._эп."/>
+    </viewModels:VoiceOversEditingViewModel.SelectedEpisodeVoiceOver>
+</viewModels:VoiceOversEditingViewModel>

@@ -1,0 +1,49 @@
+﻿<viewModels:EpisodesEditingViewModel
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cartoonModels="clr-namespace:CartoonViewer.Models.CartoonModels"
+    xmlns:settingModels="clr-namespace:CartoonViewer.Models.SettingModels"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:viewModels="clr-namespace:CartoonViewer.Settings.CartoonEditorSetting.ViewModels"
+    EpisodeEditingVisibility="Visible"
+    IsDesignTime="True">
+    <viewModels:EpisodesEditingViewModel.Episodes>
+        <cartoonModels:CartoonEpisode Number="1" />
+        <cartoonModels:CartoonEpisode Number="2" />
+        <cartoonModels:CartoonEpisode Number="3" />
+        <cartoonModels:CartoonEpisode Number="4" />
+        <cartoonModels:CartoonEpisode Number="5" />
+    </viewModels:EpisodesEditingViewModel.Episodes>
+    <viewModels:EpisodesEditingViewModel.EditingEpisode>
+        <cartoonModels:CartoonEpisode
+            Name="Название"
+            CreditsStart="0:22:30"
+            DelayedSkip="0:1:0"
+            Description="Описание эпизода"
+            SkipCount="7" />
+    </viewModels:EpisodesEditingViewModel.EditingEpisode>
+    <!--<vms:SeasonsEditingViewModel.CartoonSeason>
+        <cartoonModels:CartoonSeason Name="Название"
+                       Description="Описание"/>
+    </vms:SeasonsEditingViewModel.CartoonSeason>-->
+
+    <viewModels:EpisodesEditingViewModel.EpisodeTime>
+        <settingModels:EpisodeTime
+            CreditsStartHoursString="23"
+            CreditsStartMinutesString="59"
+            CreditsStartSecondsString="59"
+            DelayedSkipMinutesString="59"
+            DelayedSkipSecondsString="59"
+            SkipCountString="99" />
+    </viewModels:EpisodesEditingViewModel.EpisodeTime>
+    <viewModels:EpisodesEditingViewModel.VoiceOvers>
+        <cartoonModels:CartoonVoiceOver Name="Озвучка_1" />
+        <cartoonModels:CartoonVoiceOver Name="Озвучка_2" />
+        <cartoonModels:CartoonVoiceOver Name="Озвучка_3" />
+        <cartoonModels:CartoonVoiceOver Name="Озвучка_4" />
+        <cartoonModels:CartoonVoiceOver Name="Озвучка_5" />
+        <cartoonModels:CartoonVoiceOver Name="Озвучка_6" />
+        <cartoonModels:CartoonVoiceOver Name="Озвучка_7" />
+        <cartoonModels:CartoonVoiceOver Name="Озвучка_8" />
+    </viewModels:EpisodesEditingViewModel.VoiceOvers>
+</viewModels:EpisodesEditingViewModel>

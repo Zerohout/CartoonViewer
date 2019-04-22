@@ -1,0 +1,42 @@
+﻿<viewModels:CartoonsEditorViewModel
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cartoonModels="clr-namespace:CartoonViewer.Models.CartoonModels"
+    xmlns:viewModels="clr-namespace:CartoonViewer.Settings.CartoonEditorSetting.ViewModels"
+    IsDesignTime="True">
+
+    <viewModels:CartoonsEditorViewModel.WebSites>
+        <cartoonModels:CartoonWebSite Url="http://freehat.cc" />
+    </viewModels:CartoonsEditorViewModel.WebSites>
+    <viewModels:CartoonsEditorViewModel.SelectedWebSite>
+        <cartoonModels:CartoonWebSite Url="web.site.view" />
+    </viewModels:CartoonsEditorViewModel.SelectedWebSite>
+
+    <viewModels:CartoonsEditorViewModel.Cartoons>
+        <cartoonModels:Cartoon Name="Южный парк" />
+        <cartoonModels:Cartoon Name="Гриффины" />
+        <cartoonModels:Cartoon Name="Симпсоны" />
+        <cartoonModels:Cartoon Name="Американский папаша" />
+    </viewModels:CartoonsEditorViewModel.Cartoons>
+    <viewModels:CartoonsEditorViewModel.SelectedCartoon>
+        <cartoonModels:Cartoon
+            Name="Выбранный_мультсериал"
+            Description="Описание_выбранного_мультсериала" />
+    </viewModels:CartoonsEditorViewModel.SelectedCartoon>
+
+    <viewModels:CartoonsEditorViewModel.Seasons>
+        <cartoonModels:CartoonSeason Number="1" />
+        <cartoonModels:CartoonSeason Number="2" />
+        <cartoonModels:CartoonSeason Number="3" />
+        <cartoonModels:CartoonSeason Number="4" />
+        <cartoonModels:CartoonSeason Number="5" />
+    </viewModels:CartoonsEditorViewModel.Seasons>
+    <viewModels:CartoonsEditorViewModel.SelectedSeason>
+        <cartoonModels:CartoonSeason Name="Выбранный_сезон" />
+    </viewModels:CartoonsEditorViewModel.SelectedSeason>
+
+    <!--<vms:CartoonsControlViewModel.ActiveItem>
+        <vms:CartoonsEditingViewModel/>
+    </vms:CartoonsControlViewModel.ActiveItem>-->
+
+</viewModels:CartoonsEditorViewModel>

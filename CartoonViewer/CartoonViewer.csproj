@@ -112,6 +112,7 @@
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Helpers\HotkeysRegistrator.cs" />
     <Compile Include="Helpers\MessageHelper.cs" />
+    <Compile Include="Helpers\SettingsHelper.cs" />
     <Compile Include="Migrations\201904151808288_Initialize.cs" />
     <Compile Include="Migrations\201904151808288_Initialize.Designer.cs">
       <DependentUpon>201904151808288_Initialize.cs</DependentUpon>
@@ -130,53 +131,61 @@
     <Compile Include="Models\CartoonModels\CartoonVoiceOver.cs" />
     <Compile Include="Models\ProgramModels\WorkingData.cs" />
     <Compile Include="Models\SettingModels\EpisodeTime.cs" />
-    <Compile Include="Settings\Partials\CartoonsEditing\CEEventsActions.cs" />
-    <Compile Include="Settings\Partials\CartoonsEditing\CEMethods.cs" />
-    <Compile Include="Settings\Partials\CartoonsEditing\CEPropertiesAndFields.cs" />
-    <Compile Include="Settings\Partials\CartoonsControl\CCEventsActions.cs" />
-    <Compile Include="Settings\Partials\CartoonsControl\CCMethods.cs" />
-    <Compile Include="Settings\Partials\CartoonsControl\CCPropertiesAndFields.cs" />
-    <Compile Include="Settings\ViewModels\CartoonsEditingViewModel.cs" />
-    <Compile Include="Settings\Partials\EpisodesEditing\SEEventsActions.cs" />
-    <Compile Include="Settings\Partials\EpisodesEditing\SEMethods.cs" />
-    <Compile Include="Settings\Partials\EpisodesEditing\SEPropertiesAndFields.cs" />
-    <Compile Include="Settings\Partials\VoiceOversEditing\VOEEventsActions.cs" />
-    <Compile Include="Settings\Partials\VoiceOversEditing\VOEMethods.cs" />
-    <Compile Include="Settings\ViewModels\VoiceOversEditingViewModel.cs" />
-    <Compile Include="Settings\Partials\VoiceOversEditing\VOEPropertiesAndFields.cs" />
-    <Compile Include="Settings\ViewModels\GeneralSettingsViewModel.cs" />
-    <Compile Include="Settings\ViewModels\ISettingsViewModel.cs" />
-    <Compile Include="Settings\ViewModels\EpisodesEditingViewModel.cs" />
-    <Compile Include="Settings\Views\CartoonsEditingView.xaml.cs">
+    <Compile Include="Models\SettingModels\GeneralSettingsValue.cs" />
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Settings\CartoonEditorFolder\Partials\CartoonsEditing\CEEventsActions.cs" />
+    <Compile Include="Settings\CartoonEditorFolder\Partials\CartoonsEditing\CEMethods.cs" />
+    <Compile Include="Settings\CartoonEditorFolder\Partials\CartoonsEditing\CEPropertiesAndFields.cs" />
+    <Compile Include="Settings\CartoonEditorFolder\Partials\CartoonsEditor\CCEventsActions.cs" />
+    <Compile Include="Settings\CartoonEditorFolder\Partials\CartoonsEditor\CCMethods.cs" />
+    <Compile Include="Settings\CartoonEditorFolder\Partials\CartoonsEditor\CCPropertiesAndFields.cs" />
+    <Compile Include="Settings\CartoonEditorFolder\ViewModels\CartoonsEditingViewModel.cs" />
+    <Compile Include="Settings\CartoonEditorFolder\Partials\EpisodesEditing\SEEventsActions.cs" />
+    <Compile Include="Settings\CartoonEditorFolder\Partials\EpisodesEditing\SEMethods.cs" />
+    <Compile Include="Settings\CartoonEditorFolder\Partials\EpisodesEditing\SEPropertiesAndFields.cs" />
+    <Compile Include="Settings\CartoonEditorFolder\Partials\VoiceOversEditing\VOEEventsActions.cs" />
+    <Compile Include="Settings\CartoonEditorFolder\Partials\VoiceOversEditing\VOEMethods.cs" />
+    <Compile Include="Settings\CartoonEditorFolder\ViewModels\VoiceOversEditingViewModel.cs" />
+    <Compile Include="Settings\CartoonEditorFolder\Partials\VoiceOversEditing\VOEPropertiesAndFields.cs" />
+    <Compile Include="Settings\GeneralSettingsFolder\Partials\GeneralSettings\GSEventsActions.cs" />
+    <Compile Include="Settings\GeneralSettingsFolder\Partials\GeneralSettings\GSPropertiesAndFields.cs" />
+    <Compile Include="Settings\GeneralSettingsFolder\ViewModels\GeneralSettingsViewModel.cs" />
+    <Compile Include="Settings\CartoonEditorFolder\ViewModels\ISettingsViewModel.cs" />
+    <Compile Include="Settings\CartoonEditorFolder\ViewModels\EpisodesEditingViewModel.cs" />
+    <Compile Include="Settings\CartoonEditorFolder\Views\CartoonsEditingView.xaml.cs">
       <DependentUpon>CartoonsEditingView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings\Views\EpisodesEditingView.xaml.cs">
+    <Compile Include="Settings\CartoonEditorFolder\Views\EpisodesEditingView.xaml.cs">
       <DependentUpon>EpisodesEditingView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings\Views\VoiceOversEditingView.xaml.cs">
+    <Compile Include="Settings\CartoonEditorFolder\Views\VoiceOversEditingView.xaml.cs">
       <DependentUpon>VoiceOversEditingView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings\Views\GeneralSettingsView.xaml.cs">
+    <Compile Include="Settings\GeneralSettingsFolder\Views\GeneralSettingsView.xaml.cs">
       <DependentUpon>GeneralSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\ViewingsSettingsFolder\ViewModels\ViewingsSettingsViewModel.cs" />
+    <Compile Include="Settings\ViewingsSettingsFolder\Views\ViewingsSettingsView.xaml.cs">
+      <DependentUpon>ViewingsSettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\DialogViewModel.cs" />
     <Compile Include="MainMenu\Partials\MMEventsActions.cs" />
     <Compile Include="MainMenu\Partials\MMPropertiesFields.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="MainMenu\ViewModels\MainMenuViewModel.cs" />
-    <Compile Include="Settings\ViewModels\SettingsViewModel.cs" />
-    <Compile Include="Settings\ViewModels\CartoonsControlViewModel.cs" />
+    <Compile Include="Settings\CartoonEditorFolder\ViewModels\SettingsViewModel.cs" />
+    <Compile Include="Settings\CartoonEditorFolder\ViewModels\CartoonsEditorViewModel.cs" />
     <Compile Include="Views\DialogView.xaml.cs">
       <DependentUpon>DialogView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings\Views\SettingsView.xaml.cs">
+    <Compile Include="Settings\CartoonEditorFolder\Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings\Views\CartoonsControlView.xaml.cs">
-      <DependentUpon>CartoonsControlView.xaml</DependentUpon>
+    <Compile Include="Settings\CartoonEditorFolder\Views\CartoonsEditorView.xaml.cs">
+      <DependentUpon>CartoonsEditorView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -237,39 +246,51 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\DesignData\CartoonsEditingViewDesignData.xaml">
+    <Page Include="Settings\CartoonEditorFolder\DesignData\CartoonsEditingViewDesignData.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\DesignData\EpisodesEditingViewDesignData.xaml">
+    <Page Include="Settings\CartoonEditorFolder\DesignData\EpisodesEditingViewDesignData.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\DesignData\VoiceOversEditingViewDesignData.xaml">
+    <Page Include="Settings\GeneralSettingsFolder\DesignData\GeneralSettingsViewDesignData.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\DesignData\SettingsViewDesignData.xaml">
+    <Page Include="Settings\CartoonEditorFolder\DesignData\VoiceOversEditingViewDesignData.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\DesignData\CartoonsControlViewDesignData.xaml">
+    <Page Include="Settings\CartoonEditorFolder\DesignData\SettingsViewDesignData.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\Views\CartoonsEditingView.xaml">
+    <Page Include="Settings\CartoonEditorFolder\DesignData\CartoonsEditorViewDesignData.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\Views\EpisodesEditingView.xaml">
+    <Page Include="Settings\CartoonEditorFolder\Views\CartoonsEditingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\Views\VoiceOversEditingView.xaml">
+    <Page Include="Settings\CartoonEditorFolder\Views\EpisodesEditingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\Views\GeneralSettingsView.xaml">
+    <Page Include="Settings\CartoonEditorFolder\Views\VoiceOversEditingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\GeneralSettingsFolder\Views\GeneralSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\ViewingsSettingsFolder\DesignData\ViewingSettingsViewDesignData.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\ViewingsSettingsFolder\Views\ViewingsSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -285,17 +306,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\Views\SettingsView.xaml">
+    <Page Include="Settings\CartoonEditorFolder\Views\SettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\Views\CartoonsControlView.xaml">
+    <Page Include="Settings\CartoonEditorFolder\Views\CartoonsEditorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Dialogs\Partials\" />
+    <Folder Include="Settings\ViewingsSettingsFolder\Partials\ViewingsSettings\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="CartoonViewerIcon.ico" />
