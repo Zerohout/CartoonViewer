@@ -1,125 +1,136 @@
 ﻿namespace CartoonViewer.ViewModels
 {
+	using System;
 	using System.Windows;
 	using static Helpers.Helper;
 	using Screen = Caliburn.Micro.Screen;
 
 	public class DialogViewModel : Screen
 	{
-		private DialogState _currentState;
-
-		private Visibility _visibility_Yes_No;
-		private Visibility _visibility_Ok_Cancel;
-		private Visibility _saveChangesVisibility;
-		private Visibility _removeVisibility;
-
-		public Visibility RemoveVisibility
-		{
-			get => _removeVisibility;
-			set
-			{
-				_removeVisibility = value;
-				NotifyOfPropertyChange(() => RemoveVisibility);
-			}
-		}
-
-
-		public Visibility SaveChangesVisibility
-		{
-			get => _saveChangesVisibility;
-			set
-			{
-				_saveChangesVisibility = value;
-				NotifyOfPropertyChange(() => SaveChangesVisibility);
-			}
-		}
-
-		public DialogResult DialogResult { get; set; }
-
-
-		
-
-
-
-
-
-		private string _errorTitle;
 		private string _dialogTitle;
-		private string _errorMessage;
 		private string _message;
-		private string _text_Ok_Cancel;
-
-		public DialogState CurrentState
-		{
-			get => _currentState;
-			set
-			{
-				_currentState = value;
-				NotifyOfPropertyChange(() => CurrentState);
-			}
-		}
-
-		public string Test { get; set; }
-		public DialogViewModel(string message,
-			DialogState currentState = DialogState.OK,
-			string dialogTitle = null)
-		{
-			switch(currentState)
-			{
-				case DialogState.SAVE_CHANGES:
-					SaveChangesVisibility = Visibility.Visible;
-					RemoveVisibility = Visibility.Hidden;
-					CancelChangesVisibility = Visibility.Hidden;
-					_message = message ?? "Сохранить ваши изменения?";
-					_dialogTitle = dialogTitle ?? "Сохранить изменения?";
-					return;
-				case DialogState.CANCEL_CHANGES:
-					SaveChangesVisibility = Visibility.Hidden;
-					RemoveVisibility = Visibility.Hidden;
-					CancelChangesVisibility = Visibility.Visible;
-					_message = message ?? "Отменить ваши изменения?";
-					_dialogTitle = dialogTitle ?? "Отменить изменения?";
-					return;
-				case DialogState.REMOVE:
-					SaveChangesVisibility = Visibility.Hidden;
-					RemoveVisibility = Visibility.Visible;
-					CancelChangesVisibility = Visibility.Hidden;
-					_message = $"Вы действительно хотите удалить этот {message}?";
-					_dialogTitle = dialogTitle ?? "Удалить объект?";
-					return;
-				case DialogState.YES_NO:
-					SaveChangesVisibility = Visibility.Hidden;
-					Visibility_Yes_No = Visibility.Visible;
-					Visibility_Ok_Cancel = Visibility.Hidden;
-					_message = message;
-					_dialogTitle = dialogTitle ?? "У нас к вам вопрос:";
-					return;
-				case DialogState.YES_NO_CANCEL:
-					SaveChangesVisibility = Visibility.Hidden;
-					Visibility_Yes_No = Visibility.Visible;
-					Visibility_Ok_Cancel = Visibility.Visible;
-					_message = message;
-					_dialogTitle = dialogTitle ?? "Вы уверены?";
-					_text_Ok_Cancel = "Отмена";
-					return;
-				case DialogState.OK:
-					SaveChangesVisibility = Visibility.Hidden;
-					Visibility_Yes_No = Visibility.Hidden;
-					Visibility_Ok_Cancel = Visibility.Visible;
-					_message = message;
-					_dialogTitle = dialogTitle ?? "Прочтите внимательно!";
-					_text_Ok_Cancel = "ОК";
-					return;
-			}
-		}
-
-		
+		private DialogType _currentType;
 
 		public DialogViewModel()
 		{
 
 		}
 
+		public DialogViewModel(string message,
+			DialogType currentType,
+			string dialogTitle = null)
+		{
+			CurrentType = currentType;
+			_message = message;
+			_dialogTitle = dialogTitle;
+		}
+
+		public DialogType CurrentType
+		{
+			get => _currentType;
+			set
+			{
+				_currentType = value;
+				NotifyOfPropertyChange(() => CurrentType);
+				NotifyOfPropertyChange(() => YesVisibility);
+				NotifyOfPropertyChange(() => NoVisibility);
+				NotifyOfPropertyChange(() => CancelVisibility);
+				NotifyOfPropertyChange(() => OkVisibility);
+			}
+		}
+
+		public DialogResult DialogResult { get; set; }
+
+		/// <summary>
+		/// Заголовок диалогового окна
+		/// </summary>
+		public string DialogTitle
+		{
+			get
+			{
+				if(_dialogTitle != null) return _dialogTitle;
+
+				switch(_currentType)
+				{
+					case DialogType.SAVE_CHANGES:
+						return "Сохранить изменения?";
+					case DialogType.CANCEL_CHANGES:
+						return "Отменить изменения?";
+					case DialogType.REMOVE_OBJECT:
+						return "Удалить объект?";
+					case DialogType.OVERWRITE_FILE:
+						return "Перезаписать файл?";
+					case DialogType.INFO:
+						return "Информация.";
+					default:
+						throw new Exception("Некорректный DialogType");
+				}
+			}
+			}
+		/// <summary>
+		/// Сообщение внутри диалогового окна
+		/// </summary>
+		public string Message
+		{
+			get
+			{
+				if (_message != null) return _message;
+
+				switch(_currentType)
+				{
+					case DialogType.SAVE_CHANGES:
+						return "Сохранить ваши изменения?";
+					case DialogType.CANCEL_CHANGES:
+						return "Отменить ваши изменения?";
+					case DialogType.REMOVE_OBJECT:
+						return $"Вы действительно хотите удалить выбранный объект?";
+					case DialogType.OVERWRITE_FILE:
+						return "Файл уже существует, перезаписать его?";
+					case DialogType.INFO:
+						return "Информация для пользователя.";
+					default:
+						throw new Exception("Некорректный DialogType");
+				}
+			}
+		}
+
+		/// <summary>
+		/// Видимость кнопки Yes
+		/// </summary>
+		public Visibility YesVisibility =>
+			CurrentType == DialogType.SAVE_CHANGES ||
+			CurrentType == DialogType.CANCEL_CHANGES ||
+			CurrentType == DialogType.REMOVE_OBJECT ||
+			CurrentType == DialogType.OVERWRITE_FILE
+				? Visibility.Visible
+				: Visibility.Hidden;
+		/// <summary>
+		/// Видимость кнопки No
+		/// </summary>
+		public Visibility NoVisibility => 
+			CurrentType == DialogType.SAVE_CHANGES ||
+			CurrentType == DialogType.CANCEL_CHANGES ||
+			CurrentType == DialogType.REMOVE_OBJECT ||
+			CurrentType == DialogType.OVERWRITE_FILE
+				? Visibility.Visible
+				: Visibility.Hidden;
+
+		/// <summary>
+		/// Видимость кнопки Cancel
+		/// </summary>
+		public Visibility CancelVisibility =>
+			CurrentType == DialogType.SAVE_CHANGES ||
+			CurrentType == DialogType.OVERWRITE_FILE
+				? Visibility.Visible
+				: Visibility.Hidden;
+		/// <summary>
+		/// Видимость кнопки Ok
+		/// </summary>
+		public Visibility OkVisibility =>
+			CurrentType == DialogType.INFO
+				? Visibility.Visible
+				: Visibility.Hidden;
+			
 		public void YesAction()
 		{
 			DialogResult = DialogResult.YES_ACTION;
@@ -137,113 +148,5 @@
 			DialogResult = DialogResult.CANCEL_ACTION;
 			TryClose();
 		}
-
-		public void Button_Yes()
-		{
-			//DialogResult = true;
-			TryClose();
-		}
-
-		public void Button_No()
-		{
-			//DialogResult = false;
-			TryClose();
-		}
-
-		public void Button_Ok_Cancel()
-		{
-			//DialogResult = null;
-			TryClose();
-		}
-
-		public void Closed()
-		{
-			//DialogResult = null;
-			TryClose();
-		}
-
-
-		public string DialogTitle
-		{
-			get => _dialogTitle;
-			set
-			{
-				_dialogTitle = value;
-				NotifyOfPropertyChange(() => DialogTitle);
-			}
-		}
-
-		public string ErrorTitle
-		{
-			get => _errorTitle;
-			set
-			{
-				_errorTitle = value;
-				NotifyOfPropertyChange(() => ErrorTitle);
-			}
-		}
-
-		public string ErrorMessage
-		{
-			get => _errorMessage;
-			set
-			{
-				_errorMessage = value;
-				NotifyOfPropertyChange(() => ErrorMessage);
-			}
-		}
-
-		public string Message
-		{
-			get => _message;
-			set
-			{
-				_message = value;
-				NotifyOfPropertyChange(() => Message);
-			}
-		}
-
-		public string Text_Ok_Cancel
-		{
-			get => _text_Ok_Cancel;
-			set
-			{
-				_text_Ok_Cancel = value;
-				NotifyOfPropertyChange(() => Text_Ok_Cancel);
-			}
-		}
-
-		public Visibility Visibility_Yes_No
-		{
-			get => _visibility_Yes_No;
-			set
-			{
-				_visibility_Yes_No = value;
-				NotifyOfPropertyChange(() => Visibility_Yes_No);
-			}
-		}
-
-		public Visibility Visibility_Ok_Cancel
-		{
-			get => _visibility_Ok_Cancel;
-			set
-			{
-				_visibility_Ok_Cancel = value;
-				NotifyOfPropertyChange(() => Visibility_Ok_Cancel);
-			}
-		}
-
-		private Visibility _cancelChangesVisibility;
-
-		public Visibility CancelChangesVisibility
-		{
-			get => _cancelChangesVisibility;
-			set
-			{
-				_cancelChangesVisibility = value;
-				NotifyOfPropertyChange(() => CancelChangesVisibility);
-			}
-		}
-
 	}
 }

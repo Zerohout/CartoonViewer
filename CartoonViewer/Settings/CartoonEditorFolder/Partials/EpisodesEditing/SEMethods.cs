@@ -1,11 +1,11 @@
-﻿namespace CartoonViewer.Settings.CartoonEditorSetting.ViewModels
+﻿// ReSharper disable CheckNamespace
+namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 {
 	using System;
 	using System.Data.Entity;
 	using System.Linq;
 	using System.Windows;
 	using Caliburn.Micro;
-	using CartoonEditorSetting.ViewModels;
 	using Database;
 	using Models.CartoonModels;
 	using Models.SettingModels;
@@ -31,7 +31,7 @@
 		{
 			CartoonSeason season;
 
-			using(var ctx = new CVDbContext())
+			using(var ctx = new CVDbContext(AppDataPath))
 			{
 				season = await ctx.CartoonSeasons
 							.Include(s => s.CartoonEpisodes)
@@ -52,7 +52,7 @@
 		{
 			CartoonEpisode episode;
 
-			using(var ctx = new CVDbContext())
+			using(var ctx = new CVDbContext(AppDataPath))
 			{
 				episode = await ctx.CartoonEpisodes
 								   .Include(e => e.EpisodeVoiceOvers)
@@ -63,7 +63,7 @@
 			TempEpisode = CloneEpisode(episode);
 			VoiceOvers = new BindableCollection<CartoonVoiceOver>(CloneVoiceOverList(episode.EpisodeVoiceOvers));
 			EpisodeTime = ConvertToEpisodeTime(_editingEpisode);
-			
+
 			EpisodeEditingVisibility = Visibility.Visible;
 			IsNotEditing = false;
 			NotifyEpisodeListButtons();
@@ -115,7 +115,7 @@
 			NotifyOfPropertyChange(() => CanCancelChanges);
 			NotifyOfPropertyChange(() => CanCancelEditing);
 		}
-		
+
 		#endregion
 	}
 }

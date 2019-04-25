@@ -1,4 +1,5 @@
-﻿namespace CartoonViewer.Settings.CartoonEditorSetting.ViewModels
+﻿// ReSharper disable CheckNamespace
+namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 {
 	using System;
 	using System.Data.Entity;
@@ -8,7 +9,7 @@
 	using Database;
 	using static Helpers.Cloner;
 
-	public partial class VoiceOversEditingViewModel : Screen
+	public partial class VoiceOversEditingViewModel : Screen, ISettingsViewModel
 	{
 		/// <summary>
 		/// Действие при изменении текста
@@ -78,7 +79,7 @@
 					return false;
 				}
 
-				if (string.IsNullOrEmpty(EditedVoiceOver.Name))
+				if(string.IsNullOrEmpty(EditedVoiceOver.Name))
 				{
 					return false;
 				}
@@ -177,7 +178,7 @@
 				throw new Exception("Id выбраной озвучки м/ф равен 0");
 			}
 
-			using(var ctx = new CVDbContext())
+			using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
 			{
 				var cartoon = ctx.Cartoons
 								 .Include(c => c.CartoonVoiceOvers)
@@ -322,17 +323,40 @@
 				throw new Exception("Id выбраной озвучки м/ф равен 0");
 			}
 
-			using(var ctx = new CVDbContext())
+			using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
 			{
 				var episode = ctx.CartoonEpisodes
 								 .Include(ce => ce.EpisodeVoiceOvers)
 								 .Single(ce => ce.CartoonEpisodeId == IdList.EpisodeId);
 
+				if(episode.EpisodeVoiceOvers.Count == 0)
+				{
+					ctx.VoiceOvers
+					   .Include(vo => vo.CheckedEpisodes)
+					   .Single(vo => vo.CartoonVoiceOverId == SelectedVoiceOverId)
+					   .CheckedEpisodes.Add(episode);
+				}
+
 				ctx.VoiceOvers
 				   .Include(vo => vo.CartoonEpisodes)
 				   .Single(vo => vo.CartoonVoiceOverId == SelectedVoiceOverId)
 				   .CartoonEpisodes.Add(episode);
+
 				ctx.SaveChanges();
+
+				//episode = ctx.CartoonEpisodes
+				//                  .Include(ce => ce.EpisodeVoiceOvers)
+				//                  .Single(ce => ce.CartoonEpisodeId == SelectedVoiceOverId);
+
+
+
+
+
+
+
+				//ctx.SaveChanges();
+				//t = ctx.VoiceOvers
+				//       .Include(vo => vo.CheckedEpisodes).ToList();
 			}
 
 			var voiceOver = GlobalVoiceOvers.First(vo => vo.CartoonVoiceOverId == SelectedVoiceOverId);
@@ -422,7 +446,7 @@
 				throw new Exception("Id выбраной озвучки м/ф равен 0");
 			}
 
-			using(var ctx = new CVDbContext())
+			using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
 			{
 				var voiceOver = ctx.VoiceOvers.Find(SelectedVoiceOverId);
 

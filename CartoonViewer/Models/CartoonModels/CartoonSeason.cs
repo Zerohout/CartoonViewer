@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.ComponentModel.DataAnnotations;
 	using System.ComponentModel.DataAnnotations.Schema;
+	using System.Windows;
 
 	public class CartoonSeason
 	{
@@ -17,6 +18,8 @@
 		public bool Checked { get; set; }
 
 		public string NumberName => $"{Number} сезон";
+
+		[NotMapped] public Visibility CancelButtonVisibility { get; set; } = Visibility.Collapsed;
 
 		public string Name { get; set; }
 		public string Description { get; set; }

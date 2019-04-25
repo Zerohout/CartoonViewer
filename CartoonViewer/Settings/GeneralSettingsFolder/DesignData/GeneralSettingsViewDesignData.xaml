@@ -6,13 +6,13 @@
     xmlns:vms="clr-namespace:CartoonViewer.Settings.GeneralSettingsFolder.ViewModels">
     <vms:GeneralSettingsViewModel.GeneralValue>
         <settingsModels:GeneralSettingsValue
-            DefaultStartEpisodesCount="999999"
+            EpisodesCount="999999"
             IntellectualShutdown="True"
             IntellectualShutdownIdleTime="60"
             IntellectualShutdownReachedHoursTime="3"
             IntellectualShutdownReachedMinutesTime="30"
             IsIntellectualShutdownRemarkExpand="True"
-            NoneRepeatTime="3"
+            NoneRepeatTimeCount="3"
             RandomMixCount="10"
             RandomWatching="True"
             SelectedIntellectualShutdownIdleTimeType="минут"

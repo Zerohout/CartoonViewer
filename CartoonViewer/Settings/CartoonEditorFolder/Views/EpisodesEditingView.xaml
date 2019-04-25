@@ -1,11 +1,11 @@
 ﻿<UserControl
-    x:Class="CartoonViewer.Settings.CartoonEditorSetting.Views.EpisodesEditingView"
+    x:Class="CartoonViewer.Settings.CartoonEditorFolder.Views.EpisodesEditingView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cal="http://www.caliburnproject.org"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:local="clr-namespace:CartoonViewer.Settings.CartoonEditorSetting.Views"
+    xmlns:local="clr-namespace:CartoonViewer.Settings.CartoonEditorFolder.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     cal:Bind.AtDesignTime="True"
     cal:Message.Attach="[Event KeyDown]=[Action ListenKey($eventArgs)]"

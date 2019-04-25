@@ -11,7 +11,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     cal:Bind.AtDesignTime="True"
     d:DataContext="{d:DesignData Source=../DesignData/GeneralSettingsViewDesignData.xaml}"
-    d:DesignHeight="450"
+    d:DesignHeight="650"
     d:DesignWidth="800"
     Focusable="True"
     mc:Ignorable="d">
@@ -32,7 +32,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Grid
+            <!--<Grid
                 Grid.Row="0"
                 Grid.Column="0">
                 <Grid.RowDefinitions>
@@ -59,10 +59,10 @@
                     Margin="5,10,5,7.5"
                     HorizontalAlignment="Left"
                     HorizontalContentAlignment="Center"
-                    cal:Message.Attach="[Event KeyDown]=[Action NumericValidation($eventArgs)]"
+                    cal:Message.Attach="[Event KeyDown]=[Action NumericValidation($eventArgs)]; [Event TextChanged]=[Action TextChanged()]"
                     Foreground="Aqua"
                     Style="{StaticResource SETBoxDefaultStyle}"
-                    Text="{Binding GeneralValue.DefaultStartEpisodesCount, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
+                    Text="{Binding GeneralValue.EpisodesCount, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
                 <TextBlock
                     Grid.Row="0"
                     Grid.Column="2"
@@ -79,7 +79,7 @@
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
-            </Grid>
+            </Grid>-->
 
             <Grid
                 Grid.Row="1"
@@ -106,6 +106,7 @@
                     Grid.Column="1"
                     Margin="5,7.5"
                     HorizontalAlignment="Left"
+                    cal:Message.Attach="[Event Checked]=[Action CheckedStatusChanged()];[Event Unchecked]=[Action CheckedStatusChanged()]"
                     IsChecked="{Binding GeneralValue.IntellectualShutdown}"
                     OffSwitchBrush="Tomato"
                     OnSwitchBrush="LawnGreen"
@@ -162,7 +163,7 @@
                     <TextBox
                         MinWidth="50"
                         HorizontalContentAlignment="Center"
-                        cal:Message.Attach="[Event KeyDown]=[Action NumericValidation($eventArgs)]"
+                        cal:Message.Attach="[Event KeyDown]=[Action NumericValidation($eventArgs)]; [Event TextChanged]=[Action TextChanged()]"
                         Foreground="Aqua"
                         Style="{StaticResource SETBoxDefaultStyle}"
                         Text="{Binding GeneralValue.IntellectualShutdownIdleTime, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
@@ -170,6 +171,7 @@
                         MinWidth="85"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
+                        cal:Message.Attach="[Event SelectionChanged]=[Action SelectionChanged()]"
                         FontFamily="Comic Sans MS"
                         FontSize="16"
                         FontWeight="Bold"
@@ -195,7 +197,7 @@
                     <TextBox
                         MinWidth="30"
                         HorizontalContentAlignment="Center"
-                        cal:Message.Attach="[Event KeyDown]=[Action NumericValidation($eventArgs)]"
+                        cal:Message.Attach="[Event KeyDown]=[Action NumericValidation($eventArgs)]; [Event TextChanged]=[Action TextChanged()]"
                         Foreground="Aqua"
                         Style="{StaticResource SETBoxDefaultStyle}"
                         Text="{Binding GeneralValue.IntellectualShutdownReachedHoursTime, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
@@ -207,7 +209,7 @@
                     <TextBox
                         MinWidth="30"
                         HorizontalContentAlignment="Center"
-                        cal:Message.Attach="[Event KeyDown]=[Action NumericValidation($eventArgs)]"
+                        cal:Message.Attach="[Event KeyDown]=[Action NumericValidation($eventArgs)]; [Event TextChanged]=[Action TextChanged()]"
                         Foreground="Aqua"
                         Style="{StaticResource SETBoxDefaultStyle}"
                         Text="{Binding GeneralValue.IntellectualShutdownReachedMinutesTime, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
@@ -314,6 +316,7 @@
                     <RadioButton
                         Margin="5,0,0,0"
                         VerticalAlignment="Center"
+                        cal:Message.Attach="[Event Checked]=[Action CheckedStatusChanged()];[Event Unchecked]=[Action CheckedStatusChanged()]"
                         IsChecked="{Binding GeneralValue.RandomWatching}" />
                     <TextBlock
                         Margin="10,0,0,0"
@@ -346,6 +349,7 @@
                     <RadioButton
                         Margin="5,0,0,0"
                         VerticalAlignment="Center"
+                        cal:Message.Attach="[Event Checked]=[Action CheckedStatusChanged()];[Event Unchecked]=[Action CheckedStatusChanged()]"
                         IsChecked="{Binding GeneralValue.WatchingInRow}" />
                     <TextBlock
                         Margin="10,0,0,0"
@@ -395,7 +399,7 @@
                         MinWidth="50"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
-                        cal:Message.Attach="[Event KeyDown]=[Action NumericValidation($eventArgs)]"
+                        cal:Message.Attach="[Event KeyDown]=[Action NumericValidation($eventArgs)]; [Event TextChanged]=[Action TextChanged()]"
                         FontSize="30"
                         Foreground="Aqua"
                         Style="{StaticResource SETBoxDefaultStyle}"
@@ -468,6 +472,7 @@
                     MaxWidth="110"
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
+                    cal:Message.Attach="[Event SelectionChanged]=[Action SelectionChanged()]"
                     FontFamily="Comic Sans MS"
                     FontSize="16"
                     FontWeight="Bold"
@@ -528,12 +533,12 @@
                     Margin="10,0"
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
-                    cal:Message.Attach="[Event KeyDown]=[Action NumericValidation($eventArgs)]"
+                    cal:Message.Attach="[Event KeyDown]=[Action NumericValidation($eventArgs)]; [Event TextChanged]=[Action TextChanged()]"
                     FontFamily="Comic Sans MS"
                     FontSize="16"
                     FontWeight="Bold"
                     Foreground="Aqua"
-                    Text="{Binding GeneralValue.NoneRepeatTime, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}">
+                    Text="{Binding GeneralValue.NoneRepeatTimeCount, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}">
                     <TextBox.Style>
                         <Style
                             BasedOn="{StaticResource MetroTextBox}"
@@ -579,6 +584,127 @@
                     </TextBox.Style>
                 </TextBox>
             </Grid>
+            <StackPanel
+                Grid.Row="5"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <Button
+                    Margin="10"
+                    Padding="10"
+                    cal:Message.Attach="[Event Click]=[Action ExportSettingsToFile()]"
+                    BorderThickness="3">
+                    <StackPanel Orientation="Vertical">
+                        <iconPacks:PackIconFontAwesome
+                            Width="30"
+                            Height="30"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Foreground="CornflowerBlue"
+                            Kind="FileExportSolid" />
+                        <TextBlock
+                            Foreground="CornflowerBlue"
+                            Style="{StaticResource SEDefaultTBlockStyle}"
+                            Text="Сохранить" />
+                        <TextBlock
+                            Foreground="CornflowerBlue"
+                            Style="{StaticResource SEDefaultTBlockStyle}"
+                            Text="в файл" />
+                    </StackPanel>
+                </Button>
+                <Button
+                    Margin="10"
+                    Padding="10"
+                    cal:Message.Attach="[Event Click]=[Action ImportSettingsFromFile()]"
+                    BorderThickness="3">
+                    <StackPanel Orientation="Vertical">
+                        <iconPacks:PackIconFontAwesome
+                            Width="30"
+                            Height="30"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Foreground="Goldenrod"
+                            Kind="FileImportSolid" />
+                        <TextBlock
+                            Foreground="Goldenrod"
+                            Style="{StaticResource SEDefaultTBlockStyle}"
+                            Text="Загрузить" />
+                        <TextBlock
+                            Foreground="Goldenrod"
+                            Style="{StaticResource SEDefaultTBlockStyle}"
+                            Text="из файла" />
+                    </StackPanel>
+                </Button>
+                <Button
+                    Margin="10"
+                    Padding="10"
+                    cal:Message.Attach="[Event Click]=[Action SetDefaultValues()]"
+                    BorderThickness="3">
+                    <StackPanel Orientation="Vertical">
+                        <iconPacks:PackIconFontAwesome
+                            Width="30"
+                            Height="30"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Foreground="Yellow"
+                            Kind="ReplySolid" />
+                        <TextBlock
+                            Foreground="Yellow"
+                            Style="{StaticResource SEDefaultTBlockStyle}"
+                            Text="Вернуть" />
+                        <TextBlock
+                            Foreground="Yellow"
+                            Style="{StaticResource SEDefaultTBlockStyle}"
+                            Text="по умолчанию" />
+                    </StackPanel>
+                </Button>
+                <Button
+                    Margin="10"
+                    Padding="10"
+                    cal:Message.Attach="[Event Click]=[Action CancelChanges()]"
+                    BorderThickness="3">
+                    <StackPanel Orientation="Vertical">
+                        <iconPacks:PackIconFontAwesome
+                            Width="30"
+                            Height="30"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Foreground="Tomato"
+                            Kind="BanSolid" />
+                        <TextBlock
+                            Foreground="Tomato"
+                            Style="{StaticResource SEDefaultTBlockStyle}"
+                            Text="Отменить" />
+                        <TextBlock
+                            Foreground="Tomato"
+                            Style="{StaticResource SEDefaultTBlockStyle}"
+                            Text="изменения" />
+                    </StackPanel>
+                </Button>
+                <Button
+                    Margin="10"
+                    Padding="10"
+                    cal:Message.Attach="[Event Click]=[Action SaveChages()]"
+                    BorderThickness="3">
+                    <StackPanel Orientation="Vertical">
+                        <iconPacks:PackIconFontAwesome
+                            Width="30"
+                            Height="30"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Foreground="LawnGreen"
+                            Kind="CheckCircleRegular" />
+                        <TextBlock
+                            Foreground="LawnGreen"
+                            Style="{StaticResource SEDefaultTBlockStyle}"
+                            Text="Сохранить" />
+                        <TextBlock
+                            Foreground="LawnGreen"
+                            Style="{StaticResource SEDefaultTBlockStyle}"
+                            Text="изменения" />
+                    </StackPanel>
+                </Button>
+
+            </StackPanel>
         </Grid>
     </ScrollViewer>
 </UserControl>

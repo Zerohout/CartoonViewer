@@ -1,4 +1,4 @@
-﻿namespace CartoonViewer.Settings.CartoonEditorSetting.Views
+﻿namespace CartoonViewer.Settings.CartoonEditorFolder.Views
 {
 	using MahApps.Metro.Controls;
 

@@ -2,18 +2,16 @@
 namespace CartoonViewer.MainMenu.ViewModels
 {
 	using System;
-	using System.Data.Entity;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Threading.Tasks;
 	using System.Windows;
-	using Caliburn.Micro;
+	using System.Windows.Input;
 	using CartoonViewer.ViewModels;
-	using Database;
-	using Helpers;
-	using Settings.CartoonEditorSetting.ViewModels;
-	using ViewModels;
-	using Action = System.Action;
+	using Models.CartoonModels;
+	using Settings.CartoonEditorFolder.ViewModels;
 	using static Helpers.Helper;
+	using Screen = Caliburn.Micro.Screen;
 
 	public partial class MainMenuViewModel : Screen
 	{
@@ -25,13 +23,18 @@ namespace CartoonViewer.MainMenu.ViewModels
 			((MainViewModel)Parent).Exit();
 		}
 
-		///// <summary>
-		///// Действие при паузе
-		///// </summary>
-		//public void Pause()
-		//{
-		//	IsPause = !IsPause;
-		//}
+		public void TextChanged()
+		{
+			NotifyOfPropertyChange(() => EndDate);
+			NotifyOfPropertyChange(() => EndTime);
+		}
+
+		public void NumericValidation(KeyEventArgs e)
+		{
+			e.Handled = (e.Key.GetHashCode() >= 34 && e.Key.GetHashCode() <= 43 ||
+						 e.Key.GetHashCode() >= 74 && e.Key.GetHashCode() <= 83) is false;
+
+		}
 
 		/// <summary>
 		/// Попадание курсора на кнопку выхода
@@ -56,9 +59,9 @@ namespace CartoonViewer.MainMenu.ViewModels
 		{
 			((MainViewModel)Parent).WindowState = WindowState.Minimized;
 
-			Helper.StartBrowser();
+			StartBrowser();
 
-			await Task.Run((Action) (() => StartWatch()));
+			await Task.Run(StartWatch);
 		}
 
 		public void GoToSettings()
@@ -73,39 +76,55 @@ namespace CartoonViewer.MainMenu.ViewModels
 		/// </summary>
 		public void CheckedValidation()
 		{
-			CheckedCartoons.Clear();
-			CheckedCartoons.AddRange(Cartoons.Where(c => c.Checked));
+			if (CvDbContext.ChangeTracker.HasChanges())
+			{
+				CvDbContext.SaveChanges();
+			}
+
+			CheckedEpisodes = new List<CartoonEpisode>(
+				CvDbContext.CartoonEpisodes
+						   .Where(ce => ce.CartoonSeason.Cartoon.Checked));
+
+			if(CheckedEpisodes.Count > 0)
+			{
+				FilterCheckedEpisodes();
+			}
+
+			GeneralSettings.AvailableEpisodesCount = CheckedEpisodes.Count;
+
+
+
+			//CheckedCartoons.Clear();
+			//CheckedCartoons.AddRange(Cartoons.Where(c => c.Checked));
 			NotifyOfPropertyChange(() => CanStart);
 		}
 
-		/// <summary>
-		/// Оповещение свойств
-		/// </summary>
-		private void NotifyEpisodesTime()
+		private void FilterCheckedEpisodes()
 		{
-			NotifyOfPropertyChange(() => EpisodeCountString);
-			NotifyOfPropertyChange(() => FinalYear);
-			NotifyOfPropertyChange(() => FinalMonth);
-			NotifyOfPropertyChange(() => FinalDay);
-			NotifyOfPropertyChange(() => FinalHour);
-			NotifyOfPropertyChange(() => FinalMinute);
+			var count = 0;
+			var approximateTime = new TimeSpan();
+			foreach(var ce in CheckedEpisodes.ToList())
+			{
+				if(DateTime.Now.Subtract(ce.LastDateViewed) >
+				   GeneralSettings.NonRepeatTime)
+				{
+					approximateTime += ce.Duration;
+					count++;
+					continue;
+				}
+
+				CheckedEpisodes.Remove(ce);
+			}
+
+			ApproximateEpisodeDuration =
+				new TimeSpan(0, 0,
+				             (int)(approximateTime.TotalSeconds / count));
+			NotifyOfPropertyChange(() => EndTime);
+			NotifyOfPropertyChange(() => EndDate);
+			NotifyOfPropertyChange(() => GeneralSettings.EpisodesCount);
 		}
 
-		//private void SetDefaultValues()
-		//{
-		//	foreach (var c in Cartoons)
-		//	{
-		//		if ((c.Name == "Южный парк" || c.Name == "Гриффины") && !c.Checked)
-		//		{
-		//			c.Checked = true;
-		//			using (var ctx = new CVDbContext())
-		//			{
-		//				ctx.Entry(c).State = EntityState.Modified;
-		//				ctx.SaveChanges();
-		//			}
-					
-		//		}
-		//	}
-		//}
+
+		public List<CartoonEpisode> CheckedEpisodes { get; set; } = new List<CartoonEpisode>();
 	}
 }

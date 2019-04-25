@@ -104,11 +104,11 @@
 					CartoonType = "Сериал",
 					Checked = true,
 					Description = "Aмериканский мультсериал, который создают Трей Паркер и Мэтт Стоун. " +
-					              "Основу сюжета составляют приключения четырёх мальчиков и их друзей, " +
-					              "живущих в маленьком городке Саут-Парк, штат Колорадо. " +
-					              "Сериал высмеивает недостатки американской культуры и текущие мировые события, " +
-					              "а также подвергает критике множество глубоких убеждений и табу " +
-					              "посредством пародии и чёрного юмора. " +
+								  "Основу сюжета составляют приключения четырёх мальчиков и их друзей, " +
+								  "живущих в маленьком городке Саут-Парк, штат Колорадо. " +
+								  "Сериал высмеивает недостатки американской культуры и текущие мировые события, " +
+								  "а также подвергает критике множество глубоких убеждений и табу " +
+								  "посредством пародии и чёрного юмора. " +
 								  "«Южный Парк» позиционируется как мультсериал для взрослых."
 				},
 				new Cartoon
@@ -117,15 +117,15 @@
 					CartoonType = "Сериал",
 					Checked = true,
 					Description = "Американский анимационный ситком, созданный Сетом Макфарлейном " +
-					              "для телекомпании Fox Broadcasting Company. " +
-					              "В центре сюжета неблагополучная семья Гриффинов, " +
-					              "состоящая из родителей, Питера и Лоис, " +
-					              "их детей, Криса, Мэг и Стьюи, а также Брайана — антропоморфного пса. " +
-					              "Действие ситкома происходит в Куахоге, вымышленном пригороде Провиденса, " +
-					              "штат Род-Айленд. Бо́льшая часть юмора сериала представлена в форме так называемых врезок, " +
-					              "которые зачастую не имеют ничего общего с сюжетом и содержат шутки " +
-					              "на различные щепетильные и спорные темы, такие как политика, " +
-					              "рабство, инвалидность, феминизм, ожирение и другие."
+								  "для телекомпании Fox Broadcasting Company. " +
+								  "В центре сюжета неблагополучная семья Гриффинов, " +
+								  "состоящая из родителей, Питера и Лоис, " +
+								  "их детей, Криса, Мэг и Стьюи, а также Брайана — антропоморфного пса. " +
+								  "Действие ситкома происходит в Куахоге, вымышленном пригороде Провиденса, " +
+								  "штат Род-Айленд. Бо́льшая часть юмора сериала представлена в форме так называемых врезок, " +
+								  "которые зачастую не имеют ничего общего с сюжетом и содержат шутки " +
+								  "на различные щепетильные и спорные темы, такие как политика, " +
+								  "рабство, инвалидность, феминизм, ожирение и другие."
 				},
 				new Cartoon
 				{
@@ -142,46 +142,68 @@
 		/// Создание файла
 		/// </summary>
 		/// <param name="fileName">Имя файла (без расширения и указания папки)</param>
+		/// <param name="canRewriteFile">Возможность перезаписать существующий файл</param>
 		/// <param name="fileExtension">Расширение файла (по умолчанию .cview)</param>
 		/// <param name="folderPath">Путь до файла (по умолчанию WorkingData)</param>
-		public static void CreateFile(string fileName, string fileExtension = null, string folderPath = null)
+		public static string CreateFile(string fileName, bool canRewriteFile = false,
+			string fileExtension = null, string folderPath = null)
 		{
-			if (folderPath == null)
+			if(folderPath == null)
 			{
-				folderPath = $"{AppPath}\\{WorkingDataPath}";
+				folderPath = $"{AppDataPath}";
 			}
 
 			if (fileExtension == null)
 			{
-				fileExtension = ".cview";
+				fileExtension = DefaultFilesExtension;
 			}
 
-			var path = $"{folderPath}\\{fileName}{fileExtension}";
+			var fullFilePath = $"{folderPath}\\{fileName}{fileExtension}";
 
-			if (!Directory.Exists(folderPath))
+			if(Directory.Exists(folderPath) is false)
 			{
 				Directory.CreateDirectory(folderPath);
 			}
 
-			if (!File.Exists(path))
+			if(File.Exists(fullFilePath) is false)
 			{
-				using (var fs = new FileStream(path, FileMode.Create))
+				using(var fs = new FileStream(fullFilePath, FileMode.Create))
 				{
 					fs.Dispose();
 				}
 			}
 			else
 			{
-				if (WinMan.ShowDialog(new DialogViewModel(
-										  "Файл уже существует, хотите его перезаписать?",
-										  DialogState.YES_NO)) ?? false)
+				if(canRewriteFile is false)
+					return fullFilePath;
+
+				var dvm = new DialogViewModel(null, DialogType.OVERWRITE_FILE);
+
+				WinMan.ShowDialog(dvm);
+
+				switch(dvm.DialogResult)
 				{
-					using (var fs = new FileStream(path, FileMode.Create))
-					{
-						fs.Dispose();
-					}
+					case DialogResult.YES_ACTION:
+						using(var fs = new FileStream(fullFilePath, FileMode.Create))
+						{
+							fs.Dispose();
+						}
+						break;
+					case DialogResult.NO_ACTION:
+						var filePathLength = ($"{folderPath}\\{fileName}").Length;
+						fullFilePath = $"{fullFilePath.Substring(0, filePathLength)}_Copy{fileExtension}";
+
+						using(var fs = new FileStream(fullFilePath, FileMode.Create))
+						{
+							fs.Dispose();
+						}
+						break;
+					case DialogResult.CANCEL_ACTION:
+						break;
 				}
 			}
+
+			return fullFilePath;
 		}
 	}
 }

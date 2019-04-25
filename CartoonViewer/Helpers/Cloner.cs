@@ -255,8 +255,7 @@ namespace CartoonViewer.Helpers
 			CartoonVoiceOverId = cartoonVoiceOver.CartoonVoiceOverId,
 			Name = cartoonVoiceOver.Name,
 			Description = cartoonVoiceOver.Description,
-			UrlParameter = cartoonVoiceOver.UrlParameter,
-			Checked = cartoonVoiceOver.Checked
+			UrlParameter = cartoonVoiceOver.UrlParameter
 		};
 	}
 }

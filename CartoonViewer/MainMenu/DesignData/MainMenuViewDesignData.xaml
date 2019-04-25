@@ -1,16 +1,12 @@
-﻿<viewModels:MainMenuViewModel
+﻿<vms:MainMenuViewModel
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cartoonModels="clr-namespace:CartoonViewer.Models.CartoonModels"
-    xmlns:local="clr-namespace:CartoonViewer"
-    xmlns:mainMenuData="clr-namespace:CartoonViewer.MainMenu"
-    xmlns:models="clr-namespace:CartoonViewer.Models"
-    xmlns:viewModels="clr-namespace:CartoonViewer.MainMenu.ViewModels"
-    xmlns:vms="clr-namespace:CartoonViewer.ViewModels"
+    xmlns:settingsModel="clr-namespace:CartoonViewer.Models.SettingModels"
+    xmlns:vms="clr-namespace:CartoonViewer.MainMenu.ViewModels"
     Background="../../Resources/Images/HDMMBackground.png"
-    EpisodeCountString="10"
     Opacity="1">
-    <viewModels:MainMenuViewModel.Cartoons>
+    <vms:MainMenuViewModel.Cartoons>
         <cartoonModels:Cartoon Name="Южный парк" />
         <cartoonModels:Cartoon Name="Гриффины" />
         <cartoonModels:Cartoon Name="Симпсоны" />
@@ -18,7 +14,9 @@
         <cartoonModels:Cartoon Name="Спанч Боб" />
         <cartoonModels:Cartoon Name="Футурама" />
         <cartoonModels:Cartoon Name="Удивительный мир Гамбола" />
-    </viewModels:MainMenuViewModel.Cartoons>
+    </vms:MainMenuViewModel.Cartoons>
+    <vms:MainMenuViewModel.GeneralSettings>
+        <settingsModel:GeneralSettingsValue EpisodesCount="11500" />
+    </vms:MainMenuViewModel.GeneralSettings>
 
-
-</viewModels:MainMenuViewModel>
+</vms:MainMenuViewModel>

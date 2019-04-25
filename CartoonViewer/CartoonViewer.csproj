@@ -62,6 +62,9 @@
     <Reference Include="MahApps.Metro.IconPacks, Version=2.3.0.4, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.IconPacks.2.3.0\lib\net46\MahApps.Metro.IconPacks.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
@@ -103,23 +106,17 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Database\CVDbContext.cs" />
-    <Compile Include="Dialogs\ViewModels\SaveChangesDialogViewModel.cs" />
-    <Compile Include="Dialogs\Views\SaveChangesDialogView.xaml.cs">
-      <DependentUpon>SaveChangesDialogView.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Helpers\ClassWriterReader.cs" />
     <Compile Include="Helpers\Cloner.cs" />
     <Compile Include="Helpers\Creator.cs" />
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Helpers\HotkeysRegistrator.cs" />
     <Compile Include="Helpers\MessageHelper.cs" />
     <Compile Include="Helpers\SettingsHelper.cs" />
-    <Compile Include="Migrations\201904151808288_Initialize.cs" />
-    <Compile Include="Migrations\201904151808288_Initialize.Designer.cs">
-      <DependentUpon>201904151808288_Initialize.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904161211291_RenameVoiceOverListInEpisodeModel.cs" />
-    <Compile Include="Migrations\201904161211291_RenameVoiceOverListInEpisodeModel.Designer.cs">
-      <DependentUpon>201904161211291_RenameVoiceOverListInEpisodeModel.cs</DependentUpon>
+    <Compile Include="MainMenu\Partials\MMMethods.cs" />
+    <Compile Include="Migrations\201904241822423_Initialize.cs" />
+    <Compile Include="Migrations\201904241822423_Initialize.Designer.cs">
+      <DependentUpon>201904241822423_Initialize.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\CartoonModels\Cartoon.cs" />
@@ -133,12 +130,12 @@
     <Compile Include="Models\SettingModels\EpisodeTime.cs" />
     <Compile Include="Models\SettingModels\GeneralSettingsValue.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="Settings\CartoonEditorFolder\Partials\CartoonsEditing\CEEventsActions.cs" />
-    <Compile Include="Settings\CartoonEditorFolder\Partials\CartoonsEditing\CEMethods.cs" />
-    <Compile Include="Settings\CartoonEditorFolder\Partials\CartoonsEditing\CEPropertiesAndFields.cs" />
-    <Compile Include="Settings\CartoonEditorFolder\Partials\CartoonsEditor\CCEventsActions.cs" />
-    <Compile Include="Settings\CartoonEditorFolder\Partials\CartoonsEditor\CCMethods.cs" />
-    <Compile Include="Settings\CartoonEditorFolder\Partials\CartoonsEditor\CCPropertiesAndFields.cs" />
+    <Compile Include="Settings\CartoonEditorFolder\Partials\CartoonsEditing\CEditingEventsActions.cs" />
+    <Compile Include="Settings\CartoonEditorFolder\Partials\CartoonsEditing\CEditingMethods.cs" />
+    <Compile Include="Settings\CartoonEditorFolder\Partials\CartoonsEditing\CEditingPropertiesAndFields.cs" />
+    <Compile Include="Settings\CartoonEditorFolder\Partials\CartoonsEditor\CEditorEventsActions.cs" />
+    <Compile Include="Settings\CartoonEditorFolder\Partials\CartoonsEditor\CEditorMethods.cs" />
+    <Compile Include="Settings\CartoonEditorFolder\Partials\CartoonsEditor\CEditorPropertiesAndFields.cs" />
     <Compile Include="Settings\CartoonEditorFolder\ViewModels\CartoonsEditingViewModel.cs" />
     <Compile Include="Settings\CartoonEditorFolder\Partials\EpisodesEditing\SEEventsActions.cs" />
     <Compile Include="Settings\CartoonEditorFolder\Partials\EpisodesEditing\SEMethods.cs" />
@@ -147,6 +144,7 @@
     <Compile Include="Settings\CartoonEditorFolder\Partials\VoiceOversEditing\VOEMethods.cs" />
     <Compile Include="Settings\CartoonEditorFolder\ViewModels\VoiceOversEditingViewModel.cs" />
     <Compile Include="Settings\CartoonEditorFolder\Partials\VoiceOversEditing\VOEPropertiesAndFields.cs" />
+    <Compile Include="Settings\GeneralSettingsFolder\Partials\GeneralSettings\GEMethods.cs" />
     <Compile Include="Settings\GeneralSettingsFolder\Partials\GeneralSettings\GSEventsActions.cs" />
     <Compile Include="Settings\GeneralSettingsFolder\Partials\GeneralSettings\GSPropertiesAndFields.cs" />
     <Compile Include="Settings\GeneralSettingsFolder\ViewModels\GeneralSettingsViewModel.cs" />
@@ -164,6 +162,9 @@
     <Compile Include="Settings\GeneralSettingsFolder\Views\GeneralSettingsView.xaml.cs">
       <DependentUpon>GeneralSettingsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Settings\ViewingsSettingsFolder\Partials\ViewingsSettings\VSEventsActions.cs" />
+    <Compile Include="Settings\ViewingsSettingsFolder\Partials\ViewingsSettings\VSMethods.cs" />
+    <Compile Include="Settings\ViewingsSettingsFolder\Partials\ViewingsSettings\VSPropertiesAndFields.cs" />
     <Compile Include="Settings\ViewingsSettingsFolder\ViewModels\ViewingsSettingsViewModel.cs" />
     <Compile Include="Settings\ViewingsSettingsFolder\Views\ViewingsSettingsView.xaml.cs">
       <DependentUpon>ViewingsSettingsView.xaml</DependentUpon>
@@ -202,11 +203,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Migrations\201904151808288_Initialize.resx">
-      <DependentUpon>201904151808288_Initialize.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904161211291_RenameVoiceOverListInEpisodeModel.resx">
-      <DependentUpon>201904161211291_RenameVoiceOverListInEpisodeModel.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201904241822423_Initialize.resx">
+      <DependentUpon>201904241822423_Initialize.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -223,14 +221,6 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="DesignData\DialogViewDesignData.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Dialogs\DesignData\SaveChangesDialogViewDesignData.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Dialogs\Views\SaveChangesDialogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -315,10 +305,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Dialogs\Partials\" />
-    <Folder Include="Settings\ViewingsSettingsFolder\Partials\ViewingsSettings\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="CartoonViewerIcon.ico" />
   </ItemGroup>

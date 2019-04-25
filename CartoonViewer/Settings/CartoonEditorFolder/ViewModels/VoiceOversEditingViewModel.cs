@@ -1,8 +1,8 @@
-﻿namespace CartoonViewer.Settings.CartoonEditorSetting.ViewModels
+﻿namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 {
 	using Caliburn.Micro;
 
-	public partial class VoiceOversEditingViewModel : Screen
+	public partial class VoiceOversEditingViewModel : Screen, ISettingsViewModel
 	{
 
 		/// <summary>
@@ -34,7 +34,7 @@
 			base.OnInitialize();
 		}
 
-		
+
 
 		public VoiceOversEditingViewModel()
 		{

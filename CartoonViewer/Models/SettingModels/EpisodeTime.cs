@@ -47,8 +47,8 @@
 
 		private string VerificationValue(string value)
 		{
-			if (string.IsNullOrWhiteSpace(value) ||
-			    !int.TryParse(value, out var numValue))
+			if(string.IsNullOrWhiteSpace(value) ||
+				!int.TryParse(value, out var numValue))
 			{
 				return "0";
 			}
@@ -58,12 +58,12 @@
 
 		private string AdditionalHourVerification(string value)
 		{
-			if (int.Parse(value) >= 24)
+			if(int.Parse(value) >= 24)
 			{
 				return "23";
 			}
 
-			if (int.Parse(value) < 0)
+			if(int.Parse(value) < 0)
 			{
 				return "0";
 			}
@@ -73,12 +73,12 @@
 
 		private string AdditionalMinuteSecondVerification(string value)
 		{
-			if (int.Parse(value) >= 60)
+			if(int.Parse(value) >= 60)
 			{
 				return "59";
 			}
 
-			if (int.Parse(value) < 0)
+			if(int.Parse(value) < 0)
 			{
 				return "0";
 			}

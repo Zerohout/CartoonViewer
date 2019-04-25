@@ -4,7 +4,7 @@
     xmlns:cartoonModels="clr-namespace:CartoonViewer.Models.CartoonModels"
     xmlns:settingModels="clr-namespace:CartoonViewer.Models.SettingModels"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
-    xmlns:viewModels="clr-namespace:CartoonViewer.Settings.CartoonEditorSetting.ViewModels"
+    xmlns:viewModels="clr-namespace:CartoonViewer.Settings.CartoonEditorFolder.ViewModels"
     EpisodeEditingVisibility="Visible"
     IsDesignTime="True">
     <viewModels:EpisodesEditingViewModel.Episodes>

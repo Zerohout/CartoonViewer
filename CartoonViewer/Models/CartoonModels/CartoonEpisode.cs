@@ -4,7 +4,6 @@
 	using System.Collections.Generic;
 	using System.ComponentModel.DataAnnotations;
 	using System.ComponentModel.DataAnnotations.Schema;
-	using System.Drawing;
 
 	public class CartoonEpisode
 	{
@@ -29,9 +28,20 @@
 		public TimeSpan DelayedSkip { get; set; }
 		public TimeSpan CreditsStart { get; set; }
 		public TimeSpan Duration { get; set; }
-		public DateTime LastDateViewed { get; set; } = new DateTime(2019,01,01);
+		public DateTime LastDateViewed { get; set; } = new DateTime(2019, 01, 01);
+
+
 
 		public List<CartoonVoiceOver> EpisodeVoiceOvers { get; set; }
+
+		//[ForeignKey("CartoonVoiceOver")]
+		//public int CheckedVoiceOverId { get; set; }
+		[InverseProperty("CheckedEpisodes")]
+		public CartoonVoiceOver CartoonVoiceOver { get; set; }
+
+		//[InverseProperty("CheckedEpisodes")]
+		//public int? SelectedVoiceOverId { get; set; }
+		//public CartoonVoiceOver SelectedVoiceOver { get; set; }
 
 		[ForeignKey("CartoonSeason")]
 		public int CartoonSeasonId { get; set; }

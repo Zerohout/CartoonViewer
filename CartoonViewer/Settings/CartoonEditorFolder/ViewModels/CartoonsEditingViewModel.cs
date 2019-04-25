@@ -1,4 +1,4 @@
-﻿namespace CartoonViewer.Settings.CartoonEditorSetting.ViewModels
+﻿namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 {
 	using Helpers;
 	using Models.CartoonModels;
@@ -15,7 +15,7 @@
 			if(cartoon.Name == Helper.NewElementString)
 			{
 				SelectedCartoon = Cloner.CloneCartoon(cartoon);
-				
+
 				TempCartoon = Cloner.CloneCartoon(SelectedCartoon);
 				SelectedCartoonUrl = new CartoonUrl
 				{
@@ -33,7 +33,7 @@
 			NotifySeasonList();
 		}
 
-		
+
 
 		public CartoonsEditingViewModel()
 		{

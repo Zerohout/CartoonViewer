@@ -4,7 +4,6 @@ using System.Linq;
 
 namespace CartoonViewer.Helpers
 {
-	using System.Diagnostics;
 	using System.Runtime.InteropServices;
 	using System.Windows;
 	using System.Windows.Input;
@@ -41,10 +40,10 @@ namespace CartoonViewer.Helpers
 
 		private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wparam, IntPtr lparam, ref bool handled)
 		{
-			if (msg == 0x0312)
+			if(msg == 0x0312)
 			{
 				var atom = short.Parse(wparam.ToString());
-				if (_globalActions.ContainsKey(atom))
+				if(_globalActions.ContainsKey(atom))
 				{
 					_globalActions[atom]();
 				}
@@ -59,7 +58,7 @@ namespace CartoonViewer.Helpers
 			var atom = GlobalAddAtom("CartoonViewer" + (_globalActions.Count + 1));
 			var status = RegisterHotKey(_windowHandle, atom, mod, (uint)commonKey);
 
-			if (status)
+			if(status)
 			{
 				_globalActions.Add(atom, action);
 			}
@@ -68,7 +67,7 @@ namespace CartoonViewer.Helpers
 
 		public void UnregisterHotkeys()
 		{
-			foreach (var atom in _globalActions.Keys)
+			foreach(var atom in _globalActions.Keys)
 			{
 				UnregisterHotKey(_windowHandle, atom);
 				GlobalDeleteAtom(atom);

@@ -1,12 +1,11 @@
-﻿namespace CartoonViewer.Settings.CartoonEditorSetting.ViewModels
+﻿// ReSharper disable CheckNamespace
+namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 {
-	using System.Collections.Generic;
 	using System.Data.Entity;
 	using System.Linq;
 	using System.Windows;
 	using System.Windows.Threading;
 	using Caliburn.Micro;
-	using CartoonEditorSetting.ViewModels;
 	using CartoonViewer.ViewModels;
 	using Database;
 	using Models.CartoonModels;
@@ -15,11 +14,6 @@
 
 	public partial class CartoonsEditorViewModel : Conductor<Screen>.Collection.OneActive
 	{
-		#region Public methods
-
-		
-		#endregion
-
 		#region Private methods
 
 		/// <summary>
@@ -39,11 +33,11 @@
 				return;
 			}
 
-			if (SelectedSeason == null)
+			if(SelectedSeason == null)
 			{
 				LoadSeasonList();
 			}
-			
+
 		}
 
 		private void UnloadData()
@@ -51,8 +45,8 @@
 			if(_selectedSeason == null)
 			{
 				ChangeActiveItem(_selectedCartoon != null
-					                 ? new CartoonEditorSetting.ViewModels.CartoonsEditingViewModel(SelectedCartoon)
-					                 : null);
+									 ? new CartoonsEditingViewModel(SelectedCartoon)
+									 : null);
 			}
 
 			if(_selectedCartoon == null)
@@ -76,7 +70,7 @@
 		{
 			BindableCollection<CartoonWebSite> webSites;
 
-			using(var ctx = new CVDbContext())
+			using(var ctx = new CVDbContext(AppDataPath))
 			{
 				await ctx.CartoonWebSites.LoadAsync();
 				webSites = new BindableCollection<CartoonWebSite>(ctx.CartoonWebSites.Local);
@@ -91,7 +85,7 @@
 		{
 			BindableCollection<Cartoon> cartoons;
 
-			using(var ctx = new CVDbContext())
+			using(var ctx = new CVDbContext(AppDataPath))
 			{
 				await ctx.Cartoons
 						 .Where(c => c.CartoonWebSites
@@ -115,7 +109,7 @@
 		{
 			BindableCollection<CartoonSeason> seasons;
 
-			using(var ctx = new CVDbContext())
+			using(var ctx = new CVDbContext(AppDataPath))
 			{
 				await ctx.CartoonSeasons
 						 .Where(cs => cs.CartoonId == GlobalIdList.CartoonId)
@@ -125,7 +119,7 @@
 
 			Seasons = new BindableCollection<CartoonSeason>(seasons);
 		}
-		
+
 		#region Change property value
 
 		/// <summary>
@@ -139,10 +133,10 @@
 
 			if(hasChanges is false)
 				return;
-			
+
 			if(((ISettingsViewModel)ActiveItem)?.HasChanges ?? false)
 			{
-				var vm = new DialogViewModel(null, DialogState.SAVE_CHANGES);
+				var vm = new DialogViewModel(null, DialogType.SAVE_CHANGES);
 				_ = WinMan.ShowDialog(vm);
 
 				switch(vm.DialogResult)
@@ -159,7 +153,7 @@
 						return;
 				}
 			}
-			
+
 			NotifyChangedProperties(identifier, value);
 		}
 
@@ -256,7 +250,7 @@
 					if(value != null)
 					{
 						GlobalIdList.WebSiteId = ((CartoonWebSite)value).CartoonWebSiteId;
-						if (_selectedCartoon != null)
+						if(_selectedCartoon != null)
 						{
 							SelectedCartoon = null;
 						}
@@ -274,14 +268,17 @@
 				case Cartoon _:
 					if(value != null)
 					{
-						GlobalIdList.CartoonId = ((Cartoon) value).CartoonId;
-						if (_selectedSeason != null)
+						GlobalIdList.CartoonId = ((Cartoon)value).CartoonId;
+						if(_selectedSeason != null)
 						{
 							SelectedSeason = null;
 						}
 						LoadList();
 						ChangeActiveItem(
-							new CartoonEditorSetting.ViewModels.CartoonsEditingViewModel(SelectedCartoon));
+							new CartoonsEditingViewModel(SelectedCartoon)
+							{
+								DisplayName = "Редактирование мультсериала"
+							});
 
 					}
 					else
@@ -292,13 +289,16 @@
 					NotifyOfPropertyChange(() => CanCancelCartoonSelection);
 					NotifyOfPropertyChange(() => SelectedCartoon);
 					NotifyOfPropertyChange(() => CartoonEditingAndSeasonsVisibility);
-					
+
 					break;
 				case CartoonSeason _:
-					if (value != null)
+					if(value != null)
 					{
-						GlobalIdList.SeasonId = ((CartoonSeason) value).CartoonSeasonId;
-						ChangeActiveItem(new CartoonEditorSetting.ViewModels.EpisodesEditingViewModel());
+						GlobalIdList.SeasonId = ((CartoonSeason)value).CartoonSeasonId;
+						ChangeActiveItem(new EpisodesEditingViewModel()
+						{
+							DisplayName = "Редактирование сезона"
+						});
 					}
 					else
 					{

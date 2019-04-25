@@ -1,6 +1,6 @@
-﻿namespace CartoonViewer.Settings.CartoonEditorSetting.ViewModels
+﻿// ReSharper disable CheckNamespace
+namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 {
-	using System;
 	using System.Collections.Generic;
 	using System.Data.Entity;
 	using System.Linq;
@@ -9,7 +9,7 @@
 	using Database;
 	using Models.CartoonModels;
 
-	public partial class VoiceOversEditingViewModel : Screen
+	public partial class VoiceOversEditingViewModel : Screen, ISettingsViewModel
 	{
 
 		#region Global voice overs methods
@@ -20,7 +20,7 @@
 		private void LoadGlobalVoiceOverList()
 		{
 			List<CartoonVoiceOver> voiceOvers;
-			using(var ctx = new CVDbContext())
+			using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
 			{
 				voiceOvers = ctx.VoiceOvers.ToList();
 			}
@@ -33,16 +33,30 @@
 		/// </summary>
 		private async void RemoveSelectedGlobalVoiceOverFromDb()
 		{
-			using(var ctx = new CVDbContext())
-			{
-				var voiceOver = await ctx.VoiceOvers.FindAsync(SelectedVoiceOverId);
 
-				if(voiceOver == null)
+			using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
+			{
+				var voiceOver = ctx.VoiceOvers.Find(SelectedVoiceOverId);
+
+				if(IdList.EpisodeId == 0)
 				{
-					throw new Exception("Выбранная глобальная озвучка не найдена в БД.");
+					ctx.CartoonEpisodes
+					   .SingleOrDefault(ce => ce.EpisodeVoiceOvers
+												.Any(evo => evo.CartoonVoiceOverId == SelectedVoiceOverId))
+					   ?.EpisodeVoiceOvers.Remove(voiceOver);
+				}
+				else
+				{
+					ctx.CartoonEpisodes
+					   .Single(ce => ce.CartoonEpisodeId == IdList.EpisodeId)
+					   .EpisodeVoiceOvers.Remove(voiceOver);
 				}
 
-				ctx.VoiceOvers.Remove(voiceOver);
+
+
+
+				ctx.Entry(voiceOver).State = EntityState.Deleted;
+
 				await ctx.SaveChangesAsync();
 			}
 		}
@@ -70,7 +84,7 @@
 		{
 			BindableCollection<CartoonVoiceOver> voiceOvers;
 
-			using(var ctx = new CVDbContext())
+			using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
 			{
 				ctx.VoiceOvers
 				   .Where(vo => vo.Cartoons
@@ -87,7 +101,7 @@
 		/// </summary>
 		private async void RemoveSelectedCartoonVoiceOverFromDb()
 		{
-			using(var ctx = new CVDbContext())
+			using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
 			{
 				var cartoon = await ctx.Cartoons
 									   .Include(ce => ce.CartoonVoiceOvers)
@@ -124,7 +138,7 @@
 		{
 			BindableCollection<CartoonVoiceOver> voiceOvers;
 
-			using(var ctx = new CVDbContext())
+			using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
 			{
 				ctx.VoiceOvers
 				   .Where(vo => vo.CartoonEpisodes
@@ -141,7 +155,7 @@
 		/// </summary>
 		private async void RemoveSelectedEpisodeVoiceOverFromDb()
 		{
-			using(var ctx = new CVDbContext())
+			using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
 			{
 				var episode = await ctx.CartoonEpisodes
 									   .Include(ce => ce.EpisodeVoiceOvers)
@@ -178,7 +192,7 @@
 		{
 			BindableCollection<Cartoon> cartoons;
 
-			using(var ctx = new CVDbContext())
+			using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
 			{
 				ctx.Cartoons
 				   .Where(c => c.CartoonWebSites
@@ -233,7 +247,7 @@
 		{
 			BindableCollection<CartoonSeason> seasons;
 
-			using(var ctx = new CVDbContext())
+			using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
 			{
 				ctx.CartoonSeasons
 				   .Where(cs => cs.CartoonId == IdList.CartoonId)
@@ -285,7 +299,7 @@
 		{
 			BindableCollection<CartoonEpisode> episodes;
 
-			using(var ctx = new CVDbContext())
+			using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
 			{
 				ctx.CartoonEpisodes
 				   .Where(ce => ce.CartoonSeasonId == IdList.SeasonId)
@@ -329,70 +343,7 @@
 
 		#endregion
 
-		#region General methods
-
-		/// <summary>
-		/// Загрузка из базы данных всех необходимых данных
-		/// </summary>
-		private void LoadData()
-		{
-			// --Начальная, когда ни один мульсериал не выбран
-			if(_selectedCartoon == null)
-			{
-				LoadCartoonList();
-
-				// --При загруженных с конструктора данных мультсериала
-				if(IdList.CartoonId > 0)
-				{
-					_selectedCartoon = _cartoons.First(c => c.CartoonId == IdList.CartoonId);
-					LoadData();
-					NotifyCartoonData();
-				}
-
-				return;
-			}
-
-			// --При выборе мультсериала
-			if(_selectedSeason == null)
-			{
-				LoadCartoonVoiceOverList();
-				LoadSeasonList();
-
-				_selectedCartoon = _cartoons.First(c => c.CartoonId == IdList.CartoonId);
-				NotifyCartoonData();
-
-				if(IdList.SeasonId > 0)
-				{
-					_selectedSeason = _seasons.First(cs => cs.CartoonSeasonId == IdList.SeasonId);
-					LoadData();
-					NotifySeasonData();
-				}
-
-				return;
-			}
-
-			// --При выборе сезона
-			if(_selectedEpisode == null)
-			{
-				LoadEpisodeList();
-
-				_selectedSeason = _seasons.First(cs => cs.CartoonSeasonId == IdList.SeasonId);
-				NotifySeasonData();
-
-				if(IdList.EpisodeId > 0)
-				{
-					_selectedEpisode = _episodes.First(ce => ce.CartoonEpisodeId == IdList.EpisodeId);
-					LoadData();
-					NotifyEpisodeData();
-				}
-				return;
-			}
-
-			// --При выборе эпизода
-			LoadEpisodeVoiceOverList();
-			_selectedEpisode = _episodes.First(ce => ce.CartoonEpisodeId == IdList.EpisodeId);
-			NotifyEpisodeData();
-		}
+		#region VoiceOver methods
 
 		/// <summary>
 		/// Задать новое значение выбранной озвучке
@@ -430,7 +381,7 @@
 		/// <returns></returns>
 		private Task<CartoonVoiceOver> CreateNewVoiceOver()
 		{
-			using(var ctx = new CVDbContext())
+			using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
 			{
 				var count = ctx.VoiceOvers.Max(vo => vo.CartoonVoiceOverId) + 1;
 
@@ -449,6 +400,76 @@
 				return ctx.VoiceOvers.FindAsync(id);
 			}
 		}
+
+		#endregion
+
+		#region General methods
+
+		/// <summary>
+		/// Загрузка из базы данных всех необходимых данных
+		/// </summary>
+		private void LoadData()
+		{
+			// --Начальная, когда ни один мульсериал не выбран
+			if(_selectedCartoon == null)
+			{
+				LoadCartoonList();
+
+				// --При загруженных с конструктора данных мультсериала
+				if(IdList.CartoonId > 0)
+				{
+					_selectedCartoon = _cartoons.First(c => c.CartoonId == IdList.CartoonId);
+					LoadData();
+					NotifyCartoonData();
+				}
+
+				return;
+			}
+
+			// --При выборе мультсериала
+			if(_selectedSeason == null)
+			{
+				LoadCartoonVoiceOverList();
+				LoadSeasonList();
+
+				// установка значения выбранному мультфильму при смене его на другой
+				_selectedCartoon = _cartoons.First(c => c.CartoonId == IdList.CartoonId);
+				NotifyCartoonData();
+
+				if(IdList.SeasonId > 0)
+				{
+					_selectedSeason = _seasons.First(cs => cs.CartoonSeasonId == IdList.SeasonId);
+					LoadData();
+					NotifySeasonData();
+				}
+
+				return;
+			}
+
+			// --При выборе сезона
+			if(_selectedEpisode == null)
+			{
+				LoadEpisodeList();
+
+				_selectedSeason = _seasons.First(cs => cs.CartoonSeasonId == IdList.SeasonId);
+				NotifySeasonData();
+
+				if(IdList.EpisodeId > 0)
+				{
+					_selectedEpisode = _episodes.First(ce => ce.CartoonEpisodeId == IdList.EpisodeId);
+					LoadData();
+					NotifyEpisodeData();
+				}
+				return;
+			}
+
+			// --При выборе эпизода
+			LoadEpisodeVoiceOverList();
+			_selectedEpisode = _episodes.First(ce => ce.CartoonEpisodeId == IdList.EpisodeId);
+			NotifyEpisodeData();
+		}
+
+
 
 		/// <summary>
 		/// Копировать изменения редактируемой озвучки

@@ -1,4 +1,4 @@
-﻿namespace CartoonViewer.Settings.CartoonEditorSetting.ViewModels
+﻿namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 {
 	using Caliburn.Micro;
 
@@ -8,7 +8,7 @@
 
 		public EpisodesEditingViewModel()
 		{
-			
+
 		}
 
 		protected override void OnInitialize()

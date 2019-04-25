@@ -4,7 +4,7 @@
     xmlns:cartoonModels="clr-namespace:CartoonViewer.Models.CartoonModels"
     xmlns:helper="clr-namespace:CartoonViewer.Helpers"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
-    xmlns:viewModels="clr-namespace:CartoonViewer.Settings.CartoonEditorSetting.ViewModels">
+    xmlns:viewModels="clr-namespace:CartoonViewer.Settings.CartoonEditorFolder.ViewModels">
 
     <viewModels:CartoonsEditingViewModel.SelectedCartoon>
         <cartoonModels:Cartoon Name="Название_мультсериала"

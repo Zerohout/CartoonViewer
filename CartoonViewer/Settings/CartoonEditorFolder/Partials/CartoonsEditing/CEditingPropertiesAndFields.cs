@@ -1,9 +1,8 @@
-﻿namespace CartoonViewer.Settings.CartoonEditorSetting.ViewModels
+﻿// ReSharper disable CheckNamespace
+namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 {
 	using System.Windows;
 	using Caliburn.Micro;
-	using CartoonEditorSetting.ViewModels;
-	using Helpers;
 	using Models.CartoonModels;
 	using static Helpers.Helper;
 
@@ -16,7 +15,7 @@
 		private Cartoon _selectedCartoon;
 		private CartoonSeason _selectedSeason;
 		private CartoonUrl _selectedCartoonUrl;
-		
+
 		#endregion
 
 		#region Properties

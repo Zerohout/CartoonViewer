@@ -3,6 +3,7 @@
 namespace CartoonViewer.Database
 {
 	using System.Data.Entity;
+	using System.IO;
 	using Models.CartoonModels;
 
 	public class CVDbContext : DbContext
@@ -12,17 +13,18 @@ namespace CartoonViewer.Database
 			AppDomain.CurrentDomain.SetData("DataDirectory", AppDomain.CurrentDomain.BaseDirectory);
 
 			Database.SetInitializer(new CreateDatabaseIfNotExists<CVDbContext>());
-			
-			//Database.SetInitializer(new DropCreateDatabaseAlways<CVDbContext>());
-			
-
-			//Database.SetInitializer(new DropCreateDatabaseIfModelChanges<CVDbContext>());
 		}
 
 		public CVDbContext(string path) : base("CVDb")
 		{
+			if (Directory.Exists(path) is false)
+			{
+				Directory.CreateDirectory(path);
+			}
+
 			AppDomain.CurrentDomain.SetData("DataDirectory", path);
 
+			Database.SetInitializer(new CreateDatabaseIfNotExists<CVDbContext>());
 		}
 
 		public DbSet<CartoonWebSite> CartoonWebSites { get; set; }

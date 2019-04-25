@@ -3,7 +3,6 @@ namespace CartoonViewer.Migrations
 	using System.Data.Entity;
 	using System.Data.Entity.Migrations;
 	using System.Linq;
-	using System.Net;
 	using Database;
 	using Models.CartoonModels;
 	using static Helpers.Creator;
@@ -22,15 +21,17 @@ namespace CartoonViewer.Migrations
 		}
 
 
+
+
 		private void AddDataToDatabase(CVDbContext context)
 		{
-			context.CartoonWebSites.Add(new CartoonWebSite{Url = FreehatWebSite});
+			context.CartoonWebSites.Add(new CartoonWebSite { Url = FreehatWebSite });
 			context.Cartoons.AddRange(CreateCartoonList());
 			context.VoiceOvers.AddRange(CreateSouthParkVoiceOverList());
 			context.SaveChanges();
 
 
-			foreach (var cw in context.CartoonWebSites)
+			foreach(var cw in context.CartoonWebSites)
 			{
 				cw.ElementValues.Add(CreateElementValue());
 			}
@@ -41,12 +42,12 @@ namespace CartoonViewer.Migrations
 			var cartoons = context.Cartoons.ToList();
 			var voiceOvers = context.VoiceOvers.ToList();
 
-			foreach (var cc in cartoons)
+			foreach(var cc in cartoons)
 			{
-				if (cc.Name == "ёжный парк")
-				{
-					cc.CartoonVoiceOvers.AddRange(voiceOvers);
-				}
+				//if (cc.Name == "ёжный парк")
+				//{
+				//	cc.CartoonVoiceOvers.AddRange(voiceOvers);
+				//}
 
 				cc.CartoonWebSites.Add(website);
 				cc.CartoonUrls.Add(CreateCartoonUrl(cc, website));
@@ -54,12 +55,23 @@ namespace CartoonViewer.Migrations
 			}
 
 			context.SaveChanges();
+
+			var cart = cartoons.Find(c => c.Name == "ёжный парк");
+
+			foreach(var vo in voiceOvers)
+			{
+				vo.Cartoons.Add(cart);
+				context.Entry(vo).State = EntityState.Modified;
+			}
+
+
+			context.SaveChanges();
 		}
 
 		private CartoonUrl CreateCartoonUrl(Cartoon cartoon, CartoonWebSite cartoonWebSite)
 		{
 			var url = "";
-			switch (cartoon.Name)
+			switch(cartoon.Name)
 			{
 				case "ёжный парк":
 					url = $"http://sp.freehat.cc/episode/";

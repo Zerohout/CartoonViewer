@@ -1,18 +1,15 @@
-﻿namespace CartoonViewer.Settings.CartoonEditorSetting.ViewModels
+﻿// ReSharper disable CheckNamespace
+namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Data.Entity;
 	using System.Linq;
 	using System.Windows;
 	using System.Windows.Controls;
 	using System.Windows.Input;
-	using System.Windows.Navigation;
 	using Caliburn.Micro;
-	using CartoonEditorSetting.ViewModels;
 	using CartoonViewer.ViewModels;
 	using Database;
-	using Helpers;
 	using Models.CartoonModels;
 	using static Helpers.Cloner;
 	using static Helpers.Helper;
@@ -24,15 +21,15 @@
 
 		public async void EditVoiceOvers()
 		{
-			WinMan.ShowDialog(new CartoonEditorSetting.ViewModels.VoiceOversEditingViewModel(GlobalIdList));
+			WinMan.ShowDialog(new VoiceOversEditingViewModel(GlobalIdList));
 
 			CartoonEpisode episode;
 
-			using(var ctx = new CVDbContext())
+			using(var ctx = new CVDbContext(AppDataPath))
 			{
 				episode = await ctx.CartoonEpisodes
-				                   .Include(e => e.EpisodeVoiceOvers)
-				                   .SingleAsync(e => e.CartoonEpisodeId == GlobalIdList.EpisodeId);
+								   .Include(e => e.EpisodeVoiceOvers)
+								   .SingleAsync(e => e.CartoonEpisodeId == GlobalIdList.EpisodeId);
 			}
 
 			VoiceOvers = new BindableCollection<CartoonVoiceOver>(CloneVoiceOverList(episode.EpisodeVoiceOvers));
@@ -45,7 +42,7 @@
 		public void TimeChanged()
 		{
 			var time = ConvertFromEpisodeTime(EpisodeTime);
-			
+
 			EditingEpisode.DelayedSkip = time.DelayedSkip;
 			EditingEpisode.SkipCount = time.SkipCount;
 			EditingEpisode.CreditsStart = time.CreditsStart;
@@ -56,7 +53,7 @@
 
 		public async void SaveChanges()
 		{
-			using(var ctx = new CVDbContext())
+			using(var ctx = new CVDbContext(AppDataPath))
 			{
 				var episode = ctx.CartoonEpisodes
 								 .Include(c => c.EpisodeVoiceOvers)
@@ -93,7 +90,7 @@
 
 		public void CancelChanges()
 		{
-			var dvm = new DialogViewModel(null, DialogState.CANCEL_CHANGES);
+			var dvm = new DialogViewModel(null, DialogType.CANCEL_CHANGES);
 			WinMan.ShowDialog(dvm);
 
 			if(dvm.DialogResult == DialogResult.NO_ACTION)
@@ -128,13 +125,13 @@
 			Episodes.Add(defaultEpisode);
 			NotifyOfPropertyChange(() => Episodes);
 
-			using(var ctx = new CVDbContext())
+			using(var ctx = new CVDbContext(AppDataPath))
 			{
 				ctx.CartoonEpisodes.Add(defaultEpisode);
 				await ctx.SaveChangesAsync();
 				Episodes.Last().CartoonEpisodeId = ctx.CartoonEpisodes
-				                                      .ToList()
-				                                      .Last().CartoonEpisodeId;
+													  .ToList()
+													  .Last().CartoonEpisodeId;
 			}
 
 			SelectedEpisode = Episodes.Count > 0
@@ -154,14 +151,19 @@
 		public async void RemoveEpisode()
 		{
 
-			if (!HasChangesValidation())
+			if(!HasChangesValidation())
 			{
 				return;
 			}
-			
-			using(var ctx = new CVDbContext())
+
+			using(var ctx = new CVDbContext(AppDataPath))
 			{
 				var episode = ctx.CartoonEpisodes.Find(GlobalIdList.EpisodeId);
+
+				if (episode == null)
+				{
+					throw new Exception("Удаляемый эпизод не найден");
+				}
 
 				ctx.CartoonEpisodes.Remove(episode);
 				await ctx.SaveChangesAsync();
@@ -181,15 +183,15 @@
 		{
 			if(HasChanges)
 			{
-				var dvm = new DialogViewModel(null, DialogState.SAVE_CHANGES);
+				var dvm = new DialogViewModel(null, DialogType.SAVE_CHANGES);
 				WinMan.ShowDialog(dvm);
 
 				switch(dvm.DialogResult)
 				{
-					case Helper.DialogResult.YES_ACTION:
+					case DialogResult.YES_ACTION:
 						SaveChanges();
 						return true;
-					case Helper.DialogResult.NO_ACTION:
+					case DialogResult.NO_ACTION:
 						return true;
 					default:
 						return false;
@@ -201,7 +203,7 @@
 
 		public void CancelSelection()
 		{
-			if (!HasChangesValidation())
+			if(!HasChangesValidation())
 			{
 				return;
 			}
@@ -228,7 +230,7 @@
 				}
 				else
 				{
-					((CartoonEditorSetting.ViewModels.CartoonsEditorViewModel) Parent).CancelSeasonSelection();
+					((CartoonsEditorViewModel)Parent).CancelSeasonSelection();
 				}
 			}
 		}

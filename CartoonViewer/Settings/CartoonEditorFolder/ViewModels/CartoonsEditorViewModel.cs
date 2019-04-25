@@ -1,4 +1,4 @@
-﻿namespace CartoonViewer.Settings.CartoonEditorSetting.ViewModels
+﻿namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 {
 	using Caliburn.Micro;
 
@@ -12,8 +12,8 @@
 		protected override void OnInitialize()
 		{
 			LoadList();
-			NotifyOfPropertyChange<bool>(() => CanCancelSeasonSelection);
-			NotifyOfPropertyChange<bool>(() => CanCancelCartoonSelection);
+			NotifyOfPropertyChange(() => CanCancelSeasonSelection);
+			NotifyOfPropertyChange(() => CanCancelCartoonSelection);
 			base.OnInitialize();
 		}
 	}

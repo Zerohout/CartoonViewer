@@ -1,49 +1,75 @@
-﻿namespace CartoonViewer.Models.SettingModels
+﻿// ReSharper disable PossibleInvalidOperationException
+namespace CartoonViewer.Models.SettingModels
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Windows;
 	using Caliburn.Micro;
+	using Newtonsoft.Json;
 	using static Helpers.Helper;
 
-	public class GeneralSettingsValue : PropertyChangedBase
+	[Serializable]
+	[JsonObject(MemberSerialization.OptOut)]
+	public class GeneralSettingsValue : PropertyChangedBase, ICloneable
 	{
-		private int? _defaultStartEpisodesCount = 68;
+		private int? _episodesCount = 10;
 		private bool _intellectualShutdown = true;
-		private int? _intellectualShutdownIdleTime = 60;
 		private string _selectedIntellectualShutdownIdleTimeType = "минут";
+		private int? _intellectualShutdownIdleTime = 60;
 		private int? _intellectualShutdownReachedHoursTime = 1;
 		private int? _intellectualShutdownReachedMinutesTime = 0;
-		private bool _isIntellectualShutdownRemarkExpand = false;
+		private bool _isIntellectualShutdownRemarkExpand;
 		private bool _watchingInRow;
 		private bool _randomWatching = true;
 		private int? _randomMixCount = 1;
 		private string _selectedNoneRepeatTimeType = "дней";
-		private int? _noneRepeatTime = 3;
+		private int? _noneRepeatTimeCount = 3;
 
+		public GeneralSettingsValue()
+		{
+
+		}
 
 		#region Default values
 
 		/// <summary>
 		/// Количество эпизодов к просмотру по умолчанию
 		/// </summary>
-		public int? DefaultStartEpisodesCount
+		public int? EpisodesCount
 		{
-			get => _defaultStartEpisodesCount;
+			get => _episodesCount > _availableEpisodesCount
+				? _availableEpisodesCount
+				: _episodesCount;
 			set
 			{
+				if(_episodesCount == value)
+					return;
+
 				if(value == null || value < 0)
 				{
 					value = 0;
 				}
 
-				if(value > 999_999)
+				if(value > _availableEpisodesCount)
 				{
-					value = 999_999;
+					value = _availableEpisodesCount;
 				}
 
-				_defaultStartEpisodesCount = value;
-				NotifyOfPropertyChange(() => DefaultStartEpisodesCount);
+				_episodesCount = value;
+				NotifyOfPropertyChange(() => EpisodesCount);
 				NotifyOfPropertyChange(() => ApproximateDuration);
+			}
+		}
+
+		private int _availableEpisodesCount = 10;
+
+		public int AvailableEpisodesCount
+		{
+			get => _availableEpisodesCount;
+			set
+			{
+				_availableEpisodesCount = value;
+				NotifyOfPropertyChange(() => AvailableEpisodesCount);
 			}
 		}
 
@@ -52,7 +78,7 @@
 		/// </summary>
 		public TimeSpan ApproximateDuration =>
 			new TimeSpan(0, 0,
-						 (int)Math.Ceiling(ApproximateEpisodeDuration.TotalSeconds * (DefaultStartEpisodesCount ?? 0)));
+						 (int)Math.Ceiling(ApproximateEpisodeDuration.TotalSeconds * (EpisodesCount ?? 0)));
 
 		#endregion
 
@@ -66,6 +92,9 @@
 			get => _intellectualShutdown;
 			set
 			{
+				if(_intellectualShutdown == value)
+					return;
+
 				_intellectualShutdown = value;
 				NotifyOfPropertyChange(() => IntellectualShutdown);
 				NotifyOfPropertyChange(() => IntelectualShutdownSettingsVisibility);
@@ -73,7 +102,7 @@
 		}
 
 		/// <summary>
-		/// Свойство Visibility элементов зависимых от состояния включенности интеллектуального выключения
+		/// Видимость элементов зависимых от состояния включенности интеллектуального выключения
 		/// </summary>
 		public Visibility IntelectualShutdownSettingsVisibility => IntellectualShutdown
 			? Visibility.Visible
@@ -87,6 +116,8 @@
 			get => _intellectualShutdownIdleTime;
 			set
 			{
+				if(_intellectualShutdownIdleTime == value)
+					return;
 				_intellectualShutdownIdleTime = SetIdleTime(value);
 				NotifyOfPropertyChange(() => IntellectualShutdownIdleTime);
 			}
@@ -94,8 +125,8 @@
 		/// <summary>
 		/// Список типов времени ожидания интеллектуального выключения
 		/// </summary>
-		public BindableCollection<string> IntellectualShutdownIdleTimeTypeList =>
-			new BindableCollection<string>
+		public ICollection<string> IntellectualShutdownIdleTimeTypeList =>
+			new List<string>
 			{
 				"часов",
 				"минут",
@@ -109,6 +140,8 @@
 			get => _selectedIntellectualShutdownIdleTimeType;
 			set
 			{
+				if(_selectedIntellectualShutdownIdleTimeType == value)
+					return;
 
 				var tempValue = _selectedIntellectualShutdownIdleTimeType;
 				_selectedIntellectualShutdownIdleTimeType = value;
@@ -125,6 +158,9 @@
 			get => _intellectualShutdownReachedHoursTime;
 			set
 			{
+				if(_intellectualShutdownReachedHoursTime == value)
+					return;
+
 				if(value == null || value < 0)
 				{
 					value = 0;
@@ -149,6 +185,9 @@
 			get => _intellectualShutdownReachedMinutesTime;
 			set
 			{
+				if(_intellectualShutdownReachedMinutesTime == value)
+					return;
+
 				if(value == null || value < 0)
 				{
 					value = 0;
@@ -179,6 +218,9 @@
 			get => _isIntellectualShutdownRemarkExpand;
 			set
 			{
+				if(_isIntellectualShutdownRemarkExpand == value)
+					return;
+
 				_isIntellectualShutdownRemarkExpand = value;
 				NotifyOfPropertyChange(() => IsIntellectualShutdownRemarkExpand);
 				NotifyOfPropertyChange(() => IntellectualShutdownRemarkVisibility);
@@ -186,7 +228,7 @@
 		}
 
 		/// <summary>
-		/// Свойство Visibility элементов зависимых от состояния включенности интелектуального выключения
+		/// Видимость элементов зависимых от состояния включенности интелектуального выключения
 		/// </summary>
 		public Visibility IntellectualShutdownRemarkVisibility => IsIntellectualShutdownRemarkExpand
 			? Visibility.Visible
@@ -230,7 +272,7 @@
 			}
 		}
 		/// <summary>
-		/// Свойство Visibility элементов зависимых от просмотра эпизодов в случайном порядке
+		/// Видимость элементов зависимых от просмотра эпизодов в случайном порядке
 		/// </summary>
 		public Visibility RandomEnabledVisibility => RandomWatching
 			? Visibility.Visible
@@ -243,6 +285,9 @@
 			get => _randomMixCount;
 			set
 			{
+				if(_randomMixCount == value)
+					return;
+
 				if(value == null ||
 					value < 1)
 				{
@@ -260,10 +305,57 @@
 			}
 		}
 
+		public TimeSpan NonRepeatTime
+		{
+			get
+			{
+				var result = new TimeSpan();
+
+				switch(SelectedNoneRepeatTimeType)
+				{
+					case "никогда":
+						result = TimeSpan.MaxValue;
+						break;
+					case "лет":
+						result = new TimeSpan(
+							(int)((double)NoneRepeatTimeCount * 365.25),
+							0, 0, 0);
+						break;
+					case "месяцев":
+						result = new TimeSpan(
+							(int)((double)NoneRepeatTimeCount * 30.47916),
+							0, 0, 0);
+						break;
+					case "недель":
+						result = new TimeSpan(
+							(int)NoneRepeatTimeCount * 7,
+							0, 0, 0);
+						break;
+					case "дней":
+						result = new TimeSpan(
+							(int)NoneRepeatTimeCount,
+							0, 0, 0);
+						break;
+					case "часов":
+						result = new TimeSpan(
+							(int)NoneRepeatTimeCount,
+							0, 0);
+						break;
+					case "всегда":
+						break;
+				}
+
+				return result;
+			}
+		}
+
+
+
+
 		/// <summary>
 		/// Коллекция типов времени для запрета повторов просмотренных эпизодов
 		/// </summary>
-		public BindableCollection<string> NoneRepeatTimeTypeList => new BindableCollection<string>
+		public ICollection<string> NoneRepeatTimeTypeList => new List<string>
 		{
 			"никогда",
 			"лет",
@@ -282,34 +374,43 @@
 			get => _selectedNoneRepeatTimeType;
 			set
 			{
+				if(_selectedNoneRepeatTimeType == value)
+					return;
+
 				var tempValue = _selectedNoneRepeatTimeType;
 				_selectedNoneRepeatTimeType = value;
 				NotifyOfPropertyChange(() => SelectedNoneRepeatTimeType);
 
 				var temp = ConvertNonRepeatTime(tempValue);
 
-				if (temp == null) return;
+				if(temp == null)
+					return;
 
-				NoneRepeatTime = temp;
+				NoneRepeatTimeCount = temp;
 			}
 		}
 
 		/// <summary>
 		/// Значение времени, в течение которого просмотренный эпизод не будет повторяться
 		/// </summary>
-		public int? NoneRepeatTime
+		public int? NoneRepeatTimeCount
 		{
-			get => _noneRepeatTime;
+			get => _noneRepeatTimeCount;
 			set
 			{
-				_noneRepeatTime = SetNonRepeatTime(value);
-				NotifyOfPropertyChange(() => NoneRepeatTime);
+				if(_noneRepeatTimeCount == value)
+					return;
+
+				_noneRepeatTimeCount = SetNonRepeatTime(value);
+				NotifyOfPropertyChange(() => NoneRepeatTimeCount);
 			}
 		}
 
 
 
 		#endregion
+
+		#region Methods
 
 		/// <summary>
 		/// Установить время ожидания для интеллектуального выключения 
@@ -362,6 +463,10 @@
 		private int? ConvertIdleTime(string tempValue)
 		{
 			var value = _intellectualShutdownIdleTime;
+
+			if(tempValue == null)
+				return null;
+
 			switch(_selectedIntellectualShutdownIdleTimeType)
 			{
 				case "секунд":
@@ -440,10 +545,10 @@
 					}
 					break;
 				case "дней":
-					if(value > 36_575)
+					if(value > 36_525)
 					{
 						SelectedNoneRepeatTimeType = "никогда";
-						return 36_575;
+						return 36_525;
 					}
 					break;
 				case "часов":
@@ -464,9 +569,12 @@
 		/// <returns></returns>
 		private int? ConvertNonRepeatTime(string tempTypeValue)
 		{
-			var timeValue = _noneRepeatTime;
+			var timeValue = _noneRepeatTimeCount;
 			var typeValue = _selectedNoneRepeatTimeType;
-			
+
+			if(tempTypeValue == null)
+				return null;
+
 			switch(typeValue)
 			{
 				case "никогда":
@@ -486,8 +594,8 @@
 							timeValue = (int)Math.Ceiling((double)timeValue / 52.25);
 							break;
 						case "дней":
-							// каждый 4-й год весокосный, значит в году 365,75 дней
-							timeValue = (int)Math.Ceiling((double)timeValue / 365.75);
+							// каждый 4-й год весокосный, значит в году 365,25 дней
+							timeValue = (int)Math.Ceiling((double)timeValue / 365.25);
 							break;
 						case "часов":
 							// 365.75 дней умноженные на 24 == 8778 часов в году
@@ -548,10 +656,10 @@
 						case "никогда":
 							break;
 						case "лет":
-							timeValue = (int) ((double) timeValue * 365.75);
+							timeValue = (int)((double)timeValue * 365.25);
 							break;
 						case "месяцев":
-							timeValue = (int) ((double) timeValue * 30.47916);
+							timeValue = (int)((double)timeValue * 30.47916);
 							break;
 						case "недель":
 							timeValue *= 7;
@@ -572,7 +680,7 @@
 							timeValue *= 8778;
 							break;
 						case "месяцев":
-							timeValue = (int) ((double) timeValue * 731.5);
+							timeValue = (int)((double)timeValue * 731.5);
 							break;
 						case "недель":
 							// 24 * 7 = 168
@@ -592,5 +700,13 @@
 			return timeValue;
 		}
 
+		#endregion
+
+
+		/// <summary>
+		/// Клонирование данного класса
+		/// </summary>
+		/// <returns></returns>
+		public object Clone() => MemberwiseClone();
 	}
 }

@@ -2,6 +2,8 @@
 {
 	using System.Collections.Generic;
 	using System.ComponentModel.DataAnnotations;
+	using System.ComponentModel.DataAnnotations.Schema;
+	using System.Linq;
 
 	public class CartoonVoiceOver
 	{
@@ -9,31 +11,56 @@
 		{
 			Cartoons = new List<Cartoon>();
 			CartoonEpisodes = new List<CartoonEpisode>();
+			CheckedEpisodes = new List<CartoonEpisode>();
 		}
 
 
 		[Key]
 		public int CartoonVoiceOverId { get; set; }
 		
+
 		public string Name { get; set; }
 		public string Description { get; set; }
 		public string UrlParameter { get; set; }
-		public bool Checked { get; set; }
 
+		[NotMapped]
+		public int SelectedEpisodeId { private get; set; }
 
-		public List<Cartoon> Cartoons { get; set; }
+		[NotMapped]
+		public bool Checked
 
-		public List<CartoonEpisode> CartoonEpisodes { get; set; }
+		{
+			get => CheckedEpisodes.Any(ce => ce.CartoonEpisodeId == SelectedEpisodeId);
 
+			set
+			{
+				if(value is true)
+				{
+					if (CheckedEpisodes.Any(ce => ce.CartoonEpisodeId == SelectedEpisodeId) is false)
+					{
+						var addingEpisode = CartoonEpisodes
+							.First(ce => ce.CartoonEpisodeId == SelectedEpisodeId);
 
+						CheckedEpisodes.Add(addingEpisode);
+					}
+				}
+				else
+				{
+					if(CheckedEpisodes.Any(ce => ce.CartoonEpisodeId == SelectedEpisodeId) is true)
+					{
+						var removingEpisode = CheckedEpisodes
+							.First(ce => ce.CartoonEpisodeId == SelectedEpisodeId);
 
+						CheckedEpisodes.Remove(removingEpisode);
+					}
+				}
+			}
+		}
 
-		//[ForeignKey("CartoonEpisode")]
-		//public int? CartoonEpisodeId { get; set; }
-		//public CartoonEpisode CartoonEpisode { get; set; }
+		public ICollection<Cartoon> Cartoons { get; set; }
 
-		//[ForeignKey("Cartoon")]
-		//public int? CartoonId { get; set; }
-		//public Cartoon Cartoon { get; set; }
+		public ICollection<CartoonEpisode> CartoonEpisodes { get; set; }
+		public ICollection<CartoonEpisode> CheckedEpisodes { get; set; }
+
 	}
 }

@@ -4,13 +4,14 @@ namespace CartoonViewer.MainMenu.ViewModels
 	using System;
 	using System.Collections.Generic;
 	using Caliburn.Micro;
-	using Helpers;
+	using Database;
 	using Models.CartoonModels;
 	using OpenQA.Selenium;
 	using static Helpers.Helper;
 
 	public partial class MainMenuViewModel : Screen
 	{
+		private CVDbContext CvDbContext = new CVDbContext(AppDataPath);
 		private readonly Random rnd = new Random();
 		private BindableCollection<Cartoon> _cartoons = new BindableCollection<Cartoon>();
 		private List<Cartoon> _checkedCartoons = new List<Cartoon>();
@@ -20,7 +21,6 @@ namespace CartoonViewer.MainMenu.ViewModels
 		private IWebElement WebElement;
 		private bool _isPause;
 		private bool _isShutdownComp;
-		private string _episodeCount = "10";
 		private double _opacity = 1;
 		private int _currentEpisodeIndex;
 		private Uri _background = new Uri(MMBackgroundUri, UriKind.Relative);
@@ -79,37 +79,6 @@ namespace CartoonViewer.MainMenu.ViewModels
 		}
 
 		/// <summary>
-		/// Количество серий для просмотра
-		/// </summary>
-		public string EpisodeCountString
-		{
-			get => _episodeCount;
-			set
-			{
-				if (int.TryParse(value, out var tempValue))
-				{
-					if (EpisodeCount < tempValue && ElapsedTime > TimeSpan.Zero)
-					{
-						AddCartoonToQueue(tempValue - EpisodeCount);
-					}
-
-					_episodeCount = value;
-				}
-				else
-				{
-					_episodeCount = "0";
-				}
-
-				NotifyEpisodesTime();
-			}
-		}
-
-		/// <summary>
-		/// Числовое представление количества оставшихся серий для просмотра
-		/// </summary>
-		public int EpisodeCount => int.Parse(EpisodeCountString);
-
-		/// <summary>
 		/// Текст TextBlock'а Осталось серий/Серий к просмотру
 		/// </summary>
 		public string EpisodesCountRemainingString
@@ -159,9 +128,9 @@ namespace CartoonViewer.MainMenu.ViewModels
 		/// Флаг переключения серии
 		/// </summary>
 		public bool IsSwitchEpisode { get; set; }
-		
+
 		#endregion
-		
+
 		#region Свойства связанные со временем
 
 		/// <summary>
@@ -176,58 +145,36 @@ namespace CartoonViewer.MainMenu.ViewModels
 				NotifyOfPropertyChange(() => DelayedSkipDuration);
 			}
 		}
-		
+
 		/// <summary>
-		/// Кончное время просмотра указанного числа серий
+		/// Конечное время просмотра указанного числа серий
 		/// </summary>
 		public TimeSpan EndTime => DateTime.Now.TimeOfDay +
-		                           new TimeSpan(
-			                           0,
-			                           (int)Math.Ceiling(Helper.ApproximateEpisodeDuration.TotalMinutes
-			                                             * (double.Parse(_episodeCount))),
-			                           0) + (CurrentDuration - ElapsedTime);
+								   new TimeSpan(
+									   0,
+									   0,
+									   (int)GeneralSettings.ApproximateDuration.TotalSeconds)
+								   + (CurrentDuration - ElapsedTime);
 
 		/// <summary>
 		/// Конечная дата просмотра указанного числа серий
 		/// </summary>
-		public DateTime EndDate => new DateTime(
-			DateTime.Now.Year,
-			DateTime.Now.Month,
-			DateTime.Now.Day + EndTime.Days);
+		public DateTime EndDate => DateTime.Now.AddDays(EndTime.Days);
 
 		/// <summary>
 		/// Текущая длительность серии
 		/// </summary>
 		public TimeSpan CurrentDuration { get; set; }
-		/// <summary>
-		/// Год конечной даты
-		/// </summary>
-		public int FinalYear => EndDate.Year;
-		/// <summary>
-		/// Месяц конечной даты
-		/// </summary>
-		public int FinalMonth => EndDate.Month;
-		/// <summary>
-		/// День конечной даты
-		/// </summary>
-		public int FinalDay => EndDate.Day;
-		/// <summary>
-		/// Час конечного времени
-		/// </summary>
-		public int FinalHour => EndTime.Hours;
-		/// <summary>
-		/// Минута конечного времени
-		/// </summary>
-		public int FinalMinute => EndTime.Minutes;
+
 		/// <summary>
 		/// Прошедшее время серии
 		/// </summary>
-		public TimeSpan ElapsedTime => Helper.Timer.Elapsed;
+		public TimeSpan ElapsedTime => Timer.Elapsed;
 
 
 		#endregion
 
-		
+
 
 		/// <summary>
 		/// Прозрачность элементов и фона MainMenu

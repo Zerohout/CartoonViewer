@@ -1,6 +1,5 @@
 ﻿namespace CartoonViewer.ViewModels
 {
-	using System.IO;
 	using System.Windows;
 	using System.Windows.Forms;
 	using System.Windows.Input;
@@ -20,7 +19,7 @@
 			HotReg = new HotkeysRegistrator(GetView() as Window);
 			HotReg.RegisterGlobalHotkey(Exit, Keys.Pause, ModifierKeys.Shift);
 
-			
+
 
 			ActiveItem = new MainMenuViewModel()
 			{
@@ -28,7 +27,7 @@
 			};
 			base.OnViewLoaded(view);
 		}
-		
+
 		/// <summary>
 		/// Состояние окна
 		/// </summary>

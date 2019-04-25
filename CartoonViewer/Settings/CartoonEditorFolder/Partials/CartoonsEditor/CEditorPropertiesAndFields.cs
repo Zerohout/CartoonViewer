@@ -1,16 +1,9 @@
-﻿namespace CartoonViewer.Settings.CartoonEditorSetting.ViewModels
+﻿// ReSharper disable CheckNamespace
+namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 {
-	using System;
-	using System.Threading.Tasks;
 	using System.Windows;
-	using System.Windows.Input;
-	using System.Windows.Threading;
 	using Caliburn.Micro;
-	using CartoonViewer.ViewModels;
-	using Helpers;
 	using Models.CartoonModels;
-	using static Helpers.Helper;
-	using Action = System.Action;
 
 	public partial class CartoonsEditorViewModel : Conductor<Screen>.Collection.OneActive
 	{
@@ -22,7 +15,7 @@
 		private BindableCollection<CartoonWebSite> _webSites = new BindableCollection<CartoonWebSite>();
 		private BindableCollection<Cartoon> _cartoons = new BindableCollection<Cartoon>();
 		private BindableCollection<CartoonSeason> _seasons = new BindableCollection<CartoonSeason>();
-		
+
 		#endregion
 
 		#region Properties
@@ -124,14 +117,14 @@
 		}
 
 		/// <summary>
-		/// Свойство Visibility списка м/ф
+		/// Видимость списка м/ф
 		/// </summary>
 		public Visibility CartoonsVisibility =>
 			SelectedWebSite == null
 				? Visibility.Hidden
 				: Visibility.Visible;
 		/// <summary>
-		/// Свойство Visibility VM редактирования м/ф и списка сезонов выбраного м/ф
+		/// Видимость VM редактирования м/ф и списка сезонов выбраного м/ф
 		/// </summary>
 		public Visibility CartoonEditingAndSeasonsVisibility =>
 			SelectedCartoon == null

@@ -1,11 +1,13 @@
-﻿namespace CartoonViewer.Settings.GeneralSettingsFolder.ViewModels
+﻿// ReSharper disable CheckNamespace
+namespace CartoonViewer.Settings.GeneralSettingsFolder.ViewModels
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Text.RegularExpressions;
 	using System.Windows.Input;
+	using Caliburn.Micro;
+	using CartoonEditorFolder.ViewModels;
+	using Models.SettingModels;
+	using static Helpers.Helper;
 
-	public partial class GeneralSettingsViewModel
+	public partial class GeneralSettingsViewModel : Screen, ISettingsViewModel
 	{
 		public void ExpandCollapseIntellectualShutdownRemark()
 		{
@@ -20,17 +22,61 @@
 				NotifyOfPropertyChange(() => GeneralValue);
 			}
 		}
-		private static readonly Regex _regex = new Regex("[^0-9.-]+");
-		private static bool IsTextAllowed(string text)
+
+		public void SetDefaultValues()
 		{
-			return !_regex.IsMatch(text);
+
 		}
+
+		public bool CanSetDefaultValues => IsEquals(new GeneralSettingsValue(), GeneralValue) is false;
+
+		public void CancelChanges()
+		{
+
+		}
+
+		public bool CanCancelChanges => HasChanges;
+
+		public void SaveChanges()
+		{
+
+		}
+
+		public bool CanSaveChanges => HasChanges;
+
+		public void ImportSettingsToFile()
+		{
+
+		}
+
+		public bool CanImportSettingsToFile => IsEquals(new GeneralSettingsValue(), GeneralValue) is false;
+
+		public void ExportSettingsFromFile()
+		{
+
+		}
+
+		public bool CanExportSettingsFromFile => true;
 
 		public void NumericValidation(KeyEventArgs e)
 		{
 			e.Handled = (e.Key.GetHashCode() >= 34 && e.Key.GetHashCode() <= 43 ||
-			             e.Key.GetHashCode() >= 74 && e.Key.GetHashCode() <= 83) is false;
-			return;
+						 e.Key.GetHashCode() >= 74 && e.Key.GetHashCode() <= 83) is false;
+		}
+
+		public void SelectionChanged()
+		{
+			NotifyButtons();
+		}
+
+		public void CheckedStatusChanged()
+		{
+			NotifyButtons();
+		}
+
+		public void TextChanged()
+		{
+			NotifyButtons();
 		}
 	}
 }

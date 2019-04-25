@@ -7,15 +7,16 @@
     xmlns:local="clr-namespace:CartoonViewer.Views"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     Title="{Binding DialogTitle}"
     Width="800"
     Height="450"
-    cal:Message.Attach="[Event Closed]=[Action Closed]"
     cal:Bind.AtDesignTime="True"
     d:DataContext="{d:DesignData Source=../DesignData/DialogViewDesignData.xaml}"
     TitleCharacterCasing="Normal"
     UseNoneWindowStyle="True"
     WindowStartupLocation="CenterScreen"
+    Background="{StaticResource GrayBrush10}"
     WindowStyle="None"
     mc:Ignorable="d">
     <Grid>
@@ -54,12 +55,13 @@
             Grid.Row="0"
             Grid.Column="0"
             Grid.ColumnSpan="3"
+            Foreground="Azure"
             FontSize="25"
             Style="{StaticResource DlgDefaultBtnTBlockStyle}"
             Text="{Binding Message}"
             TextAlignment="Center"
             TextWrapping="Wrap" />
-        <Button
+        <!--<Button
             Grid.Row="1"
             Grid.Column="0"
             cal:Message.Attach="[Event Click]=[Action YesAction()]"
@@ -100,6 +102,192 @@
             Grid.Column="2"
             cal:Message.Attach="[Event Click]=[Action NoAction()]"
             Style="{StaticResource DlgNotCancelChangesActionBtnStyle}"
-            Visibility="{Binding CancelChangesVisibility}" />
+            Visibility="{Binding CancelChangesVisibility}" />-->
+        <Button
+            Grid.Row="1"
+            Grid.Column="0"
+            BorderThickness="3"
+            cal:Message.Attach="[Event Click]=[Action YesAction()]"
+            Visibility="{Binding YesVisibility}" >
+            <Button.Style>
+                <Style TargetType="Button"
+                       BasedOn="{StaticResource MetroButton}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding CurrentType}" Value="SAVE_CHANGES">
+                            <Setter Property="Margin" Value="30"/>
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <StackPanel Orientation="Vertical">
+                                        <iconPacks:PackIconFontAwesome
+                                            Style="{StaticResource DlgYesActionBtnIconStyle}" />
+                                        <TextBlock
+                                            Style="{StaticResource DlgYesActionBtnTBlock}"
+                                            Text="Сохранить" />
+                                        <TextBlock
+                                            Style="{StaticResource DlgYesActionBtnTBlock}"
+                                            Text="и" />
+                                        <TextBlock
+                                            Style="{StaticResource DlgYesActionBtnTBlock}"
+                                            Text="продолжить" />
+                                    </StackPanel>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding CurrentType}" Value="CANCEL_CHANGES">
+                            <Setter Property="Margin" Value="30"/>
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <StackPanel Orientation="Vertical">
+                                        <iconPacks:PackIconFontAwesome
+                                            Style="{StaticResource DlgYesActionBtnIconStyle}" />
+                                        <TextBlock
+                                            Style="{StaticResource DlgYesActionBtnTBlock}"
+                                            Text="Да," />
+                                        <TextBlock
+                                            Style="{StaticResource DlgYesActionBtnTBlock}"
+                                            Text="отменить" />
+                                    </StackPanel>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding CurrentType}" Value="REMOVE_OBJECT">
+                            <Setter Property="Margin" Value="30"/>
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <StackPanel Orientation="Vertical">
+                                        <iconPacks:PackIconFontAwesome
+                                            Style="{StaticResource DlgYesActionBtnIconStyle}" />
+                                        <TextBlock
+                                            Style="{StaticResource DlgYesActionBtnTBlock}"
+                                            Text="Да," />
+                                        <TextBlock
+                                            Style="{StaticResource DlgYesActionBtnTBlock}"
+                                            Text="удалить" />
+                                    </StackPanel>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding CurrentType}" Value="OVERWRITE_FILE">
+                            <Setter Property="Margin" Value="30"/>
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <StackPanel Orientation="Vertical">
+                                        <iconPacks:PackIconFontAwesome
+                                            Style="{StaticResource DlgRewriteActionBtnIconStyle}" />
+                                        <TextBlock
+                                            Style="{StaticResource DlgOverwriteActionBtnTBlock}"
+                                            Text="Перезаписать" />
+                                        <TextBlock
+                                            Style="{StaticResource DlgOverwriteActionBtnTBlock}"
+                                            Text="файл" />
+                                    </StackPanel>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+        <Button
+            Grid.Row="1"
+            Grid.Column="1"
+            BorderThickness="3"
+            Style="{StaticResource DlgCancelActionBtnStyle}"
+            cal:Message.Attach="[Event Click]=[Action CancelAction()]"
+            Visibility="{Binding CancelVisibility}" >
+        </Button>
+        <Button
+            Grid.Row="1"
+            Grid.Column="1"
+            BorderThickness="3"
+            Style="{StaticResource DlgOkActionBtnStyle}"
+            cal:Message.Attach="[Event Click]=[Action YesAction()]"
+            Visibility="{Binding OkVisibility}" >
+        </Button>
+        <Button
+            Grid.Row="1"
+            Grid.Column="2"
+            BorderThickness="3"
+            cal:Message.Attach="[Event Click]=[Action NoAction()]"
+           Visibility="{Binding NoVisibility}">
+            <Button.Style>
+                <Style TargetType="Button"
+                       BasedOn="{StaticResource MetroButton}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding CurrentType}" Value="SAVE_CHANGES">
+                            <Setter Property="Margin" Value="30"/>
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <StackPanel Orientation="Vertical">
+                                        <iconPacks:PackIconFontAwesome
+                                            Style="{StaticResource DlgNoActionBtnIconStyle}" />
+                                        <TextBlock
+                                            Style="{StaticResource DlgNoActionBtnTBlock}"
+                                            Text="Не сохранять" />
+                                        <TextBlock
+                                            Style="{StaticResource DlgNoActionBtnTBlock}"
+                                            Text="и" />
+                                        <TextBlock
+                                            Style="{StaticResource DlgNoActionBtnTBlock}"
+                                            Text="продолжить" />
+                                    </StackPanel>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding CurrentType}" Value="CANCEL_CHANGES">
+                            <Setter Property="Margin" Value="30"/>
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <StackPanel Orientation="Vertical">
+                                        <iconPacks:PackIconFontAwesome
+                                            Style="{StaticResource DlgNoActionBtnIconStyle}" />
+                                        <TextBlock
+                                            Style="{StaticResource DlgNoActionBtnTBlock}"
+                                            Text="Нет, не" />
+                                        <TextBlock
+                                            Style="{StaticResource DlgNoActionBtnTBlock}"
+                                            Text="отменять" />
+                                    </StackPanel>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding CurrentType}" Value="REMOVE_OBJECT">
+                            <Setter Property="Margin" Value="30"/>
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <StackPanel Orientation="Vertical">
+                                        <iconPacks:PackIconFontAwesome
+                                            Style="{StaticResource DlgNoActionBtnIconStyle}" />
+                                        <TextBlock
+                                            Style="{StaticResource DlgNoActionBtnTBlock}"
+                                            Text="Нет, не" />
+                                        <TextBlock
+                                            Style="{StaticResource DlgNoActionBtnTBlock}"
+                                            Text="удалять" />
+                                    </StackPanel>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding CurrentType}" Value="OVERWRITE_FILE">
+                            <Setter Property="Margin" Value="30"/>
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <StackPanel Orientation="Vertical">
+                                        <iconPacks:PackIconFontAwesome
+                                            Style="{StaticResource DlgCreateCopyActionBtnIconStyle}" />
+                                        <TextBlock
+                                            Style="{StaticResource DlgCreateCopyActionBtnTBlock}"
+                                            Text="Создать" />
+                                        <TextBlock
+                                            Style="{StaticResource DlgCreateCopyActionBtnTBlock}"
+                                            Text="копию" />
+                                    </StackPanel>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
     </Grid>
 </mah:MetroWindow>

@@ -2,16 +2,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:vms="clr-namespace:CartoonViewer.ViewModels"
                     xmlns:models="clr-namespace:CartoonViewer.Models"
-                    ErrorTitle="Заголовок текста ошибки"
-                    ErrorMessage="Очень длинное познавательное сообщение с ошибкой, которое подскажет данному пользователю, что ему делать дальше.
-                    А это вторая часть длинного познавательного текста об ошибке. И оно подскажет многое пользователю."
-                    DialogTitle="Сохранить изменения?"
-                    Message="Длинное информативное сообщение, или вопрос адресованный текущему пользователю."
-                   
-                    Visibility_Yes_No="Hidden"
-                    Visibility_Ok_Cancel="Hidden"
-                    SaveChangesVisibility="Visible"
-                    Text_Ok_Cancel="Ок / Отмена"
-                    CurrentState="SAVE_CHANGES">
+                   CurrentType="INFO">
     
 </vms:DialogViewModel>

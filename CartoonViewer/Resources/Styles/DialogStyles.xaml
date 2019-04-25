@@ -4,10 +4,8 @@
     xmlns:cal="http://www.caliburnproject.org"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls">
+
     <!--#region TextBlocks Styles-->
-
-    
-
 
     <Style x:Key="DlgDefaultBtnTBlockStyle" TargetType="TextBlock">
         <Setter Property="FontSize" Value="20"/>
@@ -27,6 +25,14 @@
     <Style x:Key="DlgCancelActionBtnTBlock" TargetType="TextBlock"
            BasedOn="{StaticResource DlgDefaultBtnTBlockStyle}">
         <Setter Property="Foreground" Value="DodgerBlue"/>
+    </Style>
+    <Style x:Key="DlgOverwriteActionBtnTBlock" TargetType="TextBlock"
+           BasedOn="{StaticResource DlgDefaultBtnTBlockStyle}">
+        <Setter Property="Foreground" Value="Tomato"/>
+    </Style>
+    <Style x:Key="DlgCreateCopyActionBtnTBlock" TargetType="TextBlock"
+           BasedOn="{StaticResource DlgDefaultBtnTBlockStyle}">
+        <Setter Property="Foreground" Value="LawnGreen"/>
     </Style>
 
     <!--#endregion-->
@@ -132,14 +138,55 @@
         <Setter Property="Foreground" Value="Aqua"/>
         <Setter Property="Kind" Value="HandPointerRegular"/>
     </Style>
-    
+    <Style x:Key="DlgRewriteActionBtnIconStyle" TargetType="iconPacks:PackIconFontAwesome"
+           BasedOn="{StaticResource DlgDefaultBtnIconStyle}">
+        <Setter Property="Foreground" Value="Tomato"/>
+        <Setter Property="Kind" Value="EditRegular"/>
+    </Style>
+    <Style x:Key="DlgCreateCopyActionBtnIconStyle" TargetType="iconPacks:PackIconFontAwesome"
+           BasedOn="{StaticResource DlgDefaultBtnIconStyle}">
+        <Setter Property="Foreground" Value="LawnGreen"/>
+        <Setter Property="Kind" Value="CopyRegular"/>
+    </Style>
+    <Style x:Key="DlgOkActionBtnIconStyle" 
+           BasedOn="{StaticResource DlgDefaultBtnIconStyle}"
+           TargetType="iconPacks:PackIconFontAwesome" >
+        <Setter Property="Foreground" Value="DodgerBlue"/>
+        <Setter Property="Kind" Value="CheckCircleRegular"/>
+    </Style>
+
+    <Style x:Key="EditListCheckActionBtnIconStyle" TargetType="iconPacks:PackIconFontAwesome"
+           BasedOn="{StaticResource EditListFontAwesomelBtnIconStyle}">
+        <Setter Property="Foreground" Value="LawnGreen"/>
+        <Setter Property="Kind" Value="CheckCircleRegular"/>
+        <Setter Property="Padding" Value="-4"/>
+    </Style>
+    <Style x:Key="EditListUncheckActionBtnIconStyle" TargetType="iconPacks:PackIconFontAwesome"
+           BasedOn="{StaticResource EditListFontAwesomelBtnIconStyle}">
+        <Setter Property="Foreground" Value="Tomato"/>
+        <Setter Property="Kind" Value="TimesCircleRegular"/>
+        <Setter Property="Padding" Value="-4"/>
+    </Style>
+
+    <Style x:Key="EditListSaveActionBtnIconStyle" TargetType="iconPacks:PackIconFontAwesome"
+           BasedOn="{StaticResource EditListFontAwesomelBtnIconStyle}">
+        <Setter Property="Foreground" Value="Violet"/>
+        <Setter Property="Kind" Value="SaveRegular"/>
+        <Setter Property="Padding" Value="-4"/>
+    </Style>
+
+    <Style x:Key="EditListCheckVoiceOverBtnIconStyle" TargetType="iconPacks:PackIconMaterial"
+           BasedOn="{StaticResource EditListMaterialBtnIconStyle}">
+        <Setter Property="Foreground" Value="LawnGreen"/>
+        <Setter Property="Kind" Value="VolumeHigh"/>
+        <Setter Property="Padding" Value="-4"/>
+    </Style>
 
     <!--#endregion-->
 
     <!--#region Buttons Styles-->
 
-    <Style
-        x:Key="DlgSaveActionBtnStyle"
+    <Style x:Key="DlgSaveActionBtnStyle"
         TargetType="Button"
         BasedOn="{StaticResource DefaultMetroButtonStyle}">
         <Setter Property="Margin" Value="30 15"/>
@@ -161,8 +208,68 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <Style
-        x:Key="DlgNotSaveActionBtnStyle"
+
+    <Style x:Key="DlgCancelChangesActionBtnStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource DefaultMetroButtonStyle}">
+        <Setter Property="Margin" Value="30"/>
+        <Setter Property="Content">
+            <Setter.Value>
+                <StackPanel Orientation="Vertical">
+                    <iconPacks:PackIconFontAwesome
+                        Style="{StaticResource DlgYesActionBtnIconStyle}" />
+                    <TextBlock
+                        Style="{StaticResource DlgYesActionBtnTBlock}"
+                        Text="Да," />
+                    <TextBlock
+                        Style="{StaticResource DlgYesActionBtnTBlock}"
+                        Text="отменить" />
+                </StackPanel>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="DlgRemoveActionBtnStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource DefaultMetroButtonStyle}">
+        <Setter Property="Margin" Value="30"/>
+        <Setter Property="Content">
+            <Setter.Value>
+                <StackPanel Orientation="Vertical">
+                    <iconPacks:PackIconFontAwesome
+                        Style="{StaticResource DlgYesActionBtnIconStyle}" />
+                    <TextBlock
+                        Style="{StaticResource DlgYesActionBtnTBlock}"
+                        Text="Да," />
+                    <TextBlock
+                        Style="{StaticResource DlgYesActionBtnTBlock}"
+                        Text="удалить" />
+                </StackPanel>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="DlgOverwriteActionBtnStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource DefaultMetroButtonStyle}">
+        <Setter Property="Margin" Value="30"/>
+        <Setter Property="Content">
+            <Setter.Value>
+                <StackPanel Orientation="Vertical">
+                    <iconPacks:PackIconFontAwesome
+                        Style="{StaticResource DlgRewriteActionBtnIconStyle}" />
+                    <TextBlock
+                        Style="{StaticResource DlgYesActionBtnTBlock}"
+                        Text="Перезаписать" />
+                    <TextBlock
+                        Style="{StaticResource DlgYesActionBtnTBlock}"
+                        Text="файл" />
+                </StackPanel>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="DlgNotSaveActionBtnStyle"
         TargetType="Button"
         BasedOn="{StaticResource DefaultMetroButtonStyle}">
         <Setter Property="Margin" Value="30 15"/>
@@ -184,28 +291,28 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <Style
-        x:Key="DlgRemoveActionBtnStyle"
-        TargetType="Button"
-        BasedOn="{StaticResource DefaultMetroButtonStyle}">
+    
+    <Style x:Key="DlgNotCancelChangesActionBtnStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource DefaultMetroButtonStyle}">
         <Setter Property="Margin" Value="30"/>
         <Setter Property="Content">
             <Setter.Value>
                 <StackPanel Orientation="Vertical">
                     <iconPacks:PackIconFontAwesome
-                        Style="{StaticResource DlgYesActionBtnIconStyle}" />
+                        Style="{StaticResource DlgNoActionBtnIconStyle}" />
                     <TextBlock
-                        Style="{StaticResource DlgYesActionBtnTBlock}"
-                        Text="Да," />
+                        Style="{StaticResource DlgNoActionBtnTBlock}"
+                        Text="Нет, не" />
                     <TextBlock
-                        Style="{StaticResource DlgYesActionBtnTBlock}"
-                        Text="удалить" />
+                        Style="{StaticResource DlgNoActionBtnTBlock}"
+                        Text="отменять" />
                 </StackPanel>
             </Setter.Value>
         </Setter>
     </Style>
-    <Style
-        x:Key="DlgNotRemoveActionBtnStyle"
+ 
+    <Style x:Key="DlgNotRemoveActionBtnStyle"
         TargetType="Button"
         BasedOn="{StaticResource DefaultMetroButtonStyle}">
         <Setter Property="Margin" Value="30"/>
@@ -224,48 +331,28 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <Style
-        x:Key="DlgCancelChangesActionBtnStyle"
-        TargetType="Button"
-        BasedOn="{StaticResource DefaultMetroButtonStyle}">
+
+    <Style x:Key="DlgCreateCopyActionBtnStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource DefaultMetroButtonStyle}">
         <Setter Property="Margin" Value="30"/>
         <Setter Property="Content">
             <Setter.Value>
                 <StackPanel Orientation="Vertical">
                     <iconPacks:PackIconFontAwesome
-                        Style="{StaticResource DlgYesActionBtnIconStyle}" />
+                        Style="{StaticResource DlgCreateCopyActionBtnIconStyle}" />
                     <TextBlock
-                        Style="{StaticResource DlgYesActionBtnTBlock}"
-                        Text="Да," />
+                        Style="{StaticResource DlgNoActionBtnTBlock}"
+                        Text="Создать" />
                     <TextBlock
-                        Style="{StaticResource DlgYesActionBtnTBlock}"
-                        Text="отменить" />
+                        Style="{StaticResource DlgNoActionBtnTBlock}"
+                        Text="копию" />
                 </StackPanel>
             </Setter.Value>
         </Setter>
     </Style>
-    <Style
-        x:Key="DlgNotCancelChangesActionBtnStyle"
-        TargetType="Button"
-        BasedOn="{StaticResource DefaultMetroButtonStyle}">
-        <Setter Property="Margin" Value="30"/>
-        <Setter Property="Content">
-            <Setter.Value>
-                <StackPanel Orientation="Vertical">
-                    <iconPacks:PackIconFontAwesome
-                        Style="{StaticResource DlgNoActionBtnIconStyle}" />
-                    <TextBlock
-                        Style="{StaticResource DlgNoActionBtnTBlock}"
-                        Text="Нет, не" />
-                    <TextBlock
-                        Style="{StaticResource DlgNoActionBtnTBlock}"
-                        Text="отменять" />
-                </StackPanel>
-            </Setter.Value>
-        </Setter>
-    </Style>
-    <Style
-        x:Key="DlgCancelActionBtnStyle"
+
+    <Style x:Key="DlgCancelActionBtnStyle"
         TargetType="Button"
         BasedOn="{StaticResource DefaultMetroButtonStyle}">
         <Setter Property="Padding" Value="15" />
@@ -282,6 +369,31 @@
                     <TextBlock
                         Style="{StaticResource DlgCancelActionBtnTBlock}"
                         Text="действие" />
+                </StackPanel>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="DlgOkActionBtnStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource DefaultMetroButtonStyle}">
+        <Setter Property="Padding" Value="30" />
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Content">
+            <Setter.Value>
+                <StackPanel Orientation="Vertical">
+                    <iconPacks:PackIconFontAwesome
+                        Style="{StaticResource DlgOkActionBtnIconStyle}" />
+                    <TextBlock
+                        Style="{StaticResource DlgCancelActionBtnTBlock}"
+                        Text="Принято" />
+                    <TextBlock
+                        Style="{StaticResource DlgCancelActionBtnTBlock}"
+                        Text="к" />
+                    <TextBlock
+                        Style="{StaticResource DlgCancelActionBtnTBlock}"
+                        Text="сведению" />
                 </StackPanel>
             </Setter.Value>
         </Setter>

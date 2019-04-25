@@ -1,10 +1,11 @@
-﻿namespace CartoonViewer.Settings.CartoonEditorSetting.ViewModels
+﻿// ReSharper disable CheckNamespace
+namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 {
 	using System.Windows;
 	using Caliburn.Micro;
 	using Models.CartoonModels;
 
-	public partial class VoiceOversEditingViewModel : Screen
+	public partial class VoiceOversEditingViewModel : Screen, ISettingsViewModel
 	{
 		#region Private fields
 
@@ -266,7 +267,7 @@
 		#region Visibility
 
 		/// <summary>
-		/// Свойство Visibility элементов зависимых от выбранного м/ф
+		/// Видимость элементов зависимых от выбранного м/ф
 		/// </summary>
 		public Visibility SelectedCartoonVisibility =>
 			SelectedCartoon == null
@@ -274,7 +275,7 @@
 				: Visibility.Visible;
 
 		/// <summary>
-		/// Свойство Visibility элементов зависимых от выбранного сезона
+		/// Видимость элементов зависимых от выбранного сезона
 		/// </summary>
 		public Visibility SelectedSeasonVisibility =>
 			SelectedSeason == null
@@ -282,14 +283,14 @@
 				: Visibility.Visible;
 
 		/// <summary>
-		/// Свойство Visibility элементов зависимых от выбранного эпизода
+		/// Видимость элементов зависимых от выбранного эпизода
 		/// </summary>
 		public Visibility SelectedEpisodeVisibility =>
 			SelectedEpisode == null
 				? Visibility.Hidden
 				: Visibility.Visible;
 		/// <summary>
-		/// Свойство Visibility полей для редактирования выбранной озвучки
+		/// Видимость полей для редактирования выбранной озвучки
 		/// </summary>
 		public Visibility EditingVisibility =>
 			IsNotEditing

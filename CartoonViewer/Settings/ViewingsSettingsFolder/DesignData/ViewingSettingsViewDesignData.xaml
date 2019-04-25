@@ -1,5 +1,68 @@
 ﻿<vms:ViewingsSettingsViewModel xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:vms="clr-namespace:CartoonViewer.Settings.ViewingsSettingsFolder.ViewModels">
-    
+                    xmlns:vms="clr-namespace:CartoonViewer.Settings.ViewingsSettingsFolder.ViewModels"
+                    xmlns:cartoonModels="clr-namespace:CartoonViewer.Models.CartoonModels"
+                    xmlns:cartoonViewer="clr-namespace:CartoonViewer"
+                    IsDesignTime="True">
+
+    <vms:ViewingsSettingsViewModel.Cartoons>
+        <cartoonModels:Cartoon Name="Мультсериал_1"/>
+        <cartoonModels:Cartoon Name="Мультсериал_2"/>
+        <cartoonModels:Cartoon Name="Мультсериал_3"/>
+        <cartoonModels:Cartoon Name="Мультсериал_4"/>
+        <cartoonModels:Cartoon Name="Мультсериал_5"/>
+        <cartoonModels:Cartoon Name="Мультсериал_6"/>
+        <cartoonModels:Cartoon Name="Мультсериал_7"/>
+        <cartoonModels:Cartoon Name="Мультсериал_8"/>
+        <cartoonModels:Cartoon Name="Мультсериал_9"/>
+        <cartoonModels:Cartoon Name="Мультсериал_10"/>
+    </vms:ViewingsSettingsViewModel.Cartoons>
+    <vms:ViewingsSettingsViewModel.SelectedCartoon>
+        <cartoonModels:Cartoon Name="Мультсериал_1"/>
+    </vms:ViewingsSettingsViewModel.SelectedCartoon>
+
+    <vms:ViewingsSettingsViewModel.Seasons>
+        <cartoonModels:CartoonSeason Number="1" Checked="True"/>
+        <cartoonModels:CartoonSeason Number="2" Checked="False"/>
+        <cartoonModels:CartoonSeason Number="3" Checked="True"/>
+        <cartoonModels:CartoonSeason Number="4" Checked="False"/>
+        <cartoonModels:CartoonSeason Number="5" Checked="True"/>
+        <cartoonModels:CartoonSeason Number="6" Checked="False"/>
+        <cartoonModels:CartoonSeason Number="7" Checked="True"/>
+        <cartoonModels:CartoonSeason Number="8" Checked="False"/>
+        <cartoonModels:CartoonSeason Number="9" Checked="True"/>
+        <cartoonModels:CartoonSeason Number="10" Checked="False"/>
+    </vms:ViewingsSettingsViewModel.Seasons>
+    <vms:ViewingsSettingsViewModel.SelectedSeason>
+        <cartoonModels:CartoonSeason Number="1"/>
+    </vms:ViewingsSettingsViewModel.SelectedSeason>
+
+    <vms:ViewingsSettingsViewModel.Episodes>
+        <cartoonModels:CartoonEpisode Number="1" Checked="True" CartoonEpisodeId="1"/>
+        <cartoonModels:CartoonEpisode Number="2" Checked="False"/>
+        <cartoonModels:CartoonEpisode Number="3" Checked="True"/>
+        <cartoonModels:CartoonEpisode Number="4" Checked="False"/>
+        <cartoonModels:CartoonEpisode Number="5" Checked="True"/>
+        <cartoonModels:CartoonEpisode Number="6" Checked="False"/>
+        <cartoonModels:CartoonEpisode Number="7" Checked="True"/>
+        <cartoonModels:CartoonEpisode Number="8" Checked="False"/>
+        <cartoonModels:CartoonEpisode Number="9" Checked="True"/>
+        <cartoonModels:CartoonEpisode Number="10" Checked="False"/>
+    </vms:ViewingsSettingsViewModel.Episodes>
+    <vms:ViewingsSettingsViewModel.SelectedEpisode>
+        <cartoonModels:CartoonEpisode Number="1" CartoonEpisodeId="1"/>
+    </vms:ViewingsSettingsViewModel.SelectedEpisode>
+
+    <vms:ViewingsSettingsViewModel.VoiceOvers>
+        <cartoonModels:CartoonVoiceOver Name="VO_1" SelectedEpisodeId="1"/>
+        <cartoonModels:CartoonVoiceOver Name="VO_2" SelectedEpisodeId="1"/>
+        <cartoonModels:CartoonVoiceOver Name="VO_3" SelectedEpisodeId="1"/>
+        <cartoonModels:CartoonVoiceOver Name="VO_4" SelectedEpisodeId="1"/>
+        <cartoonModels:CartoonVoiceOver Name="VO_5" SelectedEpisodeId="1"/>
+        <cartoonModels:CartoonVoiceOver Name="VO_6" SelectedEpisodeId="1"/>
+        <cartoonModels:CartoonVoiceOver Name="VO_7" SelectedEpisodeId="1"/>
+        <cartoonModels:CartoonVoiceOver Name="VO_8" SelectedEpisodeId="1"/>
+        <cartoonModels:CartoonVoiceOver Name="VO_9" SelectedEpisodeId="1"/>
+        <cartoonModels:CartoonVoiceOver Name="VO_10" SelectedEpisodeId="1"/>
+    </vms:ViewingsSettingsViewModel.VoiceOvers>
 </vms:ViewingsSettingsViewModel>

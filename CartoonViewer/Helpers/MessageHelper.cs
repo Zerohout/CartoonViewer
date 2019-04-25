@@ -85,14 +85,12 @@ namespace CartoonViewer.Helpers
 
 		public void PressKey(int key, int count = 1)
 		{
-			var result = 0;
-
 			for (var i = 0; i < count; i++)
 			{
 				Thread.Sleep(250);
-				result = sendWindowsMessage(HWND, WM_KEYDOWN, key, 0);
+				_ = sendWindowsMessage(HWND, WM_KEYDOWN, key, 0);
 				Thread.Sleep(50);
-				result = sendWindowsMessage(HWND, WM_KEYUP, key, 0);
+				_ = sendWindowsMessage(HWND, WM_KEYUP, key, 0);
 			}
 		}
 	}
