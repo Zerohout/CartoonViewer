@@ -194,7 +194,7 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
                     Style="{StaticResource MMDefaultTBlockStyle}"
-                    Text="Эпизодов к просмотру:">
+                    Text="{Binding EpisodesCountRemainingString}">
                     <TextBlock.RenderTransform>
                         <RotateTransform Angle="-6" />
                     </TextBlock.RenderTransform>

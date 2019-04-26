@@ -20,20 +20,6 @@ namespace CartoonViewer.Settings.ViewingsSettingsFolder.ViewModels
 		private BindableCollection<CartoonEpisode> _episodes = new BindableCollection<CartoonEpisode>();
 		private BindableCollection<CartoonVoiceOver> _voiceOvers = new BindableCollection<CartoonVoiceOver>();
 
-		private Visibility _btnVisibility;
-
-		public Visibility BtnVisibility
-		{
-			get => _btnVisibility;
-			set
-			{
-				_btnVisibility = value;
-				NotifyOfPropertyChange(() => BtnVisibility);
-			}
-		}
-
-
-
 		private bool _isCartoonListEnable;
 		private bool _isSeasonListEnable;
 		private bool _isEpisodeListEnable;

@@ -3,6 +3,7 @@ namespace CartoonViewer.MainMenu.ViewModels
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Data.Entity;
 	using System.Linq;
 	using System.Threading.Tasks;
 	using System.Windows;
@@ -25,6 +26,7 @@ namespace CartoonViewer.MainMenu.ViewModels
 
 		public void TextChanged()
 		{
+			NotifyOfPropertyChange(() => GeneralSettings);
 			NotifyOfPropertyChange(() => EndDate);
 			NotifyOfPropertyChange(() => EndTime);
 		}
@@ -69,20 +71,21 @@ namespace CartoonViewer.MainMenu.ViewModels
 			((MainViewModel)Parent).ChangeActiveItem(new SettingsViewModel());
 		}
 
-		public bool CanStart => CheckedCartoons.Count > 0;
+		public bool CanStart => CheckedEpisodes.Count > 0;
 
 		/// <summary>
 		/// Действие при выборе/снятия выбора с мультсериала
 		/// </summary>
 		public void CheckedValidation()
 		{
-			if (CvDbContext.ChangeTracker.HasChanges())
+			if(CvDbContext.ChangeTracker.HasChanges())
 			{
 				CvDbContext.SaveChanges();
 			}
 
 			CheckedEpisodes = new List<CartoonEpisode>(
 				CvDbContext.CartoonEpisodes
+						   .Include(ce => ce.CartoonVoiceOver)
 						   .Where(ce => ce.CartoonSeason.Cartoon.Checked));
 
 			if(CheckedEpisodes.Count > 0)
@@ -92,10 +95,7 @@ namespace CartoonViewer.MainMenu.ViewModels
 
 			GeneralSettings.AvailableEpisodesCount = CheckedEpisodes.Count;
 
-
-
-			//CheckedCartoons.Clear();
-			//CheckedCartoons.AddRange(Cartoons.Where(c => c.Checked));
+			NotifyOfPropertyChange(() => GeneralSettings);
 			NotifyOfPropertyChange(() => CanStart);
 		}
 
@@ -118,10 +118,11 @@ namespace CartoonViewer.MainMenu.ViewModels
 
 			ApproximateEpisodeDuration =
 				new TimeSpan(0, 0,
-				             (int)(approximateTime.TotalSeconds / count));
+							 (int)(approximateTime.TotalSeconds / count));
+
 			NotifyOfPropertyChange(() => EndTime);
 			NotifyOfPropertyChange(() => EndDate);
-			NotifyOfPropertyChange(() => GeneralSettings.EpisodesCount);
+
 		}
 
 

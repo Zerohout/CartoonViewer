@@ -2,6 +2,7 @@
 namespace CartoonViewer.MainMenu.ViewModels
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Data.Entity;
 	using System.Diagnostics;
 	using System.Linq;
@@ -9,7 +10,6 @@ namespace CartoonViewer.MainMenu.ViewModels
 	using System.Windows;
 	using Caliburn.Micro;
 	using CartoonViewer.ViewModels;
-	using Database;
 	using Helpers;
 	using Models.CartoonModels;
 	using OpenQA.Selenium;
@@ -21,16 +21,12 @@ namespace CartoonViewer.MainMenu.ViewModels
 		/// </summary>
 		private async void LoadCartoons()
 		{
-			//using(var ctx = new CVDbContext(Helper.AppDataPath))
-			//{
-			//	ctx.Cartoons.Include(c => c.CartoonUrls).Load();
-			//	Cartoons.AddRange(ctx.Cartoons.Local.OrderBy(c => c.CartoonId));
-			//}
-
 			Cartoons = new BindableCollection<Cartoon>(
 				await CvDbContext.Cartoons
-				                 .Include(c => c.CartoonUrls)
-				                 .ToListAsync());
+								 .Include(c => c.CartoonUrls)
+								 .Include(c => c.CartoonWebSites)
+								 .Include(c => c.CartoonSeasons)
+								 .ToListAsync());
 
 			CheckedValidation();
 		}
@@ -58,36 +54,32 @@ namespace CartoonViewer.MainMenu.ViewModels
 		/// </summary>
 		private void StartWatch()
 		{
-			using(var ctx = new CVDbContext(Helper.AppDataPath))
-			{
-				ctx.Cartoons.Where(c => c.Checked)
-				   .Include(c => c.CartoonUrls
-								  .Where(cu => cu.Checked));
-			}
-
-
-			AddCartoonToQueue(GeneralSettings.EpisodesCount ?? 10);
-
 			EpisodesCountRemainingString = "Осталось серий";
+
+			CheckedEpisodes = ShuffleEpisode(CheckedEpisodes, GeneralSettings.RandomMixCount ?? 1);
+
+			CurrentEpisodeIndex = 0;
 
 			while(GeneralSettings.EpisodesCount > 0)
 			{
 				GeneralSettings.EpisodesCount--;
-				//EpisodeCountString = (EpisodeCount - 1).ToString();
+				NotifyOfPropertyChange(() => GeneralSettings);
 
 				//цикл для переключения серии без потерь в количестве указанных просмотров
 				do
 				{
 					IsSwitchEpisode = false;
 
-					PlayEpisode(CheckedCartoons[RandomCartoonNumberList[CurrentEpisodeIndex]]);
+					PlayEpisode(CheckedEpisodes[CurrentEpisodeIndex++]);
 
 					if(IsSwitchEpisode)
 					{
-						AddCartoonToQueue(1);
-					}
+						if(GeneralSettings.EpisodesCount != GeneralSettings.AvailableEpisodesCount)
+						{
+							GeneralSettings.EpisodesCount++;
 
-					CurrentEpisodeIndex++;
+						}
+					}
 
 
 				} while(IsSwitchEpisode);
@@ -108,18 +100,57 @@ namespace CartoonViewer.MainMenu.ViewModels
 			Exit();
 		}
 
-		private void PlayEpisode(Cartoon cartoon)
+		private void PlayEpisode(CartoonEpisode episode)
 		{
-			Cartoon _cartoon;
 
-			using(var ctx = new CVDbContext(Helper.AppDataPath))
+			//var webSite =
+			//	CvDbContext.CartoonWebSites
+			//			   .Include(csw => csw.ElementValues)
+			//			   .First(cws => cws.Cartoons
+			//								.Any(c => c.CartoonSeasons
+			//										   .Any(cs => cs.CartoonSeasonId ==
+			//													  episode.CartoonSeasonId)));
+
+			var id = Cartoons
+					 .First(c => c.CartoonSeasons
+								  .Any(cs => cs.CartoonSeasonId ==
+											 episode.CartoonSeasonId)).CartoonWebSites
+					 .First().CartoonWebSiteId;
+
+			var webSite = CvDbContext.CartoonWebSites
+									 .Include(csw => csw.ElementValues)
+									 .First(csw => csw.CartoonWebSiteId == id);
+
+			var cartoon = Cartoons.First(c => c.CartoonSeasons
+											   .Any(cs => cs.CartoonSeasonId ==
+														  episode.CartoonSeasonId));
+
+			var url = cartoon.CartoonUrls.First(cu => cu.CartoonId == cartoon.CartoonId &&
+													  cu.CartoonWebSiteId == webSite.CartoonWebSiteId);
+
+			//Попытки перейти на указанный url при нестабильном интернет соединении
+			for(var i = 0; i < 10; i++)
 			{
-				ctx.Cartoons.Where(c => c.CartoonId == cartoon.CartoonId).Include("CartoonUrl").Include("ElementValues").Load();
-				_cartoon = ctx.Cartoons.Local.First(c => c.CartoonId == cartoon.CartoonId);
+				try
+				{
+					Helper.Browser.Navigate()
+						  .GoToUrl($"{url.Url}{episode.Number * 100 + episode.Number}/{episode.CartoonVoiceOver.UrlParameter}");
+					break;
+				}
+				catch
+				{
+					Helper.Browser.Navigate().Refresh();
+				}
 			}
 
-			SetCartoonsSettings(_cartoon);
-			//StartVideoPlayer(_cartoon.ElementValues.First(e => e.UserElementName.Contains("кнопка")));
+			CurrentDuration = episode.Duration;
+			DelayedSkipDuration = episode.DelayedSkip;
+			DelayedSkipCount = episode.SkipCount;
+			CvDbContext.CartoonEpisodes.Find(episode.CartoonEpisodeId).LastDateViewed = DateTime.Now;
+			CvDbContext.SaveChanges();
+
+			//SetCartoonsSettings(_cartoon);
+			StartVideoPlayer(webSite.ElementValues.First());
 
 			Helper.Timer.Restart();
 			LaunchMonitoring();
@@ -280,6 +311,7 @@ namespace CartoonViewer.MainMenu.ViewModels
 		{
 			var autoEvent = (AutoResetEvent)stateInfo;
 
+			NotifyOfPropertyChange(() => GeneralSettings);
 			NotifyOfPropertyChange(() => EndDate);
 			NotifyOfPropertyChange(() => EndTime);
 
@@ -303,17 +335,18 @@ namespace CartoonViewer.MainMenu.ViewModels
 		private void DelayedSkipMonitoring()
 		{
 			//Отложенный запуск закончил действие
-			if(IsDelayedSkip && Helper.Timer.Elapsed > DelayedSkipDuration)
+			if(DelayedSkipDuration > new TimeSpan() && Helper.Timer.Elapsed >= DelayedSkipDuration)
 			{
 				Helper.Timer.Stop();
 				Helper.Msg.PressKey(Helper.VK_SPACE);
-				Helper.Msg.PressKey(Helper.VK_RIGHT, Helper.DelayedSkipCount);
+				Helper.Msg.PressKey(Helper.VK_RIGHT, DelayedSkipCount);
 				Helper.Msg.PressKey(Helper.VK_SPACE);
 
-				IsDelayedSkip = false;
 				Helper.Timer.Start();
 			}
 		}
+
+		public int DelayedSkipCount { get; set; }
 
 		/// <summary>
 		/// Мониторинг состояния паузы
@@ -352,19 +385,7 @@ namespace CartoonViewer.MainMenu.ViewModels
 			//Отсеивание нежелательных серий
 			while(true)
 			{
-				//Попытки перейти на указанный url при нестабильном интернет соединении
-				for(var i = 0; i < 10; i++)
-				{
-					try
-					{
-						//Helper.Browser.Navigate().GoToUrl($"{cartoon.CartoonUrl.MainUrl}{cartoon.CartoonUrl.UrlParameter}");
-						break;
-					}
-					catch
-					{
-						Helper.Browser.Navigate().Refresh();
-					}
-				}
+
 
 				var url = Helper.Browser.Url;
 
@@ -373,6 +394,23 @@ namespace CartoonViewer.MainMenu.ViewModels
 					return url;
 				}
 			}
+		}
+
+		private List<CartoonEpisode> ShuffleEpisode(List<CartoonEpisode> list, int count)
+		{
+			for(var i = 0; i < count; i++)
+			{
+				for(var j = list.Count - 1; j >= 1; j--)
+				{
+					var k = rnd.Next(j + 1);
+					// обменять значения data[j] и data[i]
+					var temp = list[k];
+					list[k] = list[j];
+					list[j] = temp;
+				}
+			}
+
+			return list;
 		}
 
 		/// <summary>

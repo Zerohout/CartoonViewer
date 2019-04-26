@@ -20,9 +20,10 @@
 			HotReg.RegisterGlobalHotkey(() => { IsSwitchEpisode = true; }, Keys.Right, ModifierKeys.Control);
 			//Helper.HotReg.RegisterGlobalHotkey(() => EpisodeCountString = (EpisodeCount - 1).ToString(), Keys.Delete, ModifierKeys.Shift);
 
-			GeneralSettings = LoadGeneralSettings();
+			
 
 			LoadCartoons();
+			GeneralSettings = LoadGeneralSettings();
 			base.OnInitialize();
 		}
 

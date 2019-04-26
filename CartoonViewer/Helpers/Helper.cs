@@ -89,7 +89,7 @@
 		/// </summary>
 		public static void StartBrowser()
 		{
-			Browser = new ChromeDriver($"{AppDataPath}");
+			Browser = new ChromeDriver(AppDataPath);
 
 			Thread.Sleep(1000);
 
