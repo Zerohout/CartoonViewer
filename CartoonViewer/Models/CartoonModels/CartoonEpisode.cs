@@ -4,6 +4,7 @@
 	using System.Collections.Generic;
 	using System.ComponentModel.DataAnnotations;
 	using System.ComponentModel.DataAnnotations.Schema;
+	using System.Data.Entity.ModelConfiguration.Conventions;
 
 	public class CartoonEpisode
 	{
@@ -46,5 +47,10 @@
 		[ForeignKey("CartoonSeason")]
 		public int CartoonSeasonId { get; set; }
 		public CartoonSeason CartoonSeason { get; set; }
+
+		[ForeignKey("Cartoon")]
+		
+		public int? CartoonId { get; set; }
+		public Cartoon Cartoon { get; set; }
 	}
 }

@@ -208,10 +208,15 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 		public void CreateNewCartoon()
 		{
-			SelectedCartoon.CartoonUrls.Add(SelectedCartoonUrl);
 			var parent = ((CartoonsEditorViewModel)Parent);
 			using(var ctx = new CVDbContext(AppDataPath))
 			{
+
+
+				SelectedCartoonUrl.WebSiteUrl = ctx.CartoonWebSites.Find(GlobalIdList.WebSiteId)?.Url;
+				SelectedCartoonUrl.Checked = true;
+				SelectedCartoon.CartoonUrls.Add(SelectedCartoonUrl);
+
 				ctx.Cartoons.Add(SelectedCartoon);
 				ctx.SaveChanges();
 
@@ -219,12 +224,19 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				ctx.CartoonWebSites.Find(GlobalIdList.WebSiteId)?.Cartoons.Add(newCartoon);
 				ctx.SaveChanges();
 
+				TempCartoon = CloneCartoon(SelectedCartoon);
+				TempCartoonUrl = CloneCartoonUrl(SelectedCartoonUrl);
+
+				NotifyOfPropertyChange(() => CanSaveChanges);
+				NotifyOfPropertyChange(() => HasChanges);
+
 				GlobalIdList.CartoonId = newCartoon.CartoonId;
 				parent.Cartoons.Add(newCartoon);
 				parent.NotifyOfPropertyChange(() => parent.Cartoons);
 				parent.Cartoons.Remove(parent.Cartoons.First(c => c.Name == NewElementString));
 				parent.Cartoons.Add(new Cartoon { Name = NewElementString });
-				parent.SelectedCartoon = newCartoon;
+				parent.SelectedCartoon = parent.Cartoons.First(c => c.CartoonId == GlobalIdList.CartoonId);
+
 			}
 		}
 

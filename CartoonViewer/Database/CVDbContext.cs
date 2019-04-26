@@ -10,7 +10,8 @@ namespace CartoonViewer.Database
 	{
 		public CVDbContext() : base("CVDb")
 		{
-			AppDomain.CurrentDomain.SetData("DataDirectory", AppDomain.CurrentDomain.BaseDirectory);
+			//AppDomain.CurrentDomain.SetData("DataDirectory", AppDomain.CurrentDomain.BaseDirectory);
+			AppDomain.CurrentDomain.SetData("DataDirectory", Helpers.Helper.AppDataPath);
 
 			Database.SetInitializer(new CreateDatabaseIfNotExists<CVDbContext>());
 		}

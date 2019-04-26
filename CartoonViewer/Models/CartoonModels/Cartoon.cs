@@ -10,6 +10,7 @@
 			CartoonWebSites = new List<CartoonWebSite>();
 			CartoonUrls = new List<CartoonUrl>();
 			CartoonSeasons = new List<CartoonSeason>();
+			CartoonEpisodes = new List<CartoonEpisode>();
 			CartoonVoiceOvers = new List<CartoonVoiceOver>();
 		}
 
@@ -24,6 +25,8 @@
 		public List<CartoonWebSite> CartoonWebSites { get; set; }
 		public List<CartoonUrl> CartoonUrls { get; set; }
 		public List<CartoonSeason> CartoonSeasons { get; set; }
+
+		public List<CartoonEpisode> CartoonEpisodes { get; set; }
 		public List<CartoonVoiceOver> CartoonVoiceOvers { get; set; }
 
 	}

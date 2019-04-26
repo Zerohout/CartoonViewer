@@ -17,7 +17,21 @@ namespace CartoonViewer.Migrations
 
 		protected override void Seed(CVDbContext context)
 		{
-			AddDataToDatabase(context);
+			if (context.CartoonWebSites.Any() is false)
+			{
+				context.CartoonWebSites.Add(new CartoonWebSite { Url = FreehatWebSite });
+				context.SaveChanges();
+
+				foreach(var cw in context.CartoonWebSites)
+				{
+					cw.ElementValues.Add(CreateElementValue());
+				}
+
+				context.SaveChanges();
+			}
+
+
+			//AddDataToDatabase(context);
 		}
 
 

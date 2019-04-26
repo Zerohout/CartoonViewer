@@ -178,6 +178,13 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				throw new Exception("Id выбраной озвучки м/ф равен 0");
 			}
 
+			if(CartoonVoiceOvers.Any(cvo => cvo.CartoonVoiceOverId == SelectedVoiceOverId))
+			{
+				SelectedCartoonVoiceOver = CartoonVoiceOvers
+					.First(cvo => cvo.CartoonVoiceOverId == SelectedVoiceOverId);
+				return;
+			}
+
 			using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
 			{
 				var cartoon = ctx.Cartoons

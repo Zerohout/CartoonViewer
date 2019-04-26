@@ -388,7 +388,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				var newVoiceOver = new CartoonVoiceOver
 				{
 					Name = $"Озвучка_{count}",
-					UrlParameter = $"param_{count}",
+					UrlParameter = "",
 					Description = $"Описание озвучки_{count}"
 				};
 

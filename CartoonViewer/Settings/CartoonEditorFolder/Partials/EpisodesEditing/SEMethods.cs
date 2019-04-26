@@ -55,6 +55,8 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			using(var ctx = new CVDbContext(AppDataPath))
 			{
 				episode = await ctx.CartoonEpisodes
+				                   .Include(e => e.Cartoon)
+				                   .Include(e => e.CartoonSeason)
 								   .Include(e => e.EpisodeVoiceOvers)
 								   .SingleAsync(e => e.CartoonEpisodeId == GlobalIdList.EpisodeId);
 			}

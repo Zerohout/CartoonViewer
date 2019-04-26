@@ -111,6 +111,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			var defaultEpisode = new CartoonEpisode
 			{
 				CartoonSeasonId = GlobalIdList.SeasonId,
+				CartoonId = GlobalIdList.CartoonId,
 				Checked = true,
 				DelayedSkip = new TimeSpan(),
 				SkipCount = 7,

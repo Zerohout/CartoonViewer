@@ -5,9 +5,8 @@
     xmlns:settingsModel="clr-namespace:CartoonViewer.Models.SettingModels"
     xmlns:vms="clr-namespace:CartoonViewer.MainMenu.ViewModels"
     Background="../../Resources/Images/HDMMBackground.png"
-    Opacity="1"
-     EpisodesCountRemainingString="Эпизодов к просмотру: "
-     >
+    EpisodesCountRemainingString="Эпизодов к просмотру: "
+    Opacity="1">
     <vms:MainMenuViewModel.Cartoons>
         <cartoonModels:Cartoon Name="Южный парк" />
         <cartoonModels:Cartoon Name="Гриффины" />
