@@ -5,8 +5,12 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 	using System.Data.Entity;
 	using System.Linq;
 	using System.Windows.Controls;
+	using System.Windows.Input;
 	using Caliburn.Micro;
+	using CartoonViewer.ViewModels;
 	using Database;
+	using Helpers;
+	using Models.CartoonModels;
 	using static Helpers.Cloner;
 
 	public partial class VoiceOversEditingViewModel : Screen, ISettingsViewModel
@@ -24,21 +28,47 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// <summary>
 		/// Снять выделение с текущего м/ф
 		/// </summary>
-		public void CancelCartoonSelection() => SelectedCartoon = null;
+		public void CancelCartoonSelection()
+		{
+			if(SelectedSeason != null)
+			{
+				CancelSeasonSelection();
+			}
+			SelectedCartoon = null;
+
+			if(CartoonVoiceOvers.Count > 0)
+			{
+				CartoonVoiceOvers = new BindableCollection<CartoonVoiceOver>();
+			}
+		}
 
 		public bool CanCancelCartoonSelection => SelectedCartoon != null && IsNotEditing;
 
 		/// <summary>
 		/// Снять выделение с текущего сезона
 		/// </summary>
-		public void CancelSeasonSelection() => SelectedSeason = null;
+		public void CancelSeasonSelection()
+		{
+			if(SelectedEpisode != null)
+			{
+				CancelEpisodeSelection();
+			}
+			SelectedSeason = null;
+		}
 
 		public bool CanCancelSeasonSelection => SelectedSeason != null && IsNotEditing;
 
 		/// <summary>
 		/// Снять выделение с текущего эпизода
 		/// </summary>
-		public void CancelEpisodeSelection() => SelectedEpisode = null;
+		public void CancelEpisodeSelection()
+		{
+			SelectedEpisode = null;
+			if(EpisodeVoiceOvers.Count > 0)
+			{
+				EpisodeVoiceOvers = new BindableCollection<CartoonVoiceOver>();
+			}
+		}
 
 		public bool CanCancelEpisodeSelection => SelectedEpisode != null && IsNotEditing;
 
@@ -54,6 +84,65 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		#endregion
 
 		#region Shared actions
+
+		public void KeyDown(KeyEventArgs e)
+		{
+			switch(e.KeyboardDevice.Modifiers)
+			{
+				case ModifierKeys.Shift:
+					switch(e.Key)
+					{
+						case Key.Delete:
+							RemoveGlobalVoiceOverAction();
+							break;
+						default:
+							break;
+					}
+					break;
+				case ModifierKeys.Control:
+					switch(e.Key)
+					{
+						case Key.Delete:
+							RemoveSelectedCartoonVoiceOver();
+							break;
+						case Key.S:
+							if(CanSaveChanges) SaveChanges();
+							break;
+					}
+					break;
+				case ModifierKeys.None:
+					switch(e.Key)
+					{
+						case Key.Delete:
+							RemoveSelectedEpisodeVoiceOver();
+							break;
+						case Key.Escape:
+							if(IsNotEditing is false)
+							{
+								if (CanSaveChanges)
+								{
+									CancelChanges();
+									return;
+								}
+
+								if (CanUnlockEditingInterface)
+								{
+									UnlockEditingInterface();
+									return;
+								}
+							}
+
+							if(SelectedGlobalVoiceOver != null)
+							{
+								SelectedGlobalVoiceOver = null;
+								return;
+							}
+							Exit();
+							break;
+					}
+					break;
+			}
+		}
 
 		/// <summary>
 		/// Разблокировать интерфейс и скрыть поля редактирования выбранной озвучки
@@ -113,6 +202,8 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public void EditSelectedGlobalVoiceOver()
 		{
+			if(SelectedGlobalVoiceOver == null)
+				return;
 			EditedVoiceOver = CloneVoiceOver(SelectedGlobalVoiceOver);
 			TempEditedVoiceOver = CloneVoiceOver(SelectedGlobalVoiceOver);
 			IsNotEditing = false;
@@ -124,39 +215,66 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public void RemoveGlobalVoiceOverAction()
 		{
-			if(SelectedVoiceOverId == 0)
-			{
-				throw new Exception("Id выбраной озвучки м/ф равен 0");
-			}
+			if(SelectedGlobalVoiceOver == null)
+				return;
 
-			RemoveSelectedGlobalVoiceOverFromDb();
-
-			//RemoveVoiceOverFromLists();
-			var tempId = SelectedVoiceOverId;
-			if(SelectedEpisode != null)
+			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
 			{
-				if(EpisodeVoiceOvers.Any(evo => evo.CartoonVoiceOverId == SelectedVoiceOverId))
+				var voiceOver = ctx.VoiceOvers
+								   .Include(vo => vo.Cartoons)
+								   .Include(vo => vo.CartoonEpisodes)
+								   .Include(vo => vo.CheckedEpisodes)
+								   .First(vo => vo.CartoonVoiceOverId == SelectedVoiceOverId);
+
+				// Коллекция всех эпизодов, где встречается выбранная озвучка
+				var episodes = ctx.CartoonEpisodes
+								  .Include(ce => ce.CartoonVoiceOver)
+								  .Include(ce => ce.EpisodeVoiceOvers)
+								  .Where(ce => ce.EpisodeVoiceOvers
+												 .Any(evo => evo.CartoonVoiceOverId == SelectedVoiceOverId));
+
+
+				foreach(var episode in episodes.ToList())
 				{
-					RemoveVoiceOverFromEpisodeList();
+					voiceOver.CartoonEpisodes.Remove(episode);
+
+					if(voiceOver.CartoonEpisodes
+								 .Any(ce => ce.CartoonEpisodeId == episode.CartoonEpisodeId))
+					{
+						voiceOver.CheckedEpisodes.Remove(episode);
+						episode.EpisodeVoiceOvers.Remove(voiceOver);
+
+						// Удаление озвучки из списка выбранных озвучек эпизодов
+						// для полной очистки БД от объекта
+						if(episode.EpisodeVoiceOvers.Count > 0)
+						{
+							var checkedVoiceOver = ctx.VoiceOvers
+													  .First(vo => vo.CartoonVoiceOverId ==
+																   episode.EpisodeVoiceOvers
+																		  .First().CartoonVoiceOverId);
+
+							checkedVoiceOver.CheckedEpisodes.Add(episode);
+							episode.CartoonVoiceOver = checkedVoiceOver;
+						}
+					}
 				}
-			}
 
-			SelectedVoiceOverId = tempId;
+				var cartoons = ctx.Cartoons
+								  .Where(c => c.CartoonVoiceOvers
+											   .Any(cvo => cvo.CartoonVoiceOverId == SelectedVoiceOverId));
 
-			if(SelectedCartoon != null)
-			{
-				if(CartoonVoiceOvers.Any(cvo => cvo.CartoonVoiceOverId == SelectedVoiceOverId))
+				foreach(var cartoon in cartoons.ToList())
 				{
-					RemoveVoiceOverFromCartoonList();
+					voiceOver.Cartoons.Remove(cartoon);
 				}
+
+
+				ctx.VoiceOvers.Remove(voiceOver);
+				ctx.SaveChanges();
 			}
 
-			SelectedVoiceOverId = tempId;
 
-			RemoveVoiceOverFromGlobalList();
-
-			SelectedGlobalVoiceOver = GlobalVoiceOvers.Last();
-
+			UpdateVoiceOverList();
 		}
 
 		public bool CanRemoveGlobalVoiceOverAction => SelectedGlobalVoiceOver != null && IsNotEditing;
@@ -185,7 +303,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				return;
 			}
 
-			using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
+			using(var ctx = new CVDbContext(Helpers.SettingsHelper.AppDataPath))
 			{
 				var cartoon = ctx.Cartoons
 								 .Include(c => c.CartoonVoiceOvers)
@@ -286,29 +404,55 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public void RemoveSelectedCartoonVoiceOver()
 		{
-			if(SelectedVoiceOverId == 0)
-			{
-				throw new Exception("Id выбраной озвучки м/ф равен 0");
-			}
+			if(SelectedCartoonVoiceOver == null)
+				return;
 
-			RemoveSelectedEpisodeVoiceOverFromDb();
-			RemoveSelectedCartoonVoiceOverFromDb();
-			var tempId = SelectedVoiceOverId;
-
-			if(SelectedEpisode != null)
+			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
 			{
-				if(EpisodeVoiceOvers.Any(evo => evo.CartoonVoiceOverId == SelectedVoiceOverId))
+				var voiceOver = ctx.VoiceOvers
+								   .Include(vo => vo.Cartoons)
+								   .Include(vo => vo.CheckedEpisodes)
+								   .Include(vo => vo.CartoonEpisodes)
+								   .First(vo => vo.CartoonVoiceOverId == SelectedVoiceOverId);
+
+				// Коллекция эпизодов только выбранного м/с
+				// и только с присутствующей в нем выбранной озвучки
+				var episodes = ctx.CartoonEpisodes
+								  .Where(ce => ce.CartoonId == IdList.CartoonId &&
+											   ce.EpisodeVoiceOvers
+												 .Any(evo => evo.CartoonVoiceOverId == SelectedVoiceOverId));
+
+				foreach(var episode in episodes.ToList())
 				{
-					RemoveVoiceOverFromEpisodeList();
+					voiceOver.CartoonEpisodes.Remove(episode);
+
+					if(voiceOver.CheckedEpisodes
+								.Any(ce => ce.CartoonEpisodeId == IdList.EpisodeId))
+					{
+						voiceOver.CheckedEpisodes.Remove(episode);
+						episode.EpisodeVoiceOvers.Remove(voiceOver);
+
+						if(episode.EpisodeVoiceOvers.Count > 0)
+						{
+							var checkedVoiceOver = ctx.VoiceOvers
+													  .First(vo => vo.CartoonVoiceOverId ==
+																   episode.EpisodeVoiceOvers
+																		  .First().CartoonVoiceOverId);
+
+							checkedVoiceOver.CheckedEpisodes.Add(episode);
+							episode.CartoonVoiceOver = checkedVoiceOver;
+						}
+					}
 				}
+
+				var cartoon = ctx.Cartoons.Find(IdList.CartoonId);
+
+				voiceOver.Cartoons.Remove(cartoon);
+
+				ctx.SaveChanges();
 			}
 
-			SelectedVoiceOverId = tempId;
-			RemoveVoiceOverFromCartoonList();
-
-			SelectedGlobalVoiceOver = GlobalVoiceOvers
-				.First(gvo => gvo.CartoonVoiceOverId == CartoonVoiceOvers
-														.Last().CartoonVoiceOverId);
+			UpdateVoiceOverList();
 		}
 
 		public bool CanRemoveSelectedCartoonVoiceOver => SelectedCartoonVoiceOver != null && IsNotEditing;
@@ -330,7 +474,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				throw new Exception("Id выбраной озвучки м/ф равен 0");
 			}
 
-			using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
+			using(var ctx = new CVDbContext(Helpers.SettingsHelper.AppDataPath))
 			{
 				var episode = ctx.CartoonEpisodes
 								 .Include(ce => ce.EpisodeVoiceOvers)
@@ -350,20 +494,6 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				   .CartoonEpisodes.Add(episode);
 
 				ctx.SaveChanges();
-
-				//episode = ctx.CartoonEpisodes
-				//                  .Include(ce => ce.EpisodeVoiceOvers)
-				//                  .Single(ce => ce.CartoonEpisodeId == SelectedVoiceOverId);
-
-
-
-
-
-
-
-				//ctx.SaveChanges();
-				//t = ctx.VoiceOvers
-				//       .Include(vo => vo.CheckedEpisodes).ToList();
 			}
 
 			var voiceOver = GlobalVoiceOvers.First(vo => vo.CartoonVoiceOverId == SelectedVoiceOverId);
@@ -422,12 +552,51 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public void RemoveSelectedEpisodeVoiceOver()
 		{
-			RemoveSelectedEpisodeVoiceOverFromDb();
-			RemoveVoiceOverFromEpisodeList();
+			if(SelectedEpisodeVoiceOver == null)
+				return;
 
-			SelectedGlobalVoiceOver = GlobalVoiceOvers
-				.First(gvo => gvo.CartoonVoiceOverId == EpisodeVoiceOvers
-														.Last().CartoonVoiceOverId);
+			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
+			{
+				var episode = ctx.CartoonEpisodes
+								 .Include(ce => ce.CartoonVoiceOver)
+								 .Include(ce => ce.EpisodeVoiceOvers)
+								 .First(ce => ce.CartoonEpisodeId == IdList.EpisodeId);
+
+				var voiceOver = ctx.VoiceOvers
+								   .Include(vo => vo.CartoonEpisodes)
+								   .Include(vo => vo.CheckedEpisodes)
+								   .First(vo => vo.CartoonVoiceOverId == SelectedVoiceOverId);
+
+
+				voiceOver.CartoonEpisodes.Remove(episode);
+
+				if(voiceOver.CheckedEpisodes
+							.Any(ce => ce.CartoonEpisodeId == IdList.EpisodeId))
+				{
+					voiceOver.CheckedEpisodes.Remove(episode);
+					episode.EpisodeVoiceOvers.Remove(voiceOver);
+
+					if(episode.EpisodeVoiceOvers.Count > 0)
+					{
+						var checkedVoiceOver = ctx.VoiceOvers
+												  .First(vo => vo.CartoonVoiceOverId ==
+															   episode.EpisodeVoiceOvers
+																	  .First().CartoonVoiceOverId);
+
+						checkedVoiceOver.CheckedEpisodes.Add(episode);
+						episode.CartoonVoiceOver = checkedVoiceOver;
+					}
+				}
+
+				ctx.SaveChanges();
+
+			}
+
+			UpdateVoiceOverList();
+
+			//SelectedGlobalVoiceOver = GlobalVoiceOvers
+			//	.First(gvo => gvo.CartoonVoiceOverId == EpisodeVoiceOvers
+			//											.Last().CartoonVoiceOverId);
 		}
 
 		public bool CanRemoveSelectedEpisodeVoiceOver => SelectedEpisodeVoiceOver != null && IsNotEditing;
@@ -453,7 +622,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				throw new Exception("Id выбраной озвучки м/ф равен 0");
 			}
 
-			using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
+			using(var ctx = new CVDbContext(Helpers.SettingsHelper.AppDataPath))
 			{
 				var voiceOver = ctx.VoiceOvers.Find(SelectedVoiceOverId);
 
@@ -467,17 +636,13 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 			NotifyChanges();
 			IsNotEditing = true;
-			var tempId = SelectedVoiceOverId;
 
-			var tempValues = IdList;
+			UpdateVoiceOverList();
 
-			CancelCartoonSelection();
-			IdList = tempValues;
-			LoadGlobalVoiceOverList();
-			LoadData();
-			SelectedGlobalVoiceOver = GlobalVoiceOvers
-				.First(gvo => gvo.CartoonVoiceOverId == tempId);
+
 		}
+
+
 
 		public bool CanSaveChanges => HasChanges;
 
@@ -499,8 +664,12 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public void Exit()
 		{
+			if(Parent is WindowsManagerViewModel wm)
+			{
+				wm.TryClose();
+			}
+
 			TryClose();
 		}
-
 	}
 }

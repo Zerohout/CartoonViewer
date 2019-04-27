@@ -349,9 +349,6 @@ namespace CartoonViewer.Models.SettingModels
 			}
 		}
 
-
-
-
 		/// <summary>
 		/// Коллекция типов времени для запрета повторов просмотренных эпизодов
 		/// </summary>

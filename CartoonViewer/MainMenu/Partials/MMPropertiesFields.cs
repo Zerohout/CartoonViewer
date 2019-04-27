@@ -5,13 +5,14 @@ namespace CartoonViewer.MainMenu.ViewModels
 	using System.Collections.Generic;
 	using Caliburn.Micro;
 	using Database;
+	using Helpers;
 	using Models.CartoonModels;
 	using OpenQA.Selenium;
 	using static Helpers.Helper;
 
 	public partial class MainMenuViewModel : Screen
 	{
-		private CVDbContext CvDbContext = new CVDbContext(AppDataPath);
+		private CVDbContext CvDbContext = new CVDbContext(SettingsHelper.AppDataPath);
 		private readonly Random rnd = new Random();
 		private BindableCollection<Cartoon> _cartoons = new BindableCollection<Cartoon>();
 		private List<Cartoon> _checkedCartoons = new List<Cartoon>();
@@ -19,7 +20,7 @@ namespace CartoonViewer.MainMenu.ViewModels
 		private List<int> _randomCartoonNumberList = new List<int>();
 
 		private IWebElement WebElement;
-		private bool _isPause;
+		private bool _isPaused;
 		private bool _isShutdownComp;
 		private double _opacity = 1;
 		private int _currentEpisodeIndex;
@@ -97,13 +98,13 @@ namespace CartoonViewer.MainMenu.ViewModels
 		/// <summary>
 		/// Флаг включения паузы
 		/// </summary>
-		public bool IsPause
+		public bool IsPaused
 		{
-			get => _isPause;
+			get => _isPaused;
 			set
 			{
-				_isPause = value;
-				NotifyOfPropertyChange(() => IsPause);
+				_isPaused = value;
+				NotifyOfPropertyChange(() => IsPaused);
 			}
 		}
 

@@ -10,6 +10,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 	using Caliburn.Micro;
 	using CartoonViewer.ViewModels;
 	using Database;
+	using Helpers;
 	using Models.CartoonModels;
 	using static Helpers.Cloner;
 	using static Helpers.Helper;
@@ -17,23 +18,43 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 	public partial class EpisodesEditingViewModel : Screen, ISettingsViewModel
 	{
-		#region EventsActions
-
-		public async void EditVoiceOvers()
+		/// <summary>
+		/// Сброс даты последнего просмотра эпизода
+		/// </summary>
+		public void ResetLastDateViewed()
 		{
-			WinMan.ShowDialog(new VoiceOversEditingViewModel(GlobalIdList));
-
-			CartoonEpisode episode;
-
-			using(var ctx = new CVDbContext(AppDataPath))
+			var newDate = new DateTime(2019,01,01);
+			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
 			{
-				episode = await ctx.CartoonEpisodes
-								   .Include(e => e.EpisodeVoiceOvers)
-								   .SingleAsync(e => e.CartoonEpisodeId == GlobalIdList.EpisodeId);
+				ctx.CartoonEpisodes
+				   .First(ce => ce.CartoonEpisodeId == 
+				                EditingEpisode.CartoonEpisodeId)
+				   .LastDateViewed = newDate;
+				ctx.SaveChanges();
 			}
 
-			VoiceOvers = new BindableCollection<CartoonVoiceOver>(CloneVoiceOverList(episode.EpisodeVoiceOvers));
+			EditingEpisode.LastDateViewed = newDate;
+			TempEpisode.LastDateViewed = newDate;
+			NotifyOfPropertyChange(() => CanResetLastDateViewed);
+			NotifyOfPropertyChange(() => EditingEpisode);
 		}
+
+		public bool CanResetLastDateViewed =>
+			EditingEpisode?.LastDateViewed != new DateTime(2019, 01, 01);
+
+		/// <summary>
+		/// Кнопка Редактор озвучек
+		/// </summary>
+		public void EditVoiceOvers()
+		{
+			var wm = new WindowsManagerViewModel(new VoiceOversEditingViewModel(SettingsHelper.GlobalIdList));
+
+			WinMan.ShowDialog(wm);
+
+			UpdateVoiceOverList();
+		}
+
+
 		public void TextChanged()
 		{
 			NotifyEditingButtons();
@@ -53,11 +74,11 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 		public async void SaveChanges()
 		{
-			using(var ctx = new CVDbContext(AppDataPath))
+			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
 			{
 				var episode = ctx.CartoonEpisodes
 								 .Include(c => c.EpisodeVoiceOvers)
-								 .Single(c => c.CartoonEpisodeId == GlobalIdList.EpisodeId);
+								 .Single(c => c.CartoonEpisodeId == SettingsHelper.GlobalIdList.EpisodeId);
 
 				episode.Name = EditingEpisode.Name;
 				episode.Description = EditingEpisode.Description;
@@ -110,8 +131,8 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 			var defaultEpisode = new CartoonEpisode
 			{
-				CartoonSeasonId = GlobalIdList.SeasonId,
-				CartoonId = GlobalIdList.CartoonId,
+				CartoonSeasonId = SettingsHelper.GlobalIdList.SeasonId,
+				CartoonId = SettingsHelper.GlobalIdList.CartoonId,
 				Checked = true,
 				DelayedSkip = new TimeSpan(),
 				SkipCount = 7,
@@ -126,7 +147,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			Episodes.Add(defaultEpisode);
 			NotifyOfPropertyChange(() => Episodes);
 
-			using(var ctx = new CVDbContext(AppDataPath))
+			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
 			{
 				ctx.CartoonEpisodes.Add(defaultEpisode);
 				await ctx.SaveChangesAsync();
@@ -145,6 +166,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		public void EditEpisode()
 		{
 			LoadEpisodeData();
+			NotifyOfPropertyChange(() => CanResetLastDateViewed);
 		}
 
 		public bool CanEditEpisode => SelectedEpisode != null && IsNotEditing;
@@ -157,11 +179,11 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				return;
 			}
 
-			using(var ctx = new CVDbContext(AppDataPath))
+			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
 			{
-				var episode = ctx.CartoonEpisodes.Find(GlobalIdList.EpisodeId);
+				var episode = ctx.CartoonEpisodes.Find(SettingsHelper.GlobalIdList.EpisodeId);
 
-				if (episode == null)
+				if(episode == null)
 				{
 					throw new Exception("Удаляемый эпизод не найден");
 				}
@@ -216,23 +238,45 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 		public void ListenKey(KeyEventArgs e)
 		{
-			if(e.Key == Key.Escape)
+			switch(e.KeyboardDevice.Modifiers)
 			{
-				if(IsNotEditing is false)
-				{
-					if(HasChanges is false)
+				case ModifierKeys.Control:
+					switch(e.Key)
 					{
-						CancelEditing();
+						case Key.S:
+							if(CanSaveChanges)
+							{
+								SaveChanges();
+								return;
+							}
+							break;
 					}
-					else
+
+					break;
+				case ModifierKeys.None:
+					switch(e.Key)
 					{
-						CancelChanges();
+						case Key.Escape:
+							if(IsNotEditing is false)
+							{
+								if(CanSaveChanges)
+								{
+									CancelChanges();
+									return;
+								}
+								if(CanCancelEditing)
+								{
+									CancelEditing();
+									return;
+								}
+
+								return;
+							}
+
+							((CartoonsEditorViewModel)Parent).CancelSeasonSelection();
+							break;
 					}
-				}
-				else
-				{
-					((CartoonsEditorViewModel)Parent).CancelSeasonSelection();
-				}
+					break;
 			}
 		}
 
@@ -244,6 +288,6 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			lb.ScrollIntoView(lb.SelectedItem);
 		}
 
-		#endregion
+		
 	}
 }

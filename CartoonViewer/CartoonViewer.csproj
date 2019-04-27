@@ -174,19 +174,23 @@
     <Compile Include="MainMenu\Partials\MMPropertiesFields.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="MainMenu\ViewModels\MainMenuViewModel.cs" />
-    <Compile Include="Settings\CartoonEditorFolder\ViewModels\SettingsViewModel.cs" />
+    <Compile Include="Settings\SettingsFolder\ViewModels\SettingsViewModel.cs" />
     <Compile Include="Settings\CartoonEditorFolder\ViewModels\CartoonsEditorViewModel.cs" />
+    <Compile Include="ViewModels\WindowsManagerViewModel.cs" />
     <Compile Include="Views\DialogView.xaml.cs">
       <DependentUpon>DialogView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings\CartoonEditorFolder\Views\SettingsView.xaml.cs">
+    <Compile Include="Settings\SettingsFolder\Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Settings\CartoonEditorFolder\Views\CartoonsEditorView.xaml.cs">
       <DependentUpon>CartoonsEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WindowsManagerView.xaml.cs">
+      <DependentUpon>WindowsManagerView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -252,7 +256,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\CartoonEditorFolder\DesignData\SettingsViewDesignData.xaml">
+    <Page Include="Settings\SettingsFolder\DesignData\SettingsViewDesignData.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -296,7 +300,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\CartoonEditorFolder\Views\SettingsView.xaml">
+    <Page Include="Settings\SettingsFolder\Views\SettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -304,8 +308,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\WindowsManagerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Settings\SettingsFolder\Partials\Settings\" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="CartoonViewerIcon.ico" />
   </ItemGroup>

@@ -11,6 +11,7 @@ namespace CartoonViewer.MainMenu.ViewModels
 	using CartoonViewer.ViewModels;
 	using Models.CartoonModels;
 	using Settings.CartoonEditorFolder.ViewModels;
+	using Settings.SettingsFolder.ViewModels;
 	using static Helpers.Helper;
 	using Screen = Caliburn.Micro.Screen;
 
@@ -86,7 +87,9 @@ namespace CartoonViewer.MainMenu.ViewModels
 			CheckedEpisodes = new List<CartoonEpisode>(
 				CvDbContext.CartoonEpisodes
 						   .Include(ce => ce.CartoonVoiceOver)
-						   .Where(ce => ce.CartoonSeason.Cartoon.Checked));
+						   .Include(ce => ce.CartoonSeason)
+						   .Include(ce => ce.Cartoon)
+						   .Where(ce => ce.Cartoon.Checked));
 
 			if(CheckedEpisodes.Count > 0)
 			{

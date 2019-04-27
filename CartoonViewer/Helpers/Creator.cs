@@ -150,12 +150,12 @@
 		{
 			if(folderPath == null)
 			{
-				folderPath = $"{AppDataPath}";
+				folderPath = $"{SettingsHelper.AppDataPath}";
 			}
 
 			if (fileExtension == null)
 			{
-				fileExtension = DefaultFilesExtension;
+				fileExtension = SettingsHelper.DefaultFilesExtension;
 			}
 
 			var fullFilePath = $"{folderPath}\\{fileName}{fileExtension}";

@@ -7,12 +7,13 @@
     xmlns:viewModels="clr-namespace:CartoonViewer.Settings.CartoonEditorFolder.ViewModels">
 
     <viewModels:CartoonsEditingViewModel.SelectedCartoon>
-        <cartoonModels:Cartoon Name="Название_мультсериала"
-                               Description="Описание_мультсериала"/>
+        <cartoonModels:Cartoon
+            Name="Название_мультсериала"
+            Description="Описание_мультсериала" />
     </viewModels:CartoonsEditingViewModel.SelectedCartoon>
 
     <viewModels:CartoonsEditingViewModel.SelectedCartoonUrl>
-        <cartoonModels:CartoonUrl Url="http://cartoon.url"/>
+        <cartoonModels:CartoonUrl Url="http://cartoon.url" />
     </viewModels:CartoonsEditingViewModel.SelectedCartoonUrl>
 
     <viewModels:CartoonsEditingViewModel.Seasons>
@@ -33,13 +34,13 @@
         <cartoonModels:CartoonSeason Number="15" />
     </viewModels:CartoonsEditingViewModel.Seasons>
     <viewModels:CartoonsEditingViewModel.VoiceOvers>
-        <cartoonModels:CartoonVoiceOver Name="Озвучка_1"/>
-        <cartoonModels:CartoonVoiceOver Name="Озвучка_2"/>
-        <cartoonModels:CartoonVoiceOver Name="Озвучка_3"/>
-        <cartoonModels:CartoonVoiceOver Name="Озвучка_4"/>
-        <cartoonModels:CartoonVoiceOver Name="Озвучка_5"/>
-        <cartoonModels:CartoonVoiceOver Name="Озвучка_6"/>
-        <cartoonModels:CartoonVoiceOver Name="Озвучка_7"/>
-        <cartoonModels:CartoonVoiceOver Name="Озвучка_8"/>
+        <cartoonModels:CartoonVoiceOver Name="Озвучка_1" />
+        <cartoonModels:CartoonVoiceOver Name="Озвучка_2" />
+        <cartoonModels:CartoonVoiceOver Name="Озвучка_3" />
+        <cartoonModels:CartoonVoiceOver Name="Озвучка_4" />
+        <cartoonModels:CartoonVoiceOver Name="Озвучка_5" />
+        <cartoonModels:CartoonVoiceOver Name="Озвучка_6" />
+        <cartoonModels:CartoonVoiceOver Name="Озвучка_7" />
+        <cartoonModels:CartoonVoiceOver Name="Озвучка_8" />
     </viewModels:CartoonsEditingViewModel.VoiceOvers>
 </viewModels:CartoonsEditingViewModel>

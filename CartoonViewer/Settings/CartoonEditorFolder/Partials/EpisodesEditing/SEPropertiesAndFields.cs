@@ -4,14 +4,12 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 	using System;
 	using System.Windows;
 	using Caliburn.Micro;
+	using Helpers;
 	using Models.CartoonModels;
 	using Models.SettingModels;
-	using static Helpers.Helper;
 
 	public partial class EpisodesEditingViewModel : Screen, ISettingsViewModel
 	{
-		#region Private fields
-
 		private Visibility _episodeEditingVisibility = Visibility.Hidden;
 		private BindableCollection<CartoonVoiceOver> _voiceOvers = new BindableCollection<CartoonVoiceOver>();
 		private BindableCollection<CartoonEpisode> _episodes = new BindableCollection<CartoonEpisode>();
@@ -19,52 +17,8 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		private CartoonEpisode _tempEpisode;
 		private EpisodeTime _episodeTime;
 		private CartoonEpisode _editingEpisode;
-
-
-
-		public CartoonEpisode EditingEpisode
-		{
-			get => _editingEpisode;
-			set
-			{
-				_editingEpisode = value;
-				NotifyOfPropertyChange(() => EditingEpisode);
-			}
-		}
-
-
 		private bool _isNotEditing = true;
 
-		public bool IsNotEditing
-		{
-			get => _isNotEditing;
-			set
-			{
-				_isNotEditing = value;
-				NotifyOfPropertyChange(() => IsNotEditing);
-				NotifyEpisodeListButtons();
-			}
-		}
-
-
-		#endregion
-
-		#region Properties
-
-		/// <summary>
-		/// Флаг для корректной работы конструктора XAML
-		/// </summary>
-		public bool IsDesignTime { get; set; }
-
-		public Visibility EpisodeEditingVisibility
-		{
-			get => _episodeEditingVisibility;
-			set
-			{
-				_episodeEditingVisibility = value;
-				NotifyOfPropertyChange(() => EpisodeEditingVisibility);
-			}
-		}
 
 		public BindableCollection<CartoonVoiceOver> VoiceOvers
 		{
@@ -86,6 +40,9 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// Выбранный эпизод
+		/// </summary>
 		public CartoonEpisode SelectedEpisode
 		{
 			get => _selectedEpisode;
@@ -93,11 +50,25 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			{
 				_selectedEpisode = value;
 				NotifyOfPropertyChange(() => SelectedEpisode);
-				GlobalIdList.EpisodeId = value?.CartoonEpisodeId ?? 0;
+				SettingsHelper.GlobalIdList.EpisodeId = value?.CartoonEpisodeId ?? 0;
 				NotifyEpisodeListButtons();
 			}
 		}
-
+		/// <summary>
+		/// Редактируемый экземпляр выбранного эпизода
+		/// </summary>
+		public CartoonEpisode EditingEpisode
+		{
+			get => _editingEpisode;
+			set
+			{
+				_editingEpisode = value;
+				NotifyOfPropertyChange(() => EditingEpisode);
+			}
+		}
+		/// <summary>
+		/// Временный экземпляр редактируемого эпизода для отслеживания изменений
+		/// </summary>
 		public CartoonEpisode TempEpisode
 		{
 			get => _tempEpisode;
@@ -121,6 +92,29 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 		public TimeSpan EpisodeDuration => CalculatingDuration(EditingEpisode);
 
+
+
+		#region Flags
+
+		/// <summary>
+		/// Флаг для корректной работы конструктора XAML
+		/// </summary>
+		public bool IsDesignTime { get; set; }
+
+		public bool IsNotEditing
+		{
+			get => _isNotEditing;
+			set
+			{
+				_isNotEditing = value;
+				NotifyOfPropertyChange(() => IsNotEditing);
+				NotifyEpisodeListButtons();
+			}
+		}
+
+		/// <summary>
+		/// Флаг наличия изменений
+		/// </summary>
 		public bool HasChanges
 		{
 			get
@@ -144,7 +138,21 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			}
 		}
 
+		#endregion
+
+		#region Visibility
+
+		public Visibility EpisodeEditingVisibility
+		{
+			get => _episodeEditingVisibility;
+			set
+			{
+				_episodeEditingVisibility = value;
+				NotifyOfPropertyChange(() => EpisodeEditingVisibility);
+			}
+		}
 
 		#endregion
+
 	}
 }

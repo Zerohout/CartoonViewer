@@ -7,10 +7,62 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 	using System.Threading.Tasks;
 	using Caliburn.Micro;
 	using Database;
+	using Helpers;
 	using Models.CartoonModels;
 
 	public partial class VoiceOversEditingViewModel : Screen, ISettingsViewModel
 	{
+		public void UpdateVoiceOverList()
+		{
+			var tempId = SelectedVoiceOverId;
+			var tempValues = IdList;
+
+			CancelCartoonSelection();
+			IdList = tempValues;
+			LoadGlobalVoiceOverList();
+			LoadData();
+			SelectedVoiceOverId = tempId;
+
+			SelectVoiceOver();
+
+
+			if(IsNotEditing is false)
+			{
+				EditedVoiceOver = Cloner.CloneVoiceOver(SelectedGlobalVoiceOver);
+				TempEditedVoiceOver = Cloner.CloneVoiceOver(SelectedGlobalVoiceOver);
+			}
+		}
+
+		private void SelectVoiceOver()
+		{
+			if(CartoonVoiceOvers.Count == 0 &&
+			   EpisodeVoiceOvers.Count == 0)
+			{
+				SelectedGlobalVoiceOver = GlobalVoiceOvers.Count > 0
+					? GlobalVoiceOvers.Last()
+					: null;
+				return;
+			}
+
+			if(EpisodeVoiceOvers.Count > 0)
+			{
+				SelectedEpisodeVoiceOver = EpisodeVoiceOvers.Last();
+				return;
+			}
+
+			if(CartoonVoiceOvers.Count > 0)
+			{
+				SelectedCartoonVoiceOver = CartoonVoiceOvers.Last();
+				return;
+			}
+
+			if(SelectedVoiceOverId > 0)
+			{
+				SelectedGlobalVoiceOver = GlobalVoiceOvers
+					.FirstOrDefault(gvo => gvo.CartoonVoiceOverId == SelectedVoiceOverId);
+			}
+
+		}
 
 		#region Global voice overs methods
 
@@ -20,7 +72,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		private void LoadGlobalVoiceOverList()
 		{
 			List<CartoonVoiceOver> voiceOvers;
-			using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
+			using(var ctx = new CVDbContext(Helpers.SettingsHelper.AppDataPath))
 			{
 				voiceOvers = ctx.VoiceOvers.ToList();
 			}
@@ -34,7 +86,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		private async void RemoveSelectedGlobalVoiceOverFromDb()
 		{
 
-			using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
+			using(var ctx = new CVDbContext(Helpers.SettingsHelper.AppDataPath))
 			{
 				var voiceOver = ctx.VoiceOvers.Find(SelectedVoiceOverId);
 
@@ -51,9 +103,6 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 					   .Single(ce => ce.CartoonEpisodeId == IdList.EpisodeId)
 					   .EpisodeVoiceOvers.Remove(voiceOver);
 				}
-
-
-
 
 				ctx.Entry(voiceOver).State = EntityState.Deleted;
 
@@ -84,7 +133,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		{
 			BindableCollection<CartoonVoiceOver> voiceOvers;
 
-			using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
+			using(var ctx = new CVDbContext(Helpers.SettingsHelper.AppDataPath))
 			{
 				ctx.VoiceOvers
 				   .Where(vo => vo.Cartoons
@@ -101,7 +150,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		private async void RemoveSelectedCartoonVoiceOverFromDb()
 		{
-			using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
+			using(var ctx = new CVDbContext(Helpers.SettingsHelper.AppDataPath))
 			{
 				var cartoon = await ctx.Cartoons
 									   .Include(ce => ce.CartoonVoiceOvers)
@@ -138,7 +187,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		{
 			BindableCollection<CartoonVoiceOver> voiceOvers;
 
-			using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
+			using(var ctx = new CVDbContext(Helpers.SettingsHelper.AppDataPath))
 			{
 				ctx.VoiceOvers
 				   .Where(vo => vo.CartoonEpisodes
@@ -155,7 +204,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		private async void RemoveSelectedEpisodeVoiceOverFromDb()
 		{
-			using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
+			using(var ctx = new CVDbContext(Helpers.SettingsHelper.AppDataPath))
 			{
 				var episode = await ctx.CartoonEpisodes
 									   .Include(ce => ce.EpisodeVoiceOvers)
@@ -192,7 +241,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		{
 			BindableCollection<Cartoon> cartoons;
 
-			using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
+			using(var ctx = new CVDbContext(Helpers.SettingsHelper.AppDataPath))
 			{
 				ctx.Cartoons
 				   .Where(c => c.CartoonWebSites
@@ -247,7 +296,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		{
 			BindableCollection<CartoonSeason> seasons;
 
-			using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
+			using(var ctx = new CVDbContext(Helpers.SettingsHelper.AppDataPath))
 			{
 				ctx.CartoonSeasons
 				   .Where(cs => cs.CartoonId == IdList.CartoonId)
@@ -299,7 +348,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		{
 			BindableCollection<CartoonEpisode> episodes;
 
-			using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
+			using(var ctx = new CVDbContext(Helpers.SettingsHelper.AppDataPath))
 			{
 				ctx.CartoonEpisodes
 				   .Where(ce => ce.CartoonSeasonId == IdList.SeasonId)
@@ -381,7 +430,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// <returns></returns>
 		private Task<CartoonVoiceOver> CreateNewVoiceOver()
 		{
-			using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
+			using(var ctx = new CVDbContext(Helpers.SettingsHelper.AppDataPath))
 			{
 				var count = ctx.VoiceOvers.Max(vo => vo.CartoonVoiceOverId) + 1;
 
@@ -418,7 +467,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				// --При загруженных с конструктора данных мультсериала
 				if(IdList.CartoonId > 0)
 				{
-					_selectedCartoon = _cartoons.First(c => c.CartoonId == IdList.CartoonId);
+					_selectedCartoon = _cartoons.FirstOrDefault(c => c.CartoonId == IdList.CartoonId);
 					LoadData();
 					NotifyCartoonData();
 				}
@@ -433,12 +482,12 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				LoadSeasonList();
 
 				// установка значения выбранному мультфильму при смене его на другой
-				_selectedCartoon = _cartoons.First(c => c.CartoonId == IdList.CartoonId);
+				_selectedCartoon = _cartoons.FirstOrDefault(c => c.CartoonId == IdList.CartoonId);
 				NotifyCartoonData();
 
 				if(IdList.SeasonId > 0)
 				{
-					_selectedSeason = _seasons.First(cs => cs.CartoonSeasonId == IdList.SeasonId);
+					_selectedSeason = _seasons.FirstOrDefault(cs => cs.CartoonSeasonId == IdList.SeasonId);
 					LoadData();
 					NotifySeasonData();
 				}
@@ -451,12 +500,12 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			{
 				LoadEpisodeList();
 
-				_selectedSeason = _seasons.First(cs => cs.CartoonSeasonId == IdList.SeasonId);
+				_selectedSeason = _seasons.FirstOrDefault(cs => cs.CartoonSeasonId == IdList.SeasonId);
 				NotifySeasonData();
 
 				if(IdList.EpisodeId > 0)
 				{
-					_selectedEpisode = _episodes.First(ce => ce.CartoonEpisodeId == IdList.EpisodeId);
+					_selectedEpisode = _episodes.FirstOrDefault(ce => ce.CartoonEpisodeId == IdList.EpisodeId);
 					LoadData();
 					NotifyEpisodeData();
 				}
@@ -465,7 +514,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 			// --При выборе эпизода
 			LoadEpisodeVoiceOverList();
-			_selectedEpisode = _episodes.First(ce => ce.CartoonEpisodeId == IdList.EpisodeId);
+			_selectedEpisode = _episodes.FirstOrDefault(ce => ce.CartoonEpisodeId == IdList.EpisodeId);
 			NotifyEpisodeData();
 		}
 

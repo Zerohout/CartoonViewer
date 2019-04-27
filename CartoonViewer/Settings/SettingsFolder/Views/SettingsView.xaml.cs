@@ -1,4 +1,4 @@
-﻿namespace CartoonViewer.Settings.CartoonEditorFolder.Views
+﻿namespace CartoonViewer.Settings.SettingsFolder.Views
 {
 	using System.Windows.Controls;
 

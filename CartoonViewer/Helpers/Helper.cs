@@ -1,6 +1,7 @@
 ﻿namespace CartoonViewer.Helpers
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.IO;
 	using System.Linq;
@@ -15,37 +16,13 @@
 
 	public static class Helper
 	{
-		public static string AppPath = $"{AppDomain.CurrentDomain.BaseDirectory}";
 		public const string MMBackgroundUri = "../../Resources/Images/HDMMBackground.png";
 		public const string MMBackgroundOnExitUri = "../../Resources/Images/HDMMBackgroundOnExit.png";
-		public const string AppDataFolderName = "AppData";
-		public static readonly string AppDataPath = $"{AppPath}{AppDataFolderName}";
-		public const string DefaultFilesExtension = ".cview";
-		public const string DefaultGeneralSettingsFileName = "DefaultGeneralSettingsValues";
-		public const string SavedGeneralSettingsFileName = "SavedGeneralSettingsValues";
-		public const string NewElementString = "**Добавить новый**";
-		public const string FreehatWebSite = "http://freehat.cc";
-
-		public static int CurrentSkipCount = 6;
-		public static int DelayedSkipCount = 5;
-		public static (int WebSiteId, int CartoonId, int SeasonId, int EpisodeId) GlobalIdList;
-
-		public const int WM_KEYDOWN = 0x100;
-		public const int WM_KEYUP = 0x101;
-		public const int WM_CHAR = 0x102;
-		public const int WM_SYSKEYDOWN = 0x104;
-		public const int WM_SYSKEYUP = 0x105;
-		public const int VK_LEFT = 0x25;
-		public const int VK_RIGHT = 0x27;
-		public const int VK_F = 0x46;
-		public const int VK_ESCAPE = 0x1B;
-		public const int VK_SPACE = 0x20;
-
+		
 		public static TimeSpan ApproximateEpisodeDuration = new TimeSpan(0, 21, 10);
 		public static WindowManager WinMan = new WindowManager();
 		public static MessageHelper Msg = new MessageHelper();
 		public static Stopwatch Timer = new Stopwatch();
-		public static Visibility AdvancedSettingsVisibility = Visibility.Hidden;
 
 		public static IWebDriver Browser;
 		public static IntPtr HWND;
@@ -58,14 +35,6 @@
 			"/serii",
 			"/multfilm",
 		};
-
-
-		public enum DialogState
-		{
-			YES_NO,
-			OK,
-			YES_NO_CANCEL
-		}
 
 		public enum DialogType
 		{
@@ -81,7 +50,6 @@
 			YES_ACTION,
 			NO_ACTION,
 			CANCEL_ACTION
-
 		}
 
 		/// <summary>
@@ -89,7 +57,7 @@
 		/// </summary>
 		public static void StartBrowser()
 		{
-			Browser = new ChromeDriver(AppDataPath);
+			Browser = new ChromeDriver(SettingsHelper.AppDataPath);
 
 			Thread.Sleep(1000);
 
@@ -117,23 +85,19 @@
 
 		public static GeneralSettingsValue LoadGeneralSettings()
 		{
-			var fullDefaultSettingsFileName = $"{DefaultGeneralSettingsFileName}{DefaultFilesExtension}";
-			var fullSavedSettingsFileName = $"{SavedGeneralSettingsFileName}{DefaultFilesExtension}";
+			var fullDefaultSettingsFileName = $"{SettingsHelper.DefaultGeneralSettingsFileName}{SettingsHelper.DefaultFilesExtension}";
+			var fullSavedSettingsFileName = $"{SettingsHelper.SavedGeneralSettingsFileName}{SettingsHelper.DefaultFilesExtension}";
 
-			if(File.Exists($"{AppDataPath}\\{fullDefaultSettingsFileName}") is false)
+			if(File.Exists($"{SettingsHelper.AppDataPath}\\{fullDefaultSettingsFileName}") is false)
 			{
 				WriteClassInFile(
-					new GeneralSettingsValue(),
-					DefaultGeneralSettingsFileName,
-					DefaultFilesExtension,
-					AppDataPath);
+					new GeneralSettingsValue(), SettingsHelper.DefaultGeneralSettingsFileName, SettingsHelper.DefaultFilesExtension, SettingsHelper.AppDataPath);
 			}
 
 			return ReadClassFromFile<GeneralSettingsValue>(
-				File.Exists($"{AppDataPath}\\{fullSavedSettingsFileName}") is false
-					? $"{AppDataPath}\\{fullDefaultSettingsFileName}"
-					: $"{AppDataPath}\\{fullSavedSettingsFileName}");
+				File.Exists($"{SettingsHelper.AppDataPath}\\{fullSavedSettingsFileName}") is false
+					? $"{SettingsHelper.AppDataPath}\\{fullDefaultSettingsFileName}"
+					: $"{SettingsHelper.AppDataPath}\\{fullSavedSettingsFileName}");
 		}
-
 	}
 }

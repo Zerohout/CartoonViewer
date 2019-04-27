@@ -5,6 +5,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 	using System.Linq;
 	using Caliburn.Micro;
 	using Database;
+	using Helpers;
 	using Models.CartoonModels;
 	using static Helpers.Cloner;
 	using static Helpers.Helper;
@@ -16,19 +17,19 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		private async void LoadData()
 		{
 			Cartoon result;
-			using(var ctx = new CVDbContext(AppDataPath))
+			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
 			{
 				result = await ctx.Cartoons
 								  .Include(c => c.CartoonUrls)
 								  .Include(c => c.CartoonSeasons)
 								  .Include(c => c.CartoonVoiceOvers)
-								  .SingleAsync(c => c.CartoonId == GlobalIdList.CartoonId);
+								  .SingleAsync(c => c.CartoonId == SettingsHelper.GlobalIdList.CartoonId);
 			}
 
 			SelectedCartoon = CloneCartoon(result);
 			TempCartoon = CloneCartoon(SelectedCartoon);
 			SelectedCartoonUrl = CloneCartoonUrl(result.CartoonUrls
-													   .Find(cu => cu.CartoonWebSiteId == GlobalIdList.WebSiteId));
+													   .Find(cu => cu.CartoonWebSiteId == SettingsHelper.GlobalIdList.WebSiteId));
 			TempCartoonUrl = CloneCartoonUrl(SelectedCartoonUrl);
 			Seasons = new BindableCollection<CartoonSeason>(result.CartoonSeasons);
 			VoiceOvers = new BindableCollection<CartoonVoiceOver>(result.CartoonVoiceOvers);
@@ -36,6 +37,21 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			{
 				SelectedSeason = Seasons.First();
 			}
+		}
+
+		public async void UpdateVoiceOverList()
+		{
+			if (SettingsHelper.GlobalIdList.CartoonId == 0) return;
+
+			Cartoon cartoon;
+			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
+			{
+				cartoon = await ctx.Cartoons
+				                   .Include(c => c.CartoonVoiceOvers)
+				                   .SingleAsync(c => c.CartoonId == SettingsHelper.GlobalIdList.CartoonId);
+			}
+
+			VoiceOvers = new BindableCollection<CartoonVoiceOver>(cartoon.CartoonVoiceOvers);
 		}
 
 		private void NotifySeasonList()

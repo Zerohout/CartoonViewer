@@ -240,6 +240,7 @@
                 Grid.Column="0"
                 Margin="5,2.5"
                 cal:Message.Attach="[Event TextChanged]=[Action TextChanged()]"
+                AcceptsReturn="True"
                 FontSize="12"
                 Style="{StaticResource SETBoxDefaultStyle}"
                 Text="{Binding EditingEpisode.Description, UpdateSourceTrigger=PropertyChanged}"
@@ -266,6 +267,7 @@
                 Grid.Column="0"
                 Background="{StaticResource GrayBrush10}">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
@@ -428,6 +430,74 @@
                         </TextBlock.Text>
                     </TextBlock>
                 </StackPanel>
+                <Grid
+                    Grid.Row="4"
+                    Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        FontSize="16"
+                        Foreground="DodgerBlue"
+                        Style="{StaticResource SEDefaultTBlockStyle}"
+                        Text="Дата последнего просмотра" />
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Margin="5"
+                        FontSize="14"
+                        Foreground="DodgerBlue"
+                        Style="{StaticResource SEDefaultTBlockStyle}">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0:00}.{1:00}.{2:0000}">
+                                <Binding Path="EditingEpisode.LastDateViewed.Day" />
+                                <Binding Path="EditingEpisode.LastDateViewed.Month" />
+                                <Binding Path="EditingEpisode.LastDateViewed.Year" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Margin="5"
+                        FontSize="14"
+                        Foreground="DodgerBlue"
+                        Style="{StaticResource SEDefaultTBlockStyle}">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0:00}.{1:00}.{2:00}">
+                                <Binding Path="EditingEpisode.LastDateViewed.Hour" />
+                                <Binding Path="EditingEpisode.LastDateViewed.Minute" />
+                                <Binding Path="EditingEpisode.LastDateViewed.Second" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                    <Button
+                        cal:Message.Attach="[Event Click]=[Action ResetLastDateViewed()]"
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Margin="0,0,5,0"
+                        Padding="2"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        HorizontalContentAlignment="Center">
+                        <TextBlock
+                            FontSize="12"
+                            Foreground="DodgerBlue"
+                            Style="{StaticResource SEDefaultTBlockStyle}"
+                            Text="Сброс" />
+                    </Button>
+
+                </Grid>
             </Grid>
         </Grid>
 

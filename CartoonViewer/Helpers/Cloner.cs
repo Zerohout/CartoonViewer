@@ -221,7 +221,8 @@ namespace CartoonViewer.Helpers
 			SkipCount = cartoonEpisode.SkipCount,
 			Duration = cartoonEpisode.Duration,
 			CreditsStart = cartoonEpisode.CreditsStart,
-			//EpisodeVoiceOvers = CloneVoiceOverList(cartoonEpisode.EpisodeVoiceOvers),
+			LastDateViewed = cartoonEpisode.LastDateViewed,
+			CartoonVoiceOver = cartoonEpisode.CartoonVoiceOver,
 			CartoonSeasonId = cartoonEpisode.CartoonSeasonId
 		};
 

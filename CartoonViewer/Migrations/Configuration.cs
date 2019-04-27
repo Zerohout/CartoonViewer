@@ -4,6 +4,7 @@ namespace CartoonViewer.Migrations
 	using System.Data.Entity.Migrations;
 	using System.Linq;
 	using Database;
+	using Helpers;
 	using Models.CartoonModels;
 	using static Helpers.Creator;
 	using static Helpers.Helper;
@@ -19,7 +20,7 @@ namespace CartoonViewer.Migrations
 		{
 			if (context.CartoonWebSites.Any() is false)
 			{
-				context.CartoonWebSites.Add(new CartoonWebSite { Url = FreehatWebSite });
+				context.CartoonWebSites.Add(new CartoonWebSite { Url = SettingsHelper.FreehatWebSite });
 				context.SaveChanges();
 
 				foreach(var cw in context.CartoonWebSites)
@@ -39,7 +40,7 @@ namespace CartoonViewer.Migrations
 
 		private void AddDataToDatabase(CVDbContext context)
 		{
-			context.CartoonWebSites.Add(new CartoonWebSite { Url = FreehatWebSite });
+			context.CartoonWebSites.Add(new CartoonWebSite { Url = SettingsHelper.FreehatWebSite });
 			context.Cartoons.AddRange(CreateCartoonList());
 			context.VoiceOvers.AddRange(CreateSouthParkVoiceOverList());
 			context.SaveChanges();

@@ -3,11 +3,23 @@ namespace CartoonViewer.Helpers
 {
 	using System;
 	using System.Runtime.InteropServices;
+	using System.Text;
 	using System.Threading;
 	using static Helper;
 
 	public class MessageHelper
 	{
+		public const int WM_KEYDOWN = 0x100;
+		public const int WM_KEYUP = 0x101;
+		public const int WM_CHAR = 0x102;
+		public const int WM_SYSKEYDOWN = 0x104;
+		public const int WM_SYSKEYUP = 0x105;
+		public const int VK_LEFT = 0x25;
+		public const int VK_RIGHT = 0x27;
+		public const int VK_F = 0x46;
+		public const int VK_ESCAPE = 0x1B;
+		public const int VK_SPACE = 0x20;
+
 		[DllImport("User32.dll")]
 		private static extern int RegisterWindowMessage(string lpString);
 
@@ -54,7 +66,7 @@ namespace CartoonViewer.Helpers
 
 			if (hWnd > 0)
 			{
-				byte[] sarr = System.Text.Encoding.Default.GetBytes(msg);
+				byte[] sarr = Encoding.Default.GetBytes(msg);
 				int len = sarr.Length;
 				COPYDATASTRUCT cds;
 				cds.dwData = (IntPtr)100;
@@ -85,12 +97,14 @@ namespace CartoonViewer.Helpers
 
 		public void PressKey(int key, int count = 1)
 		{
+			var result = 0;
+
 			for (var i = 0; i < count; i++)
 			{
-				Thread.Sleep(250);
-				_ = sendWindowsMessage(HWND, WM_KEYDOWN, key, 0);
+				Thread.Sleep(450);
+				result = sendWindowsMessage(HWND, WM_KEYDOWN, key, 0);
 				Thread.Sleep(50);
-				_ = sendWindowsMessage(HWND, WM_KEYUP, key, 0);
+				result = sendWindowsMessage(HWND, WM_KEYUP, key, 0);
 			}
 		}
 	}

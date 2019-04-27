@@ -14,7 +14,6 @@
 		{
 			IdList.WebSiteId = websiteId;
 			IdList.CartoonId = cartoonId;
-			LoadData();
 		}
 
 		/// <summary>
@@ -24,12 +23,14 @@
 		public VoiceOversEditingViewModel((int WebSiteId, int CartoonId, int SeasonId, int EpisodeId) idList)
 		{
 			IdList = idList;
-			LoadData();
 		}
 
 		protected override void OnInitialize()
 		{
+			DisplayName = "Редактор озвучек";
 			LoadGlobalVoiceOverList();
+			LoadData();
+			NotifyOfPropertyChange(() => ExitButtonVisibility);
 
 			base.OnInitialize();
 		}

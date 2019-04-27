@@ -3,6 +3,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 {
 	using System.Windows;
 	using Caliburn.Micro;
+	using CartoonViewer.ViewModels;
 	using Models.CartoonModels;
 
 	public partial class VoiceOversEditingViewModel : Screen, ISettingsViewModel
@@ -27,6 +28,8 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		private (int WebSiteId, int CartoonId, int SeasonId, int EpisodeId) IdList;
 		private int SelectedVoiceOverId;
 		private bool _isNotEditing = true;
+
+		
 
 		#endregion
 
@@ -296,6 +299,14 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			IsNotEditing
 				? Visibility.Hidden
 				: Visibility.Visible;
+
+		/// <summary>
+		/// Видимость кнопки выхода
+		/// </summary>
+		public Visibility ExitButtonVisibility =>
+			Parent is WindowsManagerViewModel
+				? Visibility.Visible
+				: Visibility.Hidden;
 
 		#endregion
 

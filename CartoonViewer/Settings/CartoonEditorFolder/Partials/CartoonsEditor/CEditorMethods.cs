@@ -8,6 +8,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 	using Caliburn.Micro;
 	using CartoonViewer.ViewModels;
 	using Database;
+	using Helpers;
 	using Models.CartoonModels;
 	using static Helpers.Helper;
 	using Action = System.Action;
@@ -70,7 +71,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		{
 			BindableCollection<CartoonWebSite> webSites;
 
-			using(var ctx = new CVDbContext(AppDataPath))
+			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
 			{
 				await ctx.CartoonWebSites.LoadAsync();
 				webSites = new BindableCollection<CartoonWebSite>(ctx.CartoonWebSites.Local);
@@ -85,11 +86,11 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		{
 			BindableCollection<Cartoon> cartoons;
 
-			using(var ctx = new CVDbContext(AppDataPath))
+			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
 			{
 				await ctx.Cartoons
 						 .Where(c => c.CartoonWebSites
-									  .Any(cws => cws.CartoonWebSiteId == GlobalIdList.WebSiteId))
+									  .Any(cws => cws.CartoonWebSiteId == SettingsHelper.GlobalIdList.WebSiteId))
 						 .LoadAsync();
 				cartoons = new BindableCollection<Cartoon>(ctx.Cartoons.Local);
 			}
@@ -98,7 +99,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			{
 				new Cartoon
 				{
-					Name = NewElementString
+					Name = SettingsHelper.NewElementString
 				}
 			};
 		}
@@ -109,10 +110,10 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		{
 			BindableCollection<CartoonSeason> seasons;
 
-			using(var ctx = new CVDbContext(AppDataPath))
+			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
 			{
 				await ctx.CartoonSeasons
-						 .Where(cs => cs.CartoonId == GlobalIdList.CartoonId)
+						 .Where(cs => cs.CartoonId == SettingsHelper.GlobalIdList.CartoonId)
 						 .LoadAsync();
 				seasons = new BindableCollection<CartoonSeason>(ctx.CartoonSeasons.Local);
 			}
@@ -249,7 +250,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				case CartoonWebSite _:
 					if(value != null)
 					{
-						GlobalIdList.WebSiteId = ((CartoonWebSite)value).CartoonWebSiteId;
+						SettingsHelper.GlobalIdList.WebSiteId = ((CartoonWebSite)value).CartoonWebSiteId;
 						if(_selectedCartoon != null)
 						{
 							SelectedCartoon = null;
@@ -268,7 +269,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				case Cartoon _:
 					if(value != null)
 					{
-						GlobalIdList.CartoonId = ((Cartoon)value).CartoonId;
+						SettingsHelper.GlobalIdList.CartoonId = ((Cartoon)value).CartoonId;
 						if(_selectedSeason != null)
 						{
 							SelectedSeason = null;
@@ -294,7 +295,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				case CartoonSeason _:
 					if(value != null)
 					{
-						GlobalIdList.SeasonId = ((CartoonSeason)value).CartoonSeasonId;
+						SettingsHelper.GlobalIdList.SeasonId = ((CartoonSeason)value).CartoonSeasonId;
 						ChangeActiveItem(new EpisodesEditingViewModel()
 						{
 							DisplayName = "Редактирование сезона"

@@ -3,6 +3,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 {
 	using System.Windows;
 	using Caliburn.Micro;
+	using Helpers;
 	using Models.CartoonModels;
 	using static Helpers.Helper;
 
@@ -21,12 +22,12 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		#region Properties
 
 		public Visibility SaveChangesVisibility =>
-			TempCartoon?.Name == NewElementString
+			TempCartoon?.Name == SettingsHelper.NewElementString
 				? Visibility.Hidden
 				: Visibility.Visible;
 
 		public Visibility CreateNewCartoonVisibility =>
-			TempCartoon?.Name == NewElementString
+			TempCartoon?.Name == SettingsHelper.NewElementString
 				? Visibility.Visible
 				: Visibility.Hidden;
 

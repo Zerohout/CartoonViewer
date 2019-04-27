@@ -6,12 +6,13 @@ namespace CartoonViewer.Settings.ViewingsSettingsFolder.ViewModels
 	using Caliburn.Micro;
 	using CartoonEditorFolder.ViewModels;
 	using Database;
+	using Helpers;
 	using Models.CartoonModels;
 	using static Helpers.Helper;
 
 	public partial class ViewingsSettingsViewModel : Screen, ISettingsViewModel
 	{
-		public CVDbContext CvDbContext = new CVDbContext(AppDataPath);
+		public CVDbContext CvDbContext = new CVDbContext(SettingsHelper.AppDataPath);
 
 
 

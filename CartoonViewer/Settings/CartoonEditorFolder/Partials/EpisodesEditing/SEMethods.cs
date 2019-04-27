@@ -7,6 +7,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 	using System.Windows;
 	using Caliburn.Micro;
 	using Database;
+	using Helpers;
 	using Models.CartoonModels;
 	using Models.SettingModels;
 	using static Helpers.Cloner;
@@ -15,6 +16,23 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 	public partial class EpisodesEditingViewModel : Screen, ISettingsViewModel
 	{
+		public async void UpdateVoiceOverList()
+		{
+			if(SettingsHelper.GlobalIdList.EpisodeId == 0)
+				return;
+
+			CartoonEpisode episode;
+
+			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
+			{
+				episode = await ctx.CartoonEpisodes
+				                   .Include(e => e.EpisodeVoiceOvers)
+				                   .SingleAsync(e => e.CartoonEpisodeId == SettingsHelper.GlobalIdList.EpisodeId);
+			}
+
+			VoiceOvers = new BindableCollection<CartoonVoiceOver>(CloneVoiceOverList(episode.EpisodeVoiceOvers));
+		}
+
 		#region Private methods
 
 		private TimeSpan CalculatingDuration(CartoonEpisode episode) =>
@@ -31,11 +49,11 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		{
 			CartoonSeason season;
 
-			using(var ctx = new CVDbContext(AppDataPath))
+			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
 			{
 				season = await ctx.CartoonSeasons
 							.Include(s => s.CartoonEpisodes)
-							.SingleAsync(s => s.CartoonSeasonId == GlobalIdList.SeasonId);
+							.SingleAsync(s => s.CartoonSeasonId == SettingsHelper.GlobalIdList.SeasonId);
 			}
 
 			Episodes = new BindableCollection<CartoonEpisode>(season.CartoonEpisodes);
@@ -52,13 +70,13 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		{
 			CartoonEpisode episode;
 
-			using(var ctx = new CVDbContext(AppDataPath))
+			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
 			{
 				episode = await ctx.CartoonEpisodes
 				                   .Include(e => e.Cartoon)
 				                   .Include(e => e.CartoonSeason)
 								   .Include(e => e.EpisodeVoiceOvers)
-								   .SingleAsync(e => e.CartoonEpisodeId == GlobalIdList.EpisodeId);
+								   .SingleAsync(e => e.CartoonEpisodeId == SettingsHelper.GlobalIdList.EpisodeId);
 			}
 
 			EditingEpisode = CloneEpisode(episode);
@@ -69,6 +87,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			EpisodeEditingVisibility = Visibility.Visible;
 			IsNotEditing = false;
 			NotifyEpisodeListButtons();
+			NotifyOfPropertyChange(() => CanResetLastDateViewed);
 		}
 
 		/// <summary>

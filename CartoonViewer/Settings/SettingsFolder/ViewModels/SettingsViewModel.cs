@@ -1,21 +1,36 @@
-﻿namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
+﻿namespace CartoonViewer.Settings.SettingsFolder.ViewModels
 {
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Windows.Input;
 	using Caliburn.Micro;
+	using CartoonEditorFolder.ViewModels;
 	using CartoonViewer.ViewModels;
+	using Database;
 	using GeneralSettingsFolder.ViewModels;
 	using Helpers;
 	using MainMenu.ViewModels;
 	using ViewingsSettingsFolder.ViewModels;
 
+
 	public class SettingsViewModel : Conductor<Screen>.Collection.OneActive
 	{
+		private int currentWebSiteId;
+		
 		public SettingsViewModel()
 		{
-			AddSettingsToList();
+			
 		}
 
+		protected override void OnInitialize()
+		{
+			using (var ctx = new CVDbContext(SettingsHelper.AppDataPath))
+			{
+				currentWebSiteId = ctx.CartoonWebSites.First().CartoonWebSiteId;
+			}
+			AddSettingsToList();
+			base.OnInitialize();
+		}
 
 		private void AddSettingsToList()
 		{
@@ -24,6 +39,10 @@
 			{
 				new GeneralSettingsViewModel{DisplayName = "Основные настройки", Parent = this},
 				new CartoonsEditorViewModel{DisplayName = "Редактор мультсериалов", Parent = this},
+				new VoiceOversEditingViewModel(currentWebSiteId,0)
+				{
+					DisplayName = "Редактор озвучек",Parent = this
+				},
 				new ViewingsSettingsViewModel{DisplayName = "Настройки просмотра", Parent = this}
 			});
 		}
@@ -47,12 +66,35 @@
 			ActiveItem = viewModel;
 		}
 
-		public void SelectionChanged(MouseButtonEventArgs eventArgs)
+		//private Screen lastActiveItem;
+
+		public void SelectionChanged()
 		{
+			if (ActiveItem == null) return;
 
+			if (ActiveItem is CartoonsEditorViewModel cevm)
+			{
+				if (cevm.ActiveItem == null) return;
+
+				if (cevm.ActiveItem is CartoonsEditingViewModel ce)
+				{
+					ce.UpdateVoiceOverList();
+					return;
+				}
+
+				if (cevm.ActiveItem is EpisodesEditingViewModel ee)
+				{
+					ee.UpdateVoiceOverList();
+				}
+
+				return;
+			}
+
+			if (ActiveItem is VoiceOversEditingViewModel voe)
+			{
+				voe.UpdateVoiceOverList();
+			}
 		}
-
-
 
 		public void BackToMainMenu()
 		{
