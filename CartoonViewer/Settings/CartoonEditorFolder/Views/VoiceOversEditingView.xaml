@@ -11,9 +11,9 @@
     Width="800"
     Height="600"
     cal:Bind.AtDesignTime="True"
+    cal:Message.Attach="[Event PreviewKeyDown]=[Action KeyDown($eventArgs)]"
     d:DataContext="{d:DesignData Source=../DesignData/VoiceOversEditingViewDesignData.xaml}"
     Background="{StaticResource GrayBrush10}"
-    cal:Message.Attach="[Event PreviewKeyDown]=[Action KeyDown($eventArgs)]"
     Focusable="True"
     mc:Ignorable="d">
     <Grid>
@@ -33,6 +33,53 @@
 
         <Grid
             Grid.Row="0"
+            Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Vertical">
+                <mah:ToggleSwitchButton
+                    IsChecked="{Binding EditMode}"
+                    OffSwitchBrush="DodgerBlue"
+                    OnSwitchBrush="LawnGreen">
+                    <mah:ToggleSwitchButton.ToolTip>
+                        <StackPanel>
+                            <TextBlock Text="В режиме редактированиия двойной клик вызовет редактирование выбранной озвучки," />
+                            <TextBlock Text="в режиме перемещения двойной клик вызовет перемещение озвучки в колонку справа" />
+                        </StackPanel>
+                    </mah:ToggleSwitchButton.ToolTip>
+                </mah:ToggleSwitchButton>
+                <TextBlock HorizontalAlignment="Center">
+                    <TextBlock.Style>
+                        <Style
+                            BasedOn="{StaticResource SEDefaultTBlockStyle}"
+                            TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding EditMode}"
+                                    Value="True">
+                                    <Setter Property="Text" Value="Режим редактирования" />
+                                    <Setter Property="Foreground" Value="LawnGreen" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding EditMode}"
+                                    Value="False">
+                                    <Setter Property="Text" Value="Режим перемещения" />
+                                    <Setter Property="Foreground" Value="DodgerBlue" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </StackPanel>
+        </Grid>
+
+
+        <Grid
+            Grid.Row="0"
             Grid.Column="1"
             Margin="0,2.5">
             <Grid.RowDefinitions>
@@ -47,30 +94,31 @@
                 <ColumnDefinition Width="0.1*" />-->
             </Grid.ColumnDefinitions>
 
-            <Grid Grid.Column="0"
-                  Grid.Row="0">
+            <Grid
+                Grid.Row="0"
+                Grid.Column="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <TextBlock
                     Grid.Row="0"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
-                    Foreground="AliceBlue"
                     FontSize="16"
+                    Foreground="AliceBlue"
                     Style="{StaticResource SEDefaultTBlockStyle}"
                     Text="Выберите мультсериал:" />
                 <ComboBox
-                    IsEnabled="{Binding IsNotEditing}"
-                    Grid.Column="0"
                     Grid.Row="1"
+                    Grid.Column="0"
+                    Margin="5,2.5,5,1.25"
                     VerticalAlignment="Center"
-                    Margin="5 2.5 5 1.25"
+                    IsEnabled="{Binding IsNotEditing}"
                     ItemsSource="{Binding Cartoons}"
                     SelectedItem="{Binding SelectedCartoon}">
                     <ComboBox.ItemTemplate>
@@ -83,14 +131,13 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
                 <Button
-                    Grid.Column="1"
                     Grid.Row="1"
-                    VerticalAlignment="Center"
+                    Grid.Column="1"
                     Margin="0,2.5,5,1.25"
+                    VerticalAlignment="Center"
                     cal:Message.Attach="[Event Click]=[Action CancelCartoonSelection()]"
                     ToolTip="Снять выделение мультсериала">
                     <iconPacks:PackIconMaterial
-                        
                         Padding="-3"
                         Style="{StaticResource EditListCancelBtnIconStyle}" />
                 </Button>
@@ -112,24 +159,24 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock
-                Visibility="{Binding SelectedCartoonVisibility}"
-                Foreground="AliceBlue"
+                Grid.Row="0"
                 Grid.Column="0"
-                Grid.Row="0"
                 Margin="5,0,0,0"
-                FontSize="16"
                 HorizontalAlignment="Right"
+                FontSize="16"
+                Foreground="AliceBlue"
                 Style="{StaticResource SEDefaultTBlockStyle}"
-                Text="Сезон " />
+                Text="Сезон "
+                Visibility="{Binding SelectedCartoonVisibility}" />
             <ComboBox
-                Visibility="{Binding SelectedCartoonVisibility}"
-                IsEnabled="{Binding IsNotEditing}"
                 Grid.Row="0"
-                VerticalAlignment="Center"
-                Margin="2.5 2.5 2.5 1.25"
                 Grid.Column="1"
+                Margin="2.5,2.5,2.5,1.25"
+                VerticalAlignment="Center"
+                IsEnabled="{Binding IsNotEditing}"
                 ItemsSource="{Binding Seasons}"
-                SelectedItem="{Binding SelectedSeason}">
+                SelectedItem="{Binding SelectedSeason}"
+                Visibility="{Binding SelectedCartoonVisibility}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock
@@ -139,13 +186,13 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
             <Button
-                Visibility="{Binding SelectedCartoonVisibility}"
-                Grid.Column="2"
-                Margin="2.5 2.5 2.5 1.25"
                 Grid.Row="0"
+                Grid.Column="2"
+                Margin="2.5,2.5,2.5,1.25"
                 VerticalContentAlignment="Center"
                 cal:Message.Attach="[Event Click]=[Action CancelSeasonSelection()]"
-                ToolTip="Снять выделение сезона">
+                ToolTip="Снять выделение сезона"
+                Visibility="{Binding SelectedCartoonVisibility}">
                 <iconPacks:PackIconMaterial
                     Width="15"
                     Height="12"
@@ -154,23 +201,23 @@
             </Button>
 
             <TextBlock
-                Visibility="{Binding SelectedSeasonVisibility}"
+                Grid.Row="1"
                 Grid.Column="0"
-                Foreground="AliceBlue"
                 Margin="5,0,0,0"
-                Grid.Row="1"
                 FontSize="16"
+                Foreground="AliceBlue"
                 Style="{StaticResource SEDefaultTBlockStyle}"
-                Text="Эпизод " />
+                Text="Эпизод "
+                Visibility="{Binding SelectedSeasonVisibility}" />
             <ComboBox
-                Visibility="{Binding SelectedSeasonVisibility}"
-                IsEnabled="{Binding IsNotEditing}"
-                VerticalAlignment="Center"
                 Grid.Row="1"
-                Margin="2.5 1.25 2.5 2.5 "
                 Grid.Column="1"
+                Margin="2.5,1.25,2.5,2.5"
+                VerticalAlignment="Center"
+                IsEnabled="{Binding IsNotEditing}"
                 ItemsSource="{Binding Episodes}"
-                SelectedItem="{Binding SelectedEpisode}">
+                SelectedItem="{Binding SelectedEpisode}"
+                Visibility="{Binding SelectedSeasonVisibility}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock
@@ -180,13 +227,13 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
             <Button
-                Visibility="{Binding SelectedSeasonVisibility}"
                 Grid.Row="1"
                 Grid.Column="2"
-                Margin="2.5 1.25 2.5 2.5 "
+                Margin="2.5,1.25,2.5,2.5"
                 VerticalContentAlignment="Center"
                 cal:Message.Attach="[Event Click]=[Action CancelEpisodeSelection()]"
-                ToolTip="Снять выделение эпизода">
+                ToolTip="Снять выделение эпизода"
+                Visibility="{Binding SelectedSeasonVisibility}">
                 <iconPacks:PackIconMaterial
                     Width="15"
                     Height="12"
@@ -205,29 +252,28 @@
             Grid.Column="0"
             Margin="10,0,5,5">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <TextBlock
+                Grid.Row="0"
                 Grid.Column="0"
-               Grid.Row="0"
                 FontSize="18"
                 Foreground="AliceBlue"
                 Style="{StaticResource SEDefaultTBlockStyle}"
                 Text="Список всех озвучек" />
-            <ListBox 
-                cal:Message.Attach="[Event SelectionChanged]=[Action VoiceOverSelectionChanged($source)];[Event PreviewMouseDoubleClick]=[Action EditSelectedGlobalVoiceOver()]"
-                Margin="5"
-                IsEnabled="{Binding IsNotEditing}"
-                Grid.Column="0"
+            <ListBox
                 Grid.Row="1"
+                Grid.Column="0"
+                Margin="5"
+                cal:Message.Attach="[Event SelectionChanged]=[Action VoiceOverSelectionChanged($source)]; [Event PreviewMouseDoubleClick]=[Action DoubleClickOnGlobalVoiceOverList()]"
+                IsEnabled="{Binding IsNotEditing}"
                 ItemsSource="{Binding GlobalVoiceOvers}"
-                SelectedItem="{Binding SelectedGlobalVoiceOver}"
-                >
+                SelectedItem="{Binding SelectedGlobalVoiceOver}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock
@@ -243,44 +289,44 @@
                 VerticalAlignment="Top"
                 Orientation="Vertical">
                 <Button
-                    Margin="0 5 0 2.5"
+                    Margin="0,5,0,2.5"
                     cal:Message.Attach="[Event Click]=[Action AddGlobalVoiceOver()]"
                     ToolTip="Создать озвучку в общем списке">
                     <iconPacks:PackIconMaterial Style="{StaticResource EditListAddBtnIconStyle}" />
                 </Button>
                 <Button
-                    Margin="0 2.5"
+                    Margin="0,2.5"
                     cal:Message.Attach="[Event Click]=[Action EditSelectedGlobalVoiceOver()]"
                     ToolTip="Редактировать выбранную озвучку">
                     <iconPacks:PackIconMaterial Style="{StaticResource EditListEditBtnIconStyle}" />
                 </Button>
                 <Button
-                    Margin="0 2.5"
+                    Margin="0,2.5"
                     cal:Message.Attach="[Event Click]=[Action RemoveGlobalVoiceOverAction()]"
                     ToolTip="Удалить выбранную озвучку из всех списков (HotKey: Shift+Delete)">
                     <iconPacks:PackIconMaterial Style="{StaticResource EditListRemoveBtnIconStyle}" />
                 </Button>
                 <Button
-                    Margin="0 2.5"
+                    Margin="0,2.5"
                     cal:Message.Attach="[Event Click]=[Action CancelGlobalVoiceOverSelection()]"
                     ToolTip="Снять выделение">
                     <iconPacks:PackIconMaterial Style="{StaticResource EditListCancelBtnIconStyle}" />
                 </Button>
                 <Button
-                    Margin="0 2.5"
+                    Margin="0,2.5"
                     cal:Message.Attach="[Event Click]=[Action UnlockEditingInterface()]"
                     ToolTip="Отменить редактирование и разблокировать интерфейс"
                     Visibility="{Binding EditingVisibility}">
                     <iconPacks:PackIconFontAwesome Style="{StaticResource EditListUnlockBtnIconStyle}" />
                 </Button>
                 <Button
-                    Margin="0 2.5"
+                    Margin="0,2.5"
                     cal:Message.Attach="[Event Click]=[Action MoveToCartoonVoiceOvers()]"
                     ToolTip="Копировать озвучку в выбранный м/ф.">
                     <iconPacks:PackIconFontAwesome Style="{StaticResource EditListRigthBtnIconStyle}" />
                 </Button>
                 <Button
-                    Margin="0 2.5 0 5"
+                    Margin="0,2.5,0,5"
                     cal:Message.Attach="[Event Click]=[Action MoveFromGlobalToEpisodeVoiceOvers()]"
                     ToolTip="Копировать озвучку сразу в выбранный эпизод.">
                     <iconPacks:PackIconFontAwesome Style="{StaticResource EditListDoubleRigthBtnIconStyle}" />
@@ -302,19 +348,19 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <TextBlock
-                Grid.Column="0"
                 Grid.Row="0"
-                Foreground="AliceBlue"
+                Grid.Column="0"
                 FontSize="18"
+                Foreground="AliceBlue"
                 Style="{StaticResource SEDefaultTBlockStyle}"
                 Text="Озвучки мультсериала" />
             <ListBox
                 Grid.Row="1"
                 Grid.Column="0"
                 Margin="5"
-                cal:Message.Attach="[Event SelectionChanged]=[Action VoiceOverSelectionChanged($source)];[Event PreviewMouseDoubleClick]=[Action EditSelectedGlobalVoiceOver()]"
+                cal:Message.Attach="[Event SelectionChanged]=[Action VoiceOverSelectionChanged($source)];[Event PreviewMouseDoubleClick]=[Action DoubleClickOnCartoonVoiceOverList()]"
                 IsEnabled="{Binding IsNotEditing}"
-               ItemsSource="{Binding CartoonVoiceOvers}"
+                ItemsSource="{Binding CartoonVoiceOvers}"
                 SelectedItem="{Binding SelectedCartoonVoiceOver}"
                 Visibility="{Binding SelectedCartoonVisibility}">
                 <ListBox.ItemTemplate>
@@ -331,45 +377,45 @@
                 Grid.Column="1"
                 VerticalAlignment="Top"
                 Orientation="Vertical">
-                
+
                 <Button
-                    Margin="0 5 0 2.5"
+                    Margin="0,5,0,2.5"
                     cal:Message.Attach="[Event Click]=[Action AddCartoonVoiceOver()]"
                     ToolTip="Добавить озвучку в список выбранного м/ф">
                     <iconPacks:PackIconMaterial Style="{StaticResource EditListAddBtnIconStyle}" />
                 </Button>
                 <Button
-                    Margin="0 2.5"
+                    Margin="0,2.5"
                     cal:Message.Attach="[Event Click]=[Action EditSelectedCartoonVoiceOver()]"
                     ToolTip="Редактировать выбранную озвучку">
                     <iconPacks:PackIconMaterial Style="{StaticResource EditListEditBtnIconStyle}" />
                 </Button>
                 <Button
-                    Margin="0 2.5"
+                    Margin="0,2.5"
                     cal:Message.Attach="[Event Click]=[Action RemoveSelectedCartoonVoiceOver()]"
                     ToolTip="Удалить выбранную озвучку из списка выбранного м/ф (HotKey: Ctrl+Delete)">
                     <iconPacks:PackIconMaterial Style="{StaticResource EditListRemoveBtnIconStyle}" />
                 </Button>
                 <Button
-                    Margin="0 2.5"
+                    Margin="0,2.5"
                     cal:Message.Attach="[Event Click]=[Action CancelCartoonVoiceOverSelection()]"
                     ToolTip="Снять выделение">
                     <iconPacks:PackIconMaterial Style="{StaticResource EditListCancelBtnIconStyle}" />
                 </Button>
                 <Button
-                    Margin="0 2.5"
+                    Margin="0,2.5"
                     cal:Message.Attach="[Event Click]=[Action UnlockEditingInterface()]"
                     ToolTip="Отменить редактирование и разблокировать интерфейс"
                     Visibility="{Binding EditingVisibility}">
                     <iconPacks:PackIconFontAwesome Style="{StaticResource EditListUnlockBtnIconStyle}" />
                 </Button>
                 <Button
-                    Margin="0 2.5 0 5"
+                    Margin="0,2.5,0,5"
                     cal:Message.Attach="[Event Click]=[Action MoveToEpisodeVoiceOvers()]"
                     ToolTip="Копировать озвучку в выбранный эпизод">
                     <iconPacks:PackIconFontAwesome Style="{StaticResource EditListRigthBtnIconStyle}" />
                 </Button>
-                
+
             </StackPanel>
         </Grid>
         <Grid
@@ -386,16 +432,16 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <TextBlock
-                Foreground="AliceBlue"
                 FontSize="18"
+                Foreground="AliceBlue"
                 Style="{StaticResource SEDefaultTBlockStyle}"
                 Text="Озвучки эпизода" />
             <ListBox
                 Grid.Row="1"
                 Grid.Column="0"
-                IsEnabled="{Binding IsNotEditing}"
-                cal:Message.Attach="[Event SelectionChanged]=[Action VoiceOverSelectionChanged($source)];[Event PreviewMouseDoubleClick]=[Action EditSelectedGlobalVoiceOver()]"
                 Margin="5"
+                cal:Message.Attach="[Event SelectionChanged]=[Action VoiceOverSelectionChanged($source)];[Event PreviewMouseDoubleClick]=[Action EditSelectedGlobalVoiceOver()]"
+                IsEnabled="{Binding IsNotEditing}"
                 ItemsSource="{Binding EpisodeVoiceOvers}"
                 SelectedItem="{Binding SelectedEpisodeVoiceOver}">
                 <ListBox.ItemTemplate>
@@ -413,32 +459,32 @@
                 VerticalAlignment="Top"
                 Orientation="Vertical">
                 <Button
-                    Margin="0 5 0 2.5"
+                    Margin="0,5,0,2.5"
                     cal:Message.Attach="[Event Click]=[Action AddEpisodeVoiceOverAction()]"
                     ToolTip="Добавить озвучку в список выбранного м/ф">
                     <iconPacks:PackIconMaterial Style="{StaticResource EditListAddBtnIconStyle}" />
                 </Button>
                 <Button
-                    Margin="0 2.5"
+                    Margin="0,2.5"
                     cal:Message.Attach="[Event Click]=[Action EditSelectedEpisodeVoiceOver()]"
                     ToolTip="Редактировать выбранную озвучку">
                     <iconPacks:PackIconMaterial Style="{StaticResource EditListEditBtnIconStyle}" />
                 </Button>
                 <Button
-                    Margin="0 2.5"
+                    Margin="0,2.5"
                     cal:Message.Attach="[Event Click]=[Action RemoveSelectedEpisodeVoiceOver()]"
                     ToolTip="Удалить выбранную озвучку только из выбранного эпизода (HotKey: Delete)">
                     <iconPacks:PackIconMaterial Style="{StaticResource EditListRemoveBtnIconStyle}" />
                 </Button>
 
                 <Button
-                    Margin="0 2.5"
+                    Margin="0,2.5"
                     cal:Message.Attach="[Event Click]=[Action CancelEpisodeVoiceOverSelection()]"
                     ToolTip="Снять выделение">
                     <iconPacks:PackIconMaterial Style="{StaticResource EditListCancelBtnIconStyle}" />
                 </Button>
                 <Button
-                    Margin="0 2.5 0 5"
+                    Margin="0,2.5,0,5"
                     cal:Message.Attach="[Event Click]=[Action UnlockEditingInterface()]"
                     ToolTip="Отменить редактирование и разблокировать интерфейс"
                     Visibility="{Binding EditingVisibility}">
@@ -446,7 +492,7 @@
                 </Button>
             </StackPanel>
         </Grid>
-        
+
         <!--#endregion-->
 
         <!--#region Row 3-->
@@ -466,95 +512,97 @@
             </Grid.ColumnDefinitions>
             <TextBlock
                 Grid.Row="0"
-                Foreground="AliceBlue"
-                FontSize="15"
-                Margin="2.5 5 2.5 2.5"
-                HorizontalAlignment="Right"
                 Grid.Column="0"
+                Margin="2.5,5,2.5,2.5"
+                HorizontalAlignment="Right"
+                FontSize="15"
+                Foreground="AliceBlue"
                 Style="{StaticResource SEDefaultTBlockStyle}"
                 Text="Название:" />
             <TextBox
                 Grid.Row="0"
                 Grid.Column="1"
-                Margin="2.5 5 2.5 2.5"
+                Margin="2.5,5,2.5,2.5"
                 VerticalContentAlignment="Center"
-                cal:Message.Attach="[Event TextChanged]=[Action TextChanged()]"
+                cal:Message.Attach="[Event TextChanged]=[Action TextChanged()]; [Event PreviewMouseDoubleClick]=[TBoxDoubleClick($source)]"
                 FontSize="10"
                 Style="{StaticResource SETBoxDefaultStyle}"
                 Text="{Binding EditedVoiceOver.Name, UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock
                 Grid.Row="1"
-                Foreground="AliceBlue"
-                FontSize="15"
-                Margin="2.5 2.5"
-                HorizontalAlignment="Right"
                 Grid.Column="0"
+                Margin="2.5,2.5"
+                HorizontalAlignment="Right"
+                FontSize="15"
+                Foreground="AliceBlue"
                 Style="{StaticResource SEDefaultTBlockStyle}"
                 Text="Параметр:" />
-            <Grid Grid.Row="1"
-                        Grid.Column="1" Margin="2.5"
-                        HorizontalAlignment="Stretch"
-                       >
+            <Grid
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="2.5"
+                HorizontalAlignment="Stretch">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
                 <TextBox
-                    Margin="2.5 2.5"
-                    cal:Message.Attach="[Event TextChanged]=[Action TextChanged()]"
+                    Margin="2.5,2.5"
                     VerticalContentAlignment="Center"
+                    cal:Message.Attach="[Event TextChanged]=[Action TextChanged()]; [Event PreviewMouseDoubleClick]=[TBoxDoubleClick($source)]"
                     FontSize="10"
                     Style="{StaticResource SETBoxDefaultStyle}"
                     Text="{Binding EditedVoiceOver.UrlParameter, UpdateSourceTrigger=PropertyChanged}" />
-                <Button Grid.Column="1"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Center"
-                        Foreground="LawnGreen"
-                        Content="?"></Button>
+                <Button
+                    Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Content="?"
+                    Foreground="LawnGreen" />
             </Grid>
-            
+
             <TextBlock
                 Grid.Row="2"
-                FontSize="15"
-                Margin="2.5 2.5 2.5 5"
-                HorizontalAlignment="Right"
-                Foreground="AliceBlue"
                 Grid.Column="0"
+                Margin="2.5,2.5,2.5,5"
+                HorizontalAlignment="Right"
                 VerticalAlignment="Top"
+                FontSize="15"
+                Foreground="AliceBlue"
                 Style="{StaticResource SEDefaultTBlockStyle}"
                 Text="Описание:" />
             <TextBox
                 Grid.Row="2"
                 Grid.Column="1"
+                Margin="2.5,2.5,2.5,5"
+                cal:Message.Attach="[Event TextChanged]=[Action TextChanged()]; [Event PreviewMouseDoubleClick]=[TBoxDoubleClick($source)]"
                 AcceptsReturn="True"
-
-                Margin="2.5 2.5 2.5 5"
                 FontSize="10"
-                cal:Message.Attach="[Event TextChanged]=[Action TextChanged()]"
                 Style="{StaticResource SETBoxDefaultStyle}"
                 Text="{Binding EditedVoiceOver.Description, UpdateSourceTrigger=PropertyChanged}"
                 TextWrapping="Wrap" />
         </Grid>
 
-        
-        <Grid Grid.Row="3"
-                  Grid.Column="1"
-                  Visibility="{Binding EditingVisibility}">
+
+        <Grid
+            Grid.Row="3"
+            Grid.Column="1"
+            Visibility="{Binding EditingVisibility}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <Button
-                Grid.Column="0"
                 Grid.Row="0"
+                Grid.Column="0"
                 Padding="7,5"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
@@ -606,26 +654,26 @@
         <Button
             Grid.Row="3"
             Grid.Column="2"
-            VerticalAlignment="Center"
-            HorizontalAlignment="Center"
-            Visibility="{Binding ExitButtonVisibility}"
             Padding="10"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            cal:Message.Attach="[Event Click]=[Action Exit()]"
             IsEnabled="{Binding IsNotEditing}"
-            cal:Message.Attach="[Event Click]=[Action Exit()]">
+            Visibility="{Binding ExitButtonVisibility}">
             <StackPanel Orientation="Vertical">
-                <iconPacks:PackIconFontAwesome 
-                    Kind="WindowCloseRegular" 
-                    HorizontalAlignment="Center"
+                <iconPacks:PackIconFontAwesome
                     Width="40"
                     Height="36"
-                    Foreground="DodgerBlue"/>
+                    HorizontalAlignment="Center"
+                    Foreground="DodgerBlue"
+                    Kind="WindowCloseRegular" />
                 <TextBlock
                     Foreground="DodgerBlue"
                     Style="{StaticResource SEDefaultTBlockStyle}"
                     Text="Закрыть редактор" />
             </StackPanel>
         </Button>
-        
+
         <!--#endregion-->
 
     </Grid>

@@ -7,7 +7,6 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 	using System.Windows;
 	using System.Windows.Controls;
 	using System.Windows.Input;
-	using Caliburn.Micro;
 	using CartoonViewer.ViewModels;
 	using Database;
 	using Helpers;
@@ -18,17 +17,22 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 	public partial class EpisodesEditingViewModel : Screen, ISettingsViewModel
 	{
+		public void TBoxDoubleClick(TextBox source)
+		{
+			source.SelectAll();
+		}
+
 		/// <summary>
 		/// Сброс даты последнего просмотра эпизода
 		/// </summary>
 		public void ResetLastDateViewed()
 		{
-			var newDate = new DateTime(2019,01,01);
+			var newDate = new DateTime(2019, 01, 01);
 			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
 			{
 				ctx.CartoonEpisodes
-				   .First(ce => ce.CartoonEpisodeId == 
-				                EditingEpisode.CartoonEpisodeId)
+				   .First(ce => ce.CartoonEpisodeId ==
+								EditingEpisode.CartoonEpisodeId)
 				   .LastDateViewed = newDate;
 				ctx.SaveChanges();
 			}
@@ -288,6 +292,6 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			lb.ScrollIntoView(lb.SelectedItem);
 		}
 
-		
+
 	}
 }

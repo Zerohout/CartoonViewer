@@ -63,7 +63,7 @@
                 Grid.Column="0"
                 Margin="5,2.5"
                 VerticalAlignment="Top"
-                cal:Message.Attach="[Event TextChanged]=[Action TextChanged()]"
+                cal:Message.Attach="[Event TextChanged]=[Action TextChanged()]; [Event PreviewMouseDoubleClick]=[TBoxDoubleClick($source)]"
                 Style="{StaticResource SETBoxDefaultStyle}"
                 Text="{Binding SelectedCartoonUrl.Url, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
@@ -102,7 +102,7 @@
                 Grid.Column="0"
                 Margin="5,2.5"
                 VerticalAlignment="Top"
-                cal:Message.Attach="[Event TextChanged]=[Action TextChanged()]"
+                cal:Message.Attach="[Event TextChanged]=[Action TextChanged()]; [Event PreviewMouseDoubleClick]=[TBoxDoubleClick($source)]"
                 Style="{StaticResource SETBoxDefaultStyle}"
                 Text="{Binding SelectedCartoon.Name, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
@@ -293,7 +293,7 @@
                 AcceptsReturn="True"
                 Grid.Column="0"
                 Margin="5"
-                cal:Message.Attach="[Event TextChanged]=[Action TextChanged()]"
+                cal:Message.Attach="[Event TextChanged]=[Action TextChanged()]; [Event PreviewMouseDoubleClick]=[TBoxDoubleClick($source)]"
                 FontSize="12"
                 Foreground="AntiqueWhite"
                 Style="{StaticResource SETBoxDefaultStyle}"

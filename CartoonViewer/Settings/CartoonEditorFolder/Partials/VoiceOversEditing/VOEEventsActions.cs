@@ -15,6 +15,42 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 	public partial class VoiceOversEditingViewModel : Screen, ISettingsViewModel
 	{
+		public void TBoxDoubleClick(TextBox source)
+		{
+			source.SelectAll();
+			
+		}
+
+
+		/// <summary>
+		/// Двойной клик по списку глобальных озвучек
+		/// </summary>
+		public void DoubleClickOnGlobalVoiceOverList()
+		{
+			if (EditMode)
+			{
+				EditSelectedGlobalVoiceOver();
+			}
+			else
+			{
+				MoveToCartoonVoiceOvers();
+			}
+		}
+		/// <summary>
+		/// Двойной клик по списку озвучек м/с
+		/// </summary>
+		public void DoubleClickOnCartoonVoiceOverList()
+		{
+			if (EditMode)
+			{
+				EditSelectedGlobalVoiceOver();
+			}
+			else
+			{
+				MoveToEpisodeVoiceOvers();
+			}
+		}
+
 		/// <summary>
 		/// Действие при изменении текста
 		/// </summary>

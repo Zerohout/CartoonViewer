@@ -28,13 +28,27 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		private (int WebSiteId, int CartoonId, int SeasonId, int EpisodeId) IdList;
 		private int SelectedVoiceOverId;
 		private bool _isNotEditing = true;
+		private bool _editMode = true;
 
-		
+
 
 		#endregion
 
 		#region Flags
 
+		/// <summary>
+		/// Флаг состояния режима редактирования
+		/// </summary>
+		public bool EditMode
+		{
+			get => _editMode;
+			set
+			{
+				_editMode = value;
+				NotifyOfPropertyChange(() => EditMode);
+			}
+		}
+		
 		/// <summary>
 		/// Флаг необходимый для корректной работы конструктора XAML
 		/// </summary>
@@ -78,7 +92,9 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 				if(EditedVoiceOver.Name == TempEditedVoiceOver.Name &&
 				   EditedVoiceOver.UrlParameter == TempEditedVoiceOver.UrlParameter &&
-				   EditedVoiceOver.Description == TempEditedVoiceOver.Description)
+				   (EditedVoiceOver.Description == TempEditedVoiceOver.Description || 
+				    string.IsNullOrWhiteSpace(EditedVoiceOver.Description) && 
+				    string.IsNullOrWhiteSpace(TempEditedVoiceOver.Description)))
 				{
 					return false;
 				}

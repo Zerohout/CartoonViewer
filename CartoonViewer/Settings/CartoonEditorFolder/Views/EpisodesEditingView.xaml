@@ -210,7 +210,7 @@
                     Grid.Row="1"
                     Grid.Column="0"
                     Margin="5,2.5"
-                    cal:Message.Attach="[Event TextChanged]=[Action TextChanged()]"
+                    cal:Message.Attach="[Event TextChanged]=[Action TextChanged()]; [Event PreviewMouseDoubleClick]=[TBoxDoubleClick($source)]"
                     FontSize="14"
                     Style="{StaticResource SETBoxDefaultStyle}"
                     Text="{Binding EditingEpisode.Name, UpdateSourceTrigger=PropertyChanged}"
@@ -239,7 +239,7 @@
                 Grid.Row="1"
                 Grid.Column="0"
                 Margin="5,2.5"
-                cal:Message.Attach="[Event TextChanged]=[Action TextChanged()]"
+                cal:Message.Attach="[Event TextChanged]=[Action TextChanged()]; [Event PreviewMouseDoubleClick]=[TBoxDoubleClick($source)]"
                 AcceptsReturn="True"
                 FontSize="12"
                 Style="{StaticResource SETBoxDefaultStyle}"
@@ -481,21 +481,40 @@
                             </MultiBinding>
                         </TextBlock.Text>
                     </TextBlock>
-                    <Button
-                        cal:Message.Attach="[Event Click]=[Action ResetLastDateViewed()]"
+                    <StackPanel
                         Grid.Row="1"
                         Grid.Column="2"
-                        Margin="0,0,5,0"
-                        Padding="2"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        HorizontalContentAlignment="Center">
-                        <TextBlock
-                            FontSize="12"
-                            Foreground="DodgerBlue"
-                            Style="{StaticResource SEDefaultTBlockStyle}"
-                            Text="Сброс" />
-                    </Button>
+                        Orientation="Horizontal">
+                        <Button
+                            Margin="0,0,5,0"
+                            Padding="2"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            HorizontalContentAlignment="Center"
+                            cal:Message.Attach="[Event Click]=[Action ResetLastDateViewed()]"
+                            ToolTip="Устанавливает дату последнего просмотра на сегодняшний день">
+                            <TextBlock
+                                FontSize="12"
+                                Foreground="DodgerBlue"
+                                Style="{StaticResource SEDefaultTBlockStyle}"
+                                Text="Сегодня" />
+                        </Button>
+                        <Button
+                            Margin="0,0,5,0"
+                            Padding="2"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            HorizontalContentAlignment="Center"
+                            cal:Message.Attach="[Event Click]=[Action ResetLastDateViewed()]"
+                            ToolTip="Сбрасывает дату последнего просмотра на 01.01.2019">
+                            <TextBlock
+                                FontSize="12"
+                                Foreground="DodgerBlue"
+                                Style="{StaticResource SEDefaultTBlockStyle}"
+                                Text="Сброс" />
+                        </Button>
+                    </StackPanel>
+
 
                 </Grid>
             </Grid>
