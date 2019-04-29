@@ -5,6 +5,9 @@
 	using System.ComponentModel.DataAnnotations.Schema;
 	using System.Linq;
 
+	/// <summary>
+	/// Озвучка мультсериала
+	/// </summary>
 	public class CartoonVoiceOver
 	{
 		public CartoonVoiceOver()
@@ -12,16 +15,17 @@
 			Cartoons = new List<Cartoon>();
 			CartoonEpisodes = new List<CartoonEpisode>();
 			CheckedEpisodes = new List<CartoonEpisode>();
+
 		}
 
 
 		[Key]
 		public int CartoonVoiceOverId { get; set; }
-		
 
-		public string Name { get; set; }
-		public string Description { get; set; }
-		public string UrlParameter { get; set; }
+
+		public string Name { get; set; } = "";
+		public string Description { get; set; } = "";
+		public string UrlParameter { get; set; } = "";
 
 		[NotMapped]
 		public int SelectedEpisodeId { private get; set; }
@@ -58,7 +62,6 @@
 		}
 
 		public ICollection<Cartoon> Cartoons { get; set; }
-
 		public ICollection<CartoonEpisode> CartoonEpisodes { get; set; }
 		public ICollection<CartoonEpisode> CheckedEpisodes { get; set; }
 

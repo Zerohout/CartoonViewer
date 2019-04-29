@@ -4,8 +4,6 @@
 
 	public partial class EpisodesEditingViewModel : Screen, ISettingsViewModel
 	{
-
-
 		public EpisodesEditingViewModel()
 		{
 

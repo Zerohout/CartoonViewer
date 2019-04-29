@@ -217,8 +217,7 @@ namespace CartoonViewer.Helpers
 			Number = cartoonEpisode.Number,
 			Description = cartoonEpisode.Description,
 			Checked = cartoonEpisode.Checked,
-			DelayedSkip = cartoonEpisode.DelayedSkip,
-			SkipCount = cartoonEpisode.SkipCount,
+			Jumpers = new List<Jumper>(cartoonEpisode.Jumpers),
 			Duration = cartoonEpisode.Duration,
 			CreditsStart = cartoonEpisode.CreditsStart,
 			LastDateViewed = cartoonEpisode.LastDateViewed,
@@ -257,6 +256,16 @@ namespace CartoonViewer.Helpers
 			Name = cartoonVoiceOver.Name,
 			Description = cartoonVoiceOver.Description,
 			UrlParameter = cartoonVoiceOver.UrlParameter
+		};
+
+		public static Jumper CloneJumper(Jumper jumper) => new Jumper
+		{
+			JumperId = jumper.JumperId,
+			Number = jumper.Number,
+			CartoonEpisodeId = jumper.CartoonEpisodeId,
+			CartoonEpisode = jumper.CartoonEpisode,
+			JumperStartTime = jumper.JumperStartTime,
+			SkipCount = jumper.SkipCount
 		};
 	}
 }

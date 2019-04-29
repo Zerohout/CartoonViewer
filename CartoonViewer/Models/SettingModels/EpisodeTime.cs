@@ -1,89 +1,85 @@
 ﻿namespace CartoonViewer.Models.SettingModels
 {
+	/// <summary>
+	/// Класс для отображения времени эпизода
+	/// </summary>
 	public class EpisodeTime
 	{
-		private string _delayedSkipMinutesString;
-		private string _delayedSkipSecondsString;
-		private string _skipCountString;
-		private string _creditsStartHoursString;
-		private string _creditsStartMinutesString;
-		private string _creditsStartSecondsString;
+		private int? _jumperTimeHours;
+		private int? _jumperTimeMinutes;
+		private int? _jumperTimeSeconds;
 
-		public string DelayedSkipMinutesString
+		private int? _skipCount;
+
+		private int? _creditsTimeHours;
+		private int? _creditsTimeMinutes;
+		private int? _creditsTimeSeconds;
+
+		public int? JumperTimeHours
 		{
-			get => _delayedSkipMinutesString;
-			set => _delayedSkipMinutesString = AdditionalMinuteSecondVerification(VerificationValue(value));
+			get => _jumperTimeHours;
+			set => _jumperTimeHours = HoursVerify(value);
+		}
+		
+		public int? JumperTimeMinutes
+		{
+			get => _jumperTimeMinutes;
+			set => _jumperTimeMinutes = MinSecVerify(value);
 		}
 
-		public string DelayedSkipSecondsString
+		public int? JumperTimeSeconds
 		{
-			get => _delayedSkipSecondsString;
-			set => _delayedSkipSecondsString = AdditionalMinuteSecondVerification(VerificationValue(value));
+			get => _jumperTimeSeconds;
+			set => _jumperTimeSeconds = MinSecVerify(value);
 		}
-
-		public string SkipCountString
+		public int? SkipCount
 		{
-			get => _skipCountString;
-			set => _skipCountString = VerificationValue(value);
-		}
-
-		public string CreditsStartHoursString
-		{
-			get => _creditsStartHoursString;
-			set => _creditsStartHoursString = AdditionalHourVerification(VerificationValue(value));
-		}
-
-		public string CreditsStartMinutesString
-		{
-			get => _creditsStartMinutesString;
-			set => _creditsStartMinutesString = AdditionalMinuteSecondVerification(VerificationValue(value));
-		}
-
-		public string CreditsStartSecondsString
-		{
-			get => _creditsStartSecondsString;
-			set => _creditsStartSecondsString = AdditionalMinuteSecondVerification(VerificationValue(value));
-		}
-
-		private string VerificationValue(string value)
-		{
-			if(string.IsNullOrWhiteSpace(value) ||
-				!int.TryParse(value, out var numValue))
+			get => _skipCount;
+			set
 			{
-				return "0";
+				if(value == null || value < 0)
+					value = 0;
+				_skipCount = value;
 			}
-
-			return value;
+		}
+		public int? CreditsTimeHours
+		{
+			get => _creditsTimeHours;
+			set => _creditsTimeHours = HoursVerify(value);
+		}
+		
+		public int? CreditsTimeMinutes
+		{
+			get => _creditsTimeMinutes;
+			set => _creditsTimeMinutes = MinSecVerify(value);
 		}
 
-		private string AdditionalHourVerification(string value)
+		public int? CreditsTimeSeconds
 		{
-			if(int.Parse(value) >= 24)
-			{
-				return "23";
-			}
-
-			if(int.Parse(value) < 0)
-			{
-				return "0";
-			}
-
-			return value;
+			get => _creditsTimeSeconds;
+			set => _creditsTimeSeconds = MinSecVerify(value);
 		}
 
-		private string AdditionalMinuteSecondVerification(string value)
+
+		
+
+
+		private int? MinSecVerify(int? value)
 		{
-			if(int.Parse(value) >= 60)
-			{
-				return "59";
-			}
+			if(value == null || value < 0)
+				return 0;
+			return value >= 60
+				? 59
+				: value;
+		}
 
-			if(int.Parse(value) < 0)
-			{
-				return "0";
-			}
-
-			return value;
+		private int? HoursVerify(int? value)
+		{
+			if(value == null || value < 0)
+				return 0;
+			return value >= 24
+				? 23
+				: value;
 		}
 	}
 }

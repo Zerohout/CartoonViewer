@@ -9,34 +9,26 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 	public partial class CartoonsEditingViewModel : Screen, ISettingsViewModel
 	{
-		#region Private fields
-
 		private BindableCollection<CartoonVoiceOver> _voiceOvers = new BindableCollection<CartoonVoiceOver>();
 		private BindableCollection<CartoonSeason> _seasons = new BindableCollection<CartoonSeason>();
 		private Cartoon _selectedCartoon;
 		private CartoonSeason _selectedSeason;
 		private CartoonUrl _selectedCartoonUrl;
 
-		#endregion
 
-		#region Properties
 
-		public Visibility SaveChangesVisibility =>
-			TempCartoon?.Name == SettingsHelper.NewElementString
-				? Visibility.Hidden
-				: Visibility.Visible;
-
-		public Visibility CreateNewCartoonVisibility =>
-			TempCartoon?.Name == SettingsHelper.NewElementString
-				? Visibility.Visible
-				: Visibility.Hidden;
+		#region Flags
 
 		/// <summary>
 		/// Флаг наличия изменений
 		/// </summary>
 		public bool HasChanges => CanSaveChanges;
+
+		#endregion
+
+
 		/// <summary>
-		/// Выбранный м/ф
+		/// Выбранный м/с
 		/// </summary>
 		public Cartoon SelectedCartoon
 		{
@@ -49,7 +41,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			}
 		}
 		/// <summary>
-		/// Временный м\ф для отслеживания изменений
+		/// Временный м\с для отслеживания изменений
 		/// </summary>
 		public Cartoon TempCartoon { get; set; }
 		/// <summary>
@@ -69,7 +61,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public CartoonUrl TempCartoonUrl { get; set; }
 		/// <summary>
-		/// Список озвучек выбранного м/ф
+		/// Список озвучек выбранного м/с
 		/// </summary>
 		public BindableCollection<CartoonVoiceOver> VoiceOvers
 		{
@@ -82,7 +74,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		}
 
 		/// <summary>
-		/// Список сезонов выбранного м/ф
+		/// Список сезонов выбранного м/с
 		/// </summary>
 		public BindableCollection<CartoonSeason> Seasons
 		{
@@ -95,7 +87,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			}
 		}
 		/// <summary>
-		/// Выьранный сезон м/ф
+		/// Выьранный сезон м/с
 		/// </summary>
 		public CartoonSeason SelectedSeason
 		{
@@ -107,6 +99,24 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				NotifySeasonList();
 			}
 		}
+
+		#region Visibility
+
+		/// <summary>
+		/// Видимость элементов связанным с изменением м/с
+		/// </summary>
+		public Visibility SaveChangesVisibility =>
+			TempCartoon?.Name == SettingsHelper.NewElementString
+				? Visibility.Hidden
+				: Visibility.Visible;
+
+		/// <summary>
+		/// Видимость элементов связанных с созданием нового м/с
+		/// </summary>
+		public Visibility CreateNewCartoonVisibility =>
+			TempCartoon?.Name == SettingsHelper.NewElementString
+				? Visibility.Visible
+				: Visibility.Hidden;
 
 		#endregion
 	}

@@ -3,6 +3,9 @@
 	using System.Collections.Generic;
 	using System.ComponentModel.DataAnnotations;
 
+	/// <summary>
+	/// Мультсериал
+	/// </summary>
 	public class Cartoon
 	{
 		public Cartoon()
@@ -17,10 +20,10 @@
 		[Key]
 		public int CartoonId { get; set; }
 
-		public string Name { get; set; }
-		public string Description { get; set; }
-		public string CartoonType { get; set; }
-		public bool Checked { get; set; }
+		public string Name { get; set; } = "";
+		public string Description { get; set; } = "";
+		public string CartoonType { get; set; } = "";
+		public bool Checked { get; set; } = true;
 
 		public List<CartoonWebSite> CartoonWebSites { get; set; }
 		public List<CartoonUrl> CartoonUrls { get; set; }

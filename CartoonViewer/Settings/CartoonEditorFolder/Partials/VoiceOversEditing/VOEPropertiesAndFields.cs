@@ -1,6 +1,7 @@
 ﻿// ReSharper disable CheckNamespace
 namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 {
+	using System;
 	using System.Windows;
 	using Caliburn.Micro;
 	using CartoonViewer.ViewModels;
@@ -29,6 +30,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		private int SelectedVoiceOverId;
 		private bool _isNotEditing = true;
 		private bool _editMode = true;
+		private DateTime resetTime = new DateTime(2019,01,01);
 
 
 

@@ -43,7 +43,7 @@ namespace CartoonViewer.MainMenu.ViewModels
 
 			CheckedEpisodes = ShuffleEpisode(CheckedEpisodes, GeneralSettings.RandomMixCount ?? 1);
 
-			CheckedEpisodes[1] = CheckedEpisodes.First(ce => ce.DelayedSkip > new TimeSpan());
+			//CheckedEpisodes[1] = CheckedEpisodes.First(ce => ce.DelayedSkip > new TimeSpan());
 
 			CurrentEpisodeIndex = 0;
 
@@ -115,8 +115,8 @@ namespace CartoonViewer.MainMenu.ViewModels
 			}
 
 			CurrentDuration = episode.Duration;
-			DelayedSkipDuration = episode.DelayedSkip;
-			CurrentSkipCount = episode.SkipCount;
+			//DelayedSkipDuration = episode.DelayedSkip;
+			//CurrentSkipCount = episode.SkipCount;
 			episode.LastDateViewed = DateTime.Now;
 			CvDbContext.SaveChanges();
 

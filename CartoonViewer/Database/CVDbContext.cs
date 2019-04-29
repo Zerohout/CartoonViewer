@@ -14,6 +14,7 @@ namespace CartoonViewer.Database
 			AppDomain.CurrentDomain.SetData("DataDirectory", Helpers.SettingsHelper.AppDataPath);
 
 			Database.SetInitializer(new CreateDatabaseIfNotExists<CVDbContext>());
+			Database.SetInitializer(new DropCreateDatabaseIfModelChanges<CVDbContext>());
 		}
 
 		public CVDbContext(string path) : base("CVDb")
@@ -34,6 +35,7 @@ namespace CartoonViewer.Database
 		public DbSet<CartoonUrl> CartoonUrl { get; set; }
 		public DbSet<CartoonSeason> CartoonSeasons { get; set; }
 		public DbSet<CartoonEpisode> CartoonEpisodes { get; set; }
+		public DbSet<Jumper> Jumpers { get; set; }
 		public DbSet<CartoonVoiceOver> VoiceOvers { get; set; }
 	}
 }

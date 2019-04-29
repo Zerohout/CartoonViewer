@@ -4,6 +4,9 @@ namespace CartoonViewer.Models.CartoonModels
 {
 	using System.ComponentModel.DataAnnotations;
 
+	/// <summary>
+	/// Веб сайт с мультсериалами
+	/// </summary>
 	public class CartoonWebSite
 	{
 		public CartoonWebSite()
@@ -15,7 +18,7 @@ namespace CartoonViewer.Models.CartoonModels
 		[Key]
 		public int CartoonWebSiteId { get; set; }
 
-		public string Url { get; set; }
+		public string Url { get; set; } = "";
 
 		public List<ElementValue> ElementValues { get; set; }
 

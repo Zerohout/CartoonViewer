@@ -8,6 +8,9 @@ namespace CartoonViewer.Models.SettingModels
 	using Newtonsoft.Json;
 	using static Helpers.Helper;
 
+	/// <summary>
+	/// Общие сохраняемы и загружаемые настройки связанные с приложением
+	/// </summary>
 	[Serializable]
 	[JsonObject(MemberSerialization.OptOut)]
 	public class GeneralSettingsValue : PropertyChangedBase, ICloneable

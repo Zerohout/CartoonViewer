@@ -7,16 +7,20 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:CartoonViewer.Settings.CartoonEditorFolder.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     cal:Bind.AtDesignTime="True"
+    
     cal:Message.Attach="[Event KeyDown]=[Action ListenKey($eventArgs)]"
     d:DataContext="{d:DesignData Source=../DesignData/EpisodesEditingViewDesignData.xaml}"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    Focusable="True"
+        Focusable="True"
     mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.4*" />
+            <RowDefinition Height="0.15*" />
+            <RowDefinition Height="0.25*" />
             <RowDefinition Height="0.3*" />
             <RowDefinition Height="0.3*" />
         </Grid.RowDefinitions>
@@ -30,7 +34,7 @@
 
         <Grid
             Grid.Row="0"
-            Grid.RowSpan="2"
+            Grid.RowSpan="3"
             Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -178,8 +182,6 @@
                 </Button>
             </StackPanel>
         </Grid>
-
-
         <Grid
             Grid.Row="0"
             Grid.Column="1"
@@ -213,12 +215,14 @@
                     cal:Message.Attach="[Event TextChanged]=[Action TextChanged()]; [Event PreviewMouseDoubleClick]=[TBoxDoubleClick($source)]"
                     FontSize="14"
                     Style="{StaticResource SETBoxDefaultStyle}"
-                    Text="{Binding EditingEpisode.Name, UpdateSourceTrigger=PropertyChanged}"
+                    TabIndex="1"
+                    Text="{Binding EditableEpisode.Name, UpdateSourceTrigger=PropertyChanged}"
                     TextWrapping="Wrap" />
             </Grid>
         </Grid>
         <Grid
             Grid.Row="0"
+            Grid.RowSpan="2"
             Grid.Column="2"
             Visibility="{Binding EpisodeEditingVisibility}">
             <Grid.RowDefinitions>
@@ -243,7 +247,8 @@
                 AcceptsReturn="True"
                 FontSize="12"
                 Style="{StaticResource SETBoxDefaultStyle}"
-                Text="{Binding EditingEpisode.Description, UpdateSourceTrigger=PropertyChanged}"
+                TabIndex="2"
+                Text="{Binding EditableEpisode.Description, UpdateSourceTrigger=PropertyChanged}"
                 TextWrapping="Wrap" />
         </Grid>
         <!--#endregion-->
@@ -252,8 +257,10 @@
 
         <Grid
             Grid.Row="1"
-            Grid.RowSpan="2"
+            Grid.RowSpan="3"
             Grid.Column="1"
+            Focusable="True"
+            cal:Message.Attach="[Event KeyDown]=[Action ListenKey($eventArgs)]"
             Visibility="{Binding EpisodeEditingVisibility}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -267,71 +274,169 @@
                 Grid.Column="0"
                 Background="{StaticResource GrayBrush10}">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="0.3*" />
+                    <RowDefinition Height="0.1*" />
+                    <RowDefinition Height="0.2*" />
+                    <RowDefinition Height="0.15*" />
+                    <RowDefinition Height="0.25*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <StackPanel
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    VerticalAlignment="Center"
-                    Orientation="Vertical">
+
+                <Grid
+                    Margin="5"
+                    HorizontalAlignment="Stretch">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
                     <TextBlock
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        Margin="0 0 0 2.5"
                         FontSize="16"
-                        Foreground="DodgerBlue"
+                        Foreground="DeepSkyBlue"
                         Style="{StaticResource SEDefaultTBlockStyle}"
-                        Text="Отложенный пропуск" />
+                        Text="Список пропусков" />
+                    <ComboBox
+                        ItemsSource="{Binding Jumpers}"
+                        SelectedItem="{Binding SelectedJumper}"
+                        cal:Message.Attach="[Event SelectionChanged]=[Action JumperSelectionChanged()]"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        HorizontalAlignment="Stretch">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource CCComboBoxTBlockItemStyle}"
+                                           Text="Джампер №"/>
+                                <TextBlock Style="{StaticResource CCComboBoxTBlockItemStyle}"
+                                           Text="{Binding Number}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <Button
+                        Grid.Row="1"
+                        cal:Message.Attach="[Event Click]=[Action AddJumper()]"
+                        ToolTip="Добавить пропуск"
+                        Grid.Column="1"
+                        Margin="2.5,0">
+                        <iconPacks:PackIconMaterial 
+                            Foreground="LawnGreen"
+                            Width="20"
+                            Height="16"
+                            Padding="-3"
+                            Kind="AlarmPlus" />
+                    </Button>
+                    <Button
+                        Grid.Row="1"
+                        cal:Message.Attach="[Event Click]=[Action RemoveJumper()]"
+                        ToolTip="Удалить пропуск"
+                        Grid.Column="2"
+                        Margin="2.5,0">
+                        <iconPacks:PackIconMaterial 
+                            Foreground="Tomato"
+                            Width="20"
+                            Height="16"
+                            Padding="-3"
+                            Kind="AlarmOff" />
+                    </Button>
                     <StackPanel
-                        Margin="0,2.5"
-                        HorizontalAlignment="Center"
-                        Orientation="Horizontal">
-                        <TextBlock
-                            FontSize="14"
-                            Foreground="DodgerBlue"
-                            Style="{StaticResource SEDefaultTBlockStyle}"
-                            Text="Минуты: " />
-                        <TextBox
-                            MinWidth="25"
-                            Margin="0,0,5,0"
-                            HorizontalContentAlignment="Center"
-                            VerticalContentAlignment="Center"
-                            cal:Message.Attach="[Event TextChanged]=[Action TimeChanged()]"
-                            FontSize="14"
-                            Style="{StaticResource SETBoxDefaultStyle}"
-                            TabIndex="1"
-                            Text="{Binding EpisodeTime.DelayedSkipMinutesString, UpdateSourceTrigger=PropertyChanged}" />
-                        <TextBlock
-                            FontSize="14"
-                            Foreground="DodgerBlue"
-                            Style="{StaticResource SEDefaultTBlockStyle}"
-                            Text="Секунды: " />
-                        <TextBox
-                            MinWidth="25"
-                            Margin="0"
-                            HorizontalContentAlignment="Center"
-                            VerticalContentAlignment="Center"
-                            cal:Message.Attach="[Event TextChanged]=[Action TimeChanged()]"
-                            FontSize="14"
-                            Style="{StaticResource SETBoxDefaultStyle}"
-                            TabIndex="2"
-                            Text="{Binding EpisodeTime.DelayedSkipSecondsString, UpdateSourceTrigger=PropertyChanged}" />
+                        Grid.Row="2"
+                        Grid.Column="0"
+                            Visibility="{Binding JumperEditingVisibility}"
+                        Grid.ColumnSpan="3"
+                        VerticalAlignment="Center"
+                        Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock
+                                FontSize="16"
+                                Margin="0 2.5"
+                                Foreground="DeepSkyBlue"
+                                Style="{StaticResource SEDefaultTBlockStyle}"
+                                Text="Начало пропуска №"
+                            />
+                            <TextBlock
+                                FontSize="16"
+                                Foreground="DeepSkyBlue"
+                                Style="{StaticResource SEDefaultTBlockStyle}"
+                                Text="{Binding SelectedJumper.Number}"
+                            />
+                        </StackPanel>
+                        <StackPanel
+                            Visibility="{Binding JumperEditingVisibility}"
+                            Margin="0,2.5"
+                            HorizontalAlignment="Center"
+                            Orientation="Horizontal">
+                            <TextBlock
+                                FontSize="14"
+                                Foreground="DeepSkyBlue"
+                                Style="{StaticResource SEDefaultTBlockStyle}"
+                                Text="Час: " />
+                            <TextBox
+                                MinWidth="25"
+                                Margin="0,0,5,0"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                FontSize="14"
+                                Style="{StaticResource SETBoxDefaultStyle}"
+                                TabIndex="1"
+                                cal:Message.Attach="[Event TextChanged]=[Action TimeChanged()];[Event KeyDown]=[Action NumericValidation($eventArgs)]"
+                                Text="{Binding EditableEpisodeTime.JumperTimeHours, UpdateSourceTrigger=PropertyChanged,TargetNullValue=''}" />
+                            <TextBlock
+                                FontSize="14"
+                                Foreground="DeepSkyBlue"
+                                Style="{StaticResource SEDefaultTBlockStyle}"
+                                Text="Минута: " />
+                            <TextBox
+                                MinWidth="25"
+                                Margin="0,0,5,0"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                FontSize="14"
+                                Style="{StaticResource SETBoxDefaultStyle}"
+                                TabIndex="1"
+                                cal:Message.Attach="[Event TextChanged]=[Action TimeChanged()];[Event KeyDown]=[Action NumericValidation($eventArgs)]"
+                                Text="{Binding EditableEpisodeTime.JumperTimeMinutes, UpdateSourceTrigger=PropertyChanged,TargetNullValue=''}" />
+                            <TextBlock
+                                FontSize="14"
+                                Foreground="DeepSkyBlue"
+                                Style="{StaticResource SEDefaultTBlockStyle}"
+                                Text="Секунда: " />
+                            <TextBox
+                                MinWidth="25"
+                                Margin="0"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                cal:Message.Attach="[Event TextChanged]=[Action TimeChanged()];[Event KeyDown]=[Action NumericValidation($eventArgs)]"
+                                FontSize="14"
+                                Style="{StaticResource SETBoxDefaultStyle}"
+                                TabIndex="2"
+                                Text="{Binding EditableEpisodeTime.JumperTimeSeconds, UpdateSourceTrigger=PropertyChanged,TargetNullValue=''}" />
+                        </StackPanel>
                     </StackPanel>
-                </StackPanel>
+                </Grid>
+
                 <StackPanel
                     Grid.Row="1"
                     Grid.Column="0"
+                    Margin="0,5"
+                    Visibility="{Binding JumperEditingVisibility}"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Orientation="Horizontal">
                     <TextBlock
                         FontSize="16"
-                        Foreground="DodgerBlue"
+                        Foreground="DeepSkyBlue"
                         Style="{StaticResource SEDefaultTBlockStyle}"
                         Text="Количество пропусков: " />
                     <TextBox
@@ -339,23 +444,25 @@
                         Margin="0"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
-                        cal:Message.Attach="[Event TextChanged]=[Action TimeChanged()]"
                         FontSize="14"
                         Style="{StaticResource SETBoxDefaultStyle}"
                         TabIndex="3"
-                        Text="{Binding EpisodeTime.SkipCountString, UpdateSourceTrigger=PropertyChanged}" />
+                        cal:Message.Attach="[Event TextChanged]=[Action TimeChanged()];[Event KeyDown]=[Action NumericValidation($eventArgs)]"
+                        Text="{Binding EditableEpisodeTime.SkipCount, UpdateSourceTrigger=PropertyChanged,TargetNullValue=''}"/>
                 </StackPanel>
                 <StackPanel
                     Grid.Row="2"
                     Grid.Column="0"
+                    Margin="0,5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Orientation="Vertical">
                     <TextBlock
+                        Margin="0,0,0,2.5"
                         FontSize="16"
                         Foreground="DodgerBlue"
                         Style="{StaticResource SEDefaultTBlockStyle}"
-                        Text="Время начала титров" />
+                        Text="Время начала конечных титров" />
                     <StackPanel
                         Margin="0,2.5"
                         HorizontalAlignment="Center"
@@ -370,11 +477,11 @@
                             Margin="0,0,5,0"
                             HorizontalContentAlignment="Center"
                             VerticalContentAlignment="Center"
-                            cal:Message.Attach="[Event TextChanged]=[Action TimeChanged()]"
                             FontSize="14"
                             Style="{StaticResource SETBoxDefaultStyle}"
                             TabIndex="4"
-                            Text="{Binding EpisodeTime.CreditsStartHoursString, UpdateSourceTrigger=PropertyChanged}" />
+                            cal:Message.Attach="[Event TextChanged]=[Action TimeChanged()];[Event KeyDown]=[Action NumericValidation($eventArgs)]"
+                            Text="{Binding EditableEpisodeTime.CreditsTimeHours, UpdateSourceTrigger=PropertyChanged,TargetNullValue=''}" />
                         <TextBlock
                             FontSize="14"
                             Foreground="DodgerBlue"
@@ -385,11 +492,11 @@
                             Margin="0,0,5,0"
                             HorizontalContentAlignment="Center"
                             VerticalContentAlignment="Center"
-                            cal:Message.Attach="[Event TextChanged]=[Action TimeChanged()]"
                             FontSize="14"
                             Style="{StaticResource SETBoxDefaultStyle}"
                             TabIndex="5"
-                            Text="{Binding EpisodeTime.CreditsStartMinutesString, UpdateSourceTrigger=PropertyChanged}" />
+                            cal:Message.Attach="[Event TextChanged]=[Action TimeChanged()];[Event KeyDown]=[Action NumericValidation($eventArgs)]"
+                            Text="{Binding EditableEpisodeTime.CreditsTimeMinutes, UpdateSourceTrigger=PropertyChanged,TargetNullValue=''}"/>
                         <TextBlock
                             FontSize="14"
                             Foreground="DodgerBlue"
@@ -400,15 +507,16 @@
                             Margin="0"
                             HorizontalContentAlignment="Center"
                             VerticalContentAlignment="Center"
-                            cal:Message.Attach="[Event TextChanged]=[Action TimeChanged()]"
                             FontSize="14"
                             Style="{StaticResource SETBoxDefaultStyle}"
                             TabIndex="6"
-                            Text="{Binding EpisodeTime.CreditsStartSecondsString, UpdateSourceTrigger=PropertyChanged}" />
+                            cal:Message.Attach="[Event TextChanged]=[Action TimeChanged()];[Event KeyDown]=[Action NumericValidation($eventArgs)]"
+                            Text="{Binding EditableEpisodeTime.CreditsTimeSeconds, UpdateSourceTrigger=PropertyChanged,TargetNullValue=''}"/>
                     </StackPanel>
                 </StackPanel>
                 <StackPanel
                     Grid.Row="3"
+                    Margin="0,5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Orientation="Vertical">
@@ -424,20 +532,21 @@
                         <TextBlock.Text>
                             <MultiBinding StringFormat="{}{0:t}">
                                 <Binding Path="EpisodeDuration" />
-                                <!--<Binding Path="SelectedCartoonEpisode.Duration.Minutes" />
-                                <Binding Path="SelectedCartoonEpisode.Duration.Seconds" />-->
                             </MultiBinding>
                         </TextBlock.Text>
                     </TextBlock>
                 </StackPanel>
                 <Grid
                     Grid.Row="4"
-                    Grid.Column="0">
+                    Grid.Column="0"
+                    Margin="0,5">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
@@ -446,82 +555,81 @@
                     <TextBlock
                         Grid.Row="0"
                         Grid.Column="0"
-                        Grid.ColumnSpan="3"
+                        Grid.ColumnSpan="4"
+                        Margin="0,0,0,2.5"
                         FontSize="16"
                         Foreground="DodgerBlue"
                         Style="{StaticResource SEDefaultTBlockStyle}"
                         Text="Дата последнего просмотра" />
                     <TextBlock
                         Grid.Row="1"
-                        Grid.Column="0"
-                        Margin="5"
+                        Grid.Column="1"
+                        Margin="5,0,2.5,0"
                         FontSize="14"
                         Foreground="DodgerBlue"
                         Style="{StaticResource SEDefaultTBlockStyle}">
                         <TextBlock.Text>
                             <MultiBinding StringFormat="{}{0:00}.{1:00}.{2:0000}">
-                                <Binding Path="EditingEpisode.LastDateViewed.Day" />
-                                <Binding Path="EditingEpisode.LastDateViewed.Month" />
-                                <Binding Path="EditingEpisode.LastDateViewed.Year" />
+                                <Binding Path="EditableEpisode.LastDateViewed.Day" />
+                                <Binding Path="EditableEpisode.LastDateViewed.Month" />
+                                <Binding Path="EditableEpisode.LastDateViewed.Year" />
                             </MultiBinding>
                         </TextBlock.Text>
                     </TextBlock>
                     <TextBlock
                         Grid.Row="1"
-                        Grid.Column="1"
-                        Margin="5"
+                        Grid.Column="2"
+                        Margin="5,0"
                         FontSize="14"
                         Foreground="DodgerBlue"
                         Style="{StaticResource SEDefaultTBlockStyle}">
                         <TextBlock.Text>
                             <MultiBinding StringFormat="{}{0:00}.{1:00}.{2:00}">
-                                <Binding Path="EditingEpisode.LastDateViewed.Hour" />
-                                <Binding Path="EditingEpisode.LastDateViewed.Minute" />
-                                <Binding Path="EditingEpisode.LastDateViewed.Second" />
+                                <Binding Path="EditableEpisode.LastDateViewed.Hour" />
+                                <Binding Path="EditableEpisode.LastDateViewed.Minute" />
+                                <Binding Path="EditableEpisode.LastDateViewed.Second" />
                             </MultiBinding>
                         </TextBlock.Text>
                     </TextBlock>
-                    <StackPanel
-                        Grid.Row="1"
-                        Grid.Column="2"
-                        Orientation="Horizontal">
-                        <Button
+
+                    <Button
+                        Grid.Column="1"
+                        Grid.Row="2"
                             Margin="0,0,5,0"
-                            Padding="2"
+                            Padding="4"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             HorizontalContentAlignment="Center"
-                            cal:Message.Attach="[Event Click]=[Action ResetLastDateViewed()]"
+                            cal:Message.Attach="[Event Click]=[Action SetOnTodayLastDateViewed()]"
                             ToolTip="Устанавливает дату последнего просмотра на сегодняшний день">
-                            <TextBlock
-                                FontSize="12"
+                        <TextBlock
+                                FontSize="14"
                                 Foreground="DodgerBlue"
                                 Style="{StaticResource SEDefaultTBlockStyle}"
                                 Text="Сегодня" />
-                        </Button>
-                        <Button
+                    </Button>
+                    <Button
+                        Grid.Column="2"
+                        Grid.Row="2"
                             Margin="0,0,5,0"
-                            Padding="2"
+                            Padding="4"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             HorizontalContentAlignment="Center"
                             cal:Message.Attach="[Event Click]=[Action ResetLastDateViewed()]"
                             ToolTip="Сбрасывает дату последнего просмотра на 01.01.2019">
-                            <TextBlock
-                                FontSize="12"
+                        <TextBlock
+                                FontSize="14"
                                 Foreground="DodgerBlue"
                                 Style="{StaticResource SEDefaultTBlockStyle}"
                                 Text="Сброс" />
-                        </Button>
-                    </StackPanel>
-
-
+                    </Button>
                 </Grid>
             </Grid>
         </Grid>
 
         <Grid
-            Grid.Row="1"
+            Grid.Row="2"
             Grid.Column="2"
             RowSpan="2"
             Visibility="{Binding EpisodeEditingVisibility}">
@@ -581,7 +689,7 @@
         <!--#region Row 2-->
 
         <Grid
-            Grid.Row="2"
+            Grid.Row="3"
             Grid.Column="0"
             Visibility="{Binding EpisodeEditingVisibility}">
             <Grid.RowDefinitions>

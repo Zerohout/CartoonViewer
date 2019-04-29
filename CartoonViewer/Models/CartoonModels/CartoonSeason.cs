@@ -4,17 +4,22 @@
 	using System.ComponentModel.DataAnnotations;
 	using System.ComponentModel.DataAnnotations.Schema;
 
+	/// <summary>
+	/// Сезон мультсериала
+	/// </summary>
 	public class CartoonSeason
 	{
 		public CartoonSeason()
 		{
 			CartoonEpisodes = new List<CartoonEpisode>();
+			Name = $"{Number} сезон";
+			Description = $"Описание {Number} сезона";
 		}
 
 		[Key]
 		public int CartoonSeasonId { get; set; }
 		public int Number { get; set; }
-		public bool Checked { get; set; }
+		public bool Checked { get; set; } = true;
 
 		public string NumberName => $"{Number} сезон";
 
