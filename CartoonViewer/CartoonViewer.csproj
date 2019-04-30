@@ -94,21 +94,6 @@
     <Reference Include="WindowsInput, Version=1.0.6.0, Culture=neutral, PublicKeyToken=de2685b4776e9c2e, processorArchitecture=MSIL">
       <HintPath>..\packages\InputSimulatorPlus.1.0.7\lib\net20\WindowsInput.dll</HintPath>
     </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock, Version=3.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.5.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=3.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.5.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=3.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.5.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=3.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.5.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.Toolkit, Version=3.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.5.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -122,41 +107,21 @@
     </Compile>
     <Compile Include="Database\CVDbContext.cs" />
     <Compile Include="Helpers\ClassWriterReader.cs" />
-    <Compile Include="Helpers\Cloner.cs" />
     <Compile Include="Helpers\Creator.cs" />
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Helpers\HotkeysRegistrator.cs" />
     <Compile Include="Helpers\MessageHelper.cs" />
     <Compile Include="Helpers\SettingsHelper.cs" />
     <Compile Include="MainMenu\Partials\MMMethods.cs" />
-    <Compile Include="Migrations\201904241822423_Initialize.cs" />
-    <Compile Include="Migrations\201904241822423_Initialize.Designer.cs">
-      <DependentUpon>201904241822423_Initialize.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904280242452_AddedJumpers.cs" />
-    <Compile Include="Migrations\201904280242452_AddedJumpers.Designer.cs">
-      <DependentUpon>201904280242452_AddedJumpers.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904280342381_ModifiedJumpers.cs" />
-    <Compile Include="Migrations\201904280342381_ModifiedJumpers.Designer.cs">
-      <DependentUpon>201904280342381_ModifiedJumpers.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904280443175_ModifiedJumpers1.cs" />
-    <Compile Include="Migrations\201904280443175_ModifiedJumpers1.Designer.cs">
-      <DependentUpon>201904280443175_ModifiedJumpers1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904281134252_AddedDefaultValues.cs" />
-    <Compile Include="Migrations\201904281134252_AddedDefaultValues.Designer.cs">
-      <DependentUpon>201904281134252_AddedDefaultValues.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904282034118_ModifiedJumper.cs" />
-    <Compile Include="Migrations\201904282034118_ModifiedJumper.Designer.cs">
-      <DependentUpon>201904282034118_ModifiedJumper.cs</DependentUpon>
+    <Compile Include="Migrations\201904291514474_Initialize.cs" />
+    <Compile Include="Migrations\201904291514474_Initialize.Designer.cs">
+      <DependentUpon>201904291514474_Initialize.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\CartoonModels\Cartoon.cs" />
     <Compile Include="Models\CartoonModels\CartoonWebSite.cs" />
     <Compile Include="Models\CartoonModels\CartoonUrl.cs" />
+    <Compile Include="Models\CartoonModels\EpisodeOption.cs" />
     <Compile Include="Models\CartoonModels\Jumper.cs" />
     <Compile Include="Models\CartoonModels\ElementValue.cs" />
     <Compile Include="Models\CartoonModels\CartoonEpisode.cs" />
@@ -243,23 +208,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Migrations\201904241822423_Initialize.resx">
-      <DependentUpon>201904241822423_Initialize.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904280242452_AddedJumpers.resx">
-      <DependentUpon>201904280242452_AddedJumpers.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904280342381_ModifiedJumpers.resx">
-      <DependentUpon>201904280342381_ModifiedJumpers.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904280443175_ModifiedJumpers1.resx">
-      <DependentUpon>201904280443175_ModifiedJumpers1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904281134252_AddedDefaultValues.resx">
-      <DependentUpon>201904281134252_AddedDefaultValues.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904282034118_ModifiedJumper.resx">
-      <DependentUpon>201904282034118_ModifiedJumper.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201904291514474_Initialize.resx">
+      <DependentUpon>201904291514474_Initialize.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

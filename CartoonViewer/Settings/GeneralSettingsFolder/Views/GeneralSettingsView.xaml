@@ -7,7 +7,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:CartoonViewer.Settings.GeneralSettingsFolder.Views"
-    xmlns:mah="clr-namespace:MahApps;assembly=MahApps.Metro"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     cal:Bind.AtDesignTime="True"
     d:DataContext="{d:DesignData Source=../DesignData/GeneralSettingsViewDesignData.xaml}"
@@ -32,10 +31,11 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <!--<Grid
+            <Grid
                 Grid.Row="0"
                 Grid.Column="0">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -51,7 +51,7 @@
                     FontSize="18"
                     Foreground="DodgerBlue"
                     Style="{StaticResource SEDefaultTBlockStyle}"
-                    Text="Количество начальных просматриваемых эпизодов: " />
+                    Text="Число просматриваемых эпизодов по умолчанию: " />
                 <TextBox
                     Grid.Row="0"
                     Grid.Column="1"
@@ -62,7 +62,7 @@
                     cal:Message.Attach="[Event KeyDown]=[Action NumericValidation($eventArgs)]; [Event TextChanged]=[Action TextChanged()]"
                     Foreground="Aqua"
                     Style="{StaticResource SETBoxDefaultStyle}"
-                    Text="{Binding GeneralValue.EpisodesCount, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
+                    Text="{Binding GeneralValue.DefaultEpisodesCount, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
                 <TextBlock
                     Grid.Row="0"
                     Grid.Column="2"
@@ -79,7 +79,37 @@
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
-            </Grid>-->
+                <Grid
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Grid.Column="0"
+                        FontSize="18"
+                        Foreground="DodgerBlue"
+                        Style="{StaticResource SEDefaultTBlockStyle}"
+                        Text="Число доступных эпизодов: " />
+                    <TextBlock
+                        Grid.Column="1"
+                        Margin="0,0,5,0"
+                        FontSize="18"
+                        Foreground="DodgerBlue"
+                        Style="{StaticResource SEDefaultTBlockStyle}"
+                        Text="{Binding GeneralValue.AvailableEpisodesCount}" />
+                </Grid>
+
+
+
+            </Grid>
 
             <Grid
                 Grid.Row="1"
@@ -107,7 +137,7 @@
                     Margin="5,7.5"
                     HorizontalAlignment="Left"
                     cal:Message.Attach="[Event Checked]=[Action CheckedStatusChanged()];[Event Unchecked]=[Action CheckedStatusChanged()]"
-                    IsChecked="{Binding GeneralValue.IntellectualShutdown}"
+                    IsChecked="{Binding GeneralValue.NightHelperShutdown}"
                     OffSwitchBrush="Tomato"
                     OnSwitchBrush="LawnGreen"
                     ThumbIndicatorWidth="18" />
@@ -121,13 +151,13 @@
                             TargetType="TextBlock">
                             <Style.Triggers>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.IntellectualShutdown}"
+                                    Binding="{Binding GeneralValue.NightHelperShutdown}"
                                     Value="True">
                                     <Setter Property="Text" Value="Активировано" />
                                     <Setter Property="Foreground" Value="LawnGreen" />
                                 </DataTrigger>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.IntellectualShutdown}"
+                                    Binding="{Binding GeneralValue.NightHelperShutdown}"
                                     Value="False">
                                     <Setter Property="Text" Value="Дезактивировано" />
                                     <Setter Property="Foreground" Value="Tomato" />
@@ -141,7 +171,7 @@
             <Grid
                 Grid.Row="2"
                 Grid.Column="0"
-                Visibility="{Binding GeneralValue.IntelectualShutdownSettingsVisibility}">
+                Visibility="{Binding GeneralValue.NightHelperSettingsVisibility}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
@@ -166,7 +196,7 @@
                         cal:Message.Attach="[Event KeyDown]=[Action NumericValidation($eventArgs)]; [Event TextChanged]=[Action TextChanged()]"
                         Foreground="Aqua"
                         Style="{StaticResource SETBoxDefaultStyle}"
-                        Text="{Binding GeneralValue.IntellectualShutdownIdleTime, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
+                        Text="{Binding GeneralValue.NightHelperShutdownIdleTime, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
                     <ComboBox
                         MinWidth="85"
                         HorizontalContentAlignment="Center"
@@ -176,8 +206,8 @@
                         FontSize="16"
                         FontWeight="Bold"
                         Foreground="Aqua"
-                        ItemsSource="{Binding GeneralValue.IntellectualShutdownIdleTimeTypeList}"
-                        SelectedItem="{Binding GeneralValue.SelectedIntellectualShutdownIdleTimeType}" />
+                        ItemsSource="{Binding GeneralValue.HigntHelperShutdownIdleTimeTypeList}"
+                        SelectedItem="{Binding GeneralValue.SelectedNightHelperShutdownIdleTimeType}" />
                     <TextBlock
                         FontSize="18"
                         Foreground="OrangeRed"
@@ -200,7 +230,7 @@
                         cal:Message.Attach="[Event KeyDown]=[Action NumericValidation($eventArgs)]; [Event TextChanged]=[Action TextChanged()]"
                         Foreground="Aqua"
                         Style="{StaticResource SETBoxDefaultStyle}"
-                        Text="{Binding GeneralValue.IntellectualShutdownReachedHoursTime, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
+                        Text="{Binding GeneralValue.NightHelperShutdownReachedHoursTime, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
                     <TextBlock
                         FontSize="18"
                         Foreground="OrangeRed"
@@ -212,20 +242,20 @@
                         cal:Message.Attach="[Event KeyDown]=[Action NumericValidation($eventArgs)]; [Event TextChanged]=[Action TextChanged()]"
                         Foreground="Aqua"
                         Style="{StaticResource SETBoxDefaultStyle}"
-                        Text="{Binding GeneralValue.IntellectualShutdownReachedMinutesTime, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
+                        Text="{Binding GeneralValue.NightHelperShutdownReachedMinutesTime, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
 
                 </StackPanel>
                 <Button
                     Grid.Row="1"
                     HorizontalAlignment="Left"
-                    cal:Message.Attach="[Event Click]=[Action ExpandCollapseIntellectualShutdownRemark()]">
+                    cal:Message.Attach="[Event Click]=[Action ExpandCollapseNightHelperShutdownRemark()]">
                     <Button.Style>
                         <Style
                             BasedOn="{StaticResource MetroButton}"
                             TargetType="Button">
                             <Style.Triggers>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.IsIntellectualShutdownRemarkExpand}"
+                                    Binding="{Binding GeneralValue.IsNightHelperShutdownRemarkExpand}"
                                     Value="True">
                                     <Setter Property="ToolTip" Value="Свернуть примечания" />
                                     <Setter Property="Content">
@@ -239,7 +269,7 @@
                                     </Setter>
                                 </DataTrigger>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.IsIntellectualShutdownRemarkExpand}"
+                                    Binding="{Binding GeneralValue.IsNightHelperShutdownRemarkExpand}"
                                     Value="False">
                                     <Setter Property="ToolTip" Value="Развернуть примечания" />
                                     <Setter Property="Content">
@@ -259,7 +289,7 @@
                 <StackPanel
                     Grid.Row="2"
                     Orientation="Vertical"
-                    Visibility="{Binding GeneralValue.IntellectualShutdownRemarkVisibility}">
+                    Visibility="{Binding GeneralValue.NightHelperShutdownRemarkVisibility}">
                     <TextBlock
                         Margin="10,0,0,0"
                         HorizontalAlignment="Left"
@@ -375,6 +405,47 @@
                         </TextBlock.Style>
                     </TextBlock>
                 </StackPanel>
+                <Grid
+                    Grid.Row="0"
+                    Grid.RowSpan="2"
+                    Grid.Column="2"
+                    Margin="10,0,0,0"
+                    Visibility="{Binding GeneralValue.WatchingInRowVisibility}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        HorizontalAlignment="Right"
+                        FontSize="18"
+                        Foreground="Yellow"
+                        Style="{StaticResource SEDefaultTBlockStyle}"
+                        Text="Номер начального эпизода:" />
+                    <TextBox
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Margin="10,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        cal:Message.Attach="[Event KeyDown]=[Action NumericValidation($eventArgs)]; [Event TextChanged]=[Action TextChanged()]"
+                        FontFamily="Comic Sans MS"
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Foreground="Aqua"
+                        Text="{Binding GeneralValue.LastWatchedEpisodeInRowFullNumber, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        FontSize="18"
+                        Foreground="Yellow"
+                        Style="{StaticResource SEDefaultTBlockStyle}"
+                        Text="Формат: № сезона * 100 + № эпизода" />
+                </Grid>
                 <StackPanel
                     Grid.Row="0"
                     Grid.RowSpan="2"
@@ -406,6 +477,22 @@
                         Text="{Binding GeneralValue.RandomMixCount, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
                 </StackPanel>
             </Grid>
+            <StackPanel
+                Grid.Row="4"
+                Orientation="Vertical"
+                Visibility="{Binding GeneralValue.WatchingInRowVisibility}">
+                <TextBlock
+                    FontSize="18"
+                    Foreground="Chocolate"
+                    Style="{StaticResource SEDefaultTBlockStyle}"
+                    Text="Внимание, введенные данные не проверяются. Будьте внимательны." />
+                <TextBlock
+                    FontSize="18"
+                    Foreground="Chocolate"
+                    Style="{StaticResource SEDefaultTBlockStyle}"
+                    Text="1 сезон, 9 серия - это номер 109 (1 * 100 + 9 = 109)." />
+            </StackPanel>
+
             <Grid
                 Grid.Row="4"
                 Margin="10,5"
@@ -592,7 +679,8 @@
                     Margin="10"
                     Padding="10"
                     cal:Message.Attach="[Event Click]=[Action ExportSettingsToFile()]"
-                    BorderThickness="3">
+                    BorderThickness="3"
+                    Visibility="Hidden">
                     <StackPanel Orientation="Vertical">
                         <iconPacks:PackIconFontAwesome
                             Width="30"
@@ -615,7 +703,8 @@
                     Margin="10"
                     Padding="10"
                     cal:Message.Attach="[Event Click]=[Action ImportSettingsFromFile()]"
-                    BorderThickness="3">
+                    BorderThickness="3"
+                    Visibility="Hidden">
                     <StackPanel Orientation="Vertical">
                         <iconPacks:PackIconFontAwesome
                             Width="30"
@@ -683,7 +772,7 @@
                 <Button
                     Margin="10"
                     Padding="10"
-                    cal:Message.Attach="[Event Click]=[Action SaveChages()]"
+                    cal:Message.Attach="[Event Click]=[Action SaveChanges()]"
                     BorderThickness="3">
                     <StackPanel Orientation="Vertical">
                         <iconPacks:PackIconFontAwesome

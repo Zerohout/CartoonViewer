@@ -30,9 +30,6 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		private int SelectedVoiceOverId;
 		private bool _isNotEditing = true;
 		private bool _editMode = true;
-		private DateTime resetTime = new DateTime(2019,01,01);
-
-
 
 		#endregion
 

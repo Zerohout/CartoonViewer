@@ -3,6 +3,7 @@ namespace CartoonViewer.Settings.GeneralSettingsFolder.ViewModels
 {
 	using Caliburn.Micro;
 	using CartoonEditorFolder.ViewModels;
+	using Models.CartoonModels;
 	using Models.SettingModels;
 	using static Helpers.Helper;
 
@@ -11,6 +12,19 @@ namespace CartoonViewer.Settings.GeneralSettingsFolder.ViewModels
 		private GeneralSettingsValue _generalValue;
 		private GeneralSettingsValue _tempGeneralValue;
 
+		private BindableCollection<CartoonEpisode> _episodes;
+
+		public BindableCollection<CartoonEpisode> Episodes
+		{
+			get => _episodes;
+			set
+			{
+				_episodes = value;
+				NotifyOfPropertyChange(() => Episodes);
+			}
+		}
+
+		
 		public GeneralSettingsValue TempGeneralValue
 		{
 			get => _tempGeneralValue;

@@ -14,9 +14,7 @@
 
 		protected override void OnInitialize()
 		{
-			GeneralValue = LoadGeneralSettings();
-			TempGeneralValue = GeneralValue.Clone() as GeneralSettingsValue;
-
+			LoadData();
 			base.OnInitialize();
 		}
 

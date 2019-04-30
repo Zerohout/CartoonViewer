@@ -60,6 +60,19 @@ namespace CartoonViewer.MainMenu.ViewModels
 		/// </summary>
 		public async void Start()
 		{
+			if (CanStart is false) return;
+
+			var cartoonsCount = Cartoons.Count(c => c.Checked);
+
+			if (GeneralSettings.WatchingInRow is true &&
+			    cartoonsCount > 1)
+			{
+				WinMan.ShowDialog(new DialogViewModel(
+					                  "На данный момент нельзя смотреть подряд эпизоды, если выбрано более одного мультсериала."
+					                  , DialogType.INFO));
+				return;
+			}
+
 			((MainViewModel)Parent).WindowState = WindowState.Minimized;
 
 			StartBrowser();
@@ -88,8 +101,9 @@ namespace CartoonViewer.MainMenu.ViewModels
 				CvDbContext.CartoonEpisodes
 						   .Include(ce => ce.CartoonVoiceOver)
 						   .Include(ce => ce.CartoonSeason)
+						   .Include(ce => ce.EpisodeOptions)
 						   .Include(ce => ce.Cartoon)
-						   .Where(ce => ce.Cartoon.Checked));
+						   .Where(ce => ce.Cartoon.Checked && ce.CartoonSeason.Checked));
 
 			if(CheckedEpisodes.Count > 0)
 			{
@@ -108,10 +122,20 @@ namespace CartoonViewer.MainMenu.ViewModels
 			var approximateTime = new TimeSpan();
 			foreach(var ce in CheckedEpisodes.ToList())
 			{
-				if(DateTime.Now.Subtract(ce.LastDateViewed) >
+				var option = ce.EpisodeOptions
+							   .FirstOrDefault(eo => eo.CartoonVoiceOverId == ce.CartoonVoiceOver.CartoonVoiceOverId);
+
+				if(option == null)
+				{
+					CheckedEpisodes.Remove(ce);
+
+					continue;
+				}
+
+				if(DateTime.Now.Subtract(option.LastDateViewed) >
 				   GeneralSettings.NonRepeatTime)
 				{
-					approximateTime += ce.Duration;
+					approximateTime += option.Duration;
 					count++;
 					continue;
 				}
@@ -129,6 +153,6 @@ namespace CartoonViewer.MainMenu.ViewModels
 		}
 
 
-		public List<CartoonEpisode> CheckedEpisodes { get; set; } = new List<CartoonEpisode>();
+		
 	}
 }

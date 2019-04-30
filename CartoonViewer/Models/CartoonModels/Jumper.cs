@@ -22,12 +22,13 @@ namespace CartoonViewer.Models.CartoonModels
 
 		public int SkipCount { get; set; } = 7;
 
-		public TimeSpan JumperStartTime { get; set; }
-		
+		public TimeSpan StartTime { get; set; }
 
-		[ForeignKey("CartoonEpisode")]
-		public int CartoonEpisodeId { get; set; }
+		[NotMapped] public TimeSpan EndTime => StartTime + new TimeSpan(0, 0, SkipCount * 5);
+
+		[ForeignKey("EpisodeOption")]
+		public int EpisodeOptionId { get; set; }
 		[JsonIgnore]
-		public CartoonEpisode CartoonEpisode { get; set; }
+		public EpisodeOption EpisodeOption { get; set; }
 	}
 }

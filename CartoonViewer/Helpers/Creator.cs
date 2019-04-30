@@ -23,13 +23,13 @@
 				},
 				new CartoonVoiceOver
 				{
-					Name = "Paramaunt(Default)",
-					UrlParameter = ""
+					Name = "Paramaunt",
+					UrlParameter = "?v=par"
 				},
 				new CartoonVoiceOver
 				{
-					Name = "Paramaunt",
-					UrlParameter = "?v=par"
+					Name = "Paramaunt(Default)",
+					UrlParameter = ""
 				},
 				new CartoonVoiceOver
 				{

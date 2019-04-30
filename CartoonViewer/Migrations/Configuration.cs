@@ -3,6 +3,7 @@ namespace CartoonViewer.Migrations
 	using System.Data.Entity;
 	using System.Data.Entity.Migrations;
 	using System.Linq;
+	using System.Windows.Controls;
 	using Database;
 	using Helpers;
 	using Models.CartoonModels;
@@ -28,9 +29,11 @@ namespace CartoonViewer.Migrations
 					cw.ElementValues.Add(CreateElementValue());
 				}
 
+				context.VoiceOvers.AddRange(CreateSouthParkVoiceOverList());
+				
 				context.SaveChanges();
 			}
-
+			
 
 			//AddDataToDatabase(context);
 		}

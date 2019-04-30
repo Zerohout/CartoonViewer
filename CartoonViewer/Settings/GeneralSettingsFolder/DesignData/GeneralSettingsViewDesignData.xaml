@@ -6,18 +6,19 @@
     xmlns:vms="clr-namespace:CartoonViewer.Settings.GeneralSettingsFolder.ViewModels">
     <vms:GeneralSettingsViewModel.GeneralValue>
         <settingsModels:GeneralSettingsValue
-            EpisodesCount="999999"
-            IntellectualShutdown="True"
-            IntellectualShutdownIdleTime="60"
-            IntellectualShutdownReachedHoursTime="3"
-            IntellectualShutdownReachedMinutesTime="30"
-            IsIntellectualShutdownRemarkExpand="True"
+            DefaultEpisodesCount="999999"
+            NightHelperShutdown="True"
+            NightHelperShutdownIdleTime="60"
+            NightHelperShutdownReachedHoursTime="3"
+            NightHelperShutdownReachedMinutesTime="30"
+            IsNightHelperShutdownRemarkExpand="True"
             NoneRepeatTimeCount="3"
+            WatchingInRow="True"
+            RandomWatching="False"
+            LastWatchedEpisodeInRowFullNumber="101"
             RandomMixCount="10"
-            RandomWatching="True"
-            SelectedIntellectualShutdownIdleTimeType="минут"
-            SelectedNoneRepeatTimeType="дней"
-            WatchingInRow="False" />
+            SelectedNightHelperShutdownIdleTimeType="минут"
+            SelectedNoneRepeatTimeType="дней"/>
     </vms:GeneralSettingsViewModel.GeneralValue>
 
 

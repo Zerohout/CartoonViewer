@@ -11,14 +11,15 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 	using Database;
 	using Helpers;
 	using Models.CartoonModels;
-	using static Helpers.Cloner;
+	using static Helpers.Helper;
+	using static Helpers.SettingsHelper;
 
 	public partial class VoiceOversEditingViewModel : Screen, ISettingsViewModel
 	{
 		public void TBoxDoubleClick(TextBox source)
 		{
 			source.SelectAll();
-			
+
 		}
 
 
@@ -27,7 +28,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public void DoubleClickOnGlobalVoiceOverList()
 		{
-			if (EditMode)
+			if(EditMode)
 			{
 				EditSelectedGlobalVoiceOver();
 			}
@@ -41,7 +42,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public void DoubleClickOnCartoonVoiceOverList()
 		{
-			if (EditMode)
+			if(EditMode)
 			{
 				EditSelectedGlobalVoiceOver();
 			}
@@ -66,6 +67,9 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public void CancelCartoonSelection()
 		{
+			if(CanCancelCartoonSelection is false)
+				return;
+
 			if(SelectedSeason != null)
 			{
 				CancelSeasonSelection();
@@ -85,6 +89,9 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public void CancelSeasonSelection()
 		{
+			if(CanCancelSeasonSelection is false)
+				return;
+
 			if(SelectedEpisode != null)
 			{
 				CancelEpisodeSelection();
@@ -99,6 +106,9 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public void CancelEpisodeSelection()
 		{
+			if(CanCancelEpisodeSelection is false)
+				return;
+
 			SelectedEpisode = null;
 			if(EpisodeVoiceOvers.Count > 0)
 			{
@@ -142,7 +152,8 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 							RemoveSelectedCartoonVoiceOver();
 							break;
 						case Key.S:
-							if(CanSaveChanges) SaveChanges();
+							if(CanSaveChanges)
+								SaveChanges();
 							break;
 					}
 					break;
@@ -155,13 +166,13 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 						case Key.Escape:
 							if(IsNotEditing is false)
 							{
-								if (CanSaveChanges)
+								if(CanSaveChanges)
 								{
 									CancelChanges();
 									return;
 								}
 
-								if (CanUnlockEditingInterface)
+								if(CanUnlockEditingInterface)
 								{
 									UnlockEditingInterface();
 									return;
@@ -185,6 +196,9 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public void UnlockEditingInterface()
 		{
+			if(CanUnlockEditingInterface is false)
+				return;
+
 			EditedVoiceOver = null;
 			TempEditedVoiceOver = null;
 			IsNotEditing = true;
@@ -223,6 +237,9 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public async void AddGlobalVoiceOver()
 		{
+			if(CanAddGlobalVoiceOver is false)
+				return;
+
 			var newVoiceOver = await CreateNewVoiceOver();
 
 			GlobalVoiceOvers.Add(newVoiceOver);
@@ -238,10 +255,12 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public void EditSelectedGlobalVoiceOver()
 		{
+			if(CanEditSelectedGlobalVoiceOver is false)
+				return;
 			if(SelectedGlobalVoiceOver == null)
 				return;
-			EditedVoiceOver = CloneVoiceOver(SelectedGlobalVoiceOver);
-			TempEditedVoiceOver = CloneVoiceOver(SelectedGlobalVoiceOver);
+			EditedVoiceOver = CloneObject<CartoonVoiceOver>(SelectedGlobalVoiceOver);
+			TempEditedVoiceOver = CloneObject<CartoonVoiceOver>(SelectedGlobalVoiceOver);
 			IsNotEditing = false;
 		}
 		public bool CanEditSelectedGlobalVoiceOver => SelectedGlobalVoiceOver != null && IsNotEditing;
@@ -251,10 +270,13 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public void RemoveGlobalVoiceOverAction()
 		{
+			if(CanRemoveGlobalVoiceOverAction is false)
+				return;
+
 			if(SelectedGlobalVoiceOver == null)
 				return;
 
-			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
+			using(var ctx = new CVDbContext(AppDataPath))
 			{
 				var voiceOver = ctx.VoiceOvers
 								   .Include(vo => vo.Cartoons)
@@ -304,6 +326,12 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 					voiceOver.Cartoons.Remove(cartoon);
 				}
 
+				var options = ctx.EpisodeOptions.Where(eo => eo.CartoonVoiceOverId == voiceOver.CartoonVoiceOverId);
+
+				if(options.Any())
+				{
+					ctx.EpisodeOptions.RemoveRange(options);
+				}
 
 				ctx.VoiceOvers.Remove(voiceOver);
 				ctx.SaveChanges();
@@ -318,7 +346,13 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// <summary>
 		/// Снять выделение с выбранной глобальной озвучки
 		/// </summary>
-		public void CancelGlobalVoiceOverSelection() => SelectedGlobalVoiceOver = null;
+		public void CancelGlobalVoiceOverSelection()
+		{
+			if(CanCancelGlobalVoiceOverSelection is false)
+				return;
+
+			SelectedGlobalVoiceOver = null;
+		}
 
 		public bool CanCancelGlobalVoiceOverSelection => SelectedGlobalVoiceOver != null && IsNotEditing;
 
@@ -327,6 +361,9 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public void MoveToCartoonVoiceOvers()
 		{
+			if(CanMoveToCartoonVoiceOvers is false)
+				return;
+
 			if(SelectedVoiceOverId == 0)
 			{
 				throw new Exception("Id выбраной озвучки м/ф равен 0");
@@ -339,7 +376,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				return;
 			}
 
-			using(var ctx = new CVDbContext(Helpers.SettingsHelper.AppDataPath))
+			using(var ctx = new CVDbContext(AppDataPath))
 			{
 				var cartoon = ctx.Cartoons
 								 .Include(c => c.CartoonVoiceOvers)
@@ -386,6 +423,9 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public void MoveFromGlobalToEpisodeVoiceOvers()
 		{
+			if(CanMoveFromGlobalToEpisodeVoiceOvers is false)
+				return;
+
 			MoveToCartoonVoiceOvers();
 			MoveToEpisodeVoiceOvers();
 		}
@@ -420,6 +460,9 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public void AddCartoonVoiceOver()
 		{
+			if(CanAddCartoonVoiceOver is false)
+				return;
+
 			AddGlobalVoiceOver();
 			MoveToCartoonVoiceOvers();
 
@@ -431,6 +474,8 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public void EditSelectedCartoonVoiceOver()
 		{
+			if(CanEditSelectedCartoonVoiceOver is false)
+				return;
 			EditSelectedGlobalVoiceOver();
 		}
 		public bool CanEditSelectedCartoonVoiceOver => SelectedCartoonVoiceOver != null && IsNotEditing;
@@ -440,10 +485,13 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public void RemoveSelectedCartoonVoiceOver()
 		{
+			if(CanRemoveSelectedCartoonVoiceOver is false)
+				return;
+
 			if(SelectedCartoonVoiceOver == null)
 				return;
 
-			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
+			using(var ctx = new CVDbContext(AppDataPath))
 			{
 				var voiceOver = ctx.VoiceOvers
 								   .Include(vo => vo.Cartoons)
@@ -483,6 +531,15 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 				var cartoon = ctx.Cartoons.Find(IdList.CartoonId);
 
+				var options = ctx.EpisodeOptions
+								 .Where(eo => eo.CartoonVoiceOverId == voiceOver.CartoonVoiceOverId &&
+											  eo.CartoonEpisode.CartoonId == IdList.CartoonId);
+
+				if(options.Any())
+				{
+					ctx.EpisodeOptions.RemoveRange(options);
+				}
+
 				voiceOver.Cartoons.Remove(cartoon);
 
 				ctx.SaveChanges();
@@ -496,7 +553,13 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// <summary>
 		/// Снять выделение с выбранной озвучки текущего м/ф
 		/// </summary>
-		public void CancelCartoonVoiceOverSelection() => SelectedGlobalVoiceOver = null;
+		public void CancelCartoonVoiceOverSelection()
+		{
+			if(CanCancelCartoonVoiceOverSelection is false)
+				return;
+
+			SelectedGlobalVoiceOver = null;
+		}
 
 		public bool CanCancelCartoonVoiceOverSelection => SelectedCartoonVoiceOver != null && IsNotEditing;
 
@@ -505,16 +568,51 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public void MoveToEpisodeVoiceOvers()
 		{
+			if(CanMoveToEpisodeVoiceOvers is false)
+				return;
+
 			if(SelectedVoiceOverId == 0)
 			{
 				throw new Exception("Id выбраной озвучки м/ф равен 0");
 			}
 
-			using(var ctx = new CVDbContext(Helpers.SettingsHelper.AppDataPath))
+			using(var ctx = new CVDbContext(AppDataPath))
 			{
 				var episode = ctx.CartoonEpisodes
 								 .Include(ce => ce.EpisodeVoiceOvers)
 								 .Single(ce => ce.CartoonEpisodeId == IdList.EpisodeId);
+
+				var episodeOption = new EpisodeOption
+				{
+					CartoonEpisodeId = episode.CartoonEpisodeId,
+					CartoonVoiceOverId = SelectedVoiceOverId,
+					Name = $"{SelectedGlobalVoiceOver.Name}_Option"
+				};
+
+				ctx.EpisodeOptions.Add(episodeOption);
+				ctx.SaveChanges();
+				episodeOption = ctx.EpisodeOptions.ToList().Last();
+				// создание нового джампера
+				var jumper = new Jumper
+				{
+					EpisodeOptionId = episodeOption.EpisodeOptionId,
+					Number = 1
+				};
+
+				ctx.Jumpers.Add(jumper);
+				ctx.SaveChanges();
+
+				episodeOption = ctx.EpisodeOptions
+								   .Include(eo => eo.Jumpers)
+								   .ToList().Last();
+
+				var totalSkipCount = episodeOption.Jumpers.Sum(j => j.SkipCount);
+
+				var duration = episodeOption.CreditsStart - new TimeSpan(0, 0, totalSkipCount * 5);
+
+				episodeOption.Duration = duration;
+				ctx.SaveChanges();
+
 
 				if(episode.EpisodeVoiceOvers.Count == 0)
 				{
@@ -530,6 +628,9 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				   .CartoonEpisodes.Add(episode);
 
 				ctx.SaveChanges();
+
+
+
 			}
 
 			var voiceOver = GlobalVoiceOvers.First(vo => vo.CartoonVoiceOverId == SelectedVoiceOverId);
@@ -568,6 +669,8 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public void AddEpisodeVoiceOverAction()
 		{
+			if(CanAddEpisodeVoiceOverAction is false)
+				return;
 			AddGlobalVoiceOver();
 			MoveFromGlobalToEpisodeVoiceOvers();
 		}
@@ -579,6 +682,8 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public void EditSelectedEpisodeVoiceOver()
 		{
+			if(CanEditSelectedEpisodeVoiceOver is false)
+				return;
 			EditSelectedGlobalVoiceOver();
 		}
 		public bool CanEditSelectedEpisodeVoiceOver => SelectedEpisodeVoiceOver != null && IsNotEditing;
@@ -588,15 +693,27 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public void RemoveSelectedEpisodeVoiceOver()
 		{
+			if(CanRemoveSelectedEpisodeVoiceOver is false)
+				return;
+
 			if(SelectedEpisodeVoiceOver == null)
 				return;
 
-			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
+			using(var ctx = new CVDbContext(AppDataPath))
 			{
 				var episode = ctx.CartoonEpisodes
 								 .Include(ce => ce.CartoonVoiceOver)
 								 .Include(ce => ce.EpisodeVoiceOvers)
 								 .First(ce => ce.CartoonEpisodeId == IdList.EpisodeId);
+
+				var options = ctx.EpisodeOptions
+									   .Where(eo => eo.CartoonVoiceOverId == SelectedVoiceOverId &&
+													eo.CartoonEpisodeId == IdList.EpisodeId);
+				if(options.Any())
+				{
+					ctx.EpisodeOptions.RemoveRange(options);
+				}
+
 
 				var voiceOver = ctx.VoiceOvers
 								   .Include(vo => vo.CartoonEpisodes)
@@ -612,12 +729,15 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 					voiceOver.CheckedEpisodes.Remove(episode);
 					episode.EpisodeVoiceOvers.Remove(voiceOver);
 
+					// присваивание активной озвучки новой активной озвучки
+					// если таковая была удалена
 					if(episode.EpisodeVoiceOvers.Count > 0)
 					{
+						var tempId = episode.EpisodeVoiceOvers
+											.First().CartoonVoiceOverId;
+
 						var checkedVoiceOver = ctx.VoiceOvers
-												  .First(vo => vo.CartoonVoiceOverId ==
-															   episode.EpisodeVoiceOvers
-																	  .First().CartoonVoiceOverId);
+												  .First(vo => vo.CartoonVoiceOverId == tempId);
 
 						checkedVoiceOver.CheckedEpisodes.Add(episode);
 						episode.CartoonVoiceOver = checkedVoiceOver;
@@ -629,10 +749,6 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			}
 
 			UpdateVoiceOverList();
-
-			//SelectedGlobalVoiceOver = GlobalVoiceOvers
-			//	.First(gvo => gvo.CartoonVoiceOverId == EpisodeVoiceOvers
-			//											.Last().CartoonVoiceOverId);
 		}
 
 		public bool CanRemoveSelectedEpisodeVoiceOver => SelectedEpisodeVoiceOver != null && IsNotEditing;
@@ -640,7 +756,13 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// <summary>
 		/// Снять выделение с выбранной озвучки текущего эпизода
 		/// </summary>
-		public void CancelEpisodeVoiceOverSelection() => SelectedGlobalVoiceOver = null;
+		public void CancelEpisodeVoiceOverSelection()
+		{
+			if(CanCancelEpisodeVoiceOverSelection is false)
+				return;
+
+			SelectedGlobalVoiceOver = null;
+		}
 
 		public bool CanCancelEpisodeVoiceOverSelection => SelectedEpisodeVoiceOver != null && IsNotEditing;
 
@@ -653,14 +775,29 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public async void SaveChanges()
 		{
+			if(CanSaveChanges is false)
+				return;
+
 			if(SelectedVoiceOverId == 0)
 			{
 				throw new Exception("Id выбраной озвучки м/ф равен 0");
 			}
 
-			using(var ctx = new CVDbContext(Helpers.SettingsHelper.AppDataPath))
+			using(var ctx = new CVDbContext(AppDataPath))
 			{
 				var voiceOver = ctx.VoiceOvers.Find(SelectedVoiceOverId);
+
+				var options =
+					ctx.EpisodeOptions.Where(eo => eo.CartoonVoiceOverId == EditedVoiceOver.CartoonVoiceOverId);
+
+				if(voiceOver.Name != EditedVoiceOver.Name)
+				{
+					foreach(var option in options)
+					{
+						option.Name = $"{EditedVoiceOver.Name}_Option";
+						ctx.Entry(option).State = EntityState.Modified;
+					}
+				}
 
 				CopyChanges(ref voiceOver, EditedVoiceOver);
 
@@ -668,7 +805,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				await ctx.SaveChangesAsync();
 			}
 
-			TempEditedVoiceOver = CloneVoiceOver(EditedVoiceOver);
+			TempEditedVoiceOver = CloneObject<CartoonVoiceOver>(EditedVoiceOver);
 
 			NotifyChanges();
 			IsNotEditing = true;
@@ -687,7 +824,10 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public void CancelChanges()
 		{
-			EditedVoiceOver = CloneVoiceOver(TempEditedVoiceOver);
+			if(CanCancelChanges is false)
+				return;
+
+			EditedVoiceOver = CloneObject<CartoonVoiceOver>(TempEditedVoiceOver);
 			NotifyChanges();
 		}
 
@@ -707,5 +847,59 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 			TryClose();
 		}
+
+		private (int CurrentIndex, int EndIndex) CartoonIndexes;
+
+		private (int CurrentIndex, int EndIndex) SeasonIndexes;
+
+		private (int CurrentIndex, int EndIndex) EpisodeIndexes;
+		/// <summary>
+		/// Выбрать следующий м/с
+		/// </summary>
+		public void SelectNextCartoon()
+		{
+			if(CanSelectNextCartoon is false)
+				return;
+			SelectedCartoon = SelectedCartoon == null
+				? Cartoons.FirstOrDefault()
+				: Cartoons[CartoonIndexes.CurrentIndex + 1];
+			SelectedSeason = Seasons.FirstOrDefault();
+		}
+
+		public bool CanSelectNextCartoon => Cartoons.Count > 0 && SelectedCartoon != null &&
+											CartoonIndexes.CurrentIndex < CartoonIndexes.EndIndex;
+		/// <summary>
+		/// Выбрать следующий сезон
+		/// </summary>
+		public void SelectNextSeason()
+		{
+			if(CanSelectNextSeason is false)
+				return;
+
+			SelectedSeason = SelectedSeason == null
+				? Seasons.FirstOrDefault()
+				: Seasons[SeasonIndexes.CurrentIndex + 1];
+
+			SelectedEpisode = Episodes.FirstOrDefault();
+		}
+
+		public bool CanSelectNextSeason => Seasons.Count > 0 &&
+										   SeasonIndexes.CurrentIndex < SeasonIndexes.EndIndex;
+		/// <summary>
+		/// Выбрать следующий эпизод
+		/// </summary>
+		public void SelectNextEpisode()
+		{
+			if(CanSelectNextEpisode is false)
+				return;
+			SelectedEpisode = SelectedEpisode == null
+				? Episodes.FirstOrDefault()
+				: Episodes[EpisodeIndexes.CurrentIndex + 1];
+		}
+
+		public bool CanSelectNextEpisode => Episodes.Count > 0 &&
+											EpisodeIndexes.CurrentIndex < EpisodeIndexes.EndIndex;
+
+
 	}
 }

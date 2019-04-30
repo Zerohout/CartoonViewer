@@ -7,7 +7,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 	using Database;
 	using Helpers;
 	using Models.CartoonModels;
-	using static Helpers.Cloner;
+	using Newtonsoft.Json;
 	using static Helpers.Helper;
 
 	public partial class CartoonsEditingViewModel : Screen, ISettingsViewModel
@@ -26,29 +26,26 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 								  .SingleAsync(c => c.CartoonId == SettingsHelper.GlobalIdList.CartoonId);
 			}
 
-			SelectedCartoon = CloneCartoon(result);
-			TempCartoon = CloneCartoon(SelectedCartoon);
-			SelectedCartoonUrl = CloneCartoonUrl(result.CartoonUrls
-													   .Find(cu => cu.CartoonWebSiteId == SettingsHelper.GlobalIdList.WebSiteId));
-			TempCartoonUrl = CloneCartoonUrl(SelectedCartoonUrl);
+			SelectedCartoon = CloneObject<Cartoon>(result);
+			SelectedCartoonUrl = SelectedCartoon.CartoonUrls.First();
+			TempCartoonSnapshot = JsonConvert.SerializeObject(SelectedCartoon);
+
 			Seasons = new BindableCollection<CartoonSeason>(result.CartoonSeasons);
 			VoiceOvers = new BindableCollection<CartoonVoiceOver>(result.CartoonVoiceOvers);
-			if(Seasons.Count > 0)
-			{
-				SelectedSeason = Seasons.First();
-			}
+			SelectedSeason = Seasons.FirstOrDefault();
 		}
 
 		public async void UpdateVoiceOverList()
 		{
-			if (SettingsHelper.GlobalIdList.CartoonId == 0) return;
+			if(SettingsHelper.GlobalIdList.CartoonId == 0)
+				return;
 
 			Cartoon cartoon;
 			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
 			{
 				cartoon = await ctx.Cartoons
-				                   .Include(c => c.CartoonVoiceOvers)
-				                   .SingleAsync(c => c.CartoonId == SettingsHelper.GlobalIdList.CartoonId);
+								   .Include(c => c.CartoonVoiceOvers)
+								   .SingleAsync(c => c.CartoonId == SettingsHelper.GlobalIdList.CartoonId);
 			}
 
 			VoiceOvers = new BindableCollection<CartoonVoiceOver>(cartoon.CartoonVoiceOvers);

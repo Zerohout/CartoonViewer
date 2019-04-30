@@ -60,6 +60,8 @@
 						return "Удалить объект?";
 					case DialogType.OVERWRITE_FILE:
 						return "Перезаписать файл?";
+					case DialogType.QUESTION:
+						return "Вы хотите это сделать?";
 					case DialogType.INFO:
 						return "Информация.";
 					default:
@@ -86,6 +88,8 @@
 						return $"Вы действительно хотите удалить выбранный объект?";
 					case DialogType.OVERWRITE_FILE:
 						return "Файл уже существует, перезаписать его?";
+					case DialogType.QUESTION:
+						return "Да или нет?";
 					case DialogType.INFO:
 						return "Информация для пользователя.";
 					default:
@@ -101,6 +105,7 @@
 			CurrentType == DialogType.SAVE_CHANGES ||
 			CurrentType == DialogType.CANCEL_CHANGES ||
 			CurrentType == DialogType.REMOVE_OBJECT ||
+			CurrentType == DialogType.QUESTION ||
 			CurrentType == DialogType.OVERWRITE_FILE
 				? Visibility.Visible
 				: Visibility.Hidden;
@@ -111,6 +116,7 @@
 			CurrentType == DialogType.SAVE_CHANGES ||
 			CurrentType == DialogType.CANCEL_CHANGES ||
 			CurrentType == DialogType.REMOVE_OBJECT ||
+			CurrentType == DialogType.QUESTION ||
 			CurrentType == DialogType.OVERWRITE_FILE
 				? Visibility.Visible
 				: Visibility.Hidden;

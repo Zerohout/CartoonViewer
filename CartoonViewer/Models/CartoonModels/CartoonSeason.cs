@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.ComponentModel.DataAnnotations;
 	using System.ComponentModel.DataAnnotations.Schema;
+	using Newtonsoft.Json;
 
 	/// <summary>
 	/// Сезон мультсериала
@@ -30,6 +31,7 @@
 
 		[ForeignKey("Cartoon")]
 		public int CartoonId { get; set; }
+		[JsonIgnore]
 		public Cartoon Cartoon { get; set; }
 	}
 }

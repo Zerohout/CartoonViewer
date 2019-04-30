@@ -11,6 +11,7 @@
 
 		protected override void OnInitialize()
 		{
+			DisplayName = "Редактор эпизодов";
 			LoadSeasonData();
 			base.OnInitialize();
 		}

@@ -16,7 +16,6 @@
     <vms:EpisodesEditingViewModel.EditableEpisode>
         <cartoonModels:CartoonEpisode
             Name="Название"
-            CreditsStart="0:22:30"
             Description="Описание эпизода" />
     </vms:EpisodesEditingViewModel.EditableEpisode>
     <vms:EpisodesEditingViewModel.Jumpers>
@@ -26,7 +25,7 @@
     </vms:EpisodesEditingViewModel.Jumpers>
     <vms:EpisodesEditingViewModel.SelectedJumper>
         <cartoonModels:Jumper
-            JumperStartTime="0:0:15"
+            StartTime="0:0:15"
             Number="1"
             SkipCount="7" />
     </vms:EpisodesEditingViewModel.SelectedJumper>

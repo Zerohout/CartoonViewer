@@ -12,7 +12,6 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 	using Helpers;
 	using Models.CartoonModels;
 	using Models.SettingModels;
-	using static Helpers.Cloner;
 	using static Helpers.Helper;
 	using static Helpers.SettingsHelper;
 
@@ -29,6 +28,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			using(var ctx = new CVDbContext(AppDataPath))
 			{
 				episodes = await ctx.CartoonEpisodes
+				                    .Include(ce => ce.EpisodeVoiceOvers)
 									.Where(ce => ce.CartoonSeasonId == GlobalIdList.SeasonId).ToListAsync();
 			}
 
@@ -37,85 +37,49 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			SelectedEpisode = Episodes.FirstOrDefault();
 		}
 
-		///// <summary>
-		///// Загрузка данных эпизодов
-		///// </summary>
-		//private void LoadEpisodeData()
-		//{
-		//	CartoonEpisode episode;
-
-		//	using(var ctx = new CVDbContext(AppDataPath))
-		//	{
-		//		episode = ctx.CartoonEpisodes
-		//						   .Include(ce => ce.Jumpers)
-		//						   .Include(e => e.EpisodeVoiceOvers)
-		//						   .Single(e => e.CartoonEpisodeId == GlobalIdList.EpisodeId);
-		//	}
-
-		//	EditableEpisode = CloneEpisode(episode);
-		//	TempEpisode = CloneEpisode(episode);
-
-		//	Jumpers = new BindableCollection<Jumper>(episode.Jumpers);
-		//	EditableJumper = episode.Jumpers.FirstOrDefault();
-
-		//	EpisodeTime = ConvertToEpisodeTime(EditableJumper, EditableEpisode);
-		//	TempEpisodeTime = ConvertToEpisodeTime(EditableJumper, EditableEpisode);
-
-		//	VoiceOvers = new BindableCollection<CartoonVoiceOver>(CloneVoiceOverList(episode.EpisodeVoiceOvers));
-
-		//	IsNotEditing = false;
-
-		//	NotifyOfPropertyChange(() => CanSaveChanges);
-		//	//NotifyOfPropertyChange(() => CanSaveChanges);
-		//	//NotifyOfPropertyChange(() => CanCancelChanges);
-		//}
-
-		private CartoonEpisode GetDefaultEpisode(int count)
-		{
-			var result = new CartoonEpisode
-			{
-				CartoonSeasonId = GlobalIdList.SeasonId,
-				CartoonId = GlobalIdList.CartoonId,
-				Jumpers = new List<Jumper> { new Jumper { Number = 1 } },
-				Name = $"Название {count} эпизода",
-				Description = $"Описание {count} эпизода",
-				Number = count
-			};
-
-			result.Duration = CalculatingDuration();
-
-			return result;
-		}
-
 		/// <summary>
 		/// Конвертировать значения Эпизода в значения класса EpisodeTime
 		/// </summary>
+		/// <param name="episodeOption">редактируемая опция</param>
 		/// <param name="jumper">редактируемый джампер</param>
-		/// <param name="episode">редактируемый эпизод</param>
 		/// <returns></returns>
-		private EpisodeTime ConvertToEpisodeTime(Jumper jumper, CartoonEpisode episode) => new EpisodeTime
+		private EpisodeTime ConvertToEpisodeTime(EpisodeOption episodeOption, Jumper jumper) => new EpisodeTime
 		{
-			JumperTimeHours = jumper?.JumperStartTime.Hours,
-			JumperTimeMinutes = jumper?.JumperStartTime.Minutes,
-			JumperTimeSeconds = jumper?.JumperStartTime.Seconds,
+			JumperTimeHours = jumper?.StartTime.Hours,
+			JumperTimeMinutes = jumper?.StartTime.Minutes,
+			JumperTimeSeconds = jumper?.StartTime.Seconds,
 			SkipCount = jumper?.SkipCount,
-			CreditsTimeHours = episode?.CreditsStart.Hours,
-			CreditsTimeMinutes = episode?.CreditsStart.Minutes,
-			CreditsTimeSeconds = episode?.CreditsStart.Seconds
+			CreditsTimeHours = episodeOption?.CreditsStart.Hours,
+			CreditsTimeMinutes = episodeOption?.CreditsStart.Minutes,
+			CreditsTimeSeconds = episodeOption?.CreditsStart.Seconds
 		};
 
 		/// <summary>
 		/// Подсчет длительности эпизода
 		/// </summary>
 		/// <returns></returns>
-		private TimeSpan CalculatingDuration()
+		private TimeSpan CalculatingDuration(EpisodeOption episodeOption = null)
 		{
-			if(EditableEpisode == null)
+			int totalSkipCount;
+
+			if (episodeOption != null)
+			{
+				totalSkipCount = episodeOption.Jumpers.Sum(j => j?.SkipCount ?? 0);
+
+				return episodeOption.CreditsStart - new TimeSpan(0, 0, totalSkipCount * 5);
+			}
+
+
+			if(SelectedEpisodeOption == null)
 				return new TimeSpan();
 
-			var totalSkipCount = EditableEpisode.Jumpers.Sum(j => j.SkipCount);
+			totalSkipCount = Jumpers.Sum(j => j.SkipCount);
 
-			return EditableEpisode.CreditsStart - new TimeSpan(0, 0, totalSkipCount * 5);
+			var duration = SelectedEpisodeOption.CreditsStart - new TimeSpan(0, 0, totalSkipCount * 5);
+
+			//SelectedEpisodeOption.Duration = duration;
+
+			return duration;
 		}
 
 		/// <summary>
@@ -135,7 +99,12 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 								   .SingleAsync(e => e.CartoonEpisodeId == GlobalIdList.EpisodeId);
 			}
 
-			VoiceOvers = new BindableCollection<CartoonVoiceOver>(CloneVoiceOverList(episode.EpisodeVoiceOvers));
+			foreach (var vo in episode.EpisodeVoiceOvers)
+			{
+				vo.SelectedEpisodeId = episode.CartoonEpisodeId;
+			}
+
+			VoiceOvers = new BindableCollection<CartoonVoiceOver>(episode.EpisodeVoiceOvers);
 		}
 
 		/// <summary>
@@ -207,11 +176,15 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			NotifyOfPropertyChange(() => CanSaveChanges);
 			NotifyOfPropertyChange(() => CanCancelChanges);
 			NotifyOfPropertyChange(() => CanCancelEditing);
+			NotifyOfPropertyChange(() => CanEditPreviousEpisode);
+			NotifyOfPropertyChange(() => CanEditNextEpisode);
 		}
 
 		private void NotifyEditingProperties()
 		{
 			NotifyOfPropertyChange(() => CanCancelEditing);
+			NotifyOfPropertyChange(() => CanEditPreviousEpisode);
+			NotifyOfPropertyChange(() => CanEditNextEpisode);
 			NotifyOfPropertyChange(() => EpisodeEditingVisibility);
 			NotifyOfPropertyChange(() => CanSaveChanges);
 			NotifyOfPropertyChange(() => CanCancelChanges);

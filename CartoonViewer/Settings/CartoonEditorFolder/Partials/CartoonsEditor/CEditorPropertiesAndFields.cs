@@ -7,8 +7,6 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 	public partial class CartoonsEditorViewModel : Conductor<Screen>.Collection.OneActive
 	{
-		#region Private fields
-
 		private object _selectedWebSite;
 		private object _selectedCartoon;
 		private object _selectedSeason;
@@ -16,9 +14,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		private BindableCollection<Cartoon> _cartoons = new BindableCollection<Cartoon>();
 		private BindableCollection<CartoonSeason> _seasons = new BindableCollection<CartoonSeason>();
 
-		#endregion
-
-		#region Properties
+		
 		/// <summary>
 		/// Для корректного отображения элементов в конструкторе XAML
 		/// Без свойство, конструктор обращается к бд, чем вызывает серьезное зависание
@@ -130,8 +126,6 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			SelectedCartoon == null
 				? Visibility.Hidden
 				: Visibility.Visible;
-
-
-		#endregion
+		
 	}
 }

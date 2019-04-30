@@ -227,7 +227,7 @@
                     Grid.Column="0"
                     cal:Message.Attach="[Event KeyDown]=[Action NumericValidation($eventArgs)]; [Event TextChanged]=[Action TextChanged()]"
                     Style="{StaticResource EpisodesCountTextBoxStyle}"
-                    Text="{Binding GeneralSettings.EpisodesCount, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}">
+                    Text="{Binding EpisodeCount, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}">
                     <TextBox.RenderTransform>
                         <RotateTransform Angle="-5" />
                     </TextBox.RenderTransform>

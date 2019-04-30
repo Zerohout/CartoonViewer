@@ -104,16 +104,21 @@
         <Setter Property="Foreground" Value="DodgerBlue"/>
         <Setter Property="Kind" Value="ArrowDownBold"/>
     </Style>
-    <!--<Style x:Key="EditListMoveLeftBtnIconStyle" TargetType="iconPacks:PackIconMaterial"
+    <Style x:Key="EditListDownBtnIconStyle" TargetType="iconPacks:PackIconMaterial"
            BasedOn="{StaticResource EditListMaterialBtnIconStyle}">
         <Setter Property="Foreground" Value="DodgerBlue"/>
-        <Setter Property="Kind" Value="ArrowLeftBold"/>
+        <Setter Property="Kind" Value="ArrowDownBold"/>
+    </Style>
+    <Style x:Key="EditListUpBtnIconStyle" TargetType="iconPacks:PackIconMaterial"
+           BasedOn="{StaticResource EditListMaterialBtnIconStyle}">
+        <Setter Property="Foreground" Value="DodgerBlue"/>
+        <Setter Property="Kind" Value="ArrowUpBold"/>
     </Style>
     <Style x:Key="EditListMoveRightBtnIconStyle" TargetType="iconPacks:PackIconMaterial"
            BasedOn="{StaticResource EditListMaterialBtnIconStyle}">
         <Setter Property="Foreground" Value="DodgerBlue"/>
         <Setter Property="Kind" Value="ArrowRightBold"/>
-    </Style>-->
+    </Style>
     <Style x:Key="EditListUnlockBtnIconStyle" 
            BasedOn="{StaticResource EditListFontAwesomelBtnIconStyle}"
            TargetType="iconPacks:PackIconFontAwesome" >

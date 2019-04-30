@@ -9,6 +9,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 	using Database;
 	using Helpers;
 	using Models.CartoonModels;
+	using static Helpers.Helper;
 
 	public partial class VoiceOversEditingViewModel : Screen, ISettingsViewModel
 	{
@@ -28,8 +29,8 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 			if(IsNotEditing is false)
 			{
-				EditedVoiceOver = Cloner.CloneVoiceOver(SelectedGlobalVoiceOver);
-				TempEditedVoiceOver = Cloner.CloneVoiceOver(SelectedGlobalVoiceOver);
+				EditedVoiceOver = CloneObject<CartoonVoiceOver>(SelectedGlobalVoiceOver);
+				TempEditedVoiceOver = CloneObject<CartoonVoiceOver>(SelectedGlobalVoiceOver);
 			}
 		}
 
@@ -251,6 +252,8 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			}
 
 			Cartoons = new BindableCollection<Cartoon>(cartoons);
+			CartoonIndexes.EndIndex = Cartoons.Count - 1;
+			NotifyOfPropertyChange(() => CanSelectNextCartoon);
 		}
 
 		/// <summary>
@@ -281,8 +284,10 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			}
 			else
 			{
+				CartoonIndexes.CurrentIndex = Cartoons.IndexOf(value);
 				LoadData();
 			}
+			NotifyOfPropertyChange(() => CanSelectNextCartoon);
 		}
 
 		#endregion
@@ -305,6 +310,8 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			}
 
 			Seasons = new BindableCollection<CartoonSeason>(seasons);
+			SeasonIndexes.EndIndex = Seasons.Count - 1;
+			NotifyOfPropertyChange(() => CanSelectNextSeason);
 		}
 
 		/// <summary>
@@ -333,8 +340,10 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			}
 			else
 			{
+				SeasonIndexes.CurrentIndex = Seasons.IndexOf(value);
 				LoadData();
 			}
+			NotifyOfPropertyChange(() => CanSelectNextSeason);
 		}
 
 		#endregion
@@ -358,6 +367,8 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 			Episodes.Clear();
 			Episodes.AddRange(episodes);
+			EpisodeIndexes.EndIndex = Episodes.Count - 1;
+			NotifyOfPropertyChange(() => CanSelectNextEpisode);
 		}
 
 		/// <summary>
@@ -386,8 +397,10 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			}
 			else
 			{
+				EpisodeIndexes.CurrentIndex = Episodes.IndexOf(value);
 				LoadData();
 			}
+			NotifyOfPropertyChange(() => CanSelectNextEpisode);
 		}
 
 		#endregion
@@ -471,6 +484,11 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 					LoadData();
 					NotifyCartoonData();
 				}
+				else
+				{
+					SelectedCartoon = _cartoons.FirstOrDefault();
+					NotifyCartoonData();
+				}
 
 				return;
 			}
@@ -491,6 +509,11 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 					LoadData();
 					NotifySeasonData();
 				}
+				else
+				{
+					SelectedSeason = _seasons.FirstOrDefault();
+					NotifySeasonData();
+				}
 
 				return;
 			}
@@ -507,6 +530,11 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				{
 					_selectedEpisode = _episodes.FirstOrDefault(ce => ce.CartoonEpisodeId == IdList.EpisodeId);
 					LoadData();
+					NotifyEpisodeData();
+				}
+				else
+				{
+					SelectedEpisode = _episodes.FirstOrDefault();
 					NotifyEpisodeData();
 				}
 				return;

@@ -11,8 +11,9 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 	using Database;
 	using Helpers;
 	using Models.CartoonModels;
-	using static Helpers.Cloner;
+	using Newtonsoft.Json;
 	using static Helpers.Helper;
+	using static Helpers.SettingsHelper;
 
 	public partial class CartoonsEditingViewModel : Screen, ISettingsViewModel
 	{
@@ -62,14 +63,22 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			}
 		}
 
-
+		public void TBoxDoubleClick(TextBox source)
+		{
+			source.SelectAll();
+		}
 
 		/// <summary>
 		/// Выбор первого в списке сезона
 		/// (для обхода бага с неактивным списком при наведении курсора)
 		/// P.S. иного решения найти пока что не удалось.
 		/// </summary>
-		public void SelectSeason() { SelectedSeason = Seasons.First(); }
+		public void SelectSeason()
+		{
+			if(CanSelectSeason is false) return;
+
+			SelectedSeason = Seasons.First();
+		}
 
 		public bool CanSelectSeason
 		{
@@ -90,8 +99,8 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		public void EditVoiceOvers()
 		{
 			var wm = new WindowsManagerViewModel(new VoiceOversEditingViewModel(
-				                                     websiteId: SettingsHelper.GlobalIdList.WebSiteId,
-				                                     cartoonId: SettingsHelper.GlobalIdList.CartoonId));
+													 websiteId: GlobalIdList.WebSiteId,
+													 cartoonId: GlobalIdList.CartoonId));
 
 			WinMan.ShowDialog(wm);
 
@@ -107,7 +116,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 			var newSeason = new CartoonSeason
 			{
-				CartoonId = SettingsHelper.GlobalIdList.CartoonId,
+				CartoonId = GlobalIdList.CartoonId,
 				Number = count,
 				Checked = true,
 				CartoonEpisodes = new List<CartoonEpisode>()
@@ -118,7 +127,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			((CartoonsEditorViewModel)Parent).Seasons.Add(newSeason);
 			NotifyOfPropertyChange(() => ((CartoonsEditorViewModel)Parent).Seasons);
 
-			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
+			using(var ctx = new CVDbContext(AppDataPath))
 			{
 				ctx.CartoonSeasons.Add(Seasons.Last());
 				await ctx.SaveChangesAsync();
@@ -135,6 +144,8 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public void EditSeason()
 		{
+			if(CanEditSeason is false) return;
+
 			var parent = ((CartoonsEditorViewModel)Parent);
 
 			parent.SelectedSeason = parent.Seasons
@@ -148,7 +159,9 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public void RemoveSeason()
 		{
-			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
+			if(CanRemoveSeason is false) return;
+
+			using(var ctx = new CVDbContext(AppDataPath))
 			{
 				var temp = ctx.CartoonSeasons.Find(SelectedSeason.CartoonSeasonId);
 				ctx.Entry(temp).State = EntityState.Deleted;
@@ -172,6 +185,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public void CancelSelection()
 		{
+			if(CanCancelSelection is false) return;
 			SelectedSeason = null;
 		}
 
@@ -182,11 +196,12 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public async void SaveChanges()
 		{
-			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
+			if(CanSaveChanges is false) return;
+			using(var ctx = new CVDbContext(AppDataPath))
 			{
 				var cartoon = ctx.Cartoons
 								 .Include(c => c.CartoonUrls)
-								 .Single(c => c.CartoonId == SettingsHelper.GlobalIdList.CartoonId);
+								 .Single(c => c.CartoonId == GlobalIdList.CartoonId);
 
 				cartoon.Name = SelectedCartoon.Name;
 				cartoon.Description = SelectedCartoon.Description;
@@ -199,8 +214,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				await ctx.SaveChangesAsync();
 			}
 
-			TempCartoon = CloneCartoon(SelectedCartoon);
-			TempCartoonUrl = CloneCartoonUrl(SelectedCartoonUrl);
+			TempCartoonSnapshot = JsonConvert.SerializeObject(SelectedCartoon);
 
 			NotifyOfPropertyChange(() => CanSaveChanges);
 			NotifyOfPropertyChange(() => HasChanges);
@@ -214,71 +228,75 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			parent.NotifyOfPropertyChange(() => parent.Cartoons);
 		}
 
-		public bool CanSaveChanges
-		{
-			get
-			{
-				if(SelectedCartoon == null ||
-					SelectedCartoonUrl == null ||
-					TempCartoon == null ||
-					TempCartoonUrl == null)
-				{
-					return false;
-				}
+		public bool CanSaveChanges => HasChanges;
 
-				if(string.IsNullOrEmpty(SelectedCartoonUrl.Url) ||
-					string.IsNullOrEmpty(SelectedCartoon.Name))
-				{
-					return false;
-				}
-
-				//if(((CartoonsEditorViewModel)Parent).Cartoons.Any(c => c.Name == SelectedCartoon.Name))
-				//{
-				//	return false;
-				//}
-
-				if(SelectedCartoonUrl.Url == TempCartoonUrl.Url &&
-					SelectedCartoon.Name == TempCartoon.Name &&
-					SelectedCartoon.Description == TempCartoon.Description)
-				{
-					return false;
-				}
-
-				return true;
-			}
-		}
-
+		/// <summary>
+		/// Создать новый м/с
+		/// </summary>
 		public void CreateNewCartoon()
 		{
-			var parent = ((CartoonsEditorViewModel)Parent);
-			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
+			if(CanCreateNewCartoon is false) return;
+			using(var ctx = new CVDbContext(AppDataPath))
 			{
+				var newCartoon = new Cartoon
+				{
+					Name = SelectedCartoon.Name,
+					Checked = true,
+					Description = SelectedCartoon.Description
+				};
 
-
-				SelectedCartoonUrl.WebSiteUrl = ctx.CartoonWebSites.Find(SettingsHelper.GlobalIdList.WebSiteId)?.Url;
-				SelectedCartoonUrl.Checked = true;
-				SelectedCartoon.CartoonUrls.Add(SelectedCartoonUrl);
-
-				ctx.Cartoons.Add(SelectedCartoon);
+				ctx.Cartoons.Add(newCartoon);
+				ctx.SaveChanges();
+				ctx.CartoonWebSites
+				   .First(cws => cws.CartoonWebSiteId == GlobalIdList.WebSiteId)
+				   .Cartoons.Add(ctx.Cartoons.ToList().Last());
 				ctx.SaveChanges();
 
-				var newCartoon = ctx.Cartoons.Single(c => c.Name == SelectedCartoon.Name);
-				ctx.CartoonWebSites.Find(SettingsHelper.GlobalIdList.WebSiteId)?.Cartoons.Add(newCartoon);
+				newCartoon = ctx.Cartoons.ToList().Last();
+				GlobalIdList.CartoonId = newCartoon.CartoonId;
+
+				CartoonVoiceOver voiceOver;
+				if(VoiceOvers.Any() is false)
+				{
+					ctx.VoiceOvers.Add(new CartoonVoiceOver
+					{
+						Name = $"{SelectedCartoon.Name}_VO"
+					});
+					ctx.SaveChanges();
+					voiceOver = ctx.VoiceOvers.ToList().Last();
+				}
+				else
+				{
+					voiceOver = ctx.VoiceOvers
+								   .First(vo => vo.Cartoons
+												  .Any(c => c.CartoonId == newCartoon.CartoonId));
+				}
+
+				voiceOver.Cartoons.Add(newCartoon);
+				newCartoon.CartoonVoiceOvers.Add(voiceOver);
+
+				var parent = ((CartoonsEditorViewModel)Parent);
+
+				var cartoonUrl = new CartoonUrl
+				{
+					CartoonWebSiteId = parent.SelectedWebSite.CartoonWebSiteId,
+					WebSiteUrl = parent.SelectedWebSite.Url,
+					CartoonId = newCartoon.CartoonId,
+					Checked = true,
+					Url = SelectedCartoonUrl.Url
+				};
+				
+				newCartoon.CartoonUrls.Add(cartoonUrl);
 				ctx.SaveChanges();
 
-				TempCartoon = CloneCartoon(SelectedCartoon);
-				TempCartoonUrl = CloneCartoonUrl(SelectedCartoonUrl);
-
+				TempCartoonSnapshot = JsonConvert.SerializeObject(SelectedCartoon);
 				NotifyOfPropertyChange(() => CanSaveChanges);
-				NotifyOfPropertyChange(() => HasChanges);
 
-				SettingsHelper.GlobalIdList.CartoonId = newCartoon.CartoonId;
 				parent.Cartoons.Add(newCartoon);
 				parent.NotifyOfPropertyChange(() => parent.Cartoons);
-				parent.Cartoons.Remove(parent.Cartoons.First(c => c.Name == SettingsHelper.NewElementString));
-				parent.Cartoons.Add(new Cartoon { Name = SettingsHelper.NewElementString });
-				parent.SelectedCartoon = parent.Cartoons.First(c => c.CartoonId == SettingsHelper.GlobalIdList.CartoonId);
-
+				parent.Cartoons.Remove(parent.Cartoons.First(c => c.Name == NewElementString));
+				parent.Cartoons.Add(new Cartoon { Name = NewElementString });
+				parent.SelectedCartoon = parent.Cartoons.First(c => c.CartoonId == GlobalIdList.CartoonId);
 			}
 		}
 
@@ -294,7 +312,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 				if(string.IsNullOrEmpty(SelectedCartoon.Name) ||
 					string.IsNullOrEmpty(SelectedCartoonUrl.Url) ||
-					SelectedCartoon.Name == SettingsHelper.NewElementString)
+					SelectedCartoon.Name == NewElementString)
 				{
 					return false;
 				}
@@ -307,7 +325,9 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				return true;
 			}
 		}
-
+		/// <summary>
+		/// Удалить выбраный м/с
+		/// </summary>
 		public void RemoveCartoon()
 		{
 			var dvm = new DialogViewModel(null, DialogType.REMOVE_OBJECT);
@@ -323,10 +343,9 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 					return;
 			}
 
-			var parent = ((CartoonsEditorViewModel)Parent);
-			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
+			using(var ctx = new CVDbContext(AppDataPath))
 			{
-				var cartoon = ctx.Cartoons.Find(SettingsHelper.GlobalIdList.CartoonId);
+				var cartoon = ctx.Cartoons.Find(GlobalIdList.CartoonId);
 
 				if(cartoon != null)
 					ctx.Cartoons.Remove(cartoon);
@@ -334,14 +353,13 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				var voiceOverForRemove = ctx.VoiceOvers
 											.Where(vo => vo.Cartoons.Count == 1)
 											.Where(vo => vo.Cartoons
-														   .Any(c => c.CartoonId == SettingsHelper.GlobalIdList.CartoonId));
+														   .Any(c => c.CartoonId == GlobalIdList.CartoonId));
 				ctx.VoiceOvers.RemoveRange(voiceOverForRemove);
-
-
-
+				
 				ctx.SaveChanges();
 			}
 
+			var parent = ((CartoonsEditorViewModel)Parent);
 			parent.Cartoons.Remove(parent.SelectedCartoon);
 		}
 

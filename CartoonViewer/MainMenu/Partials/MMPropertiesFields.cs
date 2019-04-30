@@ -15,9 +15,6 @@ namespace CartoonViewer.MainMenu.ViewModels
 		private CVDbContext CvDbContext = new CVDbContext(SettingsHelper.AppDataPath);
 		private readonly Random rnd = new Random();
 		private BindableCollection<Cartoon> _cartoons = new BindableCollection<Cartoon>();
-		private List<Cartoon> _checkedCartoons = new List<Cartoon>();
-		private TimeSpan _delayedSkipDuration;
-		private List<int> _randomCartoonNumberList = new List<int>();
 
 		private IWebElement WebElement;
 		private bool _isPaused;
@@ -26,6 +23,9 @@ namespace CartoonViewer.MainMenu.ViewModels
 		private int _currentEpisodeIndex;
 		private Uri _background = new Uri(MMBackgroundUri, UriKind.Relative);
 		private string _episodesCountRemainingString = "Серий к просмотру";
+
+		public TimeSpan TotalEpisodeTime { get; set; }
+
 
 		/// <summary>
 		/// Список мультсериалов
@@ -40,31 +40,7 @@ namespace CartoonViewer.MainMenu.ViewModels
 			}
 		}
 
-		/// <summary>
-		/// Список выбранных мультсериалов
-		/// </summary>
-		public List<Cartoon> CheckedCartoons
-		{
-			get => _checkedCartoons;
-			set
-			{
-				_checkedCartoons = value;
-				NotifyOfPropertyChange(() => CheckedCartoons);
-			}
-		}
-
-		/// <summary>
-		/// Список случайных номеров мультсериалов для просмотра
-		/// </summary>
-		public List<int> RandomCartoonNumberList
-		{
-			get => _randomCartoonNumberList;
-			set
-			{
-				_randomCartoonNumberList = value;
-				NotifyOfPropertyChange(() => RandomCartoonNumberList);
-			}
-		}
+		public List<CartoonEpisode> CheckedEpisodes { get; set; } = new List<CartoonEpisode>();
 
 		/// <summary>
 		/// Индекс текущей серии
@@ -92,6 +68,23 @@ namespace CartoonViewer.MainMenu.ViewModels
 			}
 		}
 
+		private int? _episodeCount;
+
+		public int? EpisodeCount
+		{
+			get => _episodeCount;
+			set
+			{
+				if (value == null || value < 0)
+				{
+					_episodeCount = 3;
+				}
+				_episodeCount = value;
+				NotifyOfPropertyChange(() => EpisodeCount);
+			}
+		}
+
+
 
 		#region Флаги
 
@@ -108,6 +101,8 @@ namespace CartoonViewer.MainMenu.ViewModels
 			}
 		}
 
+		public bool IsNowPause { get; set; }
+
 		/// <summary>
 		/// Флаг выключения компьютера
 		/// </summary>
@@ -121,10 +116,7 @@ namespace CartoonViewer.MainMenu.ViewModels
 			}
 		}
 
-		/// <summary>
-		/// Флаг установки отложенного старта
-		/// </summary>
-		public bool IsDelayedSkip { get; set; }
+		
 		/// <summary>
 		/// Флаг переключения серии
 		/// </summary>
@@ -133,19 +125,6 @@ namespace CartoonViewer.MainMenu.ViewModels
 		#endregion
 
 		#region Свойства связанные со временем
-
-		/// <summary>
-		/// Продолжительность отложенного пропуска
-		/// </summary>
-		public TimeSpan DelayedSkipDuration
-		{
-			get => _delayedSkipDuration;
-			set
-			{
-				_delayedSkipDuration = value;
-				NotifyOfPropertyChange(() => DelayedSkipDuration);
-			}
-		}
 
 		/// <summary>
 		/// Конечное время просмотра указанного числа серий

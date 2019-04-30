@@ -184,6 +184,23 @@
                                 </Setter.Value>
                             </Setter>
                         </DataTrigger>
+                        <DataTrigger Binding="{Binding CurrentType}" Value="QUESTION">
+                            <Setter Property="Margin" Value="30"/>
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <StackPanel Orientation="Vertical">
+                                        <iconPacks:PackIconFontAwesome
+                                            Style="{StaticResource DlgYesActionBtnIconStyle}" />
+                                        <TextBlock
+                                            Style="{StaticResource DlgYesActionBtnTBlock}"
+                                            Text="Да, я" />
+                                        <TextBlock
+                                            Style="{StaticResource DlgYesActionBtnTBlock}"
+                                            Text="хочу этого." />
+                                    </StackPanel>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </Button.Style>
@@ -281,6 +298,23 @@
                                         <TextBlock
                                             Style="{StaticResource DlgCreateCopyActionBtnTBlock}"
                                             Text="копию" />
+                                    </StackPanel>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding CurrentType}" Value="QUESTION">
+                            <Setter Property="Margin" Value="30"/>
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <StackPanel Orientation="Vertical">
+                                        <iconPacks:PackIconFontAwesome
+                                            Style="{StaticResource DlgNoActionBtnIconStyle}" />
+                                        <TextBlock
+                                            Style="{StaticResource DlgNoActionBtnTBlock}"
+                                            Text="Нет, я не" />
+                                        <TextBlock
+                                            Style="{StaticResource DlgNoActionBtnTBlock}"
+                                            Text="хочу этого" />
                                     </StackPanel>
                                 </Setter.Value>
                             </Setter>

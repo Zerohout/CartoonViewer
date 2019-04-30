@@ -104,6 +104,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <TextBlock
                     Grid.Row="0"
@@ -141,6 +142,19 @@
                         Padding="-3"
                         Style="{StaticResource EditListCancelBtnIconStyle}" />
                 </Button>
+                <Button
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    Margin="2.5,1.25,2.5,2.5"
+                    VerticalContentAlignment="Center"
+                    cal:Message.Attach="[Event Click]=[Action SelectNextCartoon()]"
+                    ToolTip="Выбрать следующий м/с">
+                    <iconPacks:PackIconMaterial
+                        Width="15"
+                        Height="12"
+                        Padding="-3"
+                        Style="{StaticResource EditListDownBtnIconStyle}" />
+                </Button>
             </Grid>
         </Grid>
 
@@ -155,6 +169,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
@@ -199,6 +214,20 @@
                     Padding="-3"
                     Style="{StaticResource EditListCancelBtnIconStyle}" />
             </Button>
+            <Button
+                Grid.Row="0"
+                Grid.Column="3"
+                Margin="2.5,1.25,2.5,2.5"
+                VerticalContentAlignment="Center"
+                cal:Message.Attach="[Event Click]=[Action SelectNextSeason()]"
+                ToolTip="Выбрать следующий сезон"
+                Visibility="{Binding SelectedCartoonVisibility}">
+                <iconPacks:PackIconMaterial
+                    Width="15"
+                    Height="12"
+                    Padding="-3"
+                    Style="{StaticResource EditListDownBtnIconStyle}" />
+            </Button>
 
             <TextBlock
                 Grid.Row="1"
@@ -239,6 +268,20 @@
                     Height="12"
                     Padding="-3"
                     Style="{StaticResource EditListCancelBtnIconStyle}" />
+            </Button>
+            <Button
+                Grid.Row="1"
+                Grid.Column="3"
+                Margin="2.5,1.25,2.5,2.5"
+                VerticalContentAlignment="Center"
+                cal:Message.Attach="[Event Click]=[Action SelectNextEpisode()]"
+                ToolTip="Выбрать следующий эпизод"
+                Visibility="{Binding SelectedSeasonVisibility}">
+                <iconPacks:PackIconMaterial
+                    Width="15"
+                    Height="12"
+                    Padding="-3"
+                    Style="{StaticResource EditListDownBtnIconStyle}" />
             </Button>
         </Grid>
 

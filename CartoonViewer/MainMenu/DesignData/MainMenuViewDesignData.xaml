@@ -17,7 +17,7 @@
         <cartoonModels:Cartoon Name="Удивительный мир Гамбола" />
     </vms:MainMenuViewModel.Cartoons>
     <vms:MainMenuViewModel.GeneralSettings>
-        <settingsModel:GeneralSettingsValue EpisodesCount="11500" />
+        <settingsModel:GeneralSettingsValue DefaultEpisodesCount="11500" />
     </vms:MainMenuViewModel.GeneralSettings>
 
 </vms:MainMenuViewModel>

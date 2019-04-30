@@ -1,8 +1,12 @@
 ﻿namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 {
+	using System.Linq;
+	using System.Windows;
 	using Helpers;
 	using Models.CartoonModels;
+	using Newtonsoft.Json;
 	using Screen = Caliburn.Micro.Screen;
+	using static Helpers.Helper;
 
 	public partial class CartoonsEditingViewModel : Screen, ISettingsViewModel
 	{
@@ -14,22 +18,25 @@
 		{
 			if(cartoon.Name == SettingsHelper.NewElementString)
 			{
-				SelectedCartoon = Cloner.CloneCartoon(cartoon);
-
-				TempCartoon = Cloner.CloneCartoon(SelectedCartoon);
-				SelectedCartoonUrl = new CartoonUrl
+				cartoon.CartoonUrls.Add(new CartoonUrl
 				{
 					CartoonWebSiteId = SettingsHelper.GlobalIdList.WebSiteId
-				};
-				TempCartoonUrl = Cloner.CloneCartoonUrl(SelectedCartoonUrl);
-				//CreateNewCartoonVisibility = Visibility.Visible;
-				//SaveChangesVisibility = Visibility.Hidden;
+				});
+
+
+				SelectedCartoon = CloneObject<Cartoon>(cartoon);
+				SelectedCartoonUrl = SelectedCartoon.CartoonUrls.First();
+
+				TempCartoonSnapshot = JsonConvert.SerializeObject(SelectedCartoon);
+
+				NotifyOfPropertyChange(() => CreateNewCartoonVisibility);
+				NotifyOfPropertyChange(() => SaveChangesVisibility);
 				return;
 			}
 
 			LoadData();
-			//CreateNewCartoonVisibility = Visibility.Hidden;
-			//SaveChangesVisibility = Visibility.Visible;
+			NotifyOfPropertyChange(() => CreateNewCartoonVisibility);
+			NotifyOfPropertyChange(() => SaveChangesVisibility);
 			NotifySeasonList();
 		}
 
@@ -41,14 +48,10 @@
 		}
 
 
-
-
-
-
-
-
-
-
-
+		protected override void OnInitialize()
+		{
+			DisplayName = "Редактор мультсериалов";
+			base.OnInitialize();
+		}
 	}
 }

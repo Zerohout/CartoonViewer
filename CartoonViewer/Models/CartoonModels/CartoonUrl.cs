@@ -2,6 +2,7 @@
 {
 	using System.ComponentModel.DataAnnotations;
 	using System.ComponentModel.DataAnnotations.Schema;
+	using Newtonsoft.Json;
 
 	/// <summary>
 	/// Ссылки мультсериала (Сайт с м/с или сама ссылка на м/с, статус выбора)
@@ -18,10 +19,12 @@
 
 		[ForeignKey("CartoonWebSite")]
 		public int CartoonWebSiteId { get; set; }
+
 		public CartoonWebSite CartoonWebSite { get; set; }
 
 		[ForeignKey("Cartoon")]
 		public int CartoonId { get; set; }
+		[JsonIgnore]
 		public Cartoon Cartoon { get; set; }
 	}
 }

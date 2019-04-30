@@ -5,6 +5,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 	using Caliburn.Micro;
 	using Helpers;
 	using Models.CartoonModels;
+	using Newtonsoft.Json;
 	using static Helpers.Helper;
 
 	public partial class CartoonsEditingViewModel : Screen, ISettingsViewModel
@@ -15,6 +16,8 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		private CartoonSeason _selectedSeason;
 		private CartoonUrl _selectedCartoonUrl;
 
+		public string TempCartoonSnapshot { get; set; }
+
 
 
 		#region Flags
@@ -22,7 +25,17 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// <summary>
 		/// Флаг наличия изменений
 		/// </summary>
-		public bool HasChanges => CanSaveChanges;
+		public bool HasChanges
+		{
+			get
+			{
+				if(SelectedCartoon == null && TempCartoonSnapshot == null) return false;
+
+				var temp = JsonConvert.DeserializeObject<Cartoon>(TempCartoonSnapshot);
+
+				return IsEquals(SelectedCartoon, temp) is false;
+			}
+		}
 
 		#endregion
 
@@ -41,10 +54,6 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			}
 		}
 		/// <summary>
-		/// Временный м\с для отслеживания изменений
-		/// </summary>
-		public Cartoon TempCartoon { get; set; }
-		/// <summary>
 		/// Выбранный CartoonUrl
 		/// </summary>
 		public CartoonUrl SelectedCartoonUrl
@@ -56,10 +65,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				NotifyOfPropertyChange(() => SelectedCartoonUrl);
 			}
 		}
-		/// <summary>
-		/// Временный CartoonUrl для отслеживания изменений
-		/// </summary>
-		public CartoonUrl TempCartoonUrl { get; set; }
+		
 		/// <summary>
 		/// Список озвучек выбранного м/с
 		/// </summary>
@@ -106,7 +112,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// Видимость элементов связанным с изменением м/с
 		/// </summary>
 		public Visibility SaveChangesVisibility =>
-			TempCartoon?.Name == SettingsHelper.NewElementString
+			SelectedCartoon?.Name == SettingsHelper.NewElementString
 				? Visibility.Hidden
 				: Visibility.Visible;
 
@@ -114,7 +120,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// Видимость элементов связанных с созданием нового м/с
 		/// </summary>
 		public Visibility CreateNewCartoonVisibility =>
-			TempCartoon?.Name == SettingsHelper.NewElementString
+			SelectedCartoon?.Name == SettingsHelper.NewElementString
 				? Visibility.Visible
 				: Visibility.Hidden;
 

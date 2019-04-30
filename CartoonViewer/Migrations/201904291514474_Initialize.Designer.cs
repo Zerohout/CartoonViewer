@@ -7,13 +7,13 @@ namespace CartoonViewer.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class ModifiedJumper : IMigrationMetadata
+    public sealed partial class Initialize : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(ModifiedJumper));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Initialize));
         
         string IMigrationMetadata.Id
         {
-            get { return "201904282034118_ModifiedJumper"; }
+            get { return "201904291514474_Initialize"; }
         }
         
         string IMigrationMetadata.Source

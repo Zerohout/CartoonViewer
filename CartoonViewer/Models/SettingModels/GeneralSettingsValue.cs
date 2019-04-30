@@ -5,6 +5,7 @@ namespace CartoonViewer.Models.SettingModels
 	using System.Collections.Generic;
 	using System.Windows;
 	using Caliburn.Micro;
+	using CartoonModels;
 	using Newtonsoft.Json;
 	using static Helpers.Helper;
 
@@ -15,13 +16,13 @@ namespace CartoonViewer.Models.SettingModels
 	[JsonObject(MemberSerialization.OptOut)]
 	public class GeneralSettingsValue : PropertyChangedBase, ICloneable
 	{
-		private int? _episodesCount = 10;
-		private bool _intellectualShutdown = true;
-		private string _selectedIntellectualShutdownIdleTimeType = "минут";
-		private int? _intellectualShutdownIdleTime = 60;
-		private int? _intellectualShutdownReachedHoursTime = 1;
-		private int? _intellectualShutdownReachedMinutesTime = 0;
-		private bool _isIntellectualShutdownRemarkExpand;
+		private int? _defaultEpisodesCount = 10;
+		private bool _nightHelperShutdown = true;
+		private string _selectedNightHelperShutdownIdleTimeType = "минут";
+		private int? _nightHelperShutdownIdleTime = 60;
+		private int? _nightHelperShutdownReachedHoursTime = 1;
+		private int? _nightHelperShutdownReachedMinutesTime = 0;
+		private bool _isNightHelperShutdownRemarkExpand;
 		private bool _watchingInRow;
 		private bool _randomWatching = true;
 		private int? _randomMixCount = 1;
@@ -38,14 +39,14 @@ namespace CartoonViewer.Models.SettingModels
 		/// <summary>
 		/// Количество эпизодов к просмотру по умолчанию
 		/// </summary>
-		public int? EpisodesCount
+		public int? DefaultEpisodesCount
 		{
-			get => _episodesCount > _availableEpisodesCount
+			get => _defaultEpisodesCount > _availableEpisodesCount
 				? _availableEpisodesCount
-				: _episodesCount;
+				: _defaultEpisodesCount;
 			set
 			{
-				if(_episodesCount == value)
+				if(_defaultEpisodesCount == value)
 					return;
 
 				if(value == null || value < 0)
@@ -58,8 +59,8 @@ namespace CartoonViewer.Models.SettingModels
 					value = _availableEpisodesCount;
 				}
 
-				_episodesCount = value;
-				NotifyOfPropertyChange(() => EpisodesCount);
+				_defaultEpisodesCount = value;
+				NotifyOfPropertyChange(() => DefaultEpisodesCount);
 				NotifyOfPropertyChange(() => ApproximateDuration);
 			}
 		}
@@ -81,54 +82,72 @@ namespace CartoonViewer.Models.SettingModels
 		/// </summary>
 		public TimeSpan ApproximateDuration =>
 			new TimeSpan(0, 0,
-						 (int)Math.Ceiling(ApproximateEpisodeDuration.TotalSeconds * (EpisodesCount ?? 0)));
+						 (int)Math.Ceiling(ApproximateEpisodeDuration.TotalSeconds * (DefaultEpisodesCount ?? 0)));
 
 		#endregion
 
-		#region Intellectual shutdown
+		#region NightHelper
 
 		/// <summary>
 		/// Флаг состояния интеллектуального выключения
 		/// </summary>
-		public bool IntellectualShutdown
+		public bool NightHelperShutdown
 		{
-			get => _intellectualShutdown;
+			get => _nightHelperShutdown;
 			set
 			{
-				if(_intellectualShutdown == value)
+				if(_nightHelperShutdown == value)
 					return;
 
-				_intellectualShutdown = value;
-				NotifyOfPropertyChange(() => IntellectualShutdown);
-				NotifyOfPropertyChange(() => IntelectualShutdownSettingsVisibility);
+				_nightHelperShutdown = value;
+				NotifyOfPropertyChange(() => NightHelperShutdown);
+				NotifyOfPropertyChange(() => NightHelperSettingsVisibility);
 			}
 		}
 
 		/// <summary>
 		/// Видимость элементов зависимых от состояния включенности интеллектуального выключения
 		/// </summary>
-		public Visibility IntelectualShutdownSettingsVisibility => IntellectualShutdown
+		public Visibility NightHelperSettingsVisibility => NightHelperShutdown
 			? Visibility.Visible
 			: Visibility.Collapsed;
 
 		/// <summary>
 		/// Время ожидания, после которого начнется работа интеллектуального выключения
 		/// </summary>
-		public int? IntellectualShutdownIdleTime
+		public int? NightHelperShutdownIdleTime
 		{
-			get => _intellectualShutdownIdleTime;
+			get => _nightHelperShutdownIdleTime;
 			set
 			{
-				if(_intellectualShutdownIdleTime == value)
+				if(_nightHelperShutdownIdleTime == value)
 					return;
-				_intellectualShutdownIdleTime = SetIdleTime(value);
-				NotifyOfPropertyChange(() => IntellectualShutdownIdleTime);
+				_nightHelperShutdownIdleTime = SetIdleTime(value);
+				NotifyOfPropertyChange(() => NightHelperShutdownIdleTime);
+			}
+		}
+
+		public TimeSpan NightHelperShutdownTimeSpan
+		{
+			get
+			{
+				switch (_selectedNightHelperShutdownIdleTimeType)
+				{
+					case "часов":
+						return new TimeSpan(_nightHelperShutdownIdleTime ?? 0,0,0);
+					case "минут":
+						return new TimeSpan(0,_nightHelperShutdownIdleTime ?? 0,0);
+					case "секунд":
+						return new TimeSpan(0,0,_nightHelperShutdownIdleTime ?? 0);
+					default:
+						return new TimeSpan();
+				}
 			}
 		}
 		/// <summary>
 		/// Список типов времени ожидания интеллектуального выключения
 		/// </summary>
-		public ICollection<string> IntellectualShutdownIdleTimeTypeList =>
+		public ICollection<string> HigntHelperShutdownIdleTimeTypeList =>
 			new List<string>
 			{
 				"часов",
@@ -138,30 +157,30 @@ namespace CartoonViewer.Models.SettingModels
 		/// <summary>
 		/// Выбранный тип времени ожидания интеллектуально выключения
 		/// </summary>
-		public string SelectedIntellectualShutdownIdleTimeType
+		public string SelectedNightHelperShutdownIdleTimeType
 		{
-			get => _selectedIntellectualShutdownIdleTimeType;
+			get => _selectedNightHelperShutdownIdleTimeType;
 			set
 			{
-				if(_selectedIntellectualShutdownIdleTimeType == value)
+				if(_selectedNightHelperShutdownIdleTimeType == value)
 					return;
 
-				var tempValue = _selectedIntellectualShutdownIdleTimeType;
-				_selectedIntellectualShutdownIdleTimeType = value;
-				NotifyOfPropertyChange(() => SelectedIntellectualShutdownIdleTimeType);
-				IntellectualShutdownIdleTime = ConvertIdleTime(tempValue);
+				var tempValue = _selectedNightHelperShutdownIdleTimeType;
+				_selectedNightHelperShutdownIdleTimeType = value;
+				NotifyOfPropertyChange(() => SelectedNightHelperShutdownIdleTimeType);
+				NightHelperShutdownIdleTime = ConvertIdleTime(tempValue);
 			}
 		}
 
 		/// <summary>
 		/// Часы времени суток для определения работы интеллектуального выключения
 		/// </summary>
-		public int? IntellectualShutdownReachedHoursTime
+		public int? NightHelperShutdownReachedHoursTime
 		{
-			get => _intellectualShutdownReachedHoursTime;
+			get => _nightHelperShutdownReachedHoursTime;
 			set
 			{
-				if(_intellectualShutdownReachedHoursTime == value)
+				if(_nightHelperShutdownReachedHoursTime == value)
 					return;
 
 				if(value == null || value < 0)
@@ -174,21 +193,21 @@ namespace CartoonViewer.Models.SettingModels
 					value = 23;
 				}
 
-				_intellectualShutdownReachedHoursTime = value;
-				NotifyOfPropertyChange(() => IntellectualShutdownReachedHoursTime);
-				NotifyOfPropertyChange(() => IntellectualShutdownReachedTime);
+				_nightHelperShutdownReachedHoursTime = value;
+				NotifyOfPropertyChange(() => NightHelperShutdownReachedHoursTime);
+				NotifyOfPropertyChange(() => NightHelperShutdownReachedTime);
 			}
 		}
 
 		/// <summary>
 		/// Минуты времени суток для определения работы интеллектуального выключения
 		/// </summary>
-		public int? IntellectualShutdownReachedMinutesTime
+		public int? NightHelperShutdownReachedMinutesTime
 		{
-			get => _intellectualShutdownReachedMinutesTime;
+			get => _nightHelperShutdownReachedMinutesTime;
 			set
 			{
-				if(_intellectualShutdownReachedMinutesTime == value)
+				if(_nightHelperShutdownReachedMinutesTime == value)
 					return;
 
 				if(value == null || value < 0)
@@ -201,39 +220,39 @@ namespace CartoonViewer.Models.SettingModels
 					value = 59;
 				}
 
-				_intellectualShutdownReachedMinutesTime = value;
-				NotifyOfPropertyChange(() => IntellectualShutdownReachedMinutesTime);
-				NotifyOfPropertyChange(() => IntellectualShutdownReachedTime);
+				_nightHelperShutdownReachedMinutesTime = value;
+				NotifyOfPropertyChange(() => NightHelperShutdownReachedMinutesTime);
+				NotifyOfPropertyChange(() => NightHelperShutdownReachedTime);
 			}
 		}
 
-		public TimeSpan IntellectualShutdownReachedTime =>
+		public TimeSpan NightHelperShutdownReachedTime =>
 			new TimeSpan(
-				IntellectualShutdownReachedHoursTime ?? 0,
-				IntellectualShutdownReachedMinutesTime ?? 0,
+				NightHelperShutdownReachedHoursTime ?? 0,
+				NightHelperShutdownReachedMinutesTime ?? 0,
 				0);
 
 		/// <summary>
 		/// Флаг определения состояния развернутости примечаний интеллектуального выключения
 		/// </summary>
-		public bool IsIntellectualShutdownRemarkExpand
+		public bool IsNightHelperShutdownRemarkExpand
 		{
-			get => _isIntellectualShutdownRemarkExpand;
+			get => _isNightHelperShutdownRemarkExpand;
 			set
 			{
-				if(_isIntellectualShutdownRemarkExpand == value)
+				if(_isNightHelperShutdownRemarkExpand == value)
 					return;
 
-				_isIntellectualShutdownRemarkExpand = value;
-				NotifyOfPropertyChange(() => IsIntellectualShutdownRemarkExpand);
-				NotifyOfPropertyChange(() => IntellectualShutdownRemarkVisibility);
+				_isNightHelperShutdownRemarkExpand = value;
+				NotifyOfPropertyChange(() => IsNightHelperShutdownRemarkExpand);
+				NotifyOfPropertyChange(() => NightHelperShutdownRemarkVisibility);
 			}
 		}
 
 		/// <summary>
 		/// Видимость элементов зависимых от состояния включенности интелектуального выключения
 		/// </summary>
-		public Visibility IntellectualShutdownRemarkVisibility => IsIntellectualShutdownRemarkExpand
+		public Visibility NightHelperShutdownRemarkVisibility => IsNightHelperShutdownRemarkExpand
 			? Visibility.Visible
 			: Visibility.Collapsed;
 
@@ -255,8 +274,30 @@ namespace CartoonViewer.Models.SettingModels
 				RandomWatching = !value;
 				NotifyOfPropertyChange(() => WatchingInRow);
 				NotifyOfPropertyChange(() => RandomWatching);
+				NotifyOfPropertyChange(() => WatchingInRowVisibility);
+				NotifyOfPropertyChange(() => RandomEnabledVisibility);
 			}
 		}
+
+		private int? _lastWatchedEpisodeInRowFullNumber = 101;
+
+		public int? LastWatchedEpisodeInRowFullNumber
+		{
+			get => _lastWatchedEpisodeInRowFullNumber;
+			set
+			{
+				if (value == null ||
+				    value <= 100)
+				{
+					value = 101;
+				}
+
+				_lastWatchedEpisodeInRowFullNumber = value;
+				NotifyOfPropertyChange(() => LastWatchedEpisodeInRowFullNumber);
+			}
+		}
+
+
 		/// <summary>
 		/// Флаг просмотра эпизодов в случайном порядке
 		/// </summary>
@@ -271,6 +312,7 @@ namespace CartoonViewer.Models.SettingModels
 				WatchingInRow = !value;
 				NotifyOfPropertyChange(() => RandomWatching);
 				NotifyOfPropertyChange(() => WatchingInRow);
+				NotifyOfPropertyChange(() => WatchingInRowVisibility);
 				NotifyOfPropertyChange(() => RandomEnabledVisibility);
 			}
 		}
@@ -278,6 +320,10 @@ namespace CartoonViewer.Models.SettingModels
 		/// Видимость элементов зависимых от просмотра эпизодов в случайном порядке
 		/// </summary>
 		public Visibility RandomEnabledVisibility => RandomWatching
+			? Visibility.Visible
+			: Visibility.Hidden;
+
+		public Visibility WatchingInRowVisibility => WatchingInRow
 			? Visibility.Visible
 			: Visibility.Hidden;
 		/// <summary>
@@ -425,7 +471,7 @@ namespace CartoonViewer.Models.SettingModels
 				return 0;
 			}
 
-			switch(_selectedIntellectualShutdownIdleTimeType)
+			switch(_selectedNightHelperShutdownIdleTimeType)
 			{
 				case "секунд":
 					if(value > 86_400)
@@ -447,8 +493,8 @@ namespace CartoonViewer.Models.SettingModels
 					break;
 				default:
 					throw new Exception(
-						$"Некорректное принятое значение SelectedIntellectualShutdownIdleTimeType\n" +
-						$"Значение равно {SelectedIntellectualShutdownIdleTimeType}\n");
+						$"Некорректное принятое значение SelectedNightHelperShutdownIdleTimeType\n" +
+						$"Значение равно {SelectedNightHelperShutdownIdleTimeType}\n");
 			}
 
 			return value;
@@ -462,12 +508,12 @@ namespace CartoonViewer.Models.SettingModels
 		/// <returns></returns>
 		private int? ConvertIdleTime(string tempValue)
 		{
-			var value = _intellectualShutdownIdleTime;
+			var value = _nightHelperShutdownIdleTime;
 
 			if(tempValue == null)
 				return null;
 
-			switch(_selectedIntellectualShutdownIdleTimeType)
+			switch(_selectedNightHelperShutdownIdleTimeType)
 			{
 				case "секунд":
 					if(tempValue == "часов")

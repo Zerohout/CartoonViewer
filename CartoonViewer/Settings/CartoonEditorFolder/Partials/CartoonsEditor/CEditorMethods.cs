@@ -15,7 +15,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 	public partial class CartoonsEditorViewModel : Conductor<Screen>.Collection.OneActive
 	{
-		#region Private methods
+		#region Load/unload data
 
 		/// <summary>
 		/// Загрузка из БД списков элементов (Сайты, м/ф, сезоны)
@@ -41,6 +41,9 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 		}
 
+		/// <summary>
+		/// Выгрузка данных при изменении зависимых объектов
+		/// </summary>
 		private void UnloadData()
 		{
 			if(_selectedSeason == null)
@@ -120,6 +123,10 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 			Seasons = new BindableCollection<CartoonSeason>(seasons);
 		}
+
+		#endregion
+
+
 
 		#region Change property value
 
@@ -216,22 +223,19 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			switch(identifier)
 			{
 				case CartoonWebSite _:
-					Set(
-						ref _selectedWebSite,
+					Set(ref _selectedWebSite,
 						oldValue as CartoonWebSite,
 						nameof(SelectedWebSite));
 					NotifyOfPropertyChange(() => CanCancelWebSiteSelection);
 					return;
 				case Cartoon _:
-					Set(
-						ref _selectedCartoon,
+					Set(ref _selectedCartoon,
 						oldValue as Cartoon,
 						nameof(SelectedCartoon));
 					NotifyOfPropertyChange(() => CanCancelCartoonSelection);
 					return;
 				case CartoonSeason _:
-					Set(
-						ref _selectedSeason,
+					Set(ref _selectedSeason,
 						oldValue as CartoonSeason,
 						nameof(SelectedSeason));
 					NotifyOfPropertyChange(() => CanCancelSeasonSelection);
@@ -314,6 +318,6 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 		#endregion
 
-		#endregion
+		
 	}
 }

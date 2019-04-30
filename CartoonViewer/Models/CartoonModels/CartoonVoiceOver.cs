@@ -4,6 +4,7 @@
 	using System.ComponentModel.DataAnnotations;
 	using System.ComponentModel.DataAnnotations.Schema;
 	using System.Linq;
+	using Newtonsoft.Json;
 
 	/// <summary>
 	/// Озвучка мультсериала
@@ -31,6 +32,7 @@
 		public int SelectedEpisodeId { private get; set; }
 
 		[NotMapped]
+		[JsonIgnore]
 		public bool Checked
 
 		{
@@ -60,9 +62,11 @@
 				}
 			}
 		}
-
+		[JsonIgnore]
 		public ICollection<Cartoon> Cartoons { get; set; }
+		[JsonIgnore]
 		public ICollection<CartoonEpisode> CartoonEpisodes { get; set; }
+		[JsonIgnore]
 		public ICollection<CartoonEpisode> CheckedEpisodes { get; set; }
 
 	}

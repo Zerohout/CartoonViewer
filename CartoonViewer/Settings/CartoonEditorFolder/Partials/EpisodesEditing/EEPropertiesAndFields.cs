@@ -2,6 +2,7 @@
 namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 {
 	using System;
+	using System.Linq;
 	using System.Windows;
 	using Caliburn.Micro;
 	using Helpers;
@@ -12,15 +13,18 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 	public partial class EpisodesEditingViewModel : Screen, ISettingsViewModel
 	{
 		private BindableCollection<CartoonEpisode> _episodes = new BindableCollection<CartoonEpisode>();
-		private BindableCollection<Jumper> _jumpers = new BindableCollection<Jumper>();
 		private BindableCollection<CartoonVoiceOver> _voiceOvers = new BindableCollection<CartoonVoiceOver>();
-		
+		private BindableCollection<EpisodeOption> _episodeOptions = new BindableCollection<EpisodeOption>();
+		private BindableCollection<Jumper> _jumpers = new BindableCollection<Jumper>();
+
 		private CartoonEpisode _selectedEpisode;
 		private CartoonEpisode _editableEpisode;
+		private EpisodeOption _selectedEpisodeOption;
 		private Jumper _selectedJumper;
 		private EpisodeTime _editableEpisodeTime;
 
 		private bool _isNotEditing = true;
+		private bool _isAdvancedSettings;
 
 		#region Collections
 
@@ -33,6 +37,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			set
 			{
 				_episodes = value;
+				EpisodeIndexes.EndIndex = _episodes.Count - 1;
 				NotifyOfPropertyChange(() => Episodes);
 			}
 		}
@@ -48,6 +53,18 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				NotifyOfPropertyChange(() => VoiceOvers);
 			}
 		}
+
+
+		public BindableCollection<EpisodeOption> EpisodeOptions
+		{
+			get => _episodeOptions;
+			set
+			{
+				_episodeOptions = value;
+				NotifyOfPropertyChange(() => EpisodeOptions);
+			}
+		}
+
 		/// <summary>
 		/// Коллекция "джамперов"
 		/// </summary>
@@ -82,13 +99,14 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			}
 		}
 
-		public string EditableEpisodeSnapshot { get; set; }
-
+		
 		/// <summary>
 		/// Данные эпизода до изменений
 		/// </summary>
 		public string TempEpisodeSnapshot { get; set; }
 
+		public string TempEpisodeOptionSnapshot { get; set; }
+		
 		/// <summary>
 		/// Редактируемый экземпляр выбранного эпизода
 		/// </summary>
@@ -99,6 +117,17 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			{
 				_editableEpisode = value;
 				NotifyOfPropertyChange(() => EditableEpisode);
+			}
+		}
+
+
+		public EpisodeOption SelectedEpisodeOption
+		{
+			get => _selectedEpisodeOption;
+			set
+			{
+				_selectedEpisodeOption = value;
+				NotifyOfPropertyChange(() => SelectedEpisodeOption);
 			}
 		}
 
@@ -122,16 +151,6 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			}
 		}
 
-
-
-
-
-
-
-		
-
-		
-
 		#region Operable properties
 
 		public TimeSpan EpisodeDuration => CalculatingDuration();
@@ -144,6 +163,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// Флаг для корректной работы конструктора XAML
 		/// </summary>
 		public bool IsDesignTime { get; set; }
+
 		/// <summary>
 		/// Флаг состояния не редактирования
 		/// </summary>
@@ -159,7 +179,19 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				NotifyTimeProperties();
 			}
 		}
-		
+		/// <summary>
+		/// Флаг состояния расширенных настроек
+		/// </summary>
+		public bool IsAdvancedSettings
+		{
+			get => _isAdvancedSettings;
+			set
+			{
+				_isAdvancedSettings = value;
+				NotifyOfPropertyChange(() => IsAdvancedSettings);
+			}
+		}
+
 
 		/// <summary>
 		/// Флаг наличия изменений
@@ -168,14 +200,18 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		{
 			get
 			{
-				if(EditableEpisode == null)
+				if(EditableEpisode == null || SelectedEpisodeOption == null ||
+				   string.IsNullOrWhiteSpace(TempEpisodeSnapshot) ||
+				   string.IsNullOrWhiteSpace(TempEpisodeOptionSnapshot))
 				{
 					return false;
 				}
 
+				var tempEpisode = JsonConvert.DeserializeObject<CartoonEpisode>(TempEpisodeSnapshot);
+				var tempOption = JsonConvert.DeserializeObject<EpisodeOption>(TempEpisodeOptionSnapshot);
 
-				if (Helper.IsEquals(EditableEpisodeSnapshot, TempEpisodeSnapshot) &&
-				    Helper.IsEquals(SelectedJumperSnapshot, TempJumperSnapshot))
+				if (Helper.IsEquals(EditableEpisode, tempEpisode) &&
+				    Helper.IsEquals(SelectedEpisodeOption, tempOption))
 				{
 					return false;
 				}
@@ -199,8 +235,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			? Visibility.Visible
 			: Visibility.Hidden;
 
-		public string SelectedJumperSnapshot { get; set; }
-		public string TempJumperSnapshot { get; set; }
+		
 
 		#endregion
 

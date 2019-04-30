@@ -10,6 +10,7 @@
 	using GeneralSettingsFolder.ViewModels;
 	using Helpers;
 	using MainMenu.ViewModels;
+	using Models.CartoonModels;
 	using ViewingsSettingsFolder.ViewModels;
 
 
@@ -26,6 +27,22 @@
 		{
 			using (var ctx = new CVDbContext(SettingsHelper.AppDataPath))
 			{
+				var webSites = ctx.CartoonWebSites;
+				if (webSites.Any() is false)
+				{
+					webSites.Add(new CartoonWebSite {Url = SettingsHelper.FreehatWebSite});
+					ctx.SaveChanges();
+
+					foreach(var cw in webSites)
+					{
+						cw.ElementValues.Add(Creator.CreateElementValue());
+					}
+
+					ctx.VoiceOvers.AddRange(Creator.CreateSouthParkVoiceOverList());
+
+					ctx.SaveChanges();
+				}
+
 				currentWebSiteId = ctx.CartoonWebSites.First().CartoonWebSiteId;
 			}
 			AddSettingsToList();
@@ -85,6 +102,11 @@
 				if (cevm.ActiveItem is EpisodesEditingViewModel ee)
 				{
 					ee.UpdateVoiceOverList();
+					if (ee.IsNotEditing is false)
+					{
+
+					}
+					
 				}
 
 				return;
