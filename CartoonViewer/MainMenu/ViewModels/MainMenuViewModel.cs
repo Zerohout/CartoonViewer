@@ -22,7 +22,7 @@
 
 
 			GeneralSettings = LoadGeneralSettings();
-			EpisodeCount = GeneralSettings.DefaultEpisodesCount;
+			GeneralSettings.EpisodesCount = GeneralSettings.DefaultEpisodesCount;
 			LoadCartoons();
 			base.OnInitialize();
 		}

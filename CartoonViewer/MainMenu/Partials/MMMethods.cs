@@ -72,10 +72,10 @@ namespace CartoonViewer.MainMenu.ViewModels
 				CurrentEpisodeIndex = 0;
 			}
 
-			while(EpisodeCount > 0 && GeneralSettings.AvailableEpisodesCount > 0)
+			while(GeneralSettings.EpisodesCount > 0 && GeneralSettings.AvailableEpisodesCount > 0)
 			{
 
-				EpisodeCount--;
+				GeneralSettings.EpisodesCount--;
 				NotifyOfPropertyChange(() => GeneralSettings);
 
 				//цикл для переключения серии без потерь в количестве указанных просмотров

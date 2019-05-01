@@ -77,12 +77,30 @@ namespace CartoonViewer.Models.SettingModels
 			}
 		}
 
+		private int? _episodesCount = 3;
+
+		public int? EpisodesCount
+		{
+			get => _episodesCount;
+			set
+			{
+				if(value == null || value < 0)
+				{
+					value = 0;
+				}
+				_episodesCount = value;
+				NotifyOfPropertyChange(() => EpisodesCount);
+				NotifyOfPropertyChange(() => ApproximateDuration);
+			}
+		}
+
+
 		/// <summary>
 		/// Примерная длительность указанного количества эпизодов
 		/// </summary>
 		public TimeSpan ApproximateDuration =>
 			new TimeSpan(0, 0,
-						 (int)Math.Ceiling(ApproximateEpisodeDuration.TotalSeconds * (DefaultEpisodesCount ?? 0)));
+						 (int)Math.Ceiling(ApproximateEpisodeDuration.TotalSeconds * (EpisodesCount ?? 0)));
 
 		#endregion
 

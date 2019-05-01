@@ -68,24 +68,7 @@ namespace CartoonViewer.MainMenu.ViewModels
 			}
 		}
 
-		private int? _episodeCount;
-
-		public int? EpisodeCount
-		{
-			get => _episodeCount;
-			set
-			{
-				if (value == null || value < 0)
-				{
-					_episodeCount = 3;
-				}
-				_episodeCount = value;
-				NotifyOfPropertyChange(() => EpisodeCount);
-			}
-		}
-
-
-
+		
 		#region Флаги
 
 		/// <summary>
