@@ -2,7 +2,6 @@
 namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 {
 	using System;
-	using System.ComponentModel;
 	using System.Data.Entity;
 	using System.Linq;
 	using System.Windows.Controls;
@@ -124,7 +123,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 				Episodes.Add(episode);
 				NotifyOfPropertyChange(() => Episodes);
-				
+
 			}
 
 			SelectedEpisode = Episodes.LastOrDefault();
@@ -364,30 +363,31 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		public void ImportOptionData()
 		{
-			if (CanImportOptionData is false) return;
+			if(CanImportOptionData is false)
+				return;
 
 			using(var ctx = new CVDbContext(AppDataPath))
 			{
 				var option = ctx.EpisodeOptions
-				                .Include(eo => eo.Jumpers)
-				                .First( eo => eo.EpisodeOptionId == SelectedEpisodeOption.EpisodeOptionId);
-				if (option == null)
+								.Include(eo => eo.Jumpers)
+								.First(eo => eo.EpisodeOptionId == SelectedEpisodeOption.EpisodeOptionId);
+				if(option == null)
 				{
 					throw new Exception("Опция не существует");
 				}
 
-				foreach (var jumper in option.Jumpers.ToList())
+				foreach(var jumper in option.Jumpers.ToList())
 				{
 					ctx.Jumpers.Remove(jumper);
 					ctx.SaveChanges();
 				}
 
-				
+
 				Jumpers.Clear();
 				SelectedEpisodeOption.Jumpers.Clear();
 
 				var count = 1;
-				foreach (var j in ImportingEpisodeOption.Jumpers)
+				foreach(var j in ImportingEpisodeOption.Jumpers)
 				{
 					var jumper = new Jumper
 					{
@@ -396,7 +396,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 						SkipCount = j.SkipCount,
 						Number = count++
 					};
-					
+
 					option.Jumpers.Add(jumper);
 					ctx.SaveChanges();
 					jumper = ctx.Jumpers.ToList().Last();
@@ -410,7 +410,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				option.Duration = CalculatingDuration(option);
 				SelectedEpisodeOption.Duration = CalculatingDuration(option);
 				SelectedJumper = Jumpers.First();
-				EditableEpisodeTime = ConvertToEpisodeTime(SelectedEpisodeOption,SelectedJumper);
+				EditableEpisodeTime = ConvertToEpisodeTime(SelectedEpisodeOption, SelectedJumper);
 				ctx.SaveChanges();
 
 				TempEpisodeOptionSnapshot = JsonConvert.SerializeObject(SelectedEpisodeOption);
@@ -427,13 +427,13 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		{
 			get
 			{
-				if (SelectedEpisodeOption == null ||
-				    ImportingEpisodeOption == null ||
-				    SelectedEpisodeOption.EpisodeOptionId == ImportingEpisodeOption.EpisodeOptionId)
+				if(SelectedEpisodeOption == null ||
+					ImportingEpisodeOption == null ||
+					SelectedEpisodeOption.EpisodeOptionId == ImportingEpisodeOption.EpisodeOptionId)
 				{
 					return false;
 				}
-				
+
 				return true;
 			}
 		}
@@ -697,6 +697,22 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 								SaveChanges();
 								return;
 							}
+							break;
+						case Key.OemPlus:
+							if(CanEditNextEpisode)
+							{
+								EditNextEpisode();
+								return;
+							}
+
+							break;
+						case Key.OemMinus:
+							if(CanEditPreviousEpisode)
+							{
+								EditPreviousEpisode();
+								return;
+							}
+
 							break;
 					}
 

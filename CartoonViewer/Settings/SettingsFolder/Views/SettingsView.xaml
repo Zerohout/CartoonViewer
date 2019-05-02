@@ -67,14 +67,13 @@
             Grid.RowSpan="2"
             Grid.Column="0">
             <ListBox
-               
                 Grid.Row="0"
                 Grid.Column="0"
                 Margin="5"
-                ItemsSource="{Binding Settings}"
                 VerticalAlignment="Center"
                 cal:Message.Attach="[Event SelectionChanged]=[Action SelectionChanged()]"
                 Background="Transparent"
+                ItemsSource="{Binding Settings}"
                 SelectedItem="{Binding ActiveItem}">
                 <ListBox.Style>
                     <Style TargetType="{x:Type ListBox}">
@@ -174,8 +173,8 @@
                 x:Name="SaveChanges"
                 Grid.Row="0"
                 Grid.Column="0"
-                Visibility="Hidden"
-                Margin="10,5">
+                Margin="10,5"
+                Visibility="Hidden">
                 <StackPanel Orientation="Vertical">
                     <TextBlock
                         Style="{StaticResource TextBlockButtonStyle}"
@@ -190,8 +189,8 @@
                 Grid.Row="0"
                 Grid.Column="1"
                 Margin="10,5"
-                Visibility="Hidden"
-                IsEnabled="False">
+                IsEnabled="False"
+                Visibility="Hidden">
                 <StackPanel Orientation="Vertical">
                     <TextBlock
                         Style="{StaticResource TextBlockButtonStyle}"
