@@ -70,13 +70,13 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// <summary>
 		/// Загрузка из БД списка сайтов
 		/// </summary>
-		private async void LoadWebSiteList()
+		private void LoadWebSiteList()
 		{
 			BindableCollection<CartoonWebSite> webSites;
 
 			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
 			{
-				await ctx.CartoonWebSites.LoadAsync();
+				ctx.CartoonWebSites.Load();
 				webSites = new BindableCollection<CartoonWebSite>(ctx.CartoonWebSites.Local);
 			}
 
@@ -85,16 +85,16 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// <summary>
 		/// Загрузка из БД списка мультсериалов
 		/// </summary>
-		private async void LoadCartoonList()
+		private void LoadCartoonList()
 		{
 			BindableCollection<Cartoon> cartoons;
 
 			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
 			{
-				await ctx.Cartoons
+				ctx.Cartoons
 						 .Where(c => c.CartoonWebSites
 									  .Any(cws => cws.CartoonWebSiteId == SettingsHelper.GlobalIdList.WebSiteId))
-						 .LoadAsync();
+						 .Load();
 				cartoons = new BindableCollection<Cartoon>(ctx.Cartoons.Local);
 			}
 
@@ -109,15 +109,15 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// <summary>
 		/// Загрузка из БД списка сезонов
 		/// </summary>
-		private async void LoadSeasonList()
+		private void LoadSeasonList()
 		{
 			BindableCollection<CartoonSeason> seasons;
 
 			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
 			{
-				await ctx.CartoonSeasons
+				ctx.CartoonSeasons
 						 .Where(cs => cs.CartoonId == SettingsHelper.GlobalIdList.CartoonId)
-						 .LoadAsync();
+						 .Load();
 				seasons = new BindableCollection<CartoonSeason>(ctx.CartoonSeasons.Local);
 			}
 

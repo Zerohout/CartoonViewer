@@ -2,7 +2,6 @@
 namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 {
 	using System;
-	using System.Linq;
 	using System.Windows;
 	using Caliburn.Micro;
 	using Helpers;
@@ -20,11 +19,15 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		private CartoonEpisode _selectedEpisode;
 		private CartoonEpisode _editableEpisode;
 		private EpisodeOption _selectedEpisodeOption;
+		private EpisodeOption _importingEpisodeOption;
 		private Jumper _selectedJumper;
 		private EpisodeTime _editableEpisodeTime;
 
 		private bool _isNotEditing = true;
-		private bool _isAdvancedSettings;
+		private bool _isJumperSelectionEnable = true;
+		private bool _isJumperSwapping;
+
+		private (int CurrentIndex, int EndIndex) EpisodeIndexes;
 
 		#region Collections
 
@@ -75,14 +78,12 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			{
 				_jumpers = value;
 				NotifyOfPropertyChange(() => Jumpers);
+				NotifyOfPropertyChange(() => EpisodeDuration);
+
 			}
 		}
 
 		#endregion
-
-
-
-
 
 		/// <summary>
 		/// Выбранный эпизод
@@ -99,14 +100,17 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			}
 		}
 
-		
+
 		/// <summary>
 		/// Данные эпизода до изменений
 		/// </summary>
 		public string TempEpisodeSnapshot { get; set; }
 
+		/// <summary>
+		/// Данные опции эпизода до изменений
+		/// </summary>
 		public string TempEpisodeOptionSnapshot { get; set; }
-		
+
 		/// <summary>
 		/// Редактируемый экземпляр выбранного эпизода
 		/// </summary>
@@ -120,7 +124,9 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			}
 		}
 
-
+		/// <summary>
+		/// Выбранная опция эпизода
+		/// </summary>
 		public EpisodeOption SelectedEpisodeOption
 		{
 			get => _selectedEpisodeOption;
@@ -130,7 +136,22 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				NotifyOfPropertyChange(() => SelectedEpisodeOption);
 			}
 		}
+		/// <summary>
+		/// Опция эпизода выбранная для импорта данных
+		/// </summary>
+		public EpisodeOption ImportingEpisodeOption
+		{
+			get => _importingEpisodeOption;
+			set
+			{
+				_importingEpisodeOption = value;
+				NotifyOfPropertyChange(() => ImportingEpisodeOption);
+			}
+		}
 
+		/// <summary>
+		/// Выбранный джампер
+		/// </summary>
 		public Jumper SelectedJumper
 		{
 			get => _selectedJumper;
@@ -141,6 +162,21 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			}
 		}
 
+		//private Jumper _swappingJumper;
+
+		//public Jumper SwappingJumper
+		//{
+		//	get => _swappingJumper;
+		//	set
+		//	{
+		//		_swappingJumper = value;
+		//		NotifyOfPropertyChange(() => SwappingJumper);
+		//	}
+		//}
+
+		/// <summary>
+		/// Редактируемые данные времени эпизода
+		/// </summary>
 		public EpisodeTime EditableEpisodeTime
 		{
 			get => _editableEpisodeTime;
@@ -152,7 +188,9 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		}
 
 		#region Operable properties
-
+		/// <summary>
+		/// Длительность эпизода
+		/// </summary>
 		public TimeSpan EpisodeDuration => CalculatingDuration();
 
 		#endregion
@@ -174,23 +212,47 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			{
 				_isNotEditing = value;
 				NotifyOfPropertyChange(() => IsNotEditing);
+
+				NotifyOfPropertyChange(() => EpisodeEditingVisibility);
 				NotifyEpisodeListButtons();
-				NotifyEditingProperties();
 				NotifyTimeProperties();
+				NotifyEditingButtons();
 			}
 		}
+
+		///// <summary>
+		///// Флаг состояния смены местами джампера
+		///// </summary>
+		//public bool IsJumperSwapping
+		//{
+		//	get => _isJumperSwapping;
+		//	set
+		//	{
+		//		_isJumperSwapping = value;
+		//		NotifyOfPropertyChange(() => IsJumperSwapping);
+		//		NotifyOfPropertyChange(() => JumperEditingVisibility);
+		//		NotifyOfPropertyChange(() => SwappingJumpersVisibility);
+		//		_isJumperSelectionEnable = !value;
+		//		NotifyOfPropertyChange(() => IsJumperSelectionEnable);
+		//	}
+		//}
+
+
 		/// <summary>
-		/// Флаг состояния расширенных настроек
+		/// Флаг состояния элементов связанными с выбором редактируемого джампера
 		/// </summary>
-		public bool IsAdvancedSettings
+		public bool IsJumperSelectionEnable
 		{
-			get => _isAdvancedSettings;
+			get => _isJumperSelectionEnable;
 			set
 			{
-				_isAdvancedSettings = value;
-				NotifyOfPropertyChange(() => IsAdvancedSettings);
+				_isJumperSelectionEnable = value;
+				NotifyOfPropertyChange(() => IsJumperSelectionEnable);
+				_isJumperSwapping = !value;
+				//NotifyOfPropertyChange(() => IsJumperSwapping);
 			}
 		}
+
 
 
 		/// <summary>
@@ -210,12 +272,12 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				var tempEpisode = JsonConvert.DeserializeObject<CartoonEpisode>(TempEpisodeSnapshot);
 				var tempOption = JsonConvert.DeserializeObject<EpisodeOption>(TempEpisodeOptionSnapshot);
 
-				if (Helper.IsEquals(EditableEpisode, tempEpisode) &&
-				    Helper.IsEquals(SelectedEpisodeOption, tempOption))
+				if(Helper.IsEquals(EditableEpisode, tempEpisode) &&
+					Helper.IsEquals(SelectedEpisodeOption, tempOption))
 				{
 					return false;
 				}
-				
+
 				return true;
 			}
 		}
@@ -231,11 +293,16 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			? Visibility.Hidden
 			: Visibility.Visible;
 
-		public Visibility JumperEditingVisibility => SelectedJumper != null
-			? Visibility.Visible
-			: Visibility.Hidden;
+		///// <summary>
+		///// Видимость полей редактирования джампера
+		///// </summary>
+		//public Visibility JumperEditingVisibility => IsJumperSwapping is true
+		//	? Visibility.Hidden
+		//	: Visibility.Visible;
 
-		
+		//public Visibility SwappingJumpersVisibility => IsJumperSwapping is true
+		//	? Visibility.Visible
+		//	: Visibility.Hidden;
 
 		#endregion
 

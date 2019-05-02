@@ -9,24 +9,27 @@
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    
+    
     cal:Bind.AtDesignTime="True"
-    cal:Message.Attach="[Event KeyDown]=[Action ListenKey($eventArgs)]"
     d:DataContext="{d:DesignData Source=../DesignData/EpisodesEditingViewDesignData.xaml}"
-    d:DesignHeight="600"
+    d:DesignHeight="620"
     d:DesignWidth="800"
     Focusable="True"
+    cal:Message.Attach="[Event KeyDown]=[Action ListenKey($eventArgs)]"
     mc:Ignorable="d">
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.15*" />
             <RowDefinition Height="0.25*" />
-            <RowDefinition Height="0.4*" />
-            <RowDefinition Height="0.2*" />
+            <RowDefinition Height="0.45*" />
+            <RowDefinition Height="0.15*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="0.325*" />
+            <ColumnDefinition Width="0.35*" />
+            <ColumnDefinition Width="0.325*" />
         </Grid.ColumnDefinitions>
 
         <!--#region Row 0-->
@@ -113,11 +116,11 @@
                 ItemsSource="{Binding Episodes, UpdateSourceTrigger=PropertyChanged}"
                 SelectedItem="{Binding SelectedEpisode, UpdateSourceTrigger=PropertyChanged}">
                 <ListBox.ItemTemplate>
-                    <ItemContainerTemplate>
+                    <DataTemplate>
                         <TextBlock
                             Style="{StaticResource CCComboBoxTBlockItemStyle}"
                             Text="{Binding NumberName}" />
-                    </ItemContainerTemplate>
+                    </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
             <StackPanel
@@ -192,7 +195,7 @@
                     Margin="0,2.5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    cal:Message.Attach="[Event Click]=[Action CancelSelection()]">
+                    cal:Message.Attach="[Event Click]=[Action CancelEpisodeSelection()]">
                     <iconPacks:PackIconMaterial Style="{StaticResource EditListCancelBtnIconStyle}" />
                     <Button.Style>
                         <Style
@@ -264,8 +267,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid
-                Grid.Row="0"
-                Visibility="{Binding AdvancedSettingsVisibility}">
+                Grid.Row="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -312,8 +314,7 @@
                 FontSize="16"
                 Foreground="DodgerBlue"
                 Style="{StaticResource SEDefaultTBlockStyle}"
-                Text="Описание эпизода"
-                Visibility="{Binding AdvancedSettingsVisibility}" />
+                Text="Описание эпизода"/>
             <TextBox
                 Grid.Row="1"
                 Grid.Column="0"
@@ -324,17 +325,16 @@
                 Style="{StaticResource SETBoxDefaultStyle}"
                 TabIndex="2"
                 Text="{Binding EditableEpisode.Description, UpdateSourceTrigger=PropertyChanged}"
-                TextWrapping="Wrap"
-                Visibility="{Binding AdvancedSettingsVisibility}" />
+                TextWrapping="Wrap"/>
         </Grid>
         <!--#endregion-->
 
         <!--#region Row 1-->
-
-        <Grid
-            Grid.Row="1"
-            Grid.RowSpan="2"
-            Grid.Column="1"
+        <ScrollViewer Grid.Row="1"
+                      Grid.RowSpan="2"
+                      Grid.Column="1">
+            <Grid
+            
             cal:Message.Attach="[Event KeyDown]=[Action ListenKey($eventArgs)]"
             Focusable="True"
             Visibility="{Binding EpisodeEditingVisibility}">
@@ -356,16 +356,16 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-
-
                 <Grid
                     Margin="5"
                     HorizontalAlignment="Stretch">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
@@ -382,6 +382,7 @@
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
@@ -439,14 +440,110 @@
                                 Foreground="Tomato"
                                 Kind="AlarmOff" />
                         </Button>
+                        <Button
+                            Visibility="Collapsed"
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            Margin="2.5,0"
+                            cal:Message.Attach="[Event Click]=[Action EnableSwapping()]"
+                            ToolTip="Удалить пропуск">
+                            <iconPacks:PackIconMaterial
+                                Width="20"
+                                Height="16"
+                                Padding="-3"
+                                Foreground="Cyan"
+                                Kind="SwapVertical" />
+                        </Button>
+                    </Grid>
+                    <Grid
+                        Grid.Row="2"
+                        Grid.RowSpan="2"
+                        Grid.Column="0"
+                        Visibility="Hidden">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock  Margin="0,2.5"
+                                    Grid.Row="0"
+                                    FontSize="16"
+                                    Foreground="DeepSkyBlue"
+                                    Style="{StaticResource SEDefaultTBlockStyle}"
+                                    Text="Выберите джампер с которым"/>
+                        <TextBlock  Margin="0,2.5"
+                                    Grid.Row="1"
+                                    FontSize="16"
+                                    Foreground="DeepSkyBlue"
+                                    Style="{StaticResource SEDefaultTBlockStyle}"
+                                    Text="будет обмен местами"/>
+                        <!--<Grid Grid.Row="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <ComboBox 
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Stretch"
+                                cal:Message.Attach="[Event SelectionChanged]=[Action SwappingJumperSelectionChanged()]"
+                                ItemsSource="{Binding Jumpers}"
+                                SelectedItem="{Binding SwappingJumper}"
+                                Grid.Column="0">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock
+                                                Style="{StaticResource CCComboBoxTBlockItemStyle}"
+                                                Text="Джампер №" />
+                                            <TextBlock
+                                                Style="{StaticResource CCComboBoxTBlockItemStyle}"
+                                                Text="{Binding Number}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <Button
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Margin="2.5,0"
+                                cal:Message.Attach="[Event Click]=[Action SwapJumpers()]"
+                                ToolTip="Обменять джамперы местами">
+                                <iconPacks:PackIconMaterial
+                                    Width="20"
+                                    Height="16"
+                                    Padding="-3"
+                                    Foreground="Cyan"
+                                    Kind="SwapVertical" />
+                                </Button>
+                            <Button
+                                Grid.Row="0"
+                                Grid.Column="2"
+                                Margin="2.5,0"
+                                cal:Message.Attach="[Event Click]=[Action DisableSwapping()]"
+                                ToolTip="Отменить обмен джамперов">
+                                <iconPacks:PackIconMaterial
+                                    Width="20"
+                                    Height="16"
+                                    Padding="-3"
+                                    Foreground="BurlyWood"
+                                    Kind="Cancel" />
+                            </Button>
+                        </Grid>-->
+                        
                     </Grid>
                     <StackPanel
                         Grid.Row="2"
                         Grid.Column="0"
                         Grid.ColumnSpan="3"
                         VerticalAlignment="Center"
-                        Orientation="Vertical"
-                        Visibility="{Binding JumperEditingVisibility}">
+                        Orientation="Vertical">
                         <StackPanel
                             HorizontalAlignment="Center"
                             Orientation="Horizontal">
@@ -465,8 +562,7 @@
                         <StackPanel
                             Margin="0,2.5"
                             HorizontalAlignment="Center"
-                            Orientation="Horizontal"
-                            Visibility="{Binding JumperEditingVisibility}">
+                            Orientation="Horizontal">
                             <TextBlock
                                 FontSize="14"
                                 Foreground="DeepSkyBlue"
@@ -514,32 +610,32 @@
                                 Text="{Binding EditableEpisodeTime.JumperTimeSeconds, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
                         </StackPanel>
                     </StackPanel>
+                    <StackPanel
+                       Grid.Row="3"
+                        Grid.Column="0"
+                        Margin="0,2.5"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                        <TextBlock
+                            FontSize="16"
+                            Foreground="DeepSkyBlue"
+                            Style="{StaticResource SEDefaultTBlockStyle}"
+                            Text="Количество пропусков: " />
+                        <TextBox
+                            MinWidth="25"
+                            Margin="0"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            cal:Message.Attach="[Event TextChanged]=[Action TimeChanged()];[Event KeyDown]=[Action NumericValidation($eventArgs)]"
+                            FontSize="14"
+                            Style="{StaticResource SETBoxDefaultStyle}"
+                            TabIndex="3"
+                            Text="{Binding EditableEpisodeTime.SkipCount, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
+                    </StackPanel>
                 </Grid>
 
-                <StackPanel
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    Margin="0,2.5"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Orientation="Horizontal"
-                    Visibility="{Binding JumperEditingVisibility}">
-                    <TextBlock
-                        FontSize="16"
-                        Foreground="DeepSkyBlue"
-                        Style="{StaticResource SEDefaultTBlockStyle}"
-                        Text="Количество пропусков: " />
-                    <TextBox
-                        MinWidth="25"
-                        Margin="0"
-                        HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"
-                        cal:Message.Attach="[Event TextChanged]=[Action TimeChanged()];[Event KeyDown]=[Action NumericValidation($eventArgs)]"
-                        FontSize="14"
-                        Style="{StaticResource SETBoxDefaultStyle}"
-                        TabIndex="3"
-                        Text="{Binding EditableEpisodeTime.SkipCount, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
-                </StackPanel>
+                
                 <StackPanel Grid.Row="2">
                     <TextBlock
                         FontSize="14"
@@ -732,10 +828,57 @@
                             Text="Сброс" />
                     </Button>
                 </Grid>
+                <Grid Grid.Row="6"
+                      IsEnabled="{Binding CanCancelEditing}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock FontSize="14"
+                               Grid.Column="0"
+                               Grid.ColumnSpan="2"
+                               Foreground="DodgerBlue"
+                               Style="{StaticResource SEDefaultTBlockStyle}"
+                               Text="Импорт настроек из другой опции"/>
+                    <ComboBox
+                        Margin="5 2.5"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        cal:Message.Attach="[Event SelectionChanged]=[Action ImportingSelectionChanged()]"
+                        ItemsSource="{Binding EpisodeOptions}"
+                        SelectedItem="{Binding ImportingEpisodeOption}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    Foreground="DeepSkyBlue"
+                                    Style="{StaticResource CCComboBoxTBlockItemStyle}"
+                                    Text="{Binding Name}" />
+                                </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <Button
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Margin="2.5,0"
+                        cal:Message.Attach="[Event Click]=[Action ImportOptionData()]"
+                        ToolTip="Импортировать настройки">
+                        <iconPacks:PackIconMaterial
+                            Width="20"
+                            Height="16"
+                            Padding="-3"
+                            Foreground="Cyan"
+                            Kind="FileImport" />
+                    </Button>
+                </Grid>
             </Grid>
         </Grid>
+    </ScrollViewer>
 
-        <Grid
+    <Grid
             Grid.Row="2"
             Grid.Column="2"
             RowSpan="2"
@@ -811,7 +954,7 @@
             </Grid>
         </Grid>
 
-        <!--#endregion-->
+<!--#endregion-->
 
         <!--#region Row 2-->
 
@@ -835,16 +978,18 @@
                 TabIndex="7">
                 <StackPanel Orientation="Vertical">
                     <iconPacks:PackIconFontAwesome
-                        Width="40"
-                        Height="36"
+                        Width="32"
+                        Height="28"
                         HorizontalAlignment="Center"
                         Foreground="LawnGreen"
                         Kind="ThumbsUpRegular" />
                     <TextBlock
+                        FontSize="16"
                         Foreground="LawnGreen"
                         Style="{StaticResource SEDefaultTBlockStyle}"
                         Text="Сохранить" />
                     <TextBlock
+                        FontSize="16"
                         Foreground="LawnGreen"
                         Style="{StaticResource SEDefaultTBlockStyle}"
                         Text="изменения" />
@@ -859,28 +1004,25 @@
                 TabIndex="7">
                 <StackPanel Orientation="Vertical">
                     <iconPacks:PackIconFontAwesome
-                        Width="40"
-                        Height="36"
+                        Width="32"
+                        Height="28"
                         HorizontalAlignment="Center"
                         Foreground="Tomato"
                         Kind="ThumbsDownRegular" />
                     <TextBlock
+                        FontSize="16"
                         Foreground="Tomato"
                         Style="{StaticResource SEDefaultTBlockStyle}"
                         Text="Отменить" />
                     <TextBlock
+                        FontSize="16"
                         Foreground="Tomato"
                         Style="{StaticResource SEDefaultTBlockStyle}"
                         Text="изменения" />
                 </StackPanel>
             </Button>
         </Grid>
-
-
-
-
-
-        <!--#endregion-->
+    <!--#endregion-->
 
     </Grid>
 </UserControl>

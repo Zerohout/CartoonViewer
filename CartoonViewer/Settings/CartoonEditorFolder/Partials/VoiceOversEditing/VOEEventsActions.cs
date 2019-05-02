@@ -235,12 +235,12 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// <summary>
 		/// Добавить новую глобальную озвучку
 		/// </summary>
-		public async void AddGlobalVoiceOver()
+		public void AddGlobalVoiceOver()
 		{
 			if(CanAddGlobalVoiceOver is false)
 				return;
 
-			var newVoiceOver = await CreateNewVoiceOver();
+			var newVoiceOver = CreateNewVoiceOver();
 
 			GlobalVoiceOvers.Add(newVoiceOver);
 			NotifyOfPropertyChange(() => GlobalVoiceOvers);
@@ -773,7 +773,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// <summary>
 		/// Сохранить изменения
 		/// </summary>
-		public async void SaveChanges()
+		public void SaveChanges()
 		{
 			if(CanSaveChanges is false)
 				return;
@@ -802,7 +802,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				CopyChanges(ref voiceOver, EditedVoiceOver);
 
 				ctx.Entry(voiceOver).State = EntityState.Modified;
-				await ctx.SaveChangesAsync();
+				ctx.SaveChanges();
 			}
 
 			TempEditedVoiceOver = CloneObject<CartoonVoiceOver>(EditedVoiceOver);

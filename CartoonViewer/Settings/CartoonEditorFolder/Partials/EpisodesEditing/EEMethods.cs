@@ -5,37 +5,244 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 	using System.Collections.Generic;
 	using System.Data.Entity;
 	using System.Linq;
-	using System.Windows;
 	using Caliburn.Micro;
 	using CartoonViewer.ViewModels;
 	using Database;
-	using Helpers;
 	using Models.CartoonModels;
 	using Models.SettingModels;
+	using Newtonsoft.Json;
 	using static Helpers.Helper;
 	using static Helpers.SettingsHelper;
 
 
 	public partial class EpisodesEditingViewModel : Screen, ISettingsViewModel
 	{
+		#region Load/Update Data
+
 		/// <summary>
 		/// Загрузка данных сезона
 		/// </summary>
-		private async void LoadSeasonData()
+		private void LoadSeasonData()
 		{
 			List<CartoonEpisode> episodes;
 
 			using(var ctx = new CVDbContext(AppDataPath))
 			{
-				episodes = await ctx.CartoonEpisodes
-				                    .Include(ce => ce.EpisodeVoiceOvers)
-									.Where(ce => ce.CartoonSeasonId == GlobalIdList.SeasonId).ToListAsync();
+				episodes = ctx.CartoonEpisodes
+									.Include(ce => ce.EpisodeVoiceOvers)
+									.Where(ce => ce.CartoonSeasonId == GlobalIdList.SeasonId).ToList();
 			}
 
 			Episodes = new BindableCollection<CartoonEpisode>(episodes);
 
 			SelectedEpisode = Episodes.FirstOrDefault();
 		}
+
+		/// <summary>
+		/// Загрузка данных выбранного эпизода для редактирования
+		/// </summary>
+		/// <returns></returns>
+		private bool LoadSelectedEpisodeData()
+		{
+			using(var ctx = new CVDbContext(AppDataPath))
+			{
+				var episode = ctx.CartoonEpisodes
+								 .Include(ce => ce.EpisodeVoiceOvers)
+								 .First(ce => ce.CartoonEpisodeId == GlobalIdList.EpisodeId);
+
+				if(episode.EpisodeVoiceOvers.Count == 0)
+				{
+					WinMan.ShowDialog(new DialogViewModel(
+										  "У выбранного эпизода отсутствуют озвучки, добавьте одну или более для продолжения редактирования",
+										  DialogType.INFO));
+					return false;
+				}
+
+				var voiceOvers = ctx.VoiceOvers
+									.Include(vo => vo.CartoonEpisodes)
+									.Include(vo => vo.CheckedEpisodes)
+									.Where(vo => vo.CartoonEpisodes
+												   .Any(ce => ce.CartoonEpisodeId == GlobalIdList.EpisodeId));
+
+				foreach(var vo in voiceOvers)
+				{
+					vo.SelectedEpisodeId = episode.CartoonEpisodeId;
+				}
+
+				var options = ctx.EpisodeOptions
+								 .Include(eo => eo.Jumpers)
+								 .Where(eo => eo.CartoonEpisodeId == GlobalIdList.EpisodeId);
+
+				EditableEpisode = CloneObject<CartoonEpisode>(episode);
+				VoiceOvers = new BindableCollection<CartoonVoiceOver>(voiceOvers);
+				EpisodeOptions = new BindableCollection<EpisodeOption>(options);
+				return true;
+			}
+		}
+
+		/// <summary>
+		/// Обновить список озвучек
+		/// </summary>
+		public void UpdateVoiceOverList()
+		{
+			if(GlobalIdList.EpisodeId == 0)
+				return;
+
+			CartoonEpisode episode;
+
+			using(var ctx = new CVDbContext(AppDataPath))
+			{
+				episode = ctx.CartoonEpisodes
+								   .Include(e => e.EpisodeVoiceOvers)
+								   .Single(e => e.CartoonEpisodeId == GlobalIdList.EpisodeId);
+			}
+
+			foreach(var vo in episode.EpisodeVoiceOvers)
+			{
+				vo.SelectedEpisodeId = episode.CartoonEpisodeId;
+			}
+
+			VoiceOvers = new BindableCollection<CartoonVoiceOver>(episode.EpisodeVoiceOvers);
+			NotifyOfPropertyChange(() => CanEditPreviousEpisode);
+			NotifyOfPropertyChange(() => CanEditNextEpisode);
+		}
+
+		#endregion
+
+		#region Creating/removing methods
+
+		/// <summary>
+		/// Создание нового эпизода с активной озвучкой
+		/// </summary>
+		/// <param name="ctx">база данных</param>
+		/// <param name="voiceOver">активная озвучка</param>
+		private CartoonEpisode CreateNewEpisode(CVDbContext ctx, CartoonVoiceOver voiceOver)
+		{
+			var count = _episodes.Count + 1;
+
+			// создание эпизода с активной озвучкой
+			var episode = new CartoonEpisode
+			{
+				CartoonSeasonId = GlobalIdList.SeasonId,
+				CartoonId = GlobalIdList.CartoonId,
+				CartoonVoiceOver = voiceOver,
+				Name = $"{count}-й эпизод",
+				Description = $"{count}-й эпизод",
+				Number = count
+			};
+
+			ctx.CartoonEpisodes.Add(episode);
+			ctx.SaveChanges();
+
+			// загрузка эпизода с ID
+			episode = ctx.CartoonEpisodes.ToList().Last();
+			// добавление эпизода в список выбранных эпизодов озвучки
+			voiceOver.CheckedEpisodes.Add(episode);
+			episode.EpisodeVoiceOvers.Add(voiceOver);
+			ctx.SaveChanges();
+			return episode;
+		}
+
+		/// <summary>
+		/// Создание новой опции эпизода с джампером
+		/// </summary>
+		/// <param name="ctx">база данных</param>
+		/// <param name="episode">созданный эпизод</param>
+		/// <param name="voiceOver">активная озвучка</param>
+		private void CreateNewEpisodeOption(CVDbContext ctx, CartoonEpisode episode, CartoonVoiceOver voiceOver)
+		{
+			// создание новой опции
+			var episodeOption = new EpisodeOption
+			{
+				CartoonEpisodeId = episode.CartoonEpisodeId,
+				CartoonVoiceOverId = voiceOver.CartoonVoiceOverId,
+				Name = $"{voiceOver.Name}_Option"
+			};
+
+			ctx.EpisodeOptions.Add(episodeOption);
+			ctx.SaveChanges();
+
+			episodeOption = ctx.EpisodeOptions.ToList().Last();
+			// создание нового джампера
+			var jumper = new Jumper
+			{
+				EpisodeOptionId = episodeOption.EpisodeOptionId,
+				Number = 1
+			};
+
+			ctx.Jumpers.Add(jumper);
+			ctx.SaveChanges();
+
+			episodeOption = ctx.EpisodeOptions.ToList().Last();
+
+			episodeOption.Duration = CalculatingDuration(episodeOption);
+			ctx.SaveChanges();
+		}
+
+		/// <summary>
+		/// Удалить выбранный эпизод из БД
+		/// </summary>
+		private void RemoveEpisodeFromDb()
+		{
+			using(var ctx = new CVDbContext(AppDataPath))
+			{
+				var episode = ctx.CartoonEpisodes
+								 .FirstOrDefault(ce => ce.CartoonEpisodeId == GlobalIdList.EpisodeId);
+
+				if(episode == null)
+				{
+					throw new Exception("Удаляемый эпизод не найден");
+				}
+
+				ctx.CartoonEpisodes.Remove(episode);
+				ctx.SaveChanges();
+			}
+		}
+
+		/// <summary>
+		/// Добавить новый джампер в БД
+		/// </summary>
+		/// <param name="jumper">добавляемый джампер</param>
+		private void AddJumperToDb(Jumper jumper)
+		{
+			using(var ctx = new CVDbContext(AppDataPath))
+			{
+				ctx.EpisodeOptions
+				   .First(eo => eo.EpisodeOptionId == SelectedEpisodeOption
+									.EpisodeOptionId).Duration = CalculatingDuration();
+				ctx.Jumpers.Add(jumper);
+				ctx.SaveChanges();
+
+				Jumpers.Last().JumperId = ctx.Jumpers.ToList().Last().JumperId;
+				NotifyOfPropertyChange(() => Jumpers);
+			}
+		}
+
+		/// <summary>
+		/// Удалить выбранный джампер из БД
+		/// </summary>
+		private void RemoveJumperFromDb()
+		{
+			using(var ctx = new CVDbContext(AppDataPath))
+			{
+				var jumper = ctx.Jumpers.First(j => j.JumperId == SelectedJumper.JumperId);
+
+				ctx.Jumpers.Remove(jumper);
+				ctx.SaveChanges();
+
+				SelectedEpisodeOption.Jumpers.Remove(SelectedJumper);
+				Jumpers.Remove(SelectedJumper);
+
+				ctx.EpisodeOptions
+				   .First(eo => eo.EpisodeOptionId == SelectedEpisodeOption
+									.EpisodeOptionId).Duration = CalculatingDuration();
+				ctx.SaveChanges();
+			}
+		}
+
+		#endregion
+
+		#region EpisodeTime methods
 
 		/// <summary>
 		/// Конвертировать значения Эпизода в значения класса EpisodeTime
@@ -62,7 +269,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		{
 			int totalSkipCount;
 
-			if (episodeOption != null)
+			if(episodeOption != null)
 			{
 				totalSkipCount = episodeOption.Jumpers.Sum(j => j?.SkipCount ?? 0);
 
@@ -80,57 +287,6 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			//SelectedEpisodeOption.Duration = duration;
 
 			return duration;
-		}
-
-		/// <summary>
-		/// Обновить список озвучек
-		/// </summary>
-		public async void UpdateVoiceOverList()
-		{
-			if(GlobalIdList.EpisodeId == 0)
-				return;
-
-			CartoonEpisode episode;
-
-			using(var ctx = new CVDbContext(AppDataPath))
-			{
-				episode = await ctx.CartoonEpisodes
-								   .Include(e => e.EpisodeVoiceOvers)
-								   .SingleAsync(e => e.CartoonEpisodeId == GlobalIdList.EpisodeId);
-			}
-
-			foreach (var vo in episode.EpisodeVoiceOvers)
-			{
-				vo.SelectedEpisodeId = episode.CartoonEpisodeId;
-			}
-
-			VoiceOvers = new BindableCollection<CartoonVoiceOver>(episode.EpisodeVoiceOvers);
-		}
-
-		/// <summary>
-		/// Проверка на наличие изменений через диалоговое окно
-		/// </summary>
-		/// <returns></returns>
-		private bool HasChangesValidation()
-		{
-			if(HasChanges)
-			{
-				var dvm = new DialogViewModel(null, DialogType.SAVE_CHANGES);
-				WinMan.ShowDialog(dvm);
-
-				switch(dvm.DialogResult)
-				{
-					case DialogResult.YES_ACTION:
-						SaveChanges();
-						return true;
-					case DialogResult.NO_ACTION:
-						return true;
-					default:
-						return false;
-				}
-			}
-
-			return true;
 		}
 
 		/// <summary>
@@ -153,6 +309,98 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			return (jumperTime, skipCount, creditsStart);
 		}
 
+		#endregion
+
+		#region Saving changes
+
+		/// <summary>
+		/// Сохранение изменений джамперов
+		/// </summary>
+		/// <param name="ctx"></param>
+		private void SaveJumpersChanges(CVDbContext ctx)
+		{
+			var tempOption = JsonConvert.DeserializeObject<EpisodeOption>(TempEpisodeOptionSnapshot);
+			var jumpers = ctx.Jumpers.Where(j => j.EpisodeOptionId == tempOption.EpisodeOptionId).ToList();
+
+			for(var i = 0; i < Jumpers.Count; i++)
+			{
+				if(IsEquals(jumpers[i], Jumpers[i]) is false)
+				{
+					jumpers[i].SkipCount = Jumpers[i].SkipCount;
+					jumpers[i].StartTime = Jumpers[i].StartTime;
+
+					SelectedEpisodeOption.Jumpers[i] = Jumpers[i];
+
+					ctx.Entry(jumpers[i]).State = EntityState.Modified;
+					ctx.SaveChanges();
+				}
+			}
+
+			ctx.SaveChanges();
+		}
+		/// <summary>
+		/// Сохранение изменений эпизода
+		/// </summary>
+		/// <param name="ctx"></param>
+		private void SaveEpisodeChanges(CVDbContext ctx)
+		{
+			var episode = ctx.CartoonEpisodes
+							 .Include(ce => ce.EpisodeOptions)
+							 .Include(ce => ce.EpisodeOptions)
+							 .Include(c => c.EpisodeVoiceOvers)
+							 .First(c => c.CartoonEpisodeId == GlobalIdList.EpisodeId);
+
+			episode.Name = EditableEpisode.Name;
+			episode.Description = EditableEpisode.Description;
+			ctx.SaveChanges();
+		}
+
+		private void SaveEpisodeOptionChanges(CVDbContext ctx)
+		{
+			var option = ctx.EpisodeOptions
+							.Include(eo => eo.Jumpers)
+							.First(eo => eo.EpisodeOptionId == SelectedEpisodeOption.EpisodeOptionId);
+			SelectedEpisodeOption.Duration = EpisodeDuration;
+
+
+			if(IsEquals(option, SelectedEpisodeOption) is false)
+			{
+				option.Duration = SelectedEpisodeOption.Duration;
+				option.CreditsStart = SelectedEpisodeOption.CreditsStart;
+
+				ctx.Entry(option).State = EntityState.Modified;
+				ctx.SaveChanges();
+			}
+		}
+
+		/// <summary>
+		/// Проверка на наличие изменений через диалоговое окно
+		/// </summary>
+		/// <returns></returns>
+		private bool HasChangesValidation()
+		{
+			if(HasChanges)
+			{
+				var dvm = new DialogViewModel(null, DialogType.SAVE_CHANGES);
+				WinMan.ShowDialog(dvm);
+
+				switch(dvm.DialogResult)
+				{
+					case DialogResult.YES_ACTION:
+						SaveChanges();
+						return true;
+					case DialogResult.NO_ACTION:
+						CancelChanges();
+						return true;
+					default:
+						return false;
+				}
+			}
+
+			return true;
+		}
+
+		#endregion
 
 		#region Notifications
 
@@ -164,7 +412,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			NotifyOfPropertyChange(() => CanAddEpisode);
 			NotifyOfPropertyChange(() => CanEditEpisode);
 			NotifyOfPropertyChange(() => CanRemoveEpisode);
-			NotifyOfPropertyChange(() => CanCancelSelection);
+			NotifyOfPropertyChange(() => CanCancelEpisodeSelection);
 		}
 
 		/// <summary>
@@ -172,12 +420,12 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// </summary>
 		private void NotifyEditingButtons()
 		{
-			NotifyOfPropertyChange(() => HasChanges);
 			NotifyOfPropertyChange(() => CanSaveChanges);
 			NotifyOfPropertyChange(() => CanCancelChanges);
 			NotifyOfPropertyChange(() => CanCancelEditing);
 			NotifyOfPropertyChange(() => CanEditPreviousEpisode);
 			NotifyOfPropertyChange(() => CanEditNextEpisode);
+			NotifyOfPropertyChange(() => CanCancelEpisodeSelection);
 		}
 
 		private void NotifyEditingProperties()
@@ -196,7 +444,6 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		{
 			NotifyOfPropertyChange(() => CanAddJumper);
 			NotifyOfPropertyChange(() => CanRemoveJumper);
-			NotifyOfPropertyChange(() => JumperEditingVisibility);
 			NotifyOfPropertyChange(() => CanSetOnTodayLastDateViewed);
 			NotifyOfPropertyChange(() => CanResetLastDateViewed);
 			NotifyOfPropertyChange(() => EpisodeDuration);

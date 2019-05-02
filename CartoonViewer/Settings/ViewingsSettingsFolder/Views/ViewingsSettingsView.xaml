@@ -19,6 +19,8 @@
     d:DataContext="{d:DesignData Source=../DesignData/ViewingSettingsViewDesignData.xaml}"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    Focusable="True"
+    cal:Message.Attach="[Event KeyDown]=[Action KeyDown($eventArgs)]"
     mc:Ignorable="d">
 
     <Grid>

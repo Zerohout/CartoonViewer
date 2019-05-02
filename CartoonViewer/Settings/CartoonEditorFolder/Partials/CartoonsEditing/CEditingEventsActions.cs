@@ -110,7 +110,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// <summary>
 		/// Добавить Сезон в список
 		/// </summary>
-		public async void AddSeason()
+		public void AddSeason()
 		{
 			var count = Seasons.Count + 1;
 
@@ -130,7 +130,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			using(var ctx = new CVDbContext(AppDataPath))
 			{
 				ctx.CartoonSeasons.Add(Seasons.Last());
-				await ctx.SaveChangesAsync();
+				ctx.SaveChanges();
 				Seasons.Last().CartoonSeasonId = ctx.CartoonSeasons.ToList().Last().CartoonSeasonId;
 			}
 
@@ -194,7 +194,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// <summary>
 		/// Сохранить изменения
 		/// </summary>
-		public async void SaveChanges()
+		public void SaveChanges()
 		{
 			if(CanSaveChanges is false) return;
 			using(var ctx = new CVDbContext(AppDataPath))
@@ -211,7 +211,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				ctx.Entry(cartoon).State = EntityState.Modified;
 
 
-				await ctx.SaveChangesAsync();
+				ctx.SaveChanges();
 			}
 
 			TempCartoonSnapshot = JsonConvert.SerializeObject(SelectedCartoon);

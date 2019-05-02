@@ -14,16 +14,16 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 	{
 		#region Private methods
 
-		private async void LoadData()
+		private  void LoadData()
 		{
 			Cartoon result;
 			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
 			{
-				result = await ctx.Cartoons
+				result = ctx.Cartoons
 								  .Include(c => c.CartoonUrls)
 								  .Include(c => c.CartoonSeasons)
 								  .Include(c => c.CartoonVoiceOvers)
-								  .SingleAsync(c => c.CartoonId == SettingsHelper.GlobalIdList.CartoonId);
+								  .Single(c => c.CartoonId == SettingsHelper.GlobalIdList.CartoonId);
 			}
 
 			SelectedCartoon = CloneObject<Cartoon>(result);
@@ -35,7 +35,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			SelectedSeason = Seasons.FirstOrDefault();
 		}
 
-		public async void UpdateVoiceOverList()
+		public void UpdateVoiceOverList()
 		{
 			if(SettingsHelper.GlobalIdList.CartoonId == 0)
 				return;
@@ -43,9 +43,9 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			Cartoon cartoon;
 			using(var ctx = new CVDbContext(SettingsHelper.AppDataPath))
 			{
-				cartoon = await ctx.Cartoons
+				cartoon = ctx.Cartoons
 								   .Include(c => c.CartoonVoiceOvers)
-								   .SingleAsync(c => c.CartoonId == SettingsHelper.GlobalIdList.CartoonId);
+								   .Single(c => c.CartoonId == SettingsHelper.GlobalIdList.CartoonId);
 			}
 
 			VoiceOvers = new BindableCollection<CartoonVoiceOver>(cartoon.CartoonVoiceOvers);

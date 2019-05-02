@@ -84,7 +84,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// <summary>
 		/// Удаление глобальной озвучки из БД
 		/// </summary>
-		private async void RemoveSelectedGlobalVoiceOverFromDb()
+		private void RemoveSelectedGlobalVoiceOverFromDb()
 		{
 
 			using(var ctx = new CVDbContext(Helpers.SettingsHelper.AppDataPath))
@@ -107,7 +107,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 				ctx.Entry(voiceOver).State = EntityState.Deleted;
 
-				await ctx.SaveChangesAsync();
+				ctx.SaveChanges();
 			}
 		}
 
@@ -149,19 +149,19 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// <summary>
 		/// Удалить  озвучку выбранного м/ф из БД
 		/// </summary>
-		private async void RemoveSelectedCartoonVoiceOverFromDb()
+		private void RemoveSelectedCartoonVoiceOverFromDb()
 		{
 			using(var ctx = new CVDbContext(Helpers.SettingsHelper.AppDataPath))
 			{
-				var cartoon = await ctx.Cartoons
+				var cartoon = ctx.Cartoons
 									   .Include(ce => ce.CartoonVoiceOvers)
-									   .SingleAsync(ce => ce.CartoonId == IdList.CartoonId);
+									   .Single(ce => ce.CartoonId == IdList.CartoonId);
 
 				ctx.VoiceOvers
 				   .Include(vo => vo.Cartoons)
 				   .Single(vo => vo.CartoonVoiceOverId == SelectedVoiceOverId)
 				   .Cartoons.Remove(cartoon);
-				await ctx.SaveChangesAsync();
+				ctx.SaveChanges();
 			}
 		}
 
@@ -203,19 +203,19 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// <summary>
 		/// Удалить выбранную озвучку текущего эпизода из БД
 		/// </summary>
-		private async void RemoveSelectedEpisodeVoiceOverFromDb()
+		private void RemoveSelectedEpisodeVoiceOverFromDb()
 		{
 			using(var ctx = new CVDbContext(Helpers.SettingsHelper.AppDataPath))
 			{
-				var episode = await ctx.CartoonEpisodes
+				var episode =  ctx.CartoonEpisodes
 									   .Include(ce => ce.EpisodeVoiceOvers)
-									   .SingleAsync(ce => ce.CartoonEpisodeId == IdList.EpisodeId);
+									   .Single(ce => ce.CartoonEpisodeId == IdList.EpisodeId);
 
 				ctx.VoiceOvers
 				   .Include(vo => vo.CartoonEpisodes)
 				   .Single(vo => vo.CartoonVoiceOverId == SelectedVoiceOverId)
 				   .CartoonEpisodes.Remove(episode);
-				await ctx.SaveChangesAsync();
+				ctx.SaveChanges();
 			}
 		}
 
@@ -441,7 +441,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		/// Создать новую озвучку в БД
 		/// </summary>
 		/// <returns></returns>
-		private Task<CartoonVoiceOver> CreateNewVoiceOver()
+		private CartoonVoiceOver CreateNewVoiceOver()
 		{
 			using(var ctx = new CVDbContext(Helpers.SettingsHelper.AppDataPath))
 			{
@@ -459,7 +459,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 				var id = ctx.VoiceOvers.ToList().Last().CartoonVoiceOverId;
 
-				return ctx.VoiceOvers.FindAsync(id);
+				return ctx.VoiceOvers.Find(id);
 			}
 		}
 

@@ -29,14 +29,14 @@ namespace CartoonViewer.MainMenu.ViewModels
 		/// <summary>
 		/// Загрузка списка мультсериалов из базы данных
 		/// </summary>
-		private async void LoadCartoons()
+		private void LoadCartoons()
 		{
 			Cartoons = new BindableCollection<Cartoon>(
-				await CvDbContext.Cartoons
+				CvDbContext.Cartoons
 								 .Include(c => c.CartoonUrls)
 								 .Include(c => c.CartoonWebSites)
 								 .Include(c => c.CartoonSeasons)
-								 .ToListAsync());
+								 .ToList());
 
 			CheckedValidation();
 		}

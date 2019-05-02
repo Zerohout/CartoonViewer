@@ -15,43 +15,43 @@ namespace CartoonViewer.Settings.ViewingsSettingsFolder.ViewModels
 		/// <summary>
 		/// Загрузка данных (начальная и при смене значений объектов)
 		/// </summary>
-		private async void LoadData()
+		private void LoadData()
 		{
 			if(_selectedCartoon == null)
 			{
-				await LoadCartoonData();
+				LoadCartoonData();
 				return;
 			}
 
 			if(_selectedSeason == null)
 			{
-				await LoadSeasonData();
+				LoadSeasonData();
 				return;
 			}
 
 			if(_selectedEpisode == null)
 			{
-				await LoadEpisodeData();
+				LoadEpisodeData();
 				return;
 			}
 
 			if(_selectedVoiceOver != null)
 				return;
 
-			await LoadVoiceOverData();
+			LoadVoiceOverData();
 
 		}
 
 		/// <summary>
 		/// Загрузка м/с и связанных с ним данных
 		/// </summary>
-		private Task LoadCartoonData()
+		private void LoadCartoonData()
 		{
 			if(IdList.CartoonId == 0)
 			{
 				// Начальная загрузка списка м/с при загрузке VM
 				LoadCartoonList();
-				return Task.CompletedTask;
+				return;
 			}
 
 			// Установка значения выбранного м/с с null на notNull
@@ -60,13 +60,12 @@ namespace CartoonViewer.Settings.ViewingsSettingsFolder.ViewModels
 
 			// Загрузка списка сезонов выбранного м/с
 			LoadSeasonList();
-			return Task.CompletedTask;
 		}
 
 		/// <summary>
 		/// Загрузка сезона и связанных с нима данных
 		/// </summary>
-		private Task LoadSeasonData()
+		private void LoadSeasonData()
 		{
 			if(_selectedCartoon.CartoonId != IdList.CartoonId)
 			{
@@ -80,7 +79,7 @@ namespace CartoonViewer.Settings.ViewingsSettingsFolder.ViewModels
 			{
 				// Загрузка списка сезонов выбранного м/с
 				LoadSeasonList();
-				return Task.CompletedTask;
+				return;
 			}
 
 			// Установка значения выбранного сезона с null на notNull
@@ -90,14 +89,12 @@ namespace CartoonViewer.Settings.ViewingsSettingsFolder.ViewModels
 			NotifySeasonData();
 
 			LoadEpisodeList();
-
-			return Task.CompletedTask;
 		}
 
 		/// <summary>
 		/// Загрузка эпизода и связанных с ним данных
 		/// </summary>
-		private Task LoadEpisodeData()
+		private void LoadEpisodeData()
 		{
 			if(_selectedSeason.CartoonSeasonId != IdList.SeasonId)
 			{
@@ -112,7 +109,7 @@ namespace CartoonViewer.Settings.ViewingsSettingsFolder.ViewModels
 			{
 				// Загрузка списка эпизодов выбранного сезона
 				LoadEpisodeList();
-				return Task.CompletedTask;
+				return;
 			}
 
 			// Установка значения выбранного эпизода с null на notNull
@@ -120,10 +117,9 @@ namespace CartoonViewer.Settings.ViewingsSettingsFolder.ViewModels
 			NotifyEpisodeData();
 
 			LoadEpisodeVoiceOverList();
-			return Task.CompletedTask;
 		}
 
-		private Task LoadVoiceOverData()
+		private void LoadVoiceOverData()
 		{
 			if(_selectedEpisode.CartoonEpisodeId != IdList.EpisodeId)
 			{
@@ -137,91 +133,56 @@ namespace CartoonViewer.Settings.ViewingsSettingsFolder.ViewModels
 			{
 				// Загрузка списка озвучек выбранного эпизода
 				LoadEpisodeVoiceOverList();
-				return Task.CompletedTask;
+				return;
 			}
 
 			// Установка значения выбранной озвучки с null на notNull
 			_selectedVoiceOver = _voiceOvers.First(vo => vo.CartoonVoiceOverId == IdList.VoiceOverId);
 			NotifyVoiceOverData();
-			return Task.CompletedTask;
 		}
 
 		/// <summary>
 		/// Загрузка списка м/с из БД
 		/// </summary>
-		public async void LoadCartoonList()
+		public void LoadCartoonList()
 		{
-			//using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
-			//{
-			//	Cartoons = new BindableCollection<Cartoon>(await ctx.Cartoons.ToListAsync());
-			//}
-
-			Cartoons = new BindableCollection<Cartoon>(await CvDbContext.Cartoons.ToListAsync());
+			Cartoons = new BindableCollection<Cartoon>(CvDbContext.Cartoons.ToList());
 		}
 
 		/// <summary>
 		/// Загрузка списка сезонов выбранного м/с из БД
 		/// </summary>
-		public async void LoadSeasonList()
+		public void LoadSeasonList()
 		{
-			//using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
-			//{
-			//	Seasons = new BindableCollection<CartoonSeason>(
-			//		await ctx.CartoonSeasons
-			//				 .Where(cs => cs.CartoonId == IdList.CartoonId)
-			//				 .ToListAsync());
-			//}
-
 			Seasons = new BindableCollection<CartoonSeason>(
-				await CvDbContext.CartoonSeasons
+				CvDbContext.CartoonSeasons
 				                 .Where(cs => cs.CartoonId == IdList.CartoonId)
-							 .ToListAsync());
+							 .ToList());
 		}
 
 		/// <summary>
 		/// Загрузка списка эпизодов выбранного сезона из БД
 		/// </summary>
-		public async void LoadEpisodeList()
+		public void LoadEpisodeList()
 		{
-			//using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
-			//{
-			//	Episodes = new BindableCollection<CartoonEpisode>(
-			//		await ctx.CartoonEpisodes
-			//				 .Where(ce => ce.CartoonSeasonId == IdList.SeasonId)
-			//				 .ToListAsync());
-			//}
-
 			Episodes = new BindableCollection<CartoonEpisode>(
-				await CvDbContext.CartoonEpisodes
+				CvDbContext.CartoonEpisodes
 				         .Where(ce => ce.CartoonSeasonId == IdList.SeasonId)
-				         .ToListAsync());
+				         .ToList());
 		}
 
 		/// <summary>
 		/// Загрузка списка озвучек выбранного эпизода из БД
 		/// </summary>
-		public async void LoadEpisodeVoiceOverList()
+		public void LoadEpisodeVoiceOverList()
 		{
-			BindableCollection<CartoonVoiceOver> voiceOvers;
-
-			//using(var ctx = new CVDbContext(Helpers.Helper.AppDataPath))
-			//{
-			//	voiceOvers = new BindableCollection<CartoonVoiceOver>(
-			//		await ctx.VoiceOvers
-			//		         .Include(vo => vo.CartoonEpisodes)
-			//				 .Include(vo => vo.CheckedEpisodes)
-			//				 .Where(vo => vo.CartoonEpisodes
-			//								.Any(ce => ce.CartoonEpisodeId == IdList.EpisodeId))
-			//				 .ToListAsync());
-			//}
-
-			voiceOvers = new BindableCollection<CartoonVoiceOver>(
-				await CvDbContext.VoiceOvers
-				         .Include(vo => vo.CartoonEpisodes)
-				         .Include(vo => vo.CheckedEpisodes)
-				         .Where(vo => vo.CartoonEpisodes
-				                        .Any(ce => ce.CartoonEpisodeId == IdList.EpisodeId))
-				         .ToListAsync());
+			var voiceOvers = new BindableCollection<CartoonVoiceOver>(
+				CvDbContext.VoiceOvers
+				           .Include(vo => vo.CartoonEpisodes)
+				           .Include(vo => vo.CheckedEpisodes)
+				           .Where(vo => vo.CartoonEpisodes
+				                          .Any(ce => ce.CartoonEpisodeId == IdList.EpisodeId))
+				           .ToList());
 
 			var totalCount = voiceOvers.Count;
 			var count = 0;
@@ -319,12 +280,15 @@ namespace CartoonViewer.Settings.ViewingsSettingsFolder.ViewModels
 			if(value == null)
 			{
 				_selectedEpisode = null;
+				EpisodeIndexes.CurrentIndex = -1;
 				NotifyEpisodeData();
 			}
 			else
 			{
+				EpisodeIndexes.CurrentIndex = Episodes.IndexOf(value);
 				LoadData();
 			}
+
 		}
 
 		private void ChangeSelectedVoiceOver(CartoonVoiceOver value)

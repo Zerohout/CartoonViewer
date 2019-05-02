@@ -5,7 +5,10 @@
     xmlns:settingModels="clr-namespace:CartoonViewer.Models.SettingModels"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:vms="clr-namespace:CartoonViewer.Settings.CartoonEditorFolder.ViewModels"
-    IsDesignTime="True">
+    xmlns:cal="http://www.caliburnproject.org"
+    cal:Bind.AtDesignTime="True"
+    IsDesignTime="True"
+    >
     <vms:EpisodesEditingViewModel.Episodes>
         <cartoonModels:CartoonEpisode Number="1" />
         <cartoonModels:CartoonEpisode Number="2" />

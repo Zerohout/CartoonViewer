@@ -19,7 +19,7 @@
         <cartoonModels:CartoonVoiceOver Name="Глоб._озв._10" />
     </viewModels:VoiceOversEditingViewModel.GlobalVoiceOvers>
     <viewModels:VoiceOversEditingViewModel.SelectedGlobalVoiceOver>
-        <cartoonModels:CartoonVoiceOver Name="Выб._глоб._озв.>" />
+        <cartoonModels:CartoonVoiceOver Name="Выб._глоб._озв.&gt;" />
     </viewModels:VoiceOversEditingViewModel.SelectedGlobalVoiceOver>
 
     <viewModels:VoiceOversEditingViewModel.Cartoons>
@@ -90,6 +90,6 @@
         <cartoonModels:CartoonVoiceOver Name="Озв._эп._10" />
     </viewModels:VoiceOversEditingViewModel.EpisodeVoiceOvers>
     <viewModels:VoiceOversEditingViewModel.SelectedEpisodeVoiceOver>
-        <cartoonModels:CartoonVoiceOver Name="Выб._озв._эп."/>
+        <cartoonModels:CartoonVoiceOver Name="Выб._озв._эп." />
     </viewModels:VoiceOversEditingViewModel.SelectedEpisodeVoiceOver>
 </viewModels:VoiceOversEditingViewModel>

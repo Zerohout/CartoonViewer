@@ -1,18 +1,50 @@
 ﻿// ReSharper disable CheckNamespace
 namespace CartoonViewer.Settings.ViewingsSettingsFolder.ViewModels
 {
+	using System.Windows.Input;
 	using Caliburn.Micro;
+	using CartoonEditorFolder.ViewModels;
 	using Database;
 	using static Helpers.Helper;
 
 	public partial class ViewingsSettingsViewModel : Screen
 	{
 
-		#region Check\uncheck actions
+		public void KeyDown(KeyEventArgs e)
+		{
+			switch(e.KeyboardDevice.Modifiers)
+			{
+				case ModifierKeys.Control:
+					switch(e.Key)
+					{
+						case Key.OemPlus:
+							if(Episodes.Count > 0)
+							{
+								if (EpisodeIndexes.CurrentIndex < EpisodeIndexes.EndIndex)
+								{
+									SelectedEpisode = Episodes[EpisodeIndexes.CurrentIndex + 1];
+									return;
+								}
+							}
+							break;
+						case Key.OemMinus:
+							if (Episodes.Count > 0)
+							{
+								if (EpisodeIndexes.CurrentIndex > 0)
+								{
+									SelectedEpisode = Episodes[EpisodeIndexes.CurrentIndex - 1];
+									return;
+								}
+							}
 
-		
+							break;
+					}
 
-		#endregion
+					break;
+				case ModifierKeys.None:
+					break;
+			}
+		}
 
 
 		public void SeasonCheckValidation()
@@ -65,9 +97,11 @@ namespace CartoonViewer.Settings.ViewingsSettingsFolder.ViewModels
 
 		}
 
+		private (int CurrentIndex, int EndIndex) EpisodeIndexes;
+
 		public void EpisodeSelectionChanged()
 		{
-
+			
 		}
 
 		public void VoiceOverSelectionChanged()

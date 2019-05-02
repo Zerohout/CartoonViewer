@@ -77,6 +77,7 @@ namespace CartoonViewer.Settings.ViewingsSettingsFolder.ViewModels
 			set
 			{
 				_episodes = value;
+				EpisodeIndexes.EndIndex = value?.Count - 1 ?? -1;
 				NotifyOfPropertyChange(() => Episodes);
 			}
 		}
