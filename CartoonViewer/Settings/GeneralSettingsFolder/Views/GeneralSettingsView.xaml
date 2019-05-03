@@ -73,9 +73,9 @@
                     Style="{StaticResource SEDefaultTBlockStyle}">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}~{0}д. {1}ч. {2}м.">
-                            <Binding Path="GeneralValue.ApproximateDuration.Days" />
-                            <Binding Path="GeneralValue.ApproximateDuration.Hours" />
-                            <Binding Path="GeneralValue.ApproximateDuration.Minutes" />
+                            <Binding Path="GeneralValue.ApproximateDefaultDuration.Days" />
+                            <Binding Path="GeneralValue.ApproximateDefaultDuration.Hours" />
+                            <Binding Path="GeneralValue.ApproximateDefaultDuration.Minutes" />
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>

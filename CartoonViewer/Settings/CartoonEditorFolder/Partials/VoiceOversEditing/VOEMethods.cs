@@ -207,7 +207,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		{
 			using(var ctx = new CVDbContext(Helpers.SettingsHelper.AppDataPath))
 			{
-				var episode =  ctx.CartoonEpisodes
+				var episode = ctx.CartoonEpisodes
 									   .Include(ce => ce.EpisodeVoiceOvers)
 									   .Single(ce => ce.CartoonEpisodeId == IdList.EpisodeId);
 
@@ -254,6 +254,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			Cartoons = new BindableCollection<Cartoon>(cartoons);
 			CartoonIndexes.EndIndex = Cartoons.Count - 1;
 			NotifyOfPropertyChange(() => CanSelectNextCartoon);
+			NotifyOfPropertyChange(() => CanSelectPreviousCartoon);
 		}
 
 		/// <summary>
@@ -269,8 +270,16 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				return;
 			}
 
+			CartoonIndexes.CurrentIndex = value == null
+				? -1
+				: Cartoons.IndexOf(value);
+			NotifyOfPropertyChange(() => CanSelectNextCartoon);
+			NotifyOfPropertyChange(() => CanSelectPreviousCartoon);
+
 			if(_selectedCartoon == value)
+			{
 				return;
+			}
 
 			IdList.CartoonId = value?.CartoonId ?? 0;
 			SelectedCartoonVoiceOver = null;
@@ -284,10 +293,8 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			}
 			else
 			{
-				CartoonIndexes.CurrentIndex = Cartoons.IndexOf(value);
 				LoadData();
 			}
-			NotifyOfPropertyChange(() => CanSelectNextCartoon);
 		}
 
 		#endregion
@@ -312,6 +319,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			Seasons = new BindableCollection<CartoonSeason>(seasons);
 			SeasonIndexes.EndIndex = Seasons.Count - 1;
 			NotifyOfPropertyChange(() => CanSelectNextSeason);
+			NotifyOfPropertyChange(() => CanSelectPreviousSeason);
 		}
 
 		/// <summary>
@@ -327,8 +335,16 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				return;
 			}
 
+			SeasonIndexes.CurrentIndex = value == null
+				? -1
+				: Seasons.IndexOf(value);
+			NotifyOfPropertyChange(() => CanSelectNextSeason);
+			NotifyOfPropertyChange(() => CanSelectPreviousSeason);
+
 			if(_selectedSeason == value)
+			{
 				return;
+			}
 
 			IdList.SeasonId = value?.CartoonSeasonId ?? 0;
 			ChangeSelectedEpisode(null);
@@ -340,10 +356,8 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			}
 			else
 			{
-				SeasonIndexes.CurrentIndex = Seasons.IndexOf(value);
 				LoadData();
 			}
-			NotifyOfPropertyChange(() => CanSelectNextSeason);
 		}
 
 		#endregion
@@ -365,10 +379,11 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				episodes = new BindableCollection<CartoonEpisode>(ctx.CartoonEpisodes.Local);
 			}
 
-			Episodes.Clear();
-			Episodes.AddRange(episodes);
+			Episodes = new BindableCollection<CartoonEpisode>(episodes);
+
 			EpisodeIndexes.EndIndex = Episodes.Count - 1;
 			NotifyOfPropertyChange(() => CanSelectNextEpisode);
+			NotifyOfPropertyChange(() => CanSelectPreviousEpisode);
 		}
 
 		/// <summary>
@@ -384,8 +399,16 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				return;
 			}
 
+			EpisodeIndexes.CurrentIndex = value == null
+				? -1
+				: Episodes.IndexOf(value);
+			NotifyOfPropertyChange(() => CanSelectNextEpisode);
+			NotifyOfPropertyChange(() => CanSelectPreviousEpisode);
+
 			if(_selectedEpisode == value)
+			{
 				return;
+			}
 
 			IdList.EpisodeId = value?.CartoonEpisodeId ?? 0;
 			SelectedEpisodeVoiceOver = null;
@@ -397,10 +420,8 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			}
 			else
 			{
-				EpisodeIndexes.CurrentIndex = Episodes.IndexOf(value);
 				LoadData();
 			}
-			NotifyOfPropertyChange(() => CanSelectNextEpisode);
 		}
 
 		#endregion
@@ -481,15 +502,15 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				if(IdList.CartoonId > 0)
 				{
 					_selectedCartoon = _cartoons.FirstOrDefault(c => c.CartoonId == IdList.CartoonId);
+					CartoonIndexes.CurrentIndex = Cartoons.IndexOf(_selectedCartoon);
 					LoadData();
-					NotifyCartoonData();
 				}
 				else
 				{
 					SelectedCartoon = _cartoons.FirstOrDefault();
-					NotifyCartoonData();
 				}
 
+				NotifyCartoonData();
 				return;
 			}
 
@@ -501,20 +522,21 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 				// установка значения выбранному мультфильму при смене его на другой
 				_selectedCartoon = _cartoons.FirstOrDefault(c => c.CartoonId == IdList.CartoonId);
+				CartoonIndexes.CurrentIndex = Cartoons.IndexOf(_selectedCartoon);
 				NotifyCartoonData();
 
 				if(IdList.SeasonId > 0)
 				{
 					_selectedSeason = _seasons.FirstOrDefault(cs => cs.CartoonSeasonId == IdList.SeasonId);
+					SeasonIndexes.CurrentIndex = Seasons.IndexOf(_selectedSeason);
 					LoadData();
-					NotifySeasonData();
 				}
 				else
 				{
 					SelectedSeason = _seasons.FirstOrDefault();
-					NotifySeasonData();
 				}
 
+				NotifySeasonData();
 				return;
 			}
 
@@ -524,25 +546,28 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				LoadEpisodeList();
 
 				_selectedSeason = _seasons.FirstOrDefault(cs => cs.CartoonSeasonId == IdList.SeasonId);
+				SeasonIndexes.CurrentIndex = Seasons.IndexOf(_selectedSeason);
 				NotifySeasonData();
 
 				if(IdList.EpisodeId > 0)
 				{
 					_selectedEpisode = _episodes.FirstOrDefault(ce => ce.CartoonEpisodeId == IdList.EpisodeId);
+					EpisodeIndexes.CurrentIndex = Episodes.IndexOf(_selectedEpisode);
 					LoadData();
-					NotifyEpisodeData();
 				}
 				else
 				{
 					SelectedEpisode = _episodes.FirstOrDefault();
-					NotifyEpisodeData();
 				}
+
+				NotifyEpisodeData();
 				return;
 			}
 
 			// --При выборе эпизода
 			LoadEpisodeVoiceOverList();
 			_selectedEpisode = _episodes.FirstOrDefault(ce => ce.CartoonEpisodeId == IdList.EpisodeId);
+			EpisodeIndexes.CurrentIndex = Episodes.IndexOf(_selectedEpisode);
 			NotifyEpisodeData();
 		}
 
@@ -572,6 +597,8 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			NotifyOfPropertyChange(() => SelectedCartoon);
 			NotifyOfPropertyChange(() => SelectedCartoonVisibility);
 			NotifyOfPropertyChange(() => CanCancelCartoonSelection);
+			NotifyOfPropertyChange(() => CanSelectNextCartoon);
+			NotifyOfPropertyChange(() => CanSelectPreviousCartoon);
 		}
 		/// <summary>
 		/// Оповестить свойства зависимые от выбранного сезона
@@ -581,6 +608,8 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			NotifyOfPropertyChange(() => SelectedSeason);
 			NotifyOfPropertyChange(() => SelectedSeasonVisibility);
 			NotifyOfPropertyChange(() => CanCancelSeasonSelection);
+			NotifyOfPropertyChange(() => CanSelectNextSeason);
+			NotifyOfPropertyChange(() => CanSelectPreviousSeason);
 		}
 		/// <summary>
 		/// Оповестить свойства зависимые от выбранного эпизода
@@ -590,6 +619,8 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			NotifyOfPropertyChange(() => SelectedEpisode);
 			NotifyOfPropertyChange(() => SelectedEpisodeVisibility);
 			NotifyOfPropertyChange(() => CanCancelEpisodeSelection);
+			NotifyOfPropertyChange(() => CanSelectNextEpisode);
+			NotifyOfPropertyChange(() => CanSelectPreviousEpisode);
 		}
 		/// <summary>
 		/// Оповестить общие кнопки списков озвучек

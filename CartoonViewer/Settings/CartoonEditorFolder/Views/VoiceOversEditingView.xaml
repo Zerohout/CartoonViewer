@@ -24,9 +24,9 @@
             <RowDefinition Height="0.4*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="0.3*" />
+            <ColumnDefinition Width="0.325*" />
+            <ColumnDefinition Width="0.375*" />
         </Grid.ColumnDefinitions>
 
         <!--#region Row 0-->
@@ -105,11 +105,12 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <TextBlock
                     Grid.Row="0"
                     Grid.Column="0"
-                    Grid.ColumnSpan="2"
+                    Grid.ColumnSpan="4"
                     FontSize="16"
                     Foreground="AliceBlue"
                     Style="{StaticResource SEDefaultTBlockStyle}"
@@ -134,7 +135,7 @@
                 <Button
                     Grid.Row="1"
                     Grid.Column="1"
-                    Margin="0,2.5,5,1.25"
+                    Margin="0,2.5,2.5,2.5"
                     VerticalAlignment="Center"
                     cal:Message.Attach="[Event Click]=[Action CancelCartoonSelection()]"
                     ToolTip="Снять выделение мультсериала">
@@ -145,7 +146,20 @@
                 <Button
                     Grid.Row="1"
                     Grid.Column="2"
-                    Margin="2.5,1.25,2.5,2.5"
+                    Margin="1.25,1.25,2.5,2.5"
+                    VerticalContentAlignment="Center"
+                    cal:Message.Attach="[Event Click]=[Action SelectPreviousCartoon()]"
+                    ToolTip="Выбрать предыдущий м/с">
+                    <iconPacks:PackIconMaterial
+                        Width="15"
+                        Height="12"
+                        Padding="-3"
+                        Style="{StaticResource EditListUpBtnIconStyle}" />
+                </Button>
+                <Button
+                    Grid.Row="1"
+                    Grid.Column="3"
+                    Margin="1.25,1.25,2.5,2.5"
                     VerticalContentAlignment="Center"
                     cal:Message.Attach="[Event Click]=[Action SelectNextCartoon()]"
                     ToolTip="Выбрать следующий м/с">
@@ -155,6 +169,7 @@
                         Padding="-3"
                         Style="{StaticResource EditListDownBtnIconStyle}" />
                 </Button>
+                
             </Grid>
         </Grid>
 
@@ -171,6 +186,7 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <TextBlock
@@ -178,7 +194,7 @@
                 Grid.Column="0"
                 Margin="5,0,0,0"
                 HorizontalAlignment="Right"
-                FontSize="16"
+                FontSize="15"
                 Foreground="AliceBlue"
                 Style="{StaticResource SEDefaultTBlockStyle}"
                 Text="Сезон "
@@ -195,6 +211,7 @@
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock
+                                FontSize="14"
                             Style="{StaticResource CCComboBoxTBlockItemStyle}"
                             Text="{Binding NumberName}" />
                     </DataTemplate>
@@ -217,7 +234,21 @@
             <Button
                 Grid.Row="0"
                 Grid.Column="3"
-                Margin="2.5,1.25,2.5,2.5"
+                Margin="1.25,1.25,2.5,2.5"
+                VerticalContentAlignment="Center"
+                cal:Message.Attach="[Event Click]=[Action SelectPreviousSeason()]"
+                ToolTip="Выбрать предыдущий сезон"
+                Visibility="{Binding SelectedCartoonVisibility}">
+                <iconPacks:PackIconMaterial
+                    Width="15"
+                    Height="12"
+                    Padding="-3"
+                    Style="{StaticResource EditListUpBtnIconStyle}" />
+            </Button>
+            <Button
+                Grid.Row="0"
+                Grid.Column="4"
+                Margin="1.25,1.25,2.5,2.5"
                 VerticalContentAlignment="Center"
                 cal:Message.Attach="[Event Click]=[Action SelectNextSeason()]"
                 ToolTip="Выбрать следующий сезон"
@@ -233,7 +264,7 @@
                 Grid.Row="1"
                 Grid.Column="0"
                 Margin="5,0,0,0"
-                FontSize="16"
+                FontSize="15"
                 Foreground="AliceBlue"
                 Style="{StaticResource SEDefaultTBlockStyle}"
                 Text="Эпизод "
@@ -250,6 +281,7 @@
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock
+                                FontSize="14"
                             Style="{StaticResource CCComboBoxTBlockItemStyle}"
                             Text="{Binding NumberName}" />
                     </DataTemplate>
@@ -272,7 +304,21 @@
             <Button
                 Grid.Row="1"
                 Grid.Column="3"
-                Margin="2.5,1.25,2.5,2.5"
+                Margin="1.25,1.25,2.5,2.5"
+                VerticalContentAlignment="Center"
+                cal:Message.Attach="[Event Click]=[Action SelectPreviousEpisode()]"
+                ToolTip="Выбрать предыдущий эпизод"
+                Visibility="{Binding SelectedSeasonVisibility}">
+                <iconPacks:PackIconMaterial
+                    Width="15"
+                    Height="12"
+                    Padding="-3"
+                    Style="{StaticResource EditListUpBtnIconStyle}" />
+            </Button>
+            <Button
+                Grid.Row="1"
+                Grid.Column="4"
+                Margin="1.25,1.25,2.5,2.5"
                 VerticalContentAlignment="Center"
                 cal:Message.Attach="[Event Click]=[Action SelectNextEpisode()]"
                 ToolTip="Выбрать следующий эпизод"

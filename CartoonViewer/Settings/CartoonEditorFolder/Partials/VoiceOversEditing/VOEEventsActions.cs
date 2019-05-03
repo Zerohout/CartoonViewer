@@ -155,6 +155,22 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 							if(CanSaveChanges)
 								SaveChanges();
 							break;
+						case Key.OemPlus:
+							if(CanSelectNextEpisode)
+							{
+								SelectNextEpisode();
+								return;
+							}
+
+							break;
+						case Key.OemMinus:
+							if(CanSelectPreviousEpisode)
+							{
+								SelectPreviousEpisode();
+								return;
+							}
+
+							break;
 					}
 					break;
 				case ModifierKeys.None:
@@ -812,7 +828,8 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 			UpdateVoiceOverList();
 
-
+			NotifyChanges();
+			
 		}
 
 
@@ -847,12 +864,33 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 			TryClose();
 		}
+		/// <summary>
+		/// Индексы м/с
+		/// </summary>
+		private (int CurrentIndex, int EndIndex) CartoonIndexes = (-1,0);
+		/// <summary>
+		/// Индексы сезонов
+		/// </summary>
+		private (int CurrentIndex, int EndIndex) SeasonIndexes = (-1, 0);
+		/// <summary>
+		/// Индексы эпизодов
+		/// </summary>
+		private (int CurrentIndex, int EndIndex) EpisodeIndexes = (-1, 0);
 
-		private (int CurrentIndex, int EndIndex) CartoonIndexes;
+		/// <summary>
+		/// Выбрать предыдущий м/с
+		/// </summary>
+		public void SelectPreviousCartoon()
+		{
+			if (CanSelectPreviousCartoon is false) return;
 
-		private (int CurrentIndex, int EndIndex) SeasonIndexes;
+			SelectedCartoon = Cartoons[CartoonIndexes.CurrentIndex - 1];
+			SelectedSeason = Seasons.FirstOrDefault();
+		}
 
-		private (int CurrentIndex, int EndIndex) EpisodeIndexes;
+		public bool CanSelectPreviousCartoon => Cartoons.Count > 0 &&
+		                                         CartoonIndexes.CurrentIndex > 0;
+
 		/// <summary>
 		/// Выбрать следующий м/с
 		/// </summary>
@@ -860,14 +898,27 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		{
 			if(CanSelectNextCartoon is false)
 				return;
-			SelectedCartoon = SelectedCartoon == null
-				? Cartoons.FirstOrDefault()
-				: Cartoons[CartoonIndexes.CurrentIndex + 1];
+			SelectedCartoon = Cartoons[CartoonIndexes.CurrentIndex + 1];
 			SelectedSeason = Seasons.FirstOrDefault();
 		}
 
-		public bool CanSelectNextCartoon => Cartoons.Count > 0 && SelectedCartoon != null &&
+		public bool CanSelectNextCartoon => Cartoons.Count > 0 &&
 											CartoonIndexes.CurrentIndex < CartoonIndexes.EndIndex;
+		/// <summary>
+		/// Выбрать предыдущий сезон
+		/// </summary>
+		public void SelectPreviousSeason()
+		{
+			if (CanSelectPreviousSeason is false) return;
+
+			SelectedSeason = Seasons[SeasonIndexes.CurrentIndex - 1];
+
+			SelectedEpisode = Episodes.FirstOrDefault();
+		}
+
+		public bool CanSelectPreviousSeason => Seasons.Count > 0 &&
+		                                       SeasonIndexes.CurrentIndex > 0;
+
 		/// <summary>
 		/// Выбрать следующий сезон
 		/// </summary>
@@ -876,15 +927,24 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			if(CanSelectNextSeason is false)
 				return;
 
-			SelectedSeason = SelectedSeason == null
-				? Seasons.FirstOrDefault()
-				: Seasons[SeasonIndexes.CurrentIndex + 1];
+			SelectedSeason = Seasons[SeasonIndexes.CurrentIndex + 1];
 
 			SelectedEpisode = Episodes.FirstOrDefault();
 		}
 
 		public bool CanSelectNextSeason => Seasons.Count > 0 &&
 										   SeasonIndexes.CurrentIndex < SeasonIndexes.EndIndex;
+
+		public void SelectPreviousEpisode()
+		{
+			if (CanSelectPreviousEpisode is false) return;
+
+			SelectedEpisode = Episodes[EpisodeIndexes.CurrentIndex - 1];
+		}
+
+		public bool CanSelectPreviousEpisode => Episodes.Count > 0 &&
+		                                        EpisodeIndexes.CurrentIndex > 0;
+
 		/// <summary>
 		/// Выбрать следующий эпизод
 		/// </summary>
@@ -892,9 +952,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		{
 			if(CanSelectNextEpisode is false)
 				return;
-			SelectedEpisode = SelectedEpisode == null
-				? Episodes.FirstOrDefault()
-				: Episodes[EpisodeIndexes.CurrentIndex + 1];
+			SelectedEpisode = Episodes[EpisodeIndexes.CurrentIndex + 1];
 		}
 
 		public bool CanSelectNextEpisode => Episodes.Count > 0 &&

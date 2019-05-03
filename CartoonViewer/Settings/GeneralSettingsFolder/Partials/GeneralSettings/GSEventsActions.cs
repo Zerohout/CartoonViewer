@@ -95,6 +95,7 @@ namespace CartoonViewer.Settings.GeneralSettingsFolder.ViewModels
 
 		public void SelectionChanged()
 		{
+			NotifyOfPropertyChange(() => GeneralValue);
 			NotifyButtons();
 		}
 
@@ -105,7 +106,7 @@ namespace CartoonViewer.Settings.GeneralSettingsFolder.ViewModels
 
 		public void TextChanged()
 		{
-
+			NotifyOfPropertyChange(() => GeneralValue);
 			NotifyButtons();
 		}
 	}

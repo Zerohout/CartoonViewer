@@ -102,6 +102,13 @@ namespace CartoonViewer.Models.SettingModels
 			new TimeSpan(0, 0,
 						 (int)Math.Ceiling(ApproximateEpisodeDuration.TotalSeconds * (EpisodesCount ?? 0)));
 
+		/// <summary>
+		/// Примерная длительность указанного количества эпизодов
+		/// </summary>
+		public TimeSpan ApproximateDefaultDuration =>
+			new TimeSpan(0, 0,
+			             (int)Math.Ceiling(ApproximateEpisodeDuration.TotalSeconds * (DefaultEpisodesCount ?? 0)));
+
 		#endregion
 
 		#region NightHelper

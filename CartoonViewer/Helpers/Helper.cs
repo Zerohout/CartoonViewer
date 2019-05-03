@@ -21,6 +21,7 @@
 		public const string MMBackgroundOnExitUri = "../../Resources/Images/HDMMBackgroundOnExit.png";
 		
 		public static TimeSpan ApproximateEpisodeDuration = new TimeSpan(0, 21, 10);
+		public static int GlobalAvailableEpisodesCount = 0;
 		public static WindowManager WinMan = new WindowManager();
 		public static MessageHelper Msg = new MessageHelper();
 		public static Stopwatch Timer = new Stopwatch();

@@ -9,10 +9,13 @@ namespace CartoonViewer.MainMenu.ViewModels
 	using System.Windows;
 	using System.Windows.Input;
 	using CartoonViewer.ViewModels;
+	using Helpers;
 	using Models.CartoonModels;
 	using Settings.CartoonEditorFolder.ViewModels;
 	using Settings.SettingsFolder.ViewModels;
 	using static Helpers.Helper;
+	using static Helpers.SettingsHelper;
+	using static Helpers.ClassWriterReader;
 	using Screen = Caliburn.Micro.Screen;
 
 	public partial class MainMenuViewModel : Screen
@@ -103,7 +106,7 @@ namespace CartoonViewer.MainMenu.ViewModels
 						   .Include(ce => ce.CartoonSeason)
 						   .Include(ce => ce.EpisodeOptions)
 						   .Include(ce => ce.Cartoon)
-						   .Where(ce => ce.Cartoon.Checked && ce.CartoonSeason.Checked));
+						   .Where(ce => ce.Cartoon.Checked && ce.CartoonSeason.Checked && ce.Checked));
 
 			if(CheckedEpisodes.Count > 0)
 			{
@@ -111,11 +114,14 @@ namespace CartoonViewer.MainMenu.ViewModels
 			}
 
 			GeneralSettings.AvailableEpisodesCount = CheckedEpisodes.Count;
+			WriteClassInFile(GeneralSettings,SavedGeneralSettingsFileName,GeneralSettingsFileExtension,AppDataPath);
 
 			NotifyOfPropertyChange(() => GeneralSettings);
 			NotifyOfPropertyChange(() => CanStart);
 		}
-
+		/// <summary>
+		/// Отфильтровать серии от просмотренных и не выбранных
+		/// </summary>
 		private void FilterCheckedEpisodes()
 		{
 			var count = 0;
