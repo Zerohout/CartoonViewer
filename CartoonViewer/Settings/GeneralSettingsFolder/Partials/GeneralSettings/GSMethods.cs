@@ -31,11 +31,10 @@ namespace CartoonViewer.Settings.GeneralSettingsFolder.ViewModels
 				var cartoons = ctx.Cartoons
 				                  .Include(c => c.CartoonEpisodes)
 				                  .Where(c => c.CartoonEpisodes.Count > 0).ToList();
-				Cartoons = new BindableCollection<Cartoon>(cartoons) {new Cartoon {Name = "всех"}};
 
+				Cartoons = new BindableCollection<Cartoon>(cartoons) {new Cartoon {Name = "всех"}};
 				Episodes = new BindableCollection<CartoonEpisode>(episodes);
 				
-
 				GeneralSettings.AvailableEpisodesCount =
 					ctx.CartoonEpisodes
 					   .Include(ce => ce.CartoonVoiceOver)

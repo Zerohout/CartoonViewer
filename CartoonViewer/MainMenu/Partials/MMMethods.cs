@@ -6,7 +6,6 @@ namespace CartoonViewer.MainMenu.ViewModels
 	using System.Data.Entity;
 	using System.Diagnostics;
 	using System.Linq;
-	using System.Runtime.InteropServices.ComTypes;
 	using System.Threading;
 	using System.Windows;
 	using Caliburn.Micro;
@@ -14,8 +13,8 @@ namespace CartoonViewer.MainMenu.ViewModels
 	using Helpers;
 	using Models.CartoonModels;
 	using OpenQA.Selenium;
-	using static Helpers.MessageHelper;
 	using static Helpers.ClassWriterReader;
+	using static Helpers.MessageHelper;
 	using static Helpers.SettingsHelper;
 
 	public partial class MainMenuViewModel : Screen
@@ -53,7 +52,7 @@ namespace CartoonViewer.MainMenu.ViewModels
 		{
 			IntellectualShutdownTimer = new TimeSpan();
 			EpisodesCountRemainingString = "Осталось серий";
-			
+
 			if(GeneralSettings.WatchingInRow is true)
 			{
 				CheckedEpisodes = CvDbContext.Cartoons
@@ -183,8 +182,11 @@ namespace CartoonViewer.MainMenu.ViewModels
 			Helper.Msg.PressKey(VK_F);
 
 			Helper.Msg.PressKey(VK_LEFT);
-			Helper.Msg.PressKey(VK_RIGHT, CurrentJumper.SkipCount);
-			TotalEpisodeTime += new TimeSpan(0, 0, CurrentJumper.SkipCount * 5);
+			if(CurrentJumper.SkipCount > 0)
+			{
+				Helper.Msg.PressKey(VK_RIGHT, CurrentJumper.SkipCount);
+				TotalEpisodeTime += new TimeSpan(0, 0, CurrentJumper.SkipCount * 5);
+			}
 
 			Thread.Sleep(500);
 			Helper.Msg.PressKey(VK_SPACE);

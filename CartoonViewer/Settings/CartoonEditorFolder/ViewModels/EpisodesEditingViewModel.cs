@@ -13,6 +13,7 @@
 		{
 			DisplayName = "Редактор эпизодов";
 			LoadSeasonData();
+			UpdateCartoonVoiceOvers();
 			base.OnInitialize();
 		}
 	}

@@ -114,7 +114,7 @@
                 Grid.Row="1"
                 Grid.Column="0"
                 Margin="2.5"
-                cal:Message.Attach="[Event SelectionChanged]=[Action SeasonSelectionChanged()]"
+                cal:Message.Attach="[Event SelectionChanged]=[Action SeasonSelectionChanged($source)]"
                 ItemsSource="{Binding Seasons}"
                 SelectedItem="{Binding SelectedSeason}">
                 <ListBox.ItemTemplate>
@@ -224,7 +224,7 @@
                 Grid.Row="1"
                 Grid.Column="0"
                 Margin="2.5"
-                cal:Message.Attach="[Event SelectionChanged]=[Action EpisodeSelectionChanged()]"
+                cal:Message.Attach="[Event SelectionChanged]=[Action EpisodeSelectionChanged($source)]"
                 ItemsSource="{Binding Episodes}"
                 SelectedItem="{Binding SelectedEpisode}">
                 <ListBox.ItemTemplate>
@@ -332,7 +332,7 @@
                 Grid.Row="1"
                 Grid.Column="0"
                 Margin="2.5"
-                cal:Message.Attach="[Event SelectionChanged]=[Action VoiceOverSelectionChanged()]"
+                cal:Message.Attach="[Event SelectionChanged]=[Action VoiceOverSelectionChanged($source)]"
                 ItemsSource="{Binding VoiceOvers}"
                 SelectedItem="{Binding SelectedVoiceOver}">
                 <ListBox.ItemTemplate>

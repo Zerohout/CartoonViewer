@@ -81,10 +81,35 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		}
 
 		/// <summary>
+		/// Обновить список озвучек м/с
+		/// </summary>
+		public void UpdateCartoonVoiceOvers()
+		{
+			if (GlobalIdList.CartoonId == 0) return;
+
+			using (var ctx = new CVDbContext(AppDataPath))
+			{
+				var voiceOvers = ctx.VoiceOvers
+				                    .Where(vo => vo.Cartoons.Any(c => c.CartoonId == GlobalIdList.CartoonId));
+
+				CartoonVoiceOvers = new BindableCollection<CartoonVoiceOver>(voiceOvers);
+			}
+
+		}
+
+		/// <summary>
 		/// Обновить список озвучек
 		/// </summary>
 		public void UpdateVoiceOverList()
 		{
+			if (GlobalIdList.CartoonId == 0) return;
+
+			if (IsNotEditing)
+			{
+				UpdateCartoonVoiceOvers();
+			}
+
+
 			if(GlobalIdList.EpisodeId == 0)
 				return;
 

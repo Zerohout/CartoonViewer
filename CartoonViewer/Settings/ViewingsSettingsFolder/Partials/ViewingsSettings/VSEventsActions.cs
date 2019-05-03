@@ -1,6 +1,7 @@
 ﻿// ReSharper disable CheckNamespace
 namespace CartoonViewer.Settings.ViewingsSettingsFolder.ViewModels
 {
+	using System.Windows.Controls;
 	using System.Windows.Input;
 	using Caliburn.Micro;
 	using CartoonEditorFolder.ViewModels;
@@ -89,24 +90,23 @@ namespace CartoonViewer.Settings.ViewingsSettingsFolder.ViewModels
 
 		public void CartoonSelectionChanged()
 		{
-
 		}
 
-		public void SeasonSelectionChanged()
+		public void SeasonSelectionChanged(ListBox lb)
 		{
-
+			lb.ScrollIntoView(lb.SelectedItem);
 		}
 
 		private (int CurrentIndex, int EndIndex) EpisodeIndexes;
 
-		public void EpisodeSelectionChanged()
+		public void EpisodeSelectionChanged(ListBox lb)
 		{
-			
+			lb.ScrollIntoView(lb.SelectedItem);
 		}
 
-		public void VoiceOverSelectionChanged()
+		public void VoiceOverSelectionChanged(ListBox lb)
 		{
-
+			lb.ScrollIntoView(lb.SelectedItem);
 		}
 
 		#endregion

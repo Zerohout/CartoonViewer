@@ -12,6 +12,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 	public partial class EpisodesEditingViewModel : Screen, ISettingsViewModel
 	{
 		private BindableCollection<CartoonEpisode> _episodes = new BindableCollection<CartoonEpisode>();
+		private BindableCollection<CartoonVoiceOver> _cartoonVoiceOvers = new BindableCollection<CartoonVoiceOver>();
 		private BindableCollection<CartoonVoiceOver> _voiceOvers = new BindableCollection<CartoonVoiceOver>();
 		private BindableCollection<EpisodeOption> _episodeOptions = new BindableCollection<EpisodeOption>();
 		private BindableCollection<Jumper> _jumpers = new BindableCollection<Jumper>();
@@ -44,6 +45,21 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				NotifyOfPropertyChange(() => Episodes);
 			}
 		}
+
+		/// <summary>
+		/// Список озвучек выбранного м/с
+		/// </summary>
+		public BindableCollection<CartoonVoiceOver> CartoonVoiceOvers
+		{
+			get => _cartoonVoiceOvers;
+			set
+			{
+				_cartoonVoiceOvers = value;
+				NotifyOfPropertyChange(() => CartoonVoiceOvers);
+			}
+		}
+
+
 		/// <summary>
 		/// Коллекция озвучек эпизода
 		/// </summary>
@@ -97,6 +113,18 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				_selectedEpisode = value;
 				NotifyOfPropertyChange(() => SelectedEpisode);
 				NotifyEpisodeListButtons();
+			}
+		}
+
+		private CartoonVoiceOver _defaultVoiceOver;
+
+		public CartoonVoiceOver DefaultVoiceOver
+		{
+			get => _defaultVoiceOver;
+			set
+			{
+				_defaultVoiceOver = value;
+				NotifyOfPropertyChange(() => DefaultVoiceOver);
 			}
 		}
 
@@ -212,8 +240,8 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			{
 				_isNotEditing = value;
 				NotifyOfPropertyChange(() => IsNotEditing);
-
 				NotifyOfPropertyChange(() => EpisodeEditingVisibility);
+				NotifyOfPropertyChange(() => DefaultVoiceOverVisibility);
 				NotifyEpisodeListButtons();
 				NotifyTimeProperties();
 				NotifyEditingButtons();
@@ -292,6 +320,12 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		public Visibility EpisodeEditingVisibility => IsNotEditing is true
 			? Visibility.Hidden
 			: Visibility.Visible;
+
+		public Visibility DefaultVoiceOverVisibility => IsNotEditing is true
+			? Visibility.Visible
+			: Visibility.Hidden;
+
+
 
 		///// <summary>
 		///// Видимость полей редактирования джампера

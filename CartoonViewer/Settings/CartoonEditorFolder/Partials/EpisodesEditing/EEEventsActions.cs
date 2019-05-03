@@ -111,9 +111,20 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				}
 
 				// загрузка первой озвучки выбранного м/с
-				var voiceOver = ctx.Cartoons
-								   .Include(ce => ce.CartoonVoiceOvers)
-								   .First(c => c.CartoonId == GlobalIdList.CartoonId).CartoonVoiceOvers.First();
+				CartoonVoiceOver voiceOver;
+
+				if(DefaultVoiceOver == null)
+				{
+					voiceOver = ctx.Cartoons
+					                   .Include(ce => ce.CartoonVoiceOvers)
+					                   .First(c => c.CartoonId == GlobalIdList.CartoonId).CartoonVoiceOvers.First();
+				}
+				else
+				{
+					voiceOver = ctx.VoiceOvers
+					               .First(vo => vo.CartoonVoiceOverId == 
+					                            DefaultVoiceOver.CartoonVoiceOverId);
+				}
 
 				var episode = CreateNewEpisode(ctx, voiceOver);
 

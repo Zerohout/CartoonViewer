@@ -21,8 +21,9 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 			CancelCartoonSelection();
 			IdList = tempValues;
 			LoadGlobalVoiceOverList();
-			LoadData();
 			SelectedVoiceOverId = tempId;
+			LoadData();
+			
 
 			SelectVoiceOver();
 
@@ -244,11 +245,10 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 			using(var ctx = new CVDbContext(Helpers.SettingsHelper.AppDataPath))
 			{
-				ctx.Cartoons
-				   .Where(c => c.CartoonWebSites
-								.Any(cws => cws.CartoonWebSiteId == IdList.WebSiteId))
-				   .Load();
-				cartoons = new BindableCollection<Cartoon>(ctx.Cartoons.Local);
+				cartoons = new BindableCollection<Cartoon>(ctx.Cartoons
+				                                              .Where(c => c.CartoonWebSites
+				                                                           .Any(cws => cws.CartoonWebSiteId == 
+				                                                                       IdList.WebSiteId)));
 			}
 
 			Cartoons = new BindableCollection<Cartoon>(cartoons);
@@ -310,10 +310,9 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 			using(var ctx = new CVDbContext(Helpers.SettingsHelper.AppDataPath))
 			{
-				ctx.CartoonSeasons
-				   .Where(cs => cs.CartoonId == IdList.CartoonId)
-				   .Load();
-				seasons = new BindableCollection<CartoonSeason>(ctx.CartoonSeasons.Local);
+				seasons = new BindableCollection<CartoonSeason>(ctx.CartoonSeasons
+				                                                   .Where(cs => cs.CartoonId == 
+				                                                                IdList.CartoonId));
 			}
 
 			Seasons = new BindableCollection<CartoonSeason>(seasons);
@@ -373,10 +372,10 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 			using(var ctx = new CVDbContext(Helpers.SettingsHelper.AppDataPath))
 			{
-				ctx.CartoonEpisodes
-				   .Where(ce => ce.CartoonSeasonId == IdList.SeasonId)
-				   .Load();
-				episodes = new BindableCollection<CartoonEpisode>(ctx.CartoonEpisodes.Local);
+				episodes = new BindableCollection<CartoonEpisode>(ctx.CartoonEpisodes
+				                                                     .Where(ce => ce.CartoonSeasonId == 
+				                                                                  IdList.SeasonId)
+				                                                     .ToList());
 			}
 
 			Episodes = new BindableCollection<CartoonEpisode>(episodes);
@@ -501,7 +500,20 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				// --При загруженных с конструктора данных мультсериала
 				if(IdList.CartoonId > 0)
 				{
+					var tempId = 0;
+					if(_selectedCartoon != null)
+					{
+						tempId = _selectedCartoon.CartoonId;
+					}
+
 					_selectedCartoon = _cartoons.FirstOrDefault(c => c.CartoonId == IdList.CartoonId);
+
+					if(_selectedCartoon == null)
+					{
+						IdList.CartoonId = tempId;
+						_selectedCartoon = _cartoons.FirstOrDefault(c => c.CartoonId == IdList.CartoonId);
+					}
+					
 					CartoonIndexes.CurrentIndex = Cartoons.IndexOf(_selectedCartoon);
 					LoadData();
 				}
@@ -527,7 +539,20 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 				if(IdList.SeasonId > 0)
 				{
+					var tempId = 0;
+					if(_selectedSeason != null)
+					{
+						tempId = _selectedSeason.CartoonSeasonId;
+					}
+
 					_selectedSeason = _seasons.FirstOrDefault(cs => cs.CartoonSeasonId == IdList.SeasonId);
+
+					if(_selectedSeason == null)
+					{
+						IdList.SeasonId = tempId;
+						_selectedSeason = _seasons.FirstOrDefault(cs => cs.CartoonSeasonId == IdList.SeasonId);
+					}
+					
 					SeasonIndexes.CurrentIndex = Seasons.IndexOf(_selectedSeason);
 					LoadData();
 				}
@@ -551,7 +576,20 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 				if(IdList.EpisodeId > 0)
 				{
+					var tempId = 0;
+					if (_selectedEpisode != null)
+					{
+						tempId = _selectedEpisode.CartoonEpisodeId;
+					}
+
 					_selectedEpisode = _episodes.FirstOrDefault(ce => ce.CartoonEpisodeId == IdList.EpisodeId);
+
+					if (_selectedEpisode == null)
+					{
+						IdList.EpisodeId = tempId;
+						_selectedEpisode = _episodes.FirstOrDefault(ce => ce.CartoonEpisodeId == IdList.EpisodeId);
+					}
+
 					EpisodeIndexes.CurrentIndex = Episodes.IndexOf(_selectedEpisode);
 					LoadData();
 				}
