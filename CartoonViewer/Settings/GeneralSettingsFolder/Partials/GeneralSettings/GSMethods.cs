@@ -1,6 +1,7 @@
 ﻿// ReSharper disable CheckNamespace
 namespace CartoonViewer.Settings.GeneralSettingsFolder.ViewModels
 {
+	using System.Collections.Generic;
 	using System.Data.Entity;
 	using System.Linq;
 	using Caliburn.Micro;
@@ -19,16 +20,23 @@ namespace CartoonViewer.Settings.GeneralSettingsFolder.ViewModels
 		{
 			using(var ctx = new CVDbContext(AppDataPath))
 			{
-				GeneralValue = LoadGeneralSettings();
+				GeneralSettings = LoadGeneralSettings();
 				var episodes = ctx.CartoonEpisodes
 								  .Include(ce => ce.CartoonVoiceOver)
 								  .Include(ce => ce.CartoonSeason)
 								  .Include(ce => ce.EpisodeOptions)
 								  .Include(ce => ce.Cartoon)
 								  .ToList();
-				Episodes = new BindableCollection<CartoonEpisode>(episodes);
 
-				GeneralValue.AvailableEpisodesCount =
+				var cartoons = ctx.Cartoons
+				                  .Include(c => c.CartoonEpisodes)
+				                  .Where(c => c.CartoonEpisodes.Count > 0).ToList();
+				Cartoons = new BindableCollection<Cartoon>(cartoons) {new Cartoon {Name = "всех"}};
+
+				Episodes = new BindableCollection<CartoonEpisode>(episodes);
+				
+
+				GeneralSettings.AvailableEpisodesCount =
 					ctx.CartoonEpisodes
 					   .Include(ce => ce.CartoonVoiceOver)
 					   .Include(ce => ce.CartoonSeason)
@@ -38,12 +46,12 @@ namespace CartoonViewer.Settings.GeneralSettingsFolder.ViewModels
 					   .ToList().Count;
 
 
-				WriteClassInFile(GeneralValue, DefaultGeneralSettingsFileName, GeneralSettingsFileExtension, AppDataPath);
+				WriteClassInFile(GeneralSettings, DefaultGeneralSettingsFileName, GeneralSettingsFileExtension, AppDataPath);
 				
-				GeneralValue = LoadGeneralSettings();
-				TempGeneralValue = CloneObject<GeneralSettingsValue>(GeneralValue);
+				GeneralSettings = LoadGeneralSettings();
+				TempGeneralSettings = CloneObject<GeneralSettingsValue>(GeneralSettings);
 				
-				NotifyOfPropertyChange(() => GeneralValue);
+				NotifyOfPropertyChange(() => GeneralSettings);
 				NotifyOfPropertyChange(() => CanSaveChanges);
 				NotifyOfPropertyChange(() => CanCancelChanges);
 			}

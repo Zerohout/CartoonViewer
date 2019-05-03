@@ -1,10 +1,15 @@
 ﻿// ReSharper disable CheckNamespace
 namespace CartoonViewer.Settings.GeneralSettingsFolder.ViewModels
 {
+	using System.Collections.Generic;
+	using System.Data.Entity;
+	using System.Linq;
 	using System.Windows.Input;
 	using Caliburn.Micro;
 	using CartoonEditorFolder.ViewModels;
 	using CartoonViewer.ViewModels;
+	using Database;
+	using Models.CartoonModels;
 	using Models.SettingModels;
 	using static Helpers.Helper;
 	using static Helpers.SettingsHelper;
@@ -14,15 +19,15 @@ namespace CartoonViewer.Settings.GeneralSettingsFolder.ViewModels
 	{
 		public void ExpandCollapseNightHelperShutdownRemark()
 		{
-			if(GeneralValue.IsNightHelperShutdownRemarkExpand)
+			if(GeneralSettings.IsNightHelperShutdownRemarkExpand)
 			{
-				GeneralValue.IsNightHelperShutdownRemarkExpand = false;
-				NotifyOfPropertyChange(() => GeneralValue);
+				GeneralSettings.IsNightHelperShutdownRemarkExpand = false;
+				NotifyOfPropertyChange(() => GeneralSettings);
 			}
 			else
 			{
-				GeneralValue.IsNightHelperShutdownRemarkExpand = true;
-				NotifyOfPropertyChange(() => GeneralValue);
+				GeneralSettings.IsNightHelperShutdownRemarkExpand = true;
+				NotifyOfPropertyChange(() => GeneralSettings);
 			}
 		}
 
@@ -50,15 +55,15 @@ namespace CartoonViewer.Settings.GeneralSettingsFolder.ViewModels
 				return;
 			}
 
-			GeneralValue = new GeneralSettingsValue();
+			GeneralSettings = new GeneralSettingsValue();
 			SaveChanges();
 		}
 
-		public bool CanSetDefaultValues => IsEquals(new GeneralSettingsValue(), GeneralValue) is false;
+		public bool CanSetDefaultValues => IsEquals(new GeneralSettingsValue(), GeneralSettings) is false;
 
 		public void CancelChanges()
 		{
-			GeneralValue = CloneObject<GeneralSettingsValue>(TempGeneralValue);
+			GeneralSettings = CloneObject<GeneralSettingsValue>(TempGeneralSettings);
 
 		}
 
@@ -66,19 +71,78 @@ namespace CartoonViewer.Settings.GeneralSettingsFolder.ViewModels
 
 		public void SaveChanges()
 		{
-			WriteClassInFile(GeneralValue, SavedGeneralSettingsFileName, GeneralSettingsFileExtension, AppDataPath);
-			TempGeneralValue = CloneObject<GeneralSettingsValue>(GeneralValue);
+			WriteClassInFile(GeneralSettings, SavedGeneralSettingsFileName, GeneralSettingsFileExtension, AppDataPath);
+			TempGeneralSettings = CloneObject<GeneralSettingsValue>(GeneralSettings);
 			NotifyButtons();
 		}
 
 		public bool CanSaveChanges => HasChanges;
+
+		public void ResetLastDateViewed()
+		{
+			if (CanResetLastDateViewed is false) return;
+
+			using(var ctx = new CVDbContext(AppDataPath))
+			{
+				var dvm = new DialogViewModel("Вы уверены что хотите сбросить дату последнего просмотра? Эта операция необратима.",
+					DialogType.QUESTION);
+
+				WinMan.ShowDialog(dvm);
+
+				switch (dvm.DialogResult)
+				{
+					case DialogResult.YES_ACTION:
+						break;
+					default:
+						return;
+				}
+
+
+				List<CartoonEpisode> episodes;
+
+				if (IsSelectedAllCartoonsToReset)
+				{
+					episodes = new List<CartoonEpisode>(ctx.CartoonEpisodes
+														.Include(ce => ce.EpisodeOptions)
+														.Include(ce => ce.CartoonVoiceOver));
+				}
+				else
+				{
+					episodes = new List<CartoonEpisode>(ctx.CartoonEpisodes
+					              .Include(ce => ce.EpisodeOptions)
+					              .Include(ce => ce.CartoonVoiceOver)
+					              .Where(ce => ce.CartoonId == SelectedGlobalResetCartoon.CartoonId));
+				}
+
+				var succesfull = false;
+
+				foreach (var episode in episodes)
+				{
+					var option = episode.EpisodeOptions
+					                    .FirstOrDefault(eo => eo.CartoonVoiceOverId ==
+					                                 episode.CartoonVoiceOver.CartoonVoiceOverId && 
+					                                 eo.LastDateViewed > ResetTime);
+					if(option == null) continue;
+
+					option.LastDateViewed = ResetTime;
+					ctx.SaveChanges();
+					succesfull = true;
+				}
+
+				WinMan.ShowDialog(new DialogViewModel(succesfull ? "Сброс успешно завершен."
+				                                      : "Дата уже сброшена.", DialogType.INFO));
+			}
+
+		}
+
+		public bool CanResetLastDateViewed => SelectedGlobalResetCartoon != null;
 
 		public void ImportSettingsToFile()
 		{
 
 		}
 
-		public bool CanImportSettingsToFile => IsEquals(new GeneralSettingsValue(), GeneralValue) is false;
+		public bool CanImportSettingsToFile => IsEquals(new GeneralSettingsValue(), GeneralSettings) is false;
 
 		public void ExportSettingsFromFile()
 		{
@@ -95,7 +159,7 @@ namespace CartoonViewer.Settings.GeneralSettingsFolder.ViewModels
 
 		public void SelectionChanged()
 		{
-			NotifyOfPropertyChange(() => GeneralValue);
+			NotifyOfPropertyChange(() => GeneralSettings);
 			NotifyButtons();
 		}
 
@@ -106,7 +170,7 @@ namespace CartoonViewer.Settings.GeneralSettingsFolder.ViewModels
 
 		public void TextChanged()
 		{
-			NotifyOfPropertyChange(() => GeneralValue);
+			NotifyOfPropertyChange(() => GeneralSettings);
 			NotifyButtons();
 		}
 	}

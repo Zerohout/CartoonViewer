@@ -26,6 +26,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -46,7 +47,7 @@
                 <TextBlock
                     Grid.Row="0"
                     Grid.Column="0"
-                    Margin="5,10,5,7.5"
+                    Margin="10,10,5,7.5"
                     HorizontalAlignment="Right"
                     FontSize="18"
                     Foreground="DodgerBlue"
@@ -62,7 +63,7 @@
                     cal:Message.Attach="[Event KeyDown]=[Action NumericValidation($eventArgs)]; [Event TextChanged]=[Action TextChanged()]"
                     Foreground="Aqua"
                     Style="{StaticResource SETBoxDefaultStyle}"
-                    Text="{Binding GeneralValue.DefaultEpisodesCount, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
+                    Text="{Binding GeneralSettings.DefaultEpisodesCount, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
                 <TextBlock
                     Grid.Row="0"
                     Grid.Column="2"
@@ -73,9 +74,9 @@
                     Style="{StaticResource SEDefaultTBlockStyle}">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}~{0}д. {1}ч. {2}м.">
-                            <Binding Path="GeneralValue.ApproximateDefaultDuration.Days" />
-                            <Binding Path="GeneralValue.ApproximateDefaultDuration.Hours" />
-                            <Binding Path="GeneralValue.ApproximateDefaultDuration.Minutes" />
+                            <Binding Path="GeneralSettings.ApproximateDefaultDuration.Days" />
+                            <Binding Path="GeneralSettings.ApproximateDefaultDuration.Hours" />
+                            <Binding Path="GeneralSettings.ApproximateDefaultDuration.Minutes" />
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
@@ -93,6 +94,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <TextBlock
+                        Margin="10 0 0 0"
                         Grid.Column="0"
                         FontSize="18"
                         Foreground="DodgerBlue"
@@ -104,7 +106,7 @@
                         FontSize="18"
                         Foreground="DodgerBlue"
                         Style="{StaticResource SEDefaultTBlockStyle}"
-                        Text="{Binding GeneralValue.AvailableEpisodesCount}" />
+                        Text="{Binding GeneralSettings.AvailableEpisodesCount}" />
                 </Grid>
 
 
@@ -137,7 +139,7 @@
                     Margin="5,7.5"
                     HorizontalAlignment="Left"
                     cal:Message.Attach="[Event Checked]=[Action CheckedStatusChanged()];[Event Unchecked]=[Action CheckedStatusChanged()]"
-                    IsChecked="{Binding GeneralValue.NightHelperShutdown}"
+                    IsChecked="{Binding GeneralSettings.NightHelperShutdown}"
                     OffSwitchBrush="Tomato"
                     OnSwitchBrush="LawnGreen"
                     ThumbIndicatorWidth="18" />
@@ -151,13 +153,13 @@
                             TargetType="TextBlock">
                             <Style.Triggers>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.NightHelperShutdown}"
+                                    Binding="{Binding GeneralSettings.NightHelperShutdown}"
                                     Value="True">
                                     <Setter Property="Text" Value="Активировано" />
                                     <Setter Property="Foreground" Value="LawnGreen" />
                                 </DataTrigger>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.NightHelperShutdown}"
+                                    Binding="{Binding GeneralSettings.NightHelperShutdown}"
                                     Value="False">
                                     <Setter Property="Text" Value="Дезактивировано" />
                                     <Setter Property="Foreground" Value="Tomato" />
@@ -171,7 +173,7 @@
             <Grid
                 Grid.Row="2"
                 Grid.Column="0"
-                Visibility="{Binding GeneralValue.NightHelperSettingsVisibility}">
+                Visibility="{Binding GeneralSettings.NightHelperSettingsVisibility}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
@@ -196,7 +198,7 @@
                         cal:Message.Attach="[Event KeyDown]=[Action NumericValidation($eventArgs)]; [Event TextChanged]=[Action TextChanged()]"
                         Foreground="Aqua"
                         Style="{StaticResource SETBoxDefaultStyle}"
-                        Text="{Binding GeneralValue.NightHelperShutdownIdleTime, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
+                        Text="{Binding GeneralSettings.NightHelperShutdownIdleTime, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
                     <ComboBox
                         MinWidth="85"
                         HorizontalContentAlignment="Center"
@@ -206,8 +208,8 @@
                         FontSize="16"
                         FontWeight="Bold"
                         Foreground="Aqua"
-                        ItemsSource="{Binding GeneralValue.HigntHelperShutdownIdleTimeTypeList}"
-                        SelectedItem="{Binding GeneralValue.SelectedNightHelperShutdownIdleTimeType}" />
+                        ItemsSource="{Binding GeneralSettings.HigntHelperShutdownIdleTimeTypeList}"
+                        SelectedItem="{Binding GeneralSettings.SelectedNightHelperShutdownIdleTimeType}" />
                     <TextBlock
                         FontSize="18"
                         Foreground="OrangeRed"
@@ -230,7 +232,7 @@
                         cal:Message.Attach="[Event KeyDown]=[Action NumericValidation($eventArgs)]; [Event TextChanged]=[Action TextChanged()]"
                         Foreground="Aqua"
                         Style="{StaticResource SETBoxDefaultStyle}"
-                        Text="{Binding GeneralValue.NightHelperShutdownReachedHoursTime, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
+                        Text="{Binding GeneralSettings.NightHelperShutdownReachedHoursTime, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
                     <TextBlock
                         FontSize="18"
                         Foreground="OrangeRed"
@@ -242,7 +244,7 @@
                         cal:Message.Attach="[Event KeyDown]=[Action NumericValidation($eventArgs)]; [Event TextChanged]=[Action TextChanged()]"
                         Foreground="Aqua"
                         Style="{StaticResource SETBoxDefaultStyle}"
-                        Text="{Binding GeneralValue.NightHelperShutdownReachedMinutesTime, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
+                        Text="{Binding GeneralSettings.NightHelperShutdownReachedMinutesTime, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
 
                 </StackPanel>
                 <Button
@@ -255,7 +257,7 @@
                             TargetType="Button">
                             <Style.Triggers>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.IsNightHelperShutdownRemarkExpand}"
+                                    Binding="{Binding GeneralSettings.IsNightHelperShutdownRemarkExpand}"
                                     Value="True">
                                     <Setter Property="ToolTip" Value="Свернуть примечания" />
                                     <Setter Property="Content">
@@ -269,7 +271,7 @@
                                     </Setter>
                                 </DataTrigger>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.IsNightHelperShutdownRemarkExpand}"
+                                    Binding="{Binding GeneralSettings.IsNightHelperShutdownRemarkExpand}"
                                     Value="False">
                                     <Setter Property="ToolTip" Value="Развернуть примечания" />
                                     <Setter Property="Content">
@@ -289,7 +291,7 @@
                 <StackPanel
                     Grid.Row="2"
                     Orientation="Vertical"
-                    Visibility="{Binding GeneralValue.NightHelperShutdownRemarkVisibility}">
+                    Visibility="{Binding GeneralSettings.NightHelperShutdownRemarkVisibility}">
                     <TextBlock
                         Margin="10,0,0,0"
                         HorizontalAlignment="Left"
@@ -347,7 +349,7 @@
                         Margin="5,0,0,0"
                         VerticalAlignment="Center"
                         cal:Message.Attach="[Event Checked]=[Action CheckedStatusChanged()];[Event Unchecked]=[Action CheckedStatusChanged()]"
-                        IsChecked="{Binding GeneralValue.RandomWatching}" />
+                        IsChecked="{Binding GeneralSettings.RandomWatching}" />
                     <TextBlock
                         Margin="10,0,0,0"
                         FontSize="18"
@@ -358,12 +360,12 @@
                                 TargetType="TextBlock">
                                 <Style.Triggers>
                                     <DataTrigger
-                                        Binding="{Binding GeneralValue.RandomWatching}"
+                                        Binding="{Binding GeneralSettings.RandomWatching}"
                                         Value="True">
                                         <Setter Property="Foreground" Value="LawnGreen" />
                                     </DataTrigger>
                                     <DataTrigger
-                                        Binding="{Binding GeneralValue.RandomWatching}"
+                                        Binding="{Binding GeneralSettings.RandomWatching}"
                                         Value="False">
                                         <Setter Property="Foreground" Value="Tomato" />
                                     </DataTrigger>
@@ -380,7 +382,7 @@
                         Margin="5,0,0,0"
                         VerticalAlignment="Center"
                         cal:Message.Attach="[Event Checked]=[Action CheckedStatusChanged()];[Event Unchecked]=[Action CheckedStatusChanged()]"
-                        IsChecked="{Binding GeneralValue.WatchingInRow}" />
+                        IsChecked="{Binding GeneralSettings.WatchingInRow}" />
                     <TextBlock
                         Margin="10,0,0,0"
                         FontSize="18"
@@ -391,12 +393,12 @@
                                 TargetType="TextBlock">
                                 <Style.Triggers>
                                     <DataTrigger
-                                        Binding="{Binding GeneralValue.WatchingInRow}"
+                                        Binding="{Binding GeneralSettings.WatchingInRow}"
                                         Value="True">
                                         <Setter Property="Foreground" Value="LawnGreen" />
                                     </DataTrigger>
                                     <DataTrigger
-                                        Binding="{Binding GeneralValue.WatchingInRow}"
+                                        Binding="{Binding GeneralSettings.WatchingInRow}"
                                         Value="False">
                                         <Setter Property="Foreground" Value="Tomato" />
                                     </DataTrigger>
@@ -410,7 +412,7 @@
                     Grid.RowSpan="2"
                     Grid.Column="2"
                     Margin="10,0,0,0"
-                    Visibility="{Binding GeneralValue.WatchingInRowVisibility}">
+                    Visibility="{Binding GeneralSettings.WatchingInRowVisibility}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
@@ -436,7 +438,7 @@
                         FontSize="16"
                         FontWeight="Bold"
                         Foreground="Aqua"
-                        Text="{Binding GeneralValue.LastWatchedEpisodeInRowFullNumber, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
+                        Text="{Binding GeneralSettings.LastWatchedEpisodeInRowFullNumber, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
                     <TextBlock
                         Grid.Row="1"
                         Grid.Column="0"
@@ -451,7 +453,7 @@
                     Grid.RowSpan="2"
                     Grid.Column="2"
                     Orientation="Horizontal"
-                    Visibility="{Binding GeneralValue.RandomEnabledVisibility}">
+                    Visibility="{Binding GeneralSettings.RandomEnabledVisibility}">
                     <StackPanel
                         Margin="10,0"
                         Orientation="Vertical">
@@ -474,13 +476,13 @@
                         FontSize="30"
                         Foreground="Aqua"
                         Style="{StaticResource SETBoxDefaultStyle}"
-                        Text="{Binding GeneralValue.RandomMixCount, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
+                        Text="{Binding GeneralSettings.RandomMixCount, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" />
                 </StackPanel>
             </Grid>
             <StackPanel
                 Grid.Row="4"
                 Orientation="Vertical"
-                Visibility="{Binding GeneralValue.WatchingInRowVisibility}">
+                Visibility="{Binding GeneralSettings.WatchingInRowVisibility}">
                 <TextBlock
                     FontSize="18"
                     Foreground="Chocolate"
@@ -496,7 +498,7 @@
             <Grid
                 Grid.Row="4"
                 Margin="10,5"
-                Visibility="{Binding GeneralValue.RandomEnabledVisibility}">
+                Visibility="{Binding GeneralSettings.RandomEnabledVisibility}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
@@ -516,37 +518,37 @@
                             TargetType="TextBlock">
                             <Style.Triggers>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Binding="{Binding GeneralSettings.SelectedNoneRepeatTimeType}"
                                     Value="никогда">
                                     <Setter Property="Text" Value="Я " />
                                 </DataTrigger>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Binding="{Binding GeneralSettings.SelectedNoneRepeatTimeType}"
                                     Value="лет">
                                     <Setter Property="Text" Value="Минимальное количество " />
                                 </DataTrigger>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Binding="{Binding GeneralSettings.SelectedNoneRepeatTimeType}"
                                     Value="месяцев">
                                     <Setter Property="Text" Value="Минимальное количество " />
                                 </DataTrigger>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Binding="{Binding GeneralSettings.SelectedNoneRepeatTimeType}"
                                     Value="недель">
                                     <Setter Property="Text" Value="Минимальное количество " />
                                 </DataTrigger>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Binding="{Binding GeneralSettings.SelectedNoneRepeatTimeType}"
                                     Value="дней">
                                     <Setter Property="Text" Value="Минимальное количество " />
                                 </DataTrigger>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Binding="{Binding GeneralSettings.SelectedNoneRepeatTimeType}"
                                     Value="часов">
                                     <Setter Property="Text" Value="Минимальное количество " />
                                 </DataTrigger>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Binding="{Binding GeneralSettings.SelectedNoneRepeatTimeType}"
                                     Value="всегда">
                                     <Setter Property="Text" Value="Я " />
                                 </DataTrigger>
@@ -564,8 +566,8 @@
                     FontSize="16"
                     FontWeight="Bold"
                     Foreground="Aqua"
-                    ItemsSource="{Binding GeneralValue.NoneRepeatTimeTypeList}"
-                    SelectedItem="{Binding GeneralValue.SelectedNoneRepeatTimeType}" />
+                    ItemsSource="{Binding GeneralSettings.NoneRepeatTimeTypeList}"
+                    SelectedItem="{Binding GeneralSettings.SelectedNoneRepeatTimeType}" />
                 <TextBlock
                     Grid.Column="2"
                     FontSize="18"
@@ -576,37 +578,37 @@
                             TargetType="TextBlock">
                             <Style.Triggers>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Binding="{Binding GeneralSettings.SelectedNoneRepeatTimeType}"
                                     Value="никогда">
                                     <Setter Property="Text" Value=" не хочу видеть повторяющиеся эпизоды." />
                                 </DataTrigger>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Binding="{Binding GeneralSettings.SelectedNoneRepeatTimeType}"
                                     Value="лет">
                                     <Setter Property="Text" Value=", прежде чем эпизод повторится -" />
                                 </DataTrigger>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Binding="{Binding GeneralSettings.SelectedNoneRepeatTimeType}"
                                     Value="месяцев">
                                     <Setter Property="Text" Value=", прежде чем эпизод повторится -" />
                                 </DataTrigger>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Binding="{Binding GeneralSettings.SelectedNoneRepeatTimeType}"
                                     Value="недель">
                                     <Setter Property="Text" Value=", прежде чем эпизод повторится -" />
                                 </DataTrigger>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Binding="{Binding GeneralSettings.SelectedNoneRepeatTimeType}"
                                     Value="дней">
                                     <Setter Property="Text" Value=", прежде чем эпизод повторится -" />
                                 </DataTrigger>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Binding="{Binding GeneralSettings.SelectedNoneRepeatTimeType}"
                                     Value="часов">
                                     <Setter Property="Text" Value=", прежде чем эпизод повторится -" />
                                 </DataTrigger>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Binding="{Binding GeneralSettings.SelectedNoneRepeatTimeType}"
                                     Value="всегда">
                                     <Setter Property="Text" Value=" хочу видеть повторяющиеся эпизоды." />
                                 </DataTrigger>
@@ -625,44 +627,44 @@
                     FontSize="16"
                     FontWeight="Bold"
                     Foreground="Aqua"
-                    Text="{Binding GeneralValue.NoneRepeatTimeCount, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}">
+                    Text="{Binding GeneralSettings.NoneRepeatTimeCount, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}">
                     <TextBox.Style>
                         <Style
                             BasedOn="{StaticResource MetroTextBox}"
                             TargetType="TextBox">
                             <Style.Triggers>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Binding="{Binding GeneralSettings.SelectedNoneRepeatTimeType}"
                                     Value="никогда">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                 </DataTrigger>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Binding="{Binding GeneralSettings.SelectedNoneRepeatTimeType}"
                                     Value="лет">
                                     <Setter Property="Visibility" Value="Visible" />
                                 </DataTrigger>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Binding="{Binding GeneralSettings.SelectedNoneRepeatTimeType}"
                                     Value="месяцев">
                                     <Setter Property="Visibility" Value="Visible" />
                                 </DataTrigger>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Binding="{Binding GeneralSettings.SelectedNoneRepeatTimeType}"
                                     Value="недель">
                                     <Setter Property="Visibility" Value="Visible" />
                                 </DataTrigger>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Binding="{Binding GeneralSettings.SelectedNoneRepeatTimeType}"
                                     Value="дней">
                                     <Setter Property="Visibility" Value="Visible" />
                                 </DataTrigger>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Binding="{Binding GeneralSettings.SelectedNoneRepeatTimeType}"
                                     Value="часов">
                                     <Setter Property="Visibility" Value="Visible" />
                                 </DataTrigger>
                                 <DataTrigger
-                                    Binding="{Binding GeneralValue.SelectedNoneRepeatTimeType}"
+                                    Binding="{Binding GeneralSettings.SelectedNoneRepeatTimeType}"
                                     Value="всегда">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                 </DataTrigger>
@@ -671,8 +673,91 @@
                     </TextBox.Style>
                 </TextBox>
             </Grid>
+            <Grid Grid.Row="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Button 
+                    Margin="10 0 0 0"
+                    BorderThickness="3" 
+                    cal:Message.Attach="[Event Click]=[Action ResetLastDateViewed()]">
+                    <TextBlock
+                        
+                        Style="{StaticResource SEDefaultTBlockStyle}"
+                        FontSize="18"
+                        Foreground="DarkCyan"
+                        Text="Сбросить"/>
+                </Button>
+                <TextBlock Grid.Column="1"
+                    Margin="10 0 0 0"
+                    Style="{StaticResource SEDefaultTBlockStyle}"
+                           FontSize="18"
+                           Foreground="DarkCyan"
+                           Text="дату последнего просмотра у"/>
+                <TextBlock Grid.Column="2"
+                           FontSize="18"
+                           Foreground="DarkCyan">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource SEDefaultTBlockStyle}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsSelectedAllCartoonsToReset}" Value="True">
+                                    <Setter Property="Text" Value=" "/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsSelectedAllCartoonsToReset}" Value="False">
+                                    <Setter Property="Text" Value=" мультсериала "/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <ComboBox Grid.Column="3"
+                          MinWidth="200"
+                          ItemsSource="{Binding Cartoons}"
+                          SelectedIndex="1"
+                          SelectedItem="{Binding SelectedGlobalResetCartoon}"
+                          HorizontalContentAlignment="Center"
+                          VerticalContentAlignment="Center"
+                          cal:Message.Attach="[Event SelectionChanged]=[Action SelectionChanged()]"
+                          FontFamily="Comic Sans MS"
+                          FontSize="16"
+                          FontWeight="Bold"
+                          Foreground="Aqua">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock FontFamily="Comic Sans MS"
+                                       FontSize="18"
+                                       FontWeight="Bold"
+                                       Foreground="Aqua"
+                                       Text="{Binding Name}"></TextBlock>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <TextBlock Grid.Column="4"
+                           FontSize="18"
+                           Foreground="DarkCyan">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource SEDefaultTBlockStyle}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsSelectedAllCartoonsToReset}" Value="True">
+                                    <Setter Property="Text" Value=" мультсериалов."/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsSelectedAllCartoonsToReset}" Value="False">
+                                    <Setter Property="Text" Value=" ."/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
             <StackPanel
-                Grid.Row="5"
+                Grid.Row="6"
                 HorizontalAlignment="Center"
                 Orientation="Horizontal">
                 <Button

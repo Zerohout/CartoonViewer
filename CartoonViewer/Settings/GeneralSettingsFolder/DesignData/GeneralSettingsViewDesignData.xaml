@@ -4,7 +4,7 @@
     xmlns:settingsModels="clr-namespace:CartoonViewer.Models.SettingModels"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:vms="clr-namespace:CartoonViewer.Settings.GeneralSettingsFolder.ViewModels">
-    <vms:GeneralSettingsViewModel.GeneralValue>
+    <vms:GeneralSettingsViewModel.GeneralSettings>
         <settingsModels:GeneralSettingsValue
             DefaultEpisodesCount="999999"
             NightHelperShutdown="True"
@@ -19,7 +19,7 @@
             RandomMixCount="10"
             SelectedNightHelperShutdownIdleTimeType="минут"
             SelectedNoneRepeatTimeType="дней"/>
-    </vms:GeneralSettingsViewModel.GeneralValue>
+    </vms:GeneralSettingsViewModel.GeneralSettings>
 
 
 </vms:GeneralSettingsViewModel>

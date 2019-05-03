@@ -160,7 +160,7 @@
     <Compile Include="Settings\CartoonEditorFolder\Partials\VoiceOversEditing\VOEMethods.cs" />
     <Compile Include="Settings\CartoonEditorFolder\ViewModels\VoiceOversEditingViewModel.cs" />
     <Compile Include="Settings\CartoonEditorFolder\Partials\VoiceOversEditing\VOEPropertiesAndFields.cs" />
-    <Compile Include="Settings\GeneralSettingsFolder\Partials\GeneralSettings\GEMethods.cs" />
+    <Compile Include="Settings\GeneralSettingsFolder\Partials\GeneralSettings\GSMethods.cs" />
     <Compile Include="Settings\GeneralSettingsFolder\Partials\GeneralSettings\GSEventsActions.cs" />
     <Compile Include="Settings\GeneralSettingsFolder\Partials\GeneralSettings\GSPropertiesAndFields.cs" />
     <Compile Include="Settings\GeneralSettingsFolder\ViewModels\GeneralSettingsViewModel.cs" />
