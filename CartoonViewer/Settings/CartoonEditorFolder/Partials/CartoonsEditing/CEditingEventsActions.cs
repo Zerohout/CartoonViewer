@@ -178,7 +178,8 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				: null;
 		}
 
-		public bool CanRemoveSeason => SelectedSeason != null;
+		public bool CanRemoveSeason => SelectedSeason != null &&
+		SelectedSeason.Number == Seasons.Max(cs => cs.Number);
 
 		/// <summary>
 		/// Отменить выделение сезона

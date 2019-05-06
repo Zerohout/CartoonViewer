@@ -210,8 +210,21 @@
                     Margin="0,2.5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
+                    ToolTipService.ShowOnDisabled="true"
                     cal:Message.Attach="[Event Click]=[Action RemoveSeason()]"
-                    ToolTip="Удалить выбранный сезон">
+                    >
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource MetroButton}">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="ToolTip" Value="Удалить сезон"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="ToolTip" Value="Удалить можно только последний сезон"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
                     <iconPacks:PackIconMaterial Style="{StaticResource EditListRemoveBtnIconStyle}" />
                 </Button>
                 <Button
@@ -219,7 +232,7 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     cal:Message.Attach="[Event Click]=[Action CancelSelection()]"
-                    ToolTip="Снять выделение">
+                    ToolTip="Снять выделение с текущего сезона">
                     <iconPacks:PackIconMaterial Style="{StaticResource EditListCancelBtnIconStyle}" />
                 </Button>
             </StackPanel>

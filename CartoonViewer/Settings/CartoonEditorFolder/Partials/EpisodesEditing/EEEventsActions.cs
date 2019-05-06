@@ -116,14 +116,14 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 				if(DefaultVoiceOver == null)
 				{
 					voiceOver = ctx.Cartoons
-					                   .Include(ce => ce.CartoonVoiceOvers)
-					                   .First(c => c.CartoonId == GlobalIdList.CartoonId).CartoonVoiceOvers.First();
+									   .Include(ce => ce.CartoonVoiceOvers)
+									   .First(c => c.CartoonId == GlobalIdList.CartoonId).CartoonVoiceOvers.First();
 				}
 				else
 				{
 					voiceOver = ctx.VoiceOvers
-					               .First(vo => vo.CartoonVoiceOverId == 
-					                            DefaultVoiceOver.CartoonVoiceOverId);
+								   .First(vo => vo.CartoonVoiceOverId ==
+												DefaultVoiceOver.CartoonVoiceOverId);
 				}
 
 				var episode = CreateNewEpisode(ctx, voiceOver);
@@ -194,7 +194,8 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 
 
 
-		public bool CanRemoveEpisode => SelectedEpisode != null && IsNotEditing;
+		public bool CanRemoveEpisode => SelectedEpisode != null && IsNotEditing 
+		&& SelectedEpisode.Number == Episodes.Max(ce => ce.Number);
 
 		/// <summary>
 		/// Снять выделение с выбранного эпизода
@@ -461,6 +462,7 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		{
 			EditableEpisodeTime = ConvertToEpisodeTime(SelectedEpisodeOption, SelectedJumper);
 			NotifyEditingButtons();
+			NotifyOfPropertyChange(() => CanRemoveJumper);
 			//NotifyOfPropertyChange(() => CanSwapJumpers);
 		}
 
@@ -523,8 +525,25 @@ namespace CartoonViewer.Settings.CartoonEditorFolder.ViewModels
 		}
 
 
-		public bool CanRemoveJumper => Jumpers.Count > 1 &&
-			IsNotEditing is false;
+		public bool CanRemoveJumper
+		{
+			get
+			{
+				if (Jumpers.Count == 0 ||
+				    SelectedJumper == null ||
+				    IsNotEditing is true)
+				{
+					return false;
+				}
+
+				if (SelectedJumper.Number < Jumpers.Max(j => j.Number))
+				{
+					return false;
+				}
+
+				return true;
+			}
+		}
 
 		///// <summary>
 		///// Измене выбор обмениваемого джампера

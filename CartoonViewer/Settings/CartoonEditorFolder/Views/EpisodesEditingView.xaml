@@ -181,7 +181,7 @@
                                     <Setter Property="ToolTip" Value="Добавить новый эпизод" />
                                 </Trigger>
                                 <Trigger Property="IsEnabled" Value="False">
-                                    <Setter Property="ToolTip" Value="Необходимо разблокировать интерфейс" />
+                                    <Setter Property="ToolTip" Value="Для разблокировки завершите редактирование" />
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
@@ -202,7 +202,7 @@
                                     <Setter Property="ToolTip" Value="Редактировать выбранный эпизод" />
                                 </Trigger>
                                 <Trigger Property="IsEnabled" Value="False">
-                                    <Setter Property="ToolTip" Value="Необходимо разблокировать интерфейс" />
+                                    <Setter Property="ToolTip" Value="Для разблокировки завершите редактирование" />
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
@@ -220,10 +220,10 @@
                             TargetType="Button">
                             <Style.Triggers>
                                 <Trigger Property="IsEnabled" Value="True">
-                                    <Setter Property="ToolTip" Value="Удалить выбранный эпизод" />
+                                    <Setter Property="ToolTip" Value="Удалить эпизод" />
                                 </Trigger>
                                 <Trigger Property="IsEnabled" Value="False">
-                                    <Setter Property="ToolTip" Value="Необходимо разблокировать интерфейс" />
+                                    <Setter Property="ToolTip" Value="Удалить можно только последний эпизод" />
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
@@ -244,7 +244,7 @@
                                     <Setter Property="ToolTip" Value="Снять выделение" />
                                 </Trigger>
                                 <Trigger Property="IsEnabled" Value="False">
-                                    <Setter Property="ToolTip" Value="Необходимо разблокировать интерфейс" />
+                                    <Setter Property="ToolTip" Value="Для разблокировки завершите редактирование" />
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
@@ -264,7 +264,7 @@
                             TargetType="Button">
                             <Style.Triggers>
                                 <Trigger Property="IsEnabled" Value="True">
-                                    <Setter Property="ToolTip" Value="Разблокировать интерфейс" />
+                                    <Setter Property="ToolTip" Value="Прекратить редактирование и разблокировать интерфейс" />
                                 </Trigger>
                                 <Trigger Property="IsEnabled" Value="False">
                                     <Setter Property="ToolTip" Value="Необходимо сохранить или отменить изменения" />
@@ -278,8 +278,21 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     cal:Message.Attach="[Event Click]=[Action EditPreviousEpisode()]"
-                    ToolTip="Выбрать следующий эпизод"
                     Visibility="{Binding EpisodeEditingVisibility}">
+                    <Button.Style>
+                        <Style
+                            BasedOn="{StaticResource MahApps.Metro.Styles.MetroButton}"
+                            TargetType="Button">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="ToolTip" Value="Редактировать предыдущий эпизод" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="ToolTip" Value="Необходимо сохранить или отменить изменения" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
                     <iconPacks:PackIconMaterial Style="{StaticResource EditListUpBtnIconStyle}" />
                 </Button>
                 <Button
@@ -287,8 +300,21 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     cal:Message.Attach="[Event Click]=[Action EditNextEpisode()]"
-                    ToolTip="Выбрать следующий эпизод"
                     Visibility="{Binding EpisodeEditingVisibility}">
+                    <Button.Style>
+                        <Style
+                            BasedOn="{StaticResource MahApps.Metro.Styles.MetroButton}"
+                            TargetType="Button">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="ToolTip" Value="Редактировать следующий эпизод" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="ToolTip" Value="Необходимо сохранить или отменить изменения" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
                     <iconPacks:PackIconMaterial Style="{StaticResource EditListDownBtnIconStyle}" />
                 </Button>
             </StackPanel>
@@ -469,9 +495,20 @@
                             Grid.Row="1"
                             Grid.Column="2"
                             Margin="2.5,0"
-                            cal:Message.Attach="[Event Click]=[Action RemoveJumper()]"
-                            ToolTip="Удалить пропуск">
-                            <iconPacks:PackIconMaterial
+                            cal:Message.Attach="[Event Click]=[Action RemoveJumper()]">
+                            <Button.Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource MetroButton}">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsEnabled" Value="True">
+                                            <Setter Property="ToolTip" Value="Удалить джампер"/>
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="ToolTip" Value="Удалить можно только последний джампер"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                                <iconPacks:PackIconMaterial
                                 Width="20"
                                 Height="16"
                                 Padding="-3"
@@ -1012,6 +1049,7 @@
                 Padding="7,5"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
+                ToolTip="Сохранить изменения"
                 cal:Message.Attach="[Event Click]=[Action SaveChanges()]"
                 TabIndex="7">
                 <StackPanel Orientation="Vertical">
@@ -1039,6 +1077,7 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 cal:Message.Attach="[Event Click]=[Action CancelChanges()]"
+                ToolTip="Отменить изменения"
                 TabIndex="7">
                 <StackPanel Orientation="Vertical">
                     <iconPacks:PackIconFontAwesome

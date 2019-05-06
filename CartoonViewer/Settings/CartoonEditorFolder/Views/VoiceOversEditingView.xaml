@@ -169,7 +169,7 @@
                         Padding="-3"
                         Style="{StaticResource EditListDownBtnIconStyle}" />
                 </Button>
-                
+
             </Grid>
         </Grid>
 
@@ -211,7 +211,7 @@
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock
-                                FontSize="14"
+                            FontSize="14"
                             Style="{StaticResource CCComboBoxTBlockItemStyle}"
                             Text="{Binding NumberName}" />
                     </DataTemplate>
@@ -281,7 +281,7 @@
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock
-                                FontSize="14"
+                            FontSize="14"
                             Style="{StaticResource CCComboBoxTBlockItemStyle}"
                             Text="{Binding NumberName}" />
                     </DataTemplate>
@@ -470,7 +470,7 @@
                 <Button
                     Margin="0,5,0,2.5"
                     cal:Message.Attach="[Event Click]=[Action AddCartoonVoiceOver()]"
-                    ToolTip="Добавить озвучку в список выбранного м/ф">
+                    ToolTip="Добавить озвучку в список выбранного м/с">
                     <iconPacks:PackIconMaterial Style="{StaticResource EditListAddBtnIconStyle}" />
                 </Button>
                 <Button
@@ -482,7 +482,7 @@
                 <Button
                     Margin="0,2.5"
                     cal:Message.Attach="[Event Click]=[Action RemoveSelectedCartoonVoiceOver()]"
-                    ToolTip="Удалить выбранную озвучку из списка выбранного м/ф (HotKey: Ctrl+Delete)">
+                    ToolTip="Удалить выбранную озвучку из списка выбранного м/с (HotKey: Ctrl+Delete)">
                     <iconPacks:PackIconMaterial Style="{StaticResource EditListRemoveBtnIconStyle}" />
                 </Button>
                 <Button
@@ -550,7 +550,7 @@
                 <Button
                     Margin="0,5,0,2.5"
                     cal:Message.Attach="[Event Click]=[Action AddEpisodeVoiceOverAction()]"
-                    ToolTip="Добавить озвучку в список выбранного м/ф">
+                    ToolTip="Добавить озвучку в список выбранного эпизода">
                     <iconPacks:PackIconMaterial Style="{StaticResource EditListAddBtnIconStyle}" />
                 </Button>
                 <Button
